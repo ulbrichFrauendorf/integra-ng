@@ -51,7 +51,7 @@
       <div
         *ngFor="let option of filteredOptions()"
         class="i-select-option"
-        [class.selected]="getOptionValue(option) === value"
+        [class.selected]="isOptionSelected(option)"
         (click)="selectOption(option)"
       >
         {{ getOptionLabel(option) }}

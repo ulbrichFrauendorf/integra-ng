@@ -48,7 +48,7 @@ export class ISelect implements ControlValueAccessor {
     SelectOption[] | null | undefined
   >([]);
   @Input({ required: true }) optionLabel!: string;
-  @Input({ required: true }) optionValue!: string;
+  @Input() optionValue?: string; // Made optional - if not provided, stores full object
   @Input() placeholder = 'Select an option';
   @Input() id?: string;
   @Input() fluid = false;
@@ -164,7 +164,26 @@ export class ISelect implements ControlValueAccessor {
   }
 
   getOptionValue(option: SelectOption): any {
+    // If optionValue is not provided, return the entire object
+    if (!this.optionValue) {
+      return option;
+    }
+    // Otherwise, extract the specified property value
     return option[this.optionValue] || option['value'] || String(option);
+  }
+
+  isOptionSelected(option: SelectOption): boolean {
+    if (this.value === null || this.value === undefined) {
+      return false;
+    }
+
+    if (!this.optionValue) {
+      // When storing full objects, do deep comparison
+      return JSON.stringify(option) === JSON.stringify(this.value);
+    } else {
+      // When storing extracted values, do simple comparison
+      return this.getOptionValue(option) === this.value;
+    }
   }
 
   getOptionSearchValue(option: SelectOption): string {
@@ -184,8 +203,8 @@ export class ISelect implements ControlValueAccessor {
       return String(this.value);
     }
 
-    const selectedOption = currentOptions.find(
-      (option: SelectOption) => this.getOptionValue(option) === this.value
+    const selectedOption = currentOptions.find((option: SelectOption) =>
+      this.isOptionSelected(option)
     );
 
     return selectedOption

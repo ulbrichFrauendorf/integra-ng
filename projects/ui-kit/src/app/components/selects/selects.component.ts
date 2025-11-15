@@ -64,49 +64,28 @@ export class SelectsComponent implements OnInit {
 
   // Code examples organized by category
   codeExamples = {
-    basic: `// 1. Import required modules and component
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { ISelect } from 'invensys-angular-shared/components/select/select.component';
+    basic: `// Two approaches available:
 
-// 2. Define your data (any object structure now supported)
-countries = [
-  { value: 'us', label: 'United States' },
-  { value: 'uk', label: 'United Kingdom' },
-  { value: 'de', label: 'Germany' }
-];
+// 1. Extract specific value (traditional approach)
+<i-select 
+  label="Country" 
+  [options]="countries" 
+  optionLabel="label" 
+  optionValue="value"        // Stores just the value: "us"
+  formControlName="country">
+</i-select>
 
-statuses = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'pending', label: 'Pending' }
-];
+// 2. Store full object (new optional approach) 
+<i-select 
+  label="Country" 
+  [options]="countries" 
+  optionLabel="label"        // optionValue is now optional!
+  formControlName="fullObjectSelect"> // Stores full object: {value: "us", label: "United States"}
+</i-select>
 
-// 3. Create your form
-form = this.fb.group({
-  country: [''],
-  status: ['']
-});
-
-// 4. Use in template (optionLabel and optionValue are now required)
-<form [formGroup]="form">
-  <i-select 
-    label="Country" 
-    [options]="countries" 
-    optionLabel="label" 
-    optionValue="value" 
-    placeholder="Select a country" 
-    formControlName="country">
-  </i-select>
-
-  <i-select 
-    label="Status" 
-    [options]="statuses" 
-    optionLabel="label" 
-    optionValue="value"
-    placeholder="Select status" 
-    formControlName="status">
-  </i-select>
-</form>`,
+// Form values comparison:
+// With optionValue:    { country: "us" }
+// Without optionValue: { fullObjectSelect: { value: "us", label: "United States" } }`,
 
     validation: `<i-select 
   label="Status (Required)" 
@@ -181,6 +160,8 @@ form = this.fb.group({
       status: [''],
       preselected: ['us'],
       disabled: [{ value: 'uk', disabled: true }],
+      // New: Store full object instead of just value
+      fullObjectSelect: [null],
     });
 
     this.validationForm = this.fb.group({
@@ -220,6 +201,22 @@ form = this.fb.group({
     } else {
       this.markFormGroupTouched(form);
     }
+  }
+
+  onCountryValueChange(value: any) {
+    console.log('Country Value Changed (optionValue="value"):', value);
+    console.log('Form control value:', this.basicForm.get('country')?.value);
+    console.log('Type:', typeof value);
+  }
+
+  onCountryObjectChange(value: any) {
+    console.log('Country Object Changed (no optionValue):', value);
+    console.log(
+      'Form control value:',
+      this.basicForm.get('fullObjectSelect')?.value
+    );
+    console.log('Type:', typeof value);
+    console.log('Full object properties:', value ? Object.keys(value) : 'null');
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {

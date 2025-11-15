@@ -87,49 +87,28 @@ export class MultiSelectsComponent implements OnInit {
 
   // Code examples organized by category
   codeExamples = {
-    basic: `// 1. Import required modules and component
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { IMultiSelect } from 'invensys-angular-shared/components/multi-select/multi-select.component';
+    basic: `// Two approaches available:
 
-// 2. Define your data (any object structure now supported)
-skills = [
-  { value: 'javascript', label: 'JavaScript' },
-  { value: 'typescript', label: 'TypeScript' },
-  { value: 'angular', label: 'Angular' }
-];
+// 1. Extract specific values (traditional approach)
+<i-multi-select
+  label="Skills"
+  [options]="skills"
+  optionLabel="label"
+  optionValue="value"        // Stores just the values: ["javascript", "angular"]
+  formControlName="skills">
+</i-multi-select>
 
-departments = [
-  { value: 1, label: 'Sales' },
-  { value: 2, label: 'Marketing' },
-  { value: 3, label: 'Engineering' }
-];
+// 2. Store full objects (new optional approach)
+<i-multi-select
+  label="Skills"
+  [options]="skills"
+  optionLabel="label"        // optionValue is now optional!
+  formControlName="fullObjectSkills"> // Stores full objects: [{value: "javascript", label: "JavaScript"}, ...]
+</i-multi-select>
 
-// 3. Create your form
-form = this.fb.group({
-  skills: [[]],
-  departments: [[]]
-});
-
-// 4. Use in template (optionLabel and optionValue are now required)
-<form [formGroup]="form">
-  <i-multi-select
-    label="Skills"
-    [options]="skills"
-    optionLabel="label"
-    optionValue="value"
-    placeholder="Select skills"
-    formControlName="skills">
-  </i-multi-select>
-
-  <i-multi-select
-    label="Departments"
-    [options]="departments"
-    optionLabel="label"
-    optionValue="value"
-    placeholder="Select departments"
-    formControlName="departments">
-  </i-multi-select>
-</form>`,
+// Form values comparison:
+// With optionValue:    { skills: ["javascript", "angular"] }
+// Without optionValue: { fullObjectSkills: [{value: "javascript", label: "JavaScript"}, {value: "angular", label: "Angular"}] }`,
 
     validation: `// Form setup with different validation requirements
 form = this.fb.group({
@@ -237,6 +216,8 @@ private minArrayLengthValidator(minLength: number) {
       departments: [[]],
       preselected: [['javascript', 'angular']],
       disabled: [{ value: [1, 2], disabled: true }],
+      // New: Store full objects instead of just values
+      fullObjectSkills: [[]],
     });
 
     this.validationForm = this.fb.group({
@@ -267,6 +248,21 @@ private minArrayLengthValidator(minLength: number) {
     } else {
       this.markFormGroupTouched(form);
     }
+  }
+
+  onSkillsValueChange(values: any[]) {
+    console.log('Skills Values Changed (optionValue="value"):', values);
+    console.log('Form control value:', this.basicForm.get('skills')?.value);
+    console.log('Array length:', values.length);
+    console.log('Types:', values.map(v => typeof v));
+  }
+
+  onSkillsObjectChange(values: any[]) {
+    console.log('Skills Objects Changed (no optionValue):', values);
+    console.log('Form control value:', this.basicForm.get('fullObjectSkills')?.value);
+    console.log('Array length:', values.length);
+    console.log('Types:', values.map(v => typeof v));
+    console.log('Object properties:', values.map(v => v ? Object.keys(v) : 'null'));
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {

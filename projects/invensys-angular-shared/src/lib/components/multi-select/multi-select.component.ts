@@ -50,7 +50,7 @@ export class IMultiSelect implements ControlValueAccessor {
     MultiSelectOption[] | null | undefined
   >([]);
   @Input({ required: true }) optionLabel!: string;
-  @Input({ required: true }) optionValue!: string;
+  @Input() optionValue?: string;  // Made optional - if not provided, stores full objects
   @Input() placeholder = 'Select options';
   @Input() id?: string;
   @Input() fluid = false;
@@ -148,14 +148,25 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   toggleOption(option: MultiSelectOption) {
-    const optionValue = this.getOptionValue(option);
     const currentValues = [...this.value];
-    const index = currentValues.findIndex((val) => val === optionValue);
-
-    if (index > -1) {
-      currentValues.splice(index, 1);
+    
+    if (!this.optionValue) {
+      // When storing full objects
+      const index = currentValues.findIndex(val => JSON.stringify(val) === JSON.stringify(option));
+      if (index > -1) {
+        currentValues.splice(index, 1);
+      } else {
+        currentValues.push(option);
+      }
     } else {
-      currentValues.push(optionValue);
+      // When storing extracted values
+      const optionValue = this.getOptionValue(option);
+      const index = currentValues.findIndex((val) => val === optionValue);
+      if (index > -1) {
+        currentValues.splice(index, 1);
+      } else {
+        currentValues.push(optionValue);
+      }
     }
 
     this.value = currentValues;
@@ -165,8 +176,14 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   isOptionSelected(option: MultiSelectOption): boolean {
-    const optionValue = this.getOptionValue(option);
-    return this.value.includes(optionValue);
+    if (!this.optionValue) {
+      // When storing full objects, do deep comparison
+      return this.value.some(val => JSON.stringify(val) === JSON.stringify(option));
+    } else {
+      // When storing extracted values, do simple comparison
+      const optionValue = this.getOptionValue(option);
+      return this.value.includes(optionValue);
+    }
   }
 
   clearSelection() {
@@ -179,7 +196,16 @@ export class IMultiSelect implements ControlValueAccessor {
   removeSelectedItem(value: any, event: Event) {
     event.stopPropagation();
     const currentValues = [...this.value];
-    const index = currentValues.findIndex((val) => val === value);
+    
+    let index: number;
+    if (!this.optionValue) {
+      // When storing full objects, use deep comparison
+      index = currentValues.findIndex((val) => JSON.stringify(val) === JSON.stringify(value));
+    } else {
+      // When storing extracted values, use simple comparison
+      index = currentValues.findIndex((val) => val === value);
+    }
+    
     if (index > -1) {
       currentValues.splice(index, 1);
       this.value = currentValues;
@@ -194,6 +220,11 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   getOptionValue(option: MultiSelectOption): any {
+    // If optionValue is not provided, return the entire object
+    if (!this.optionValue) {
+      return option;
+    }
+    // Otherwise, extract the specified property value
     return option[this.optionValue] || option['value'] || option;
   }
 
@@ -211,10 +242,16 @@ export class IMultiSelect implements ControlValueAccessor {
     }
 
     return this.value.map((val) => {
-      const option = currentOptions.find(
-        (opt: MultiSelectOption) => this.getOptionValue(opt) === val
-      );
-      return option ? this.getOptionLabel(option) : String(val);
+      if (!this.optionValue) {
+        // When storing full objects, val is already the option object
+        return this.getOptionLabel(val);
+      } else {
+        // When storing extracted values, find the option by value
+        const option = currentOptions.find(
+          (opt: MultiSelectOption) => this.getOptionValue(opt) === val
+        );
+        return option ? this.getOptionLabel(option) : String(val);
+      }
     });
   }
 
