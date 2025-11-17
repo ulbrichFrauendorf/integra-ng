@@ -22,56 +22,6 @@
       </div>
     </app-demo-card>
 
-    <!-- Chips Input Examples -->
-    <app-demo-card
-      title="Chips Input (Tags)"
-      [sourceCode]="codeExamples.chipsInput"
-    >
-      <form
-        [formGroup]="basicForm"
-        (ngSubmit)="onSubmit(basicForm, 'basic')"
-        class="demo-form"
-      >
-        <i-chips
-          label="Tags"
-          placeholder="Enter tags and press Enter"
-          formControlName="tags"
-          [showClear]="true"
-          [fluid]="true"
-        />
-        <i-button severity="primary" type="submit">Submit Basic Form</i-button>
-      </form>
-    </app-demo-card>
-
-    <!-- Validation Example -->
-    <app-demo-card
-      title="Required Validation"
-      [sourceCode]="codeExamples.validation"
-    >
-      <form
-        [formGroup]="validationForm"
-        (ngSubmit)="onSubmit(validationForm, 'validation')"
-        class="demo-form"
-      >
-        <i-chips
-          label="Required Tags"
-          placeholder="Enter at least 2 tags"
-          formControlName="requiredTags"
-          [showClear]="true"
-          [fluid]="true"
-        />
-
-        @if (validationForm.get('requiredTags')?.invalid &&
-        validationForm.get('requiredTags')?.touched) {
-        <div class="error-message">At least 2 tags are required</div>
-        }
-
-        <i-button severity="primary" type="submit"
-          >Submit Validation Form</i-button
-        >
-      </form>
-    </app-demo-card>
-
     <!-- Features Demonstration -->
     <app-demo-card title="Features">
       <div class="features-grid">
