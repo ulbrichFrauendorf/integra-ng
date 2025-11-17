@@ -6,6 +6,7 @@ import {
   OnDestroy,
   Input,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -14,13 +15,6 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="code-display-container">
-      <div
-        class="ui-section"
-        [class.fluid-container]="hasFluidComponents"
-        #uiContent
-      >
-        <ng-content></ng-content>
-      </div>
       <div class="code-section">
         <div class="code-header">
           <span class="code-title">HTML</span>
@@ -35,6 +29,7 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
   styleUrls: ['./code-display.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() sourceCode: string = '';
@@ -171,46 +166,62 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private applySyntaxHighlighting(code: string): string {
-    // Simply escape HTML and apply basic highlighting
+    // Escape HTML first
     let highlighted = code
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
 
-    // Apply syntax highlighting with careful ordering
-    return (
-      highlighted
-        // 1. Angular property bindings like [severity]="value"
-        .replace(
-          /(\[[\w-]+\])(=)(&quot;[^&quot;]*&quot;)/g,
-          '<span class="angular-binding">$1</span>$2<span class="html-attr-value">$3</span>'
-        )
-
-        // 2. Angular event bindings like (click)="value"
-        .replace(
-          /(\([\w-]+\))(=)(&quot;[^&quot;]*&quot;)/g,
-          '<span class="angular-event">$1</span>$2<span class="html-attr-value">$3</span>'
-        )
-
-        // 3. Opening HTML tags like <i-button
-        .replace(
-          /(&lt;)([a-zA-Z][\w-]*)/g,
-          '<span class="html-tag">$1$2</span>'
-        )
-
-        // 4. Closing tags like >
-        .replace(/(&gt;)/g, '<span class="html-tag">$1</span>')
-
-        // 5. Self-closing tag endings like />
-        .replace(/(\/&gt;)/g, '<span class="html-tag">$1</span>')
-
-        // 6. Angular interpolation like {{value}}
-        .replace(
-          /({{[^}]*}})/g,
-          '<span class="angular-interpolation">$1</span>'
-        )
+    // 1. HTML/XML tags (opening and closing)
+    highlighted = highlighted.replace(
+      /(&lt;\/?)([a-zA-Z][-a-zA-Z0-9]*)/g,
+      '<span class="html-tag">$1$2</span>'
     );
+
+    // 2. Closing brackets > and self-closing />
+    highlighted = highlighted.replace(
+      /(\s*\/?)(&gt;)/g,
+      '<span class="html-tag">$1$2</span>'
+    );
+
+    // 3. Angular property bindings [property]="value"
+    highlighted = highlighted.replace(
+      /(\[[\w-]+\])(\s*=\s*)(&quot;[^&quot;]*&quot;)/g,
+      '<span class="angular-binding">$1</span>$2<span class="html-attr-value">$3</span>'
+    );
+
+    // 4. Angular event bindings (event)="value"
+    highlighted = highlighted.replace(
+      /(\([\w-]+\))(\s*=\s*)(&quot;[^&quot;]*&quot;)/g,
+      '<span class="angular-event">$1</span>$2<span class="html-attr-value">$3</span>'
+    );
+
+    // 5. Regular HTML attributes (not already processed)
+    highlighted = highlighted.replace(
+      /(\s)([a-zA-Z_:][-a-zA-Z0-9_:]*)(\s*=\s*)(&quot;[^&quot;]*&quot;)/g,
+      function (match, space, attrName, equals, value) {
+        // Don't replace if already wrapped in spans
+        if (match.includes('<span')) {
+          return match;
+        }
+        return `${space}<span class="html-attr-name">${attrName}</span>${equals}<span class="html-attr-value">${value}</span>`;
+      }
+    );
+
+    // 6. Angular interpolation {{ ... }}
+    highlighted = highlighted.replace(
+      /({{[^}]*}})/g,
+      '<span class="angular-interpolation">$1</span>'
+    );
+
+    // 7. Numbers
+    highlighted = highlighted.replace(
+      /\b(\d+)\b/g,
+      '<span class="code-number">$1</span>'
+    );
+
+    return highlighted;
   }
 
   copyCode() {
