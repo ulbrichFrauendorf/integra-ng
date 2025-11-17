@@ -5,6 +5,10 @@
     color: colors.$color-text-primary;
     border: 1px solid colors.$color-surface-border;
     background: colors.$color-surface-ground;
+
+    &.component-border {
+      background: colors.$color-component-background;
+    }
   }
 
   .i-input:focus {

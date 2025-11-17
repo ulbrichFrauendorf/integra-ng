@@ -29,7 +29,7 @@
   }
 
   .i-listbox-dropdown {
-    background: colors.$color-surface-ground;
+    background: colors.$color-component-background;
     border: 1px solid colors.$color-surface-border;
 
     .i-listbox-filter {
@@ -46,8 +46,7 @@
     }
 
     .i-listbox-options {
-      background: colors.$color-surface-ground; // Ensure background is set
-      border-radius: 0 0 4px 4px; // Match container border radius
+      background: transparent;
 
       .i-listbox-option {
         color: colors.$color-text-primary;

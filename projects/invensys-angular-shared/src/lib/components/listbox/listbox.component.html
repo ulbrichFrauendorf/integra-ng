@@ -17,6 +17,7 @@
       [externalInvalid]="showErrors"
       [externalErrorMessage]="showErrors ? getErrorMessage() || '' : ''"
       [readonly]="readonly"
+      [backgroundStyle]="'component'"
     >
       <!-- Selected chips overlay (positioned above the input) -->
       @if (shouldShowChips()) {
@@ -52,6 +53,7 @@
         [ngModel]="filterValue()"
         (ngModelChange)="filterValue.set($event)"
         [fluid]="true"
+        [icon]="'pi pi-search'"
       >
       </i-input-text>
     </div>

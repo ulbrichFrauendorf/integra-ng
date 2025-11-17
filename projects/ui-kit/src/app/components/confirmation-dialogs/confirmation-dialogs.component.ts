@@ -124,6 +124,7 @@ async showConfirmation() {
 
   async showCustomConfirmation() {
     await this.confirmationService.confirm({
+      severity: 'warning',
       message:
         'Please confirm if you would like to unlink the report from the organization.',
       header: 'Are you sure?',
@@ -159,6 +160,7 @@ async showConfirmation() {
 
   async showDangerousAction() {
     await this.confirmationService.confirm({
+      severity: 'danger',
       message:
         'This action cannot be undone. All data will be permanently deleted.',
       header: 'Permanent Deletion',

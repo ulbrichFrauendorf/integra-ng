@@ -109,19 +109,19 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 10px;
       min-width: 0;
     }
 
     .i-whisper-message-summary {
       font-weight: 600;
-      font-size: 14px;
-      line-height: 1.3;
+      font-size: 1em;
+      line-height: 1.4;
       word-wrap: break-word;
     }
 
     .i-whisper-message-detail {
-      font-size: 13px;
+      font-size: 0.9em;
       line-height: 1.4;
       word-wrap: break-word;
       opacity: 0.9;

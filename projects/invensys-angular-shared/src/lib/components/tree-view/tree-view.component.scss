@@ -39,7 +39,7 @@
     justify-content: center;
     gap: 8px;
     padding: 20px;
-    font-size: 14px;
+    font-size: 1em;
 
     .pi-spinner {
       font-size: 16px;
@@ -51,7 +51,7 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    font-size: 14px;
+    font-size: 1em;
     font-style: italic;
   }
 }
@@ -128,12 +128,12 @@
   }
 
   .i-tree-view-node-icon {
-    font-size: 14px;
+    font-size: 1em;
     flex-shrink: 0;
   }
 
   .i-tree-view-node-label {
-    font-size: 14px;
+    font-size: 1em;
     line-height: 1.4;
     flex: 1;
     overflow: hidden;

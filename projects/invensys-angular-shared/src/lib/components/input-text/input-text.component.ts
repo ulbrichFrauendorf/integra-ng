@@ -26,6 +26,7 @@ export class IInputText implements ControlValueAccessor {
   @Input() placeholder?: string;
   @Input() externalInvalid = false; // Allow parent to override validation state
   @Input() externalErrorMessage?: string; // Allow parent to provide error message
+  @Input() backgroundStyle: 'surface' | 'component' = 'surface'; // Toggle between surface-border and component-background
 
   /** Optional icon name or path to display on the left of the input */
   @Input() icon?: string;

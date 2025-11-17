@@ -29,6 +29,7 @@
         [class.has-icon]="icon"
         [class.hide-text]="hideText"
         [class.readonly]="readonly"
+        [class.component-border]="backgroundStyle === 'component'"
         [iTooltip]="showErrors ? (getErrorMessage() || '') : ''"
         tooltipPosition="below"
         [tooltipDelay]="100"

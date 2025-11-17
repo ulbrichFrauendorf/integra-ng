@@ -50,7 +50,7 @@ export class IMultiSelect implements ControlValueAccessor {
     MultiSelectOption[] | null | undefined
   >([]);
   @Input({ required: true }) optionLabel!: string;
-  @Input() optionValue?: string;  // Made optional - if not provided, stores full objects
+  @Input() optionValue?: string; // Made optional - if not provided, stores full objects
   @Input() placeholder = 'Select options';
   @Input() id?: string;
   @Input() fluid = false;
@@ -149,10 +149,12 @@ export class IMultiSelect implements ControlValueAccessor {
 
   toggleOption(option: MultiSelectOption) {
     const currentValues = [...this.value];
-    
+
     if (!this.optionValue) {
       // When storing full objects
-      const index = currentValues.findIndex(val => JSON.stringify(val) === JSON.stringify(option));
+      const index = currentValues.findIndex(
+        (val) => JSON.stringify(val) === JSON.stringify(option)
+      );
       if (index > -1) {
         currentValues.splice(index, 1);
       } else {
@@ -178,7 +180,9 @@ export class IMultiSelect implements ControlValueAccessor {
   isOptionSelected(option: MultiSelectOption): boolean {
     if (!this.optionValue) {
       // When storing full objects, do deep comparison
-      return this.value.some(val => JSON.stringify(val) === JSON.stringify(option));
+      return this.value.some(
+        (val) => JSON.stringify(val) === JSON.stringify(option)
+      );
     } else {
       // When storing extracted values, do simple comparison
       const optionValue = this.getOptionValue(option);
@@ -196,16 +200,18 @@ export class IMultiSelect implements ControlValueAccessor {
   removeSelectedItem(value: any, event: Event) {
     event.stopPropagation();
     const currentValues = [...this.value];
-    
+
     let index: number;
     if (!this.optionValue) {
       // When storing full objects, use deep comparison
-      index = currentValues.findIndex((val) => JSON.stringify(val) === JSON.stringify(value));
+      index = currentValues.findIndex(
+        (val) => JSON.stringify(val) === JSON.stringify(value)
+      );
     } else {
       // When storing extracted values, use simple comparison
       index = currentValues.findIndex((val) => val === value);
     }
-    
+
     if (index > -1) {
       currentValues.splice(index, 1);
       this.value = currentValues;

@@ -33,7 +33,7 @@
       .i-select-clear {
         pointer-events: auto;
         cursor: pointer;
-        font-size: 12px;
+        font-size: 0.8em;
         opacity: 0.6;
         transition: opacity 0.15s ease;
 
@@ -43,7 +43,7 @@
       }
 
       .i-select-arrow {
-        font-size: 10px;
+        font-size: 0.7rem; // 10px
         transition: transform 0.15s ease;
         opacity: 0.6;
 
@@ -74,7 +74,7 @@
         padding: 8px;
         border: 1px solid;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 1em;
         outline: none;
       }
     }
@@ -93,7 +93,7 @@
       padding-right: 2px; // Small padding to prevent scrollbar cutoff
 
       .i-select-option {
-        font-size: 14px;
+        font-size: 1em;
         padding: 12px;
         cursor: pointer;
         transition: background-color 0.15s ease;
