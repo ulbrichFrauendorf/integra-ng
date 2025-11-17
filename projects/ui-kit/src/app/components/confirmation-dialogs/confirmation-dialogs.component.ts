@@ -15,7 +15,7 @@ export class ConfirmationDialogsComponent {
   // Code examples organized by category
   codeExamples = {
     basic: `// 1. Import and inject the service
-import { ConfirmationDialogService } from 'invensys-angular-shared/components/confirmation-dialog/services/confirmation-dialog.service';
+import { ConfirmationDialogService } from '../../../../../invensys-angular-shared/src/lib/components/confirmation-dialog/services/confirmation-dialog.service';
 
 constructor(private confirmationService = inject(ConfirmationDialogService)) {}
 

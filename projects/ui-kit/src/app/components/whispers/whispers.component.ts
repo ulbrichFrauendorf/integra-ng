@@ -185,8 +185,8 @@ export class WhispersComponent {
   // Code examples
   codeExamples = {
     basic: `// 1. Import the service and component
-import { WhisperService } from 'invensys-angular-shared/components/whisper/services/whisper.service';
-import { IWhisper } from 'invensys-angular-shared/components/whisper/whisper.component';
+import { WhisperService } from '../../../../../invensys-angular-shared/src/lib/components/whisper/services/whisper.service';
+import { IWhisper } from '../../../../../invensys-angular-shared/src/lib/components/whisper/whisper.component';
 
 // 2. Add to your component
 @Component({

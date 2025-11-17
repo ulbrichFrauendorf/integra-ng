@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { LayoutComponent } from './layout/components/layout/layout.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { InputTextsComponent } from './components/input-texts/input-texts.component';
 import { CardsComponent } from './components/cards/cards.component';
@@ -14,18 +15,38 @@ import { CheckboxesComponent } from './components/checkboxes/checkboxes.componen
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
 
 export const routes: Routes = [
-  { path: 'buttons', component: ButtonsComponent },
-  { path: 'checkboxes', component: CheckboxesComponent },
-  { path: 'input-texts', component: InputTextsComponent },
-  { path: 'cards', component: CardsComponent },
-  { path: 'dialogs', component: DialogsComponent },
-  { path: 'confirmation-dialogs', component: ConfirmationDialogsComponent },
-  { path: 'tooltips', component: TooltipsComponent },
-  { path: 'selects', component: SelectsComponent },
-  { path: 'multi-selects', component: MultiSelectsComponent },
-  { path: 'chips', component: ChipsComponent },
-  { path: 'listboxes', component: ListboxesComponent },
-  { path: 'tree-views', component: TreeViewsComponent },
-  { path: 'whispers', component: WhispersComponent },
-  { path: '', redirectTo: '/input-texts', pathMatch: 'full' },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'components/input-texts',
+  },
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'components',
+        children: [
+          { path: 'buttons', component: ButtonsComponent },
+          { path: 'checkboxes', component: CheckboxesComponent },
+          { path: 'input-texts', component: InputTextsComponent },
+          { path: 'cards', component: CardsComponent },
+          { path: 'dialogs', component: DialogsComponent },
+          {
+            path: 'confirmation-dialogs',
+            component: ConfirmationDialogsComponent,
+          },
+          { path: 'tooltips', component: TooltipsComponent },
+          { path: 'selects', component: SelectsComponent },
+          { path: 'multi-selects', component: MultiSelectsComponent },
+          { path: 'chips', component: ChipsComponent },
+          { path: 'listboxes', component: ListboxesComponent },
+          { path: 'tree-views', component: TreeViewsComponent },
+          { path: 'whispers', component: WhispersComponent },
+          { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
+        ],
+      },
+    ],
+  },
+  { path: '**', redirectTo: 'components/input-texts' },
 ];

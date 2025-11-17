@@ -47,7 +47,7 @@ export class CheckboxesComponent {
   // Code examples organized by category
   codeExamples = {
     basic: `// 1. Import the component and FormsModule
-import { ICheckbox } from 'invensys-angular-shared/components/checkbox/checkbox.component';
+import { ICheckbox } from '../../../../../invensys-angular-shared/src/lib/components/checkbox/checkbox.component';
 import { FormsModule } from '@angular/forms';
 
 // 2. Add to your component imports

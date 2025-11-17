@@ -13,8 +13,8 @@ export class TooltipsComponent {
   // Code examples organized by category
   codeExamples = {
     basic: `// 1. Import the directive and components
-import { TooltipDirective } from 'invensys-angular-shared/directives/tooltip/tooltip.directive';
-import { IButton } from 'invensys-angular-shared/components/button/button.component';
+import { TooltipDirective } from '../../../../../invensys-angular-shared/src/lib/directives/tooltip/tooltip.directive';
+import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
 
 // 2. Use in your component imports
 @Component({

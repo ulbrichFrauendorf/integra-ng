@@ -1,0 +1,102 @@
+.layout {
+  .layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+
+    .layout-body {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0; // Important for flex children with overflow
+
+      .layout-sidebar-container {
+        flex-shrink: 0;
+        width: 300px;
+        overflow-y: auto;
+      }
+
+      .layout-main-container {
+        flex: 1 1 auto;
+        min-width: 0; // Prevent flex item from overflowing
+        overflow-y: auto;
+        padding: 2rem;
+
+        .layout-main {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+    }
+
+    &.layout-static-inactive {
+      .layout-main-container {
+        margin-left: 0;
+      }
+    }
+
+    &.layout-mobile-inactive {
+      .layout-sidebar-container {
+        transform: translateX(-100%);
+      }
+    }
+
+    &.layout-overlay-active {
+      .layout-sidebar-container {
+        position: fixed;
+        left: 0;
+        top: 5rem;
+        height: calc(100vh - 5rem);
+        z-index: 999;
+        background: var(--surface-overlay);
+      }
+    }
+
+    .layout-mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 998;
+      display: none;
+    }
+  }
+}
+
+// Responsive behavior
+@media (max-width: 991px) {
+  .layout {
+    .layout-wrapper {
+      .layout-body {
+        .layout-sidebar-container {
+          position: fixed;
+          left: 0;
+          top: 5rem;
+          height: calc(100vh - 5rem);
+          z-index: 999;
+          transform: translateX(-100%);
+          transition: transform 0.2s ease;
+          background: var(--surface-overlay);
+        }
+
+        .layout-main-container {
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+
+      &.layout-overlay-active,
+      &.layout-mobile-inactive {
+        .layout-sidebar-container {
+          transform: translateX(0);
+        }
+
+        .layout-mask {
+          display: block;
+        }
+      }
+    }
+  }
+}

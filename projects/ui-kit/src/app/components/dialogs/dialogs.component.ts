@@ -121,8 +121,8 @@ export class DialogsComponent implements OnInit, OnDestroy {
   // Code examples organized by category
   codeExamples = {
     dynamic: `// 1. Import and inject the service
-import { DialogService } from 'invensys-angular-shared/components/dialog/services/dialog.service';
-import { DynamicDialogRef } from 'invensys-angular-shared/components/dialog/services/dialog.interfaces';
+import { DialogService } from '../../../../../invensys-angular-shared/src/lib/components/dialog/services/dialog.service';
+import { DynamicDialogRef } from '../../../../../invensys-angular-shared/src/lib/components/dialog/services/dialog.interfaces';
 
 // In your component
 ref: DynamicDialogRef | undefined;

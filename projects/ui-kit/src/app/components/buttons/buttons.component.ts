@@ -132,7 +132,7 @@ export class ButtonsComponent {
   // Code examples organized by category
   codeExamples = {
     contrast: `// 1. Import the component
-import { IButton } from 'invensys-angular-shared/components/button/button.component';
+import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
 
 // 2. Add to your component imports
 @Component({

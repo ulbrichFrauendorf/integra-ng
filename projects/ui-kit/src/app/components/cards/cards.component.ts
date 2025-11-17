@@ -21,7 +21,7 @@ export class CardsComponent {
   // Code examples organized by category
   codeExamples = {
     basic: `// 1. Import the component
-import { ICard } from 'invensys-angular-shared/components/card/card.component';
+import { ICard } from '../../../../../invensys-angular-shared/src/lib/components/card/card.component';
 
 // 2. Add to your component imports
 @Component({

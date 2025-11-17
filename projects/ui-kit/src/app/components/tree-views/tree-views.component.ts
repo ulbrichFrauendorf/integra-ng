@@ -258,7 +258,7 @@ export class TreeViewsComponent {
   // Code examples
   codeExamples = {
     basic: `// 1. Import the component
-import { ITreeView, ITreeNode } from 'invensys-angular-shared';
+import { ITreeView, ITreeNode } from '../../../../../invensys-angular-shared/src/public-api';
 
 // 2. Define tree data
 treeData: ITreeNode[] = [

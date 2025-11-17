@@ -89,7 +89,7 @@ export class InputTextsComponent implements OnInit {
   codeExamples = {
     basic: `// 1. Import required modules and component
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { IInputText } from 'invensys-angular-shared/components/input-text/input-text.component';
+import { IInputText } from '../../../../../invensys-angular-shared/src/lib/components/input-text/input-text.component';
 
 // 2. Create your form
 form = this.fb.group({
