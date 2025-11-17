@@ -5,6 +5,7 @@ import {
 } from '../dialog/services/dialog.interfaces';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { IDialogActions } from '../dialog/inner/dialog-actions/dialog-actions.component';
+import { ISeverity } from '@shared/enums/IButtonSeverity';
 
 @Component({
   selector: 'i-confirmation-dialog',
@@ -18,15 +19,16 @@ export class ConfirmationDialogComponent implements OnInit {
 
   componentId = UniqueComponentId('i-confirmation-dialog-');
 
+  severity = signal<ISeverity>('primary');
   message = signal('');
   header = signal('Are you sure?');
   acceptLabel: string = 'Confirm';
   rejectLabel: string = 'Cancel';
 
   ngOnInit() {
-    // Update signals after config is set by the dialog service
     this.message.set(this.config.data?.message || '');
     this.header.set(this.config.data?.header || 'Are you sure?');
+    this.severity.set(this.config.data?.severity || 'primary');
   }
 
   onConfirm() {

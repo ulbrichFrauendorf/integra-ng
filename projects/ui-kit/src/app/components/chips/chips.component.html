@@ -33,8 +33,11 @@
         class="demo-form"
       >
         <i-chips
+          label="Tags"
           placeholder="Enter tags and press Enter"
           formControlName="tags"
+          [showClear]="true"
+          [fluid]="true"
         />
         <i-button severity="primary" type="submit">Submit Basic Form</i-button>
       </form>
@@ -51,8 +54,11 @@
         class="demo-form"
       >
         <i-chips
+          label="Required Tags"
           placeholder="Enter at least 2 tags"
           formControlName="requiredTags"
+          [showClear]="true"
+          [fluid]="true"
         />
 
         @if (validationForm.get('requiredTags')?.invalid &&

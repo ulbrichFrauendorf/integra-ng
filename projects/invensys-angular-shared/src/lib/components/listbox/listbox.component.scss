@@ -55,21 +55,12 @@
 
       .i-listbox-clear {
         cursor: pointer;
-        font-size: 14px;
+        font-size: 0.8em;
         opacity: 0.6;
         transition: opacity 0.15s ease;
 
         &:hover {
           opacity: 1;
-        }
-      }
-
-      .i-listbox-arrow {
-        font-size: 12px;
-        transition: transform 0.15s ease;
-
-        &.flipped {
-          transform: rotate(180deg);
         }
       }
     }
@@ -89,7 +80,7 @@
         padding: 8px;
         border: 1px solid;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 1em;
         outline: none;
       }
     }
@@ -105,7 +96,7 @@
       @include scrollbar.dropdown-scrollbar();
 
       .i-listbox-option {
-        font-size: 14px;
+        font-size: 1em;
         padding: 8px 12px;
         cursor: pointer;
         transition: background-color 0.15s ease;

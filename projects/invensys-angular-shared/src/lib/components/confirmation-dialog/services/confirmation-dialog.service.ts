@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { DialogService } from '../../dialog/services/dialog.service';
 import { IDynamicDialogRef } from '../../dialog/services/dialog.interfaces';
+import { ISeverity } from '@shared/enums/IButtonSeverity';
 
 export interface ConfirmationDialogConfig {
+  severity?: ISeverity;
   message: string;
   header?: string;
   acceptLabel?: string;
@@ -30,7 +32,7 @@ export class ConfirmationDialogService {
     this.rejectLabel = config.rejectLabel || 'Cancel';
 
     const ref = this.dialogService.open(ConfirmationDialogComponent, {
-      header: ' ',
+      header: config.header,
       width: '400px',
       contentStyle: { overflow: 'auto' },
       breakpoints: {
@@ -40,6 +42,7 @@ export class ConfirmationDialogService {
       data: {
         message: config.message,
         header: config.header,
+        severity: config.severity || 'primary',
       },
     });
 

@@ -29,7 +29,7 @@
         [class.has-icon]="icon"
         [class.hide-text]="hideText"
         [class.readonly]="readonly"
-        [iTooltip]="showErrors ? getErrorMessage() || '' : ''"
+        [iTooltip]="showErrors ? (getErrorMessage() || '') : ''"
         tooltipPosition="below"
         [tooltipDelay]="100"
       />

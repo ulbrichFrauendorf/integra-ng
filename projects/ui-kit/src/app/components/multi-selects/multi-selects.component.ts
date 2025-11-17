@@ -254,15 +254,27 @@ private minArrayLengthValidator(minLength: number) {
     console.log('Skills Values Changed (optionValue="value"):', values);
     console.log('Form control value:', this.basicForm.get('skills')?.value);
     console.log('Array length:', values.length);
-    console.log('Types:', values.map(v => typeof v));
+    console.log(
+      'Types:',
+      values.map((v) => typeof v)
+    );
   }
 
   onSkillsObjectChange(values: any[]) {
     console.log('Skills Objects Changed (no optionValue):', values);
-    console.log('Form control value:', this.basicForm.get('fullObjectSkills')?.value);
+    console.log(
+      'Form control value:',
+      this.basicForm.get('fullObjectSkills')?.value
+    );
     console.log('Array length:', values.length);
-    console.log('Types:', values.map(v => typeof v));
-    console.log('Object properties:', values.map(v => v ? Object.keys(v) : 'null'));
+    console.log(
+      'Types:',
+      values.map((v) => typeof v)
+    );
+    console.log(
+      'Object properties:',
+      values.map((v) => (v ? Object.keys(v) : 'null'))
+    );
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {

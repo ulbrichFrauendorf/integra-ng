@@ -59,7 +59,8 @@ export class TooltipDirective implements OnDestroy {
       clearTimeout(this.hideTimeout);
     }
 
-    if (!this.tooltipText || this.tooltipComponent) {
+    // Check for empty, null, or whitespace-only tooltip text
+    if (!this.tooltipText || !this.tooltipText.trim() || this.tooltipComponent) {
       return;
     }
 

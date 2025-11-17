@@ -46,23 +46,29 @@ form = this.fb.group({
   tags: [['angular', 'typescript']]
 });
 
-// 3. Use in template
+// 3. Use in template with enhanced features
 <form [formGroup]="form">
   <i-chips
+    label="Tags"
     placeholder="Enter tags and press Enter"
-    formControlName="tags">
+    formControlName="tags"
+    [showClear]="true"
+    [fluid]="true">
   </i-chips>
 </form>`,
 
-    validation: `// With validation
+    validation: `// With validation and clear functionality
 form = this.fb.group({
   requiredTags: [[], [Validators.required, this.minArrayLengthValidator(2)]]
 });
 
 <form [formGroup]="form">
   <i-chips
+    label="Required Tags"
     placeholder="Enter at least 2 tags"
-    formControlName="requiredTags">
+    formControlName="requiredTags"
+    [showClear]="true"
+    [fluid]="true">
   </i-chips>
   @if (form.get('requiredTags')?.invalid && form.get('requiredTags')?.touched) {
     <div class="error-message">At least 2 tags are required</div>
@@ -100,8 +106,23 @@ form = this.fb.group({
       title: 'Reactive Forms',
       description: 'Full integration with Angular reactive forms',
     },
-    { title: 'Float Labels', description: 'PrimeNG-style float label support' },
-    { title: 'Validation', description: 'Works with Angular form validators' },
+    {
+      title: 'Float Labels',
+      description:
+        'PrimeNG-style float label support with input-text integration',
+    },
+    {
+      title: 'Validation',
+      description: 'Works with Angular form validators',
+    },
+    {
+      title: 'Clear All',
+      description: 'Clear all chips at once with a single click',
+    },
+    {
+      title: 'Fluid Layout',
+      description: 'Responsive width adjustment to container',
+    },
     {
       title: 'Keyboard Support',
       description: 'Enter, Tab, and Backspace key handling',
