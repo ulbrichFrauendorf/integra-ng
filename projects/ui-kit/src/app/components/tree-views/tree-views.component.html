@@ -23,12 +23,12 @@
       <p>Basic tree structure with expand/collapse functionality.</p>
 
       <div class="demo-actions">
-        <button type="button" class="demo-btn" (click)="expandAll()">
+        <i-button severity="secondary" (clicked)="expandAll()">
           Expand All
-        </button>
-        <button type="button" class="demo-btn" (click)="collapseAll()">
+        </i-button>
+        <i-button severity="secondary" (clicked)="collapseAll()">
           Collapse All
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view [value]="basicTreeData" scrollHeight="300px"> </i-tree-view>
@@ -45,9 +45,9 @@
       </p>
 
       <div class="demo-actions">
-        <button type="button" class="demo-btn" (click)="clearSingleSelection()">
+        <i-button severity="secondary" (clicked)="clearSingleSelection()">
           Clear Selection
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view
@@ -76,13 +76,9 @@
       <p>Hold Ctrl/Cmd and click to select multiple nodes.</p>
 
       <div class="demo-actions">
-        <button
-          type="button"
-          class="demo-btn"
-          (click)="clearMultipleSelection()"
-        >
+        <i-button severity="secondary" (clicked)="clearMultipleSelection()">
           Clear Selection
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view
@@ -121,13 +117,9 @@
       </p>
 
       <div class="demo-actions">
-        <button
-          type="button"
-          class="demo-btn"
-          (click)="clearCheckboxSelection()"
-        >
+        <i-button severity="secondary" (clicked)="clearCheckboxSelection()">
           Clear Selection
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view

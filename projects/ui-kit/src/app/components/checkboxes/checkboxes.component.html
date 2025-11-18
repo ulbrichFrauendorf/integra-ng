@@ -115,26 +115,27 @@
           <span class="status">Value: {{ formControlExample.value }}</span>
         </div>
         <div class="example-row">
-          <button
-            class="demo-button"
-            (click)="formControlExample.setValue(!formControlExample.value)"
+          <i-button
+            severity="secondary"
+            [text]="true"
+            (clicked)="formControlExample.setValue(!formControlExample.value)"
           >
             Toggle via FormControl
-          </button>
-          <button
-            class="demo-button"
-            (click)="formControlExample.disable()"
+          </i-button>
+          <i-button
+            severity="secondary"
+            (clicked)="formControlExample.disable()"
             [disabled]="formControlExample.disabled"
           >
             Disable
-          </button>
-          <button
-            class="demo-button"
-            (click)="formControlExample.enable()"
+          </i-button>
+          <i-button
+            severity="secondary"
+            (clicked)="formControlExample.enable()"
             [disabled]="!formControlExample.disabled"
           >
             Enable
-          </button>
+          </i-button>
         </div>
       </div>
     </app-demo-card>
@@ -173,13 +174,13 @@
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="demo-button primary">Submit</button>
-            <button type="button" class="demo-button" (click)="selectAll()">
+            <i-button severity="primary" type="submit">Submit</i-button>
+            <i-button severity="secondary" (clicked)="selectAll()">
               Select All
-            </button>
-            <button type="button" class="demo-button" (click)="resetForm()">
+            </i-button>
+            <i-button severity="secondary" (clicked)="resetForm()">
               Reset
-            </button>
+            </i-button>
           </div>
         </form>
 

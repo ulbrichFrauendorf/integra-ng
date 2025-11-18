@@ -9,6 +9,7 @@ import { JsonPipe } from '@angular/common';
 import {
   ITreeView,
   ITreeNode,
+  IButton,
 } from '../../../../../invensys-angular-shared/src/public-api';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
@@ -20,6 +21,7 @@ import {
   selector: 'app-tree-views',
   imports: [
     ITreeView,
+    IButton,
     DemoCardComponent,
     FormsModule,
     ReactiveFormsModule,

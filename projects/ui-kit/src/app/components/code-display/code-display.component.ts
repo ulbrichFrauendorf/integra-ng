@@ -9,36 +9,37 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
 
 @Component({
   selector: 'app-code-display',
-  imports: [CommonModule],
+  imports: [CommonModule, IButton],
   template: `
     <div class="code-display-container">
       <div class="code-section">
         <div class="code-header">
           <div class="tab-container" *ngIf="showTabs && tsCode">
-            <button
-              class="tab-button"
+            <i-button
+              severity="secondary"
               [class.active]="activeTab === 'html'"
-              (click)="activeTab = 'html'"
+              (clicked)="activeTab = 'html'"
             >
               HTML
-            </button>
-            <button
-              class="tab-button"
+            </i-button>
+            <i-button
+              severity="secondary"
               [class.active]="activeTab === 'ts'"
-              (click)="activeTab = 'ts'"
+              (clicked)="activeTab = 'ts'"
             >
               TypeScript
-            </button>
+            </i-button>
           </div>
           <span class="code-title" *ngIf="!showTabs || !tsCode">
             {{ activeTab === 'html' ? 'HTML' : 'TypeScript' }}
           </span>
-          <button class="copy-button" (click)="copyCode()" title="Copy code">
+          <i-button severity="secondary" (clicked)="copyCode()" title="Copy code">
             <i class="pi pi-copy"></i>
-          </button>
+          </i-button>
         </div>
         <div class="code-block">
           <pre

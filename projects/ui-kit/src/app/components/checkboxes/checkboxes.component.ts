@@ -6,6 +6,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { ICheckbox } from '../../../../../invensys-angular-shared/src/lib/components/checkbox/checkbox.component';
+import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { JsonPipe } from '@angular/common';
 import {
@@ -17,6 +18,7 @@ import {
   selector: 'app-checkboxes',
   imports: [
     ICheckbox,
+    IButton,
     DemoCardComponent,
     FormsModule,
     ReactiveFormsModule,
