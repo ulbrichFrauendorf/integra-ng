@@ -15,10 +15,12 @@
     display: flex;
     align-items: center;
     color: var(--surface-900);
-    font-size: 1.5rem;
+    font-size: 18px;
     font-weight: 500;
     margin-right: 50px;
     border-radius: 12px;
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
 
     img {
       height: 2.5rem;
@@ -26,10 +28,10 @@
     }
 
     &:focus {
-     outline: 0 none;
-    outline-offset: 0;
-    transition: box-shadow .2s;
-    box-shadow: inset var(--focus-ring);
+      outline: 0 none;
+      outline-offset: 0;
+      transition: box-shadow 0.2s;
+      box-shadow: inset var(--focus-ring);
     }
   }
 

@@ -30,6 +30,8 @@ The library includes the following components:
 To view and test the components in the UI Kit showcase:
 
 ```bash
+npm install
+
 npm run start
 ```
 
