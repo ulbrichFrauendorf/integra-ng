@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
+import { IButton } from '../../../../../integra-ng/src/lib/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,
@@ -157,7 +157,7 @@ export class ButtonsComponent {
   };
 
   // TypeScript initialization example
-  initializationCode = `import { IButton } from 'invensys-angular-shared';
+  initializationCode = `import { IButton } from 'integra-ng';
 
 @Component({
   selector: 'app-example',

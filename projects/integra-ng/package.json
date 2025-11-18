@@ -1,5 +1,5 @@
 {
-  "name": "invensys-angular-shared",
+  "name": "integra-ng",
   "version": "1.0.2",
   "peerDependencies": {
     "@angular/common": "^20.3.3",

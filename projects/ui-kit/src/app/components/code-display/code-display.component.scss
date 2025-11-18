@@ -36,63 +36,17 @@ $rider-event: #cc7832; // reuse keyword color for events
       .tab-container {
         display: flex;
         gap: 2px;
-
-        .tab-button {
-          background: $rider-bg;
-          border: 1px solid $rider-border;
-          color: $rider-text;
-          padding: 0.25rem 0.75rem;
-          cursor: pointer;
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          transition: all 0.15s;
-          border-radius: 4px 4px 0 0;
-
-          &:hover {
-            background: lighten($rider-panel, 5%);
-          }
-
-          &.active {
-            background: $rider-bg;
-            color: $rider-function;
-            border-bottom-color: $rider-bg;
-            font-weight: 600;
-          }
-        }
       }
 
       .code-title {
-        font-size: 0.75rem;
+        font-size: 0.75em;
         font-weight: 600;
         color: $rider-text;
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
 
-      .copy-button {
-        background: $rider-bg;
-        border: 1px solid $rider-border;
-        border-radius: 4px;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        color: $rider-text;
-        transition: background 0.15s, color 0.15s, border-color 0.15s;
-        font-size: 0.75rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
 
-        &:hover {
-          background-color: $rider-panel;
-          color: $rider-function;
-          border-color: $rider-function;
-        }
-
-        i {
-          font-size: 0.75rem;
-        }
-      }
     }
 
     .code-block {
@@ -105,8 +59,8 @@ $rider-event: #cc7832; // reuse keyword color for events
         color: $rider-text;
         font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New",
           monospace;
-        font-size: 0.8rem;
-        line-height: 1.4;
+        font-size:  0.75em;
+        line-height: 1.6;
         white-space: pre;
         tab-size: 2;
 
@@ -181,9 +135,6 @@ $rider-event: #cc7832; // reuse keyword color for events
   .code-display-container {
     .code-section {
       max-width: 100%;
-    }
-    .ui-section {
-      flex-wrap: wrap;
     }
   }
 }

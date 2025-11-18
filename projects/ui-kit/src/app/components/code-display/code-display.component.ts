@@ -9,7 +9,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
+import { IButton } from '../../../../../integra-ng/src/lib/components/button/button.component';
 
 @Component({
   selector: 'app-code-display',
@@ -20,14 +20,18 @@ import { IButton } from '../../../../../invensys-angular-shared/src/lib/componen
         <div class="code-header">
           <div class="tab-container" *ngIf="showTabs && tsCode">
             <i-button
-              severity="secondary"
+              [size]="'small'"
+              severity="primary"
+              [text]="true"
               [class.active]="activeTab === 'html'"
               (clicked)="activeTab = 'html'"
             >
               HTML
             </i-button>
             <i-button
-              severity="secondary"
+              [size]="'small'"
+              severity="primary"
+              [text]="true"
               [class.active]="activeTab === 'ts'"
               (clicked)="activeTab = 'ts'"
             >
@@ -38,9 +42,11 @@ import { IButton } from '../../../../../invensys-angular-shared/src/lib/componen
             {{ activeTab === 'html' ? 'HTML' : 'TypeScript' }}
           </span>
           <i-button
+            [size]="'small'"
             severity="secondary"
+            [text]="true"
             (clicked)="copyCode()"
-            title="Copy code"
+            [title]="'Copy code'"
           >
             <i class="pi pi-copy"></i>
           </i-button>

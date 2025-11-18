@@ -125,8 +125,8 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   // TypeScript code example for Dynamic Dialog Service
   dynamicDialogTsCode = `import { Component, inject } from '@angular/core';
-import { DialogService } from 'invensys-angular-shared';
-import { IDynamicDialogRef } from 'invensys-angular-shared';
+import { DialogService } from 'integra-ng';
+import { IDynamicDialogRef } from 'integra-ng';
 import { ExampleDialogComponent } from './example-dialog.component';
 
 @Component({

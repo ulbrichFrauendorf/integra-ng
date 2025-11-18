@@ -7,22 +7,10 @@
     </p>
   </header>
 
-  <!-- Component Setup -->
-  <app-demo-card
-    header="Component Setup"
-    [sourceCode]="''"
-    [tsCode]="initializationCode"
-  >
-    <p>
-      Import and register the IButton component to start using it in your
-      templates:
-    </p>
-  </app-demo-card>
-
   <div class="cards-container">
     <!-- Contrast Buttons -->
     <app-demo-card
-      header="Contrast Text Buttons"
+      [title]="'Contrast Text Buttons'"
       [sourceCode]="codeExamples.contrast"
     >
       <div class="button-examples">
@@ -39,7 +27,7 @@
 
     <!-- Success Buttons -->
     <app-demo-card
-      header="Success Raised Buttons"
+      [title]="'Success Raised Buttons'"
       [sourceCode]="codeExamples.success"
     >
       <div class="button-examples">
@@ -56,7 +44,7 @@
 
     <!-- Warning Buttons -->
     <app-demo-card
-      header="Warning Outlined Buttons"
+      [title]="'Warning Outlined Buttons'"
       [sourceCode]="codeExamples.warning"
     >
       <div class="button-examples">
@@ -73,7 +61,7 @@
 
     <!-- Info Buttons -->
     <app-demo-card
-      header="Info Buttons with Icons"
+      [title]="'Info Buttons with Icons'"
       [sourceCode]="codeExamples.info"
     >
       <div class="button-examples">
@@ -90,7 +78,7 @@
     </app-demo-card>
 
     <!-- Fluid Buttons -->
-    <app-demo-card header="Fluid Buttons" [sourceCode]="codeExamples.fluid">
+    <app-demo-card [title]="'Fluid Buttons'" [sourceCode]="codeExamples.fluid">
       <div class="button-examples fluid">
         @for (button of buttonExamples.fluid; track $index) {
         <i-button
@@ -108,7 +96,7 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>

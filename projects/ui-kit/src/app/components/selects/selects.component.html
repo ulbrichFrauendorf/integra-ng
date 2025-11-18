@@ -10,7 +10,7 @@
   <div class="cards-container">
     <!-- Basic Select Examples -->
     <app-demo-card
-      title="Basic Select Options"
+      [title]="'Basic Select Options'"
       [sourceCode]="codeExamples.reactiveForm"
     >
       <form [formGroup]="basicForm" class="demo-form">
@@ -82,7 +82,7 @@
 
     <!-- Validation Example -->
     <app-demo-card
-      title="Required Validation"
+      [title]="'Required Validation'"
       [sourceCode]="codeExamples.validation"
     >
       <form [formGroup]="validationForm" class="demo-form">
@@ -106,7 +106,7 @@
 
     <!-- Advanced Features -->
     <app-demo-card
-      title="Advanced Features (Filtering & Clear)"
+      [title]="'Advanced Features (Filtering & Clear)'"
       [sourceCode]="codeExamples.advanced"
     >
       <form [formGroup]="advancedForm" class="demo-form">
@@ -133,7 +133,7 @@
     </app-demo-card>
 
     <!-- Fluid Layout -->
-    <app-demo-card title="Fluid Layout" [sourceCode]="codeExamples.fluid">
+    <app-demo-card [title]="'Fluid Layout'" [sourceCode]="codeExamples.fluid">
       <form [formGroup]="fluidForm" class="demo-form">
         <i-select
           label="Fluid Select"
@@ -156,7 +156,7 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
-import { WhisperService } from '../../../../../invensys-angular-shared/src/lib/components/whisper/services/whisper.service';
-import { IWhisper } from '../../../../../invensys-angular-shared/src/lib/components/whisper/whisper.component';
+import { IButton } from '../../../../../integra-ng/src/lib/components/button/button.component';
+import { WhisperService } from '../../../../../integra-ng/src/lib/components/whisper/services/whisper.service';
+import { IWhisper } from '../../../../../integra-ng/src/lib/components/whisper/whisper.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
-import { IWhisperMessage } from '../../../../../invensys-angular-shared/src/lib/components/whisper/services/whisper.interfaces';
+import { IWhisperMessage } from '../../../../../integra-ng/src/lib/components/whisper/services/whisper.interfaces';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 import {
   FeaturesListComponent,
@@ -223,8 +223,8 @@ export class WhispersComponent {
 
   // TypeScript examples
   tsExamples = {
-    basic: `import { WhisperService } from 'invensys-angular-shared';
-import { IWhisper } from 'invensys-angular-shared';
+    basic: `import { WhisperService } from 'integra-ng';
+import { IWhisper } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -283,8 +283,8 @@ clearMessages() {
   };
 
   // Component setup
-  initializationCode = `import { WhisperService } from 'invensys-angular-shared';
-import { IWhisper } from 'invensys-angular-shared';
+  initializationCode = `import { WhisperService } from 'integra-ng';
+import { IWhisper } from 'integra-ng';
 
 @Component({
   selector: 'app-example',

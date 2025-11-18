@@ -10,7 +10,7 @@
   <div class="cards-container">
     <!-- Basic Usage -->
     <app-demo-card
-      title="Basic ngModel Usage"
+      [title]="'Basic ngModel Usage'"
       [sourceCode]="codeExamples.ngModel"
       [tsCode]="tsExamples.ngModel"
     >
@@ -29,7 +29,7 @@
 
     <!-- With Labels -->
     <app-demo-card
-      title="Checkboxes with Labels"
+      [title]="'Checkboxes with Labels'"
       [sourceCode]="codeExamples.ngModel"
     >
       <div class="checkbox-examples">
@@ -50,7 +50,7 @@
     </app-demo-card>
 
     <!-- States -->
-    <app-demo-card title="Checkbox States" [sourceCode]="codeExamples.ngModel">
+    <app-demo-card [title]="'Checkbox States'" [sourceCode]="codeExamples.ngModel">
       <div class="checkbox-examples">
         <div class="example-row">
           <i-checkbox
@@ -71,7 +71,7 @@
 
     <!-- Sizes -->
     <app-demo-card
-      title="Checkbox Sizes"
+      [title]="'Checkbox Sizes'"
       [sourceCode]="codeExamples.sizes"
       [tsCode]="tsExamples.ngModel"
     >
@@ -102,7 +102,7 @@
 
     <!-- FormControl -->
     <app-demo-card
-      title="Reactive Forms - FormControl"
+      [title]="'Reactive Forms - FormControl'"
       [sourceCode]="codeExamples.formControl"
       [tsCode]="tsExamples.formControl"
     >
@@ -142,7 +142,7 @@
 
     <!-- FormGroup -->
     <app-demo-card
-      title="Reactive Forms - FormGroup"
+      [title]="'Reactive Forms - FormGroup'"
       [sourceCode]="codeExamples.reactiveForm"
       [tsCode]="tsExamples.reactiveForm"
     >
@@ -194,7 +194,7 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>

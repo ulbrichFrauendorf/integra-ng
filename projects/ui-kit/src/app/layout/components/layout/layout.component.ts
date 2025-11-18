@@ -10,8 +10,8 @@ import { filter, Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { AppTopBarComponent } from '../top-bar/app.topbar.component';
 import { SideBarStickyComponent } from '../side-bar-sticky/side-bar-sticky.component';
-import { LayoutService } from 'app/layout/service/app.layout.service';
-import { COLOR_SCHEME } from 'app/layout/service/color-scheme-injection';
+import { LayoutService } from '../../service/app.layout.service';
+import { COLOR_SCHEME } from '../../service/color-scheme-injection';
 
 @Component({
   selector: 'app-layout',

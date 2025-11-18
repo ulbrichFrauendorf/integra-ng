@@ -9,7 +9,7 @@
 
   <div class="cards-container">
     <!-- Basic Chip Examples -->
-    <app-demo-card title="Basic Chips" [sourceCode]="codeExamples.basicChips">
+    <app-demo-card [title]="'Basic Chips'" [sourceCode]="codeExamples.basicChips">
       <div class="chip-examples">
         @for (chip of chipExamples; track chip.label) {
         <i-chip
@@ -23,7 +23,7 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
