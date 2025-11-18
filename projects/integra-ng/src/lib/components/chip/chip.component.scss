@@ -1,0 +1,53 @@
+@use "./chip.component.theme.scss" as theme;
+
+@include theme.i-chip-theme();
+
+.i-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 1em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  user-select: none;
+  max-width: 150px;
+
+  &.i-chip-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .i-chip-icon {
+    flex-shrink: 0;
+  }
+
+  .i-chip-image {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .i-chip-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .i-chip-remove-icon {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 4px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

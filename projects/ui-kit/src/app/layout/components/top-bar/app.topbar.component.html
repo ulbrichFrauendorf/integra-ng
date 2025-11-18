@@ -1,0 +1,45 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img
+            src="assets/layout/images/{{
+                layoutService.config().colorScheme === 'light'
+                    ? 'invensys-icon-light'
+                    : 'invensys-icon-dark'
+            }}.png"
+            alt="invensys-logo"
+        />
+        <span>IntegraFlow</span>
+    </a>
+
+    <i-button
+        [severity]="'contrast'"
+        size="medium"
+        [text]="true"
+        [icon]="'pi pi-bars'"
+        (clicked)="layoutService.onMenuToggle()"
+    ></i-button>
+    <i-button
+        class="layout-topbar-menu-button"
+        [severity]="'contrast'"
+        size="medium"
+        [text]="true"
+        [icon]="'pi pi-ellipsis-v'"
+        (clicked)="layoutService.showProfileSidebar()"
+    ></i-button>
+
+    <div
+        class="layout-topbar-menu"
+        [ngClass]="{
+            'layout-topbar-menu-mobile-active':
+                layoutService.state.profileSidebarVisible
+        }"
+    >
+    <i-button
+                [severity]="'contrast'"
+                size="medium"
+                [text]="true"
+                [icon]="'pi pi-sun'"
+                (clicked)="changeTheme()"
+            />
+    </div>
+</div>

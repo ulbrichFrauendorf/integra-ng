@@ -10,7 +10,11 @@
 
   <div class="cards-container">
     <!-- Basic Multi-Select Examples -->
-    <app-demo-card title="Basic Multi-Select" [sourceCode]="codeExamples.basic">
+    <app-demo-card
+      [title]="'Basic Multi-Select'"
+      [sourceCode]="codeExamples.reactiveForm"
+      [tsCode]="tsExamples.reactiveForm"
+    >
       <form
         [formGroup]="basicForm"
         (ngSubmit)="onSubmit(basicForm, 'basic')"
@@ -56,6 +60,29 @@
             formControlName="disabled"
           >
           </i-multi-select>
+
+          <!-- Value Extraction Example -->
+          <i-multi-select
+            label="Skills (Values Only)"
+            [options]="selectData.skills"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Stores only the values"
+            formControlName="skills"
+            (onChange)="onSkillsValueChange($event)"
+          >
+          </i-multi-select>
+
+          <!-- Full Object Example -->
+          <i-multi-select
+            label="Skills (Full Objects)"
+            [options]="selectData.skills"
+            optionLabel="label"
+            placeholder="Stores the entire objects"
+            formControlName="fullObjectSkills"
+            (onChange)="onSkillsObjectChange($event)"
+          >
+          </i-multi-select>
         </div>
 
         <i-button type="submit" severity="primary">Submit Basic Form</i-button>
@@ -64,8 +91,9 @@
 
     <!-- Validation Example -->
     <app-demo-card
-      title="Required Validation"
+      [title]="'Required Validation'"
       [sourceCode]="codeExamples.validation"
+      [tsCode]="tsExamples.validation"
     >
       <form
         [formGroup]="validationForm"
@@ -102,7 +130,7 @@
 
     <!-- Advanced Configuration -->
     <app-demo-card
-      title="Advanced Features"
+      [title]="'Advanced Features'"
       [sourceCode]="codeExamples.advanced"
     >
       <form
@@ -131,7 +159,7 @@
     </app-demo-card>
 
     <!-- Fluid Layout Example -->
-    <app-demo-card title="Fluid Layout" [sourceCode]="codeExamples.fluid">
+    <app-demo-card [title]="'Fluid Layout'" [sourceCode]="codeExamples.fluid">
       <form
         [formGroup]="fluidForm"
         (ngSubmit)="onSubmit(fluidForm, 'fluid')"
@@ -152,16 +180,9 @@
       </form>
     </app-demo-card>
 
-    <!-- Features Overview -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

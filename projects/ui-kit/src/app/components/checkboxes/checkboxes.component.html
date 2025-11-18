@@ -10,8 +10,9 @@
   <div class="cards-container">
     <!-- Basic Usage -->
     <app-demo-card
-      title="Basic ngModel Usage"
-      [sourceCode]="codeExamples.basic"
+      [title]="'Basic ngModel Usage'"
+      [sourceCode]="codeExamples.ngModel"
+      [tsCode]="tsExamples.ngModel"
     >
       <div class="checkbox-examples">
         <div class="example-row">
@@ -28,8 +29,8 @@
 
     <!-- With Labels -->
     <app-demo-card
-      title="Checkboxes with Labels"
-      [sourceCode]="codeExamples.withLabel"
+      [title]="'Checkboxes with Labels'"
+      [sourceCode]="codeExamples.ngModel"
     >
       <div class="checkbox-examples">
         <div class="example-row">
@@ -49,7 +50,7 @@
     </app-demo-card>
 
     <!-- States -->
-    <app-demo-card title="Checkbox States" [sourceCode]="codeExamples.states">
+    <app-demo-card [title]="'Checkbox States'" [sourceCode]="codeExamples.ngModel">
       <div class="checkbox-examples">
         <div class="example-row">
           <i-checkbox
@@ -69,7 +70,11 @@
     </app-demo-card>
 
     <!-- Sizes -->
-    <app-demo-card title="Checkbox Sizes" [sourceCode]="codeExamples.sizes">
+    <app-demo-card
+      [title]="'Checkbox Sizes'"
+      [sourceCode]="codeExamples.sizes"
+      [tsCode]="tsExamples.ngModel"
+    >
       <div class="checkbox-examples">
         <div class="example-row">
           <i-checkbox
@@ -97,8 +102,9 @@
 
     <!-- FormControl -->
     <app-demo-card
-      title="Reactive Forms - FormControl"
+      [title]="'Reactive Forms - FormControl'"
       [sourceCode]="codeExamples.formControl"
+      [tsCode]="tsExamples.formControl"
     >
       <div class="checkbox-examples">
         <div class="example-row">
@@ -109,34 +115,36 @@
           <span class="status">Value: {{ formControlExample.value }}</span>
         </div>
         <div class="example-row">
-          <button
-            class="demo-button"
-            (click)="formControlExample.setValue(!formControlExample.value)"
+          <i-button
+            severity="secondary"
+            [text]="true"
+            (clicked)="formControlExample.setValue(!formControlExample.value)"
           >
             Toggle via FormControl
-          </button>
-          <button
-            class="demo-button"
-            (click)="formControlExample.disable()"
+          </i-button>
+          <i-button
+            severity="secondary"
+            (clicked)="formControlExample.disable()"
             [disabled]="formControlExample.disabled"
           >
             Disable
-          </button>
-          <button
-            class="demo-button"
-            (click)="formControlExample.enable()"
+          </i-button>
+          <i-button
+            severity="secondary"
+            (clicked)="formControlExample.enable()"
             [disabled]="!formControlExample.disabled"
           >
             Enable
-          </button>
+          </i-button>
         </div>
       </div>
     </app-demo-card>
 
     <!-- FormGroup -->
     <app-demo-card
-      title="Reactive Forms - FormGroup"
-      [sourceCode]="codeExamples.formGroup"
+      [title]="'Reactive Forms - FormGroup'"
+      [sourceCode]="codeExamples.reactiveForm"
+      [tsCode]="tsExamples.reactiveForm"
     >
       <div class="checkbox-examples">
         <form [formGroup]="userPreferencesForm" (ngSubmit)="onFormSubmit()">
@@ -166,13 +174,13 @@
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="demo-button primary">Submit</button>
-            <button type="button" class="demo-button" (click)="selectAll()">
+            <i-button severity="primary" type="submit">Submit</i-button>
+            <i-button severity="secondary" (clicked)="selectAll()">
               Select All
-            </button>
-            <button type="button" class="demo-button" (click)="resetForm()">
+            </i-button>
+            <i-button severity="secondary" (clicked)="resetForm()">
               Reset
-            </button>
+            </i-button>
           </div>
         </form>
 
@@ -184,18 +192,10 @@
         </div>
       </div>
     </app-demo-card>
-  </div>
 
-  <!-- Features Section -->
-  <div class="features-section">
-    <h2>Features</h2>
-    <div class="features-grid">
-      @for (feature of features; track feature.title) {
-      <div class="feature-card">
-        <h3>{{ feature.title }}</h3>
-        <p>{{ feature.description }}</p>
-      </div>
-      }
-    </div>
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
   </div>
 </div>

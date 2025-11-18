@@ -1,0 +1,87 @@
+<div class="i-listbox-wrapper" [class.i-listbox--fluid]="fluid" #dropdown>
+  <!-- Input container with click handler -->
+  <div class="i-listbox-input-container">
+    <!-- Reuse the input-text component for consistent styling and form integration -->
+    <i-input-text
+      #inputText
+      [label]="label"
+      [id]="id"
+      [fluid]="fluid"
+      [placeholder]="getPlaceholder()"
+      [errorMessages]="errorMessages"
+      [ngModel]="inputValue"
+      [type]="'text'"
+      [disabled]="disabled"
+      [forceFloated]="hasValue()"
+      [hideText]="shouldHideText()"
+      [externalInvalid]="showErrors"
+      [externalErrorMessage]="showErrors ? getErrorMessage() || '' : ''"
+      [readonly]="readonly"
+      [backgroundStyle]="'component'"
+    >
+      <!-- Selected chips overlay (positioned above the input) -->
+      @if (shouldShowChips()) {
+      <div class="i-listbox-chips-overlay">
+        <i-chip
+          *ngFor="let selectedValue of getValueArray(); trackBy: trackByValue"
+          [label]="getSelectedLabels()[getValueArray().indexOf(selectedValue)]"
+          [removable]="!disabled"
+          (onRemove)="removeSelectedItem(selectedValue, $event)"
+        ></i-chip>
+      </div>
+      }
+
+      <!-- Icons overlay on the input -->
+      <div class="i-listbox-icons-overlay">
+        @if (showClear && hasValue() && !disabled) {
+        <i
+          class="pi pi-times i-listbox-clear"
+          (click)="clearSelection(); $event.stopPropagation()"
+        ></i>
+        }
+      </div>
+    </i-input-text>
+  </div>
+
+  <div class="i-listbox-dropdown">
+    @if (filter) {
+    <div class="i-listbox-filter">
+      <i-input-text
+        #searchInput
+        [useFloatLabel]="false"
+        placeholder="Search..."
+        [ngModel]="filterValue()"
+        (ngModelChange)="filterValue.set($event)"
+        [fluid]="true"
+        [icon]="'pi pi-search'"
+      >
+      </i-input-text>
+    </div>
+    }
+
+    <div class="i-listbox-options">
+      <div
+        *ngFor="let option of filteredOptions()"
+        class="i-listbox-option"
+        [class.selected]="isOptionSelected(option)"
+        (click)="toggleOption(option)"
+      >
+        @if (multiple) {
+        <i-checkbox
+          [checked]="isOptionSelected(option)"
+          [readonly]="true"
+          size="small"
+          class="i-listbox-checkbox"
+        ></i-checkbox>
+        }
+        <span class="i-listbox-option-label">
+          {{ getOptionLabel(option) }}
+        </span>
+      </div>
+
+      @if (filteredOptions().length === 0) {
+      <div class="i-listbox-no-options">No options found</div>
+      }
+    </div>
+  </div>
+</div>

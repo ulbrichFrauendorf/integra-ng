@@ -2,43 +2,40 @@ import { Component } from '@angular/core';
 import { TooltipDirective } from '@shared/directives/tooltip/tooltip.directive';
 import { IButton } from '@shared/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-tooltips',
-  imports: [TooltipDirective, IButton, DemoCardComponent],
+  imports: [
+    TooltipDirective,
+    IButton,
+    DemoCardComponent,
+    FeaturesListComponent,
+  ],
   templateUrl: './tooltips.component.html',
   styleUrl: './tooltips.component.scss',
 })
 export class TooltipsComponent {
-  // Code examples organized by category
+  // HTML Code examples organized by category
   codeExamples = {
-    basic: `// 1. Import the directive and components
-import { TooltipDirective } from 'invensys-angular-shared/directives/tooltip/tooltip.directive';
-import { IButton } from 'invensys-angular-shared/components/button/button.component';
-
-// 2. Use in your component imports
-@Component({
-  selector: 'your-component',
-  imports: [TooltipDirective, IButton],
-  // ...
-})
-
-// 3. Use in template
-<i-button iTooltip="This is a tooltip above" tooltipPosition="above">Hover Above</i-button>
+    basic: `<i-button iTooltip="This is a tooltip above" tooltipPosition="above">Hover Above</i-button>
 <i-button iTooltip="This is a tooltip below" tooltipPosition="below">Hover Below</i-button>
 <i-button iTooltip="This is a tooltip to the left" tooltipPosition="left">Hover Left</i-button>
 <i-button iTooltip="This is a tooltip to the right" tooltipPosition="right">Hover Right</i-button>`,
 
-    styled: `<i-button [severity]="'primary'" iTooltip="Primary action button" tooltipPosition="above">
+    styled: `<i-button severity="primary" iTooltip="Primary action button" tooltipPosition="above">
   Primary Button
 </i-button>
-<i-button [severity]="'secondary'" [outlined]="true" iTooltip="Secondary action button" tooltipPosition="below">
+<i-button severity="secondary" [outlined]="true" iTooltip="Secondary action button" tooltipPosition="below">
   Secondary Button
 </i-button>
-<i-button [severity]="'success'" [raised]="true" iTooltip="Success action completed" tooltipPosition="left">
+<i-button severity="success" [raised]="true" iTooltip="Success action completed" tooltipPosition="left">
   Success Button
 </i-button>
-<i-button [severity]="'warning'" [text]="true" iTooltip="Warning: This action requires confirmation" tooltipPosition="right">
+<i-button severity="warning" [text]="true" iTooltip="Warning: This action requires confirmation" tooltipPosition="right">
   Warning Button
 </i-button>`,
 
@@ -72,7 +69,49 @@ import { IButton } from 'invensys-angular-shared/components/button/button.compon
 </span>`,
   };
 
-  features = [
+  // TypeScript examples
+  tsExamples = {
+    basic: `import { TooltipDirective } from 'integra-ng';
+import { IButton } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [TooltipDirective, IButton],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  // Component ready to use tooltips
+}`,
+
+    advanced: `// Custom tooltip configuration
+@Component({
+  template: \`
+    <i-button 
+      iTooltip="Custom tooltip" 
+      tooltipPosition="above"
+      [tooltipDelay]="500">
+      Custom Tooltip
+    </i-button>
+  \`
+})
+export class ExampleComponent {
+  // Tooltip with custom delay
+}`,
+  };
+
+  // Component setup
+  initializationCode = `import { TooltipDirective } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [TooltipDirective],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  // Component ready to use
+}`;
+
+  features: Feature[] = [
     {
       title: 'Positioning Options',
       description: 'Four directional positions: above, below, left, right',

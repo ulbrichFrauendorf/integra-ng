@@ -4,10 +4,15 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms';
 import { ISelect } from '@shared/components/select/select.component';
 import { IButton } from '@shared/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 export interface SelectOption {
   value: any;
@@ -17,7 +22,14 @@ export interface SelectOption {
 
 @Component({
   selector: 'app-selects',
-  imports: [ISelect, IButton, ReactiveFormsModule, DemoCardComponent],
+  imports: [
+    ISelect,
+    IButton,
+    ReactiveFormsModule,
+    FormsModule,
+    DemoCardComponent,
+    FeaturesListComponent,
+  ],
   templateUrl: './selects.component.html',
   styleUrl: './selects.component.scss',
 })
@@ -26,6 +38,11 @@ export class SelectsComponent implements OnInit {
   validationForm: FormGroup;
   advancedForm: FormGroup;
   fluidForm: FormGroup;
+
+  // NgModel examples
+  countryValue: string = '';
+  statusValue: string = '';
+  preselectedValue: string = 'us';
 
   // Sample data organized by category
   selectData = {
@@ -62,60 +79,51 @@ export class SelectsComponent implements OnInit {
     ],
   };
 
-  // Code examples organized by category
+  // HTML Code examples organized by category
   codeExamples = {
-    basic: `// 1. Import required modules and component
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { ISelect } from 'invensys-angular-shared/components/select/select.component';
+    ngModel: `<i-select 
+  label="Country" 
+  [options]="countries" 
+  optionLabel="label" 
+  optionValue="value"
+  [(ngModel)]="countryValue"
+  placeholder="Select country" />
 
-// 2. Define your data (any object structure now supported)
-countries = [
-  { value: 'us', label: 'United States' },
-  { value: 'uk', label: 'United Kingdom' },
-  { value: 'de', label: 'Germany' }
-];
+<i-select 
+  label="Status" 
+  [options]="statuses" 
+  optionLabel="label" 
+  optionValue="value"
+  [(ngModel)]="statusValue"
+  placeholder="Select status" />`,
 
-statuses = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'pending', label: 'Pending' }
-];
-
-// 3. Create your form
-form = this.fb.group({
-  country: [''],
-  status: ['']
-});
-
-// 4. Use in template (optionLabel and optionValue are now required)
-<form [formGroup]="form">
+    reactiveForm: `<form [formGroup]="basicForm">
   <i-select 
     label="Country" 
     [options]="countries" 
     optionLabel="label" 
-    optionValue="value" 
-    placeholder="Select a country" 
-    formControlName="country">
-  </i-select>
+    optionValue="value"
+    formControlName="country"
+    placeholder="Select country" />
 
   <i-select 
     label="Status" 
     [options]="statuses" 
     optionLabel="label" 
     optionValue="value"
-    placeholder="Select status" 
-    formControlName="status">
-  </i-select>
+    formControlName="status"
+    placeholder="Select status" />
 </form>`,
 
-    validation: `<i-select 
-  label="Status (Required)" 
-  [options]="statuses" 
-  optionLabel="label" 
-  optionValue="value"
-  placeholder="Select status" 
-  formControlName="status">
-</i-select>`,
+    validation: `<form [formGroup]="validationForm">
+  <i-select 
+    label="Status (Required)" 
+    [options]="statuses" 
+    optionLabel="label" 
+    optionValue="value"
+    placeholder="Select status" 
+    formControlName="status" />
+</form>`,
 
     advanced: `<i-select 
   [options]="reports" 
@@ -125,8 +133,7 @@ form = this.fb.group({
   optionLabel="name" 
   optionValue="value" 
   placeholder="Select Report" 
-  formControlName="selectedReport">
-</i-select>`,
+  formControlName="selectedReport" />`,
 
     fluid: `<i-select 
   label="Fluid Select" 
@@ -135,11 +142,71 @@ form = this.fb.group({
   optionValue="value"
   [fluid]="true" 
   placeholder="Select option" 
-  formControlName="fluidSelect">
-</i-select>`,
+  formControlName="fluidSelect" />`,
   };
 
-  features = [
+  // TypeScript examples
+  tsExamples = {
+    ngModel: `import { FormsModule } from '@angular/forms';
+import { ISelect } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [FormsModule, ISelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  countryValue: string = '';
+  statusValue: string = '';
+  
+  countries = [
+    { value: 'us', label: 'United States' },
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'de', label: 'Germany' }
+  ];
+}`,
+
+    reactiveForm: `import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ISelect } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [ReactiveFormsModule, ISelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  basicForm = this.fb.group({
+    country: [''],
+    status: [''],
+    preselected: ['us']
+  });
+
+  constructor(private fb: FormBuilder) {}
+}`,
+
+    validation: `import { FormBuilder, Validators } from '@angular/forms';
+
+validationForm = this.fb.group({
+  status: ['', [Validators.required]]
+});`,
+  };
+
+  // Component setup
+  initializationCode = `import { ISelect } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [ISelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' }
+  ];
+}`;
+
+  features: Feature[] = [
     {
       title: 'Option Configuration',
       description:
@@ -181,6 +248,8 @@ form = this.fb.group({
       status: [''],
       preselected: ['us'],
       disabled: [{ value: 'uk', disabled: true }],
+      // New: Store full object instead of just value
+      fullObjectSelect: [null],
     });
 
     this.validationForm = this.fb.group({
@@ -220,6 +289,22 @@ form = this.fb.group({
     } else {
       this.markFormGroupTouched(form);
     }
+  }
+
+  onCountryValueChange(value: any) {
+    console.log('Country Value Changed (optionValue="value"):', value);
+    console.log('Form control value:', this.basicForm.get('country')?.value);
+    console.log('Type:', typeof value);
+  }
+
+  onCountryObjectChange(value: any) {
+    console.log('Country Object Changed (no optionValue):', value);
+    console.log(
+      'Form control value:',
+      this.basicForm.get('fullObjectSelect')?.value
+    );
+    console.log('Type:', typeof value);
+    console.log('Full object properties:', value ? Object.keys(value) : 'null');
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {

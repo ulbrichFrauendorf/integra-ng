@@ -9,7 +9,7 @@
 
   <div class="cards-container">
     <!-- Basic Chip Examples -->
-    <app-demo-card title="Basic Chips" [sourceCode]="codeExamples.basicChips">
+    <app-demo-card [title]="'Basic Chips'" [sourceCode]="codeExamples.basicChips">
       <div class="chip-examples">
         @for (chip of chipExamples; track chip.label) {
         <i-chip
@@ -22,60 +22,9 @@
       </div>
     </app-demo-card>
 
-    <!-- Chips Input Examples -->
-    <app-demo-card
-      title="Chips Input (Tags)"
-      [sourceCode]="codeExamples.chipsInput"
-    >
-      <form
-        [formGroup]="basicForm"
-        (ngSubmit)="onSubmit(basicForm, 'basic')"
-        class="demo-form"
-      >
-        <i-chips
-          placeholder="Enter tags and press Enter"
-          formControlName="tags"
-        />
-        <i-button severity="primary" type="submit">Submit Basic Form</i-button>
-      </form>
-    </app-demo-card>
-
-    <!-- Validation Example -->
-    <app-demo-card
-      title="Required Validation"
-      [sourceCode]="codeExamples.validation"
-    >
-      <form
-        [formGroup]="validationForm"
-        (ngSubmit)="onSubmit(validationForm, 'validation')"
-        class="demo-form"
-      >
-        <i-chips
-          placeholder="Enter at least 2 tags"
-          formControlName="requiredTags"
-        />
-
-        @if (validationForm.get('requiredTags')?.invalid &&
-        validationForm.get('requiredTags')?.touched) {
-        <div class="error-message">At least 2 tags are required</div>
-        }
-
-        <i-button severity="primary" type="submit"
-          >Submit Validation Form</i-button
-        >
-      </form>
-    </app-demo-card>
-
-    <!-- Features Demonstration -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

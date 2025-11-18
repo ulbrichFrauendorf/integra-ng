@@ -1,0 +1,85 @@
+@use "../../../../../../integra-ng/src/lib/themes/color-variables.scss"
+  as colors;
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-group {
+  margin-bottom: 1rem;
+
+  .menu-group-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    color: colors.$color-contrast;
+  }
+
+  .menu-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .menu-item {
+      a {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: colors.$color-text-primary;
+        text-decoration: none;
+        font-size: 0.95rem;
+        border-left: 3px solid transparent;
+        transition: all 0.2s ease;
+
+        i {
+          margin-right: 0.5rem;
+          font-size: 1.1rem;
+        }
+
+        &:hover {
+          background-color: colors.$color-surface-hover;
+          border-radius: 6px;
+        }
+
+        &.active {
+          background-color: colors.$color-surface-hover;
+          border-radius: 6px;
+          border-left: 3px solid colors.$color-primary;
+          font-weight: 600;
+        }
+      }
+
+      .submenu {
+        list-style: none;
+        padding-left: 1.5rem;
+
+        .submenu-item {
+          a {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: colors.$color-text-tertiary;
+
+            &:hover {
+              background-color: colors.$color-surface-hover;
+              color: colors.$color-text-primary;
+            }
+
+            &.active {
+              color: colors.$color-primary;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid #334155;
+  margin: 0.5rem 0;
+}

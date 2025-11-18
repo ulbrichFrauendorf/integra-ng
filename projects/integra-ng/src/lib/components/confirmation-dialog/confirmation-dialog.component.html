@@ -1,0 +1,13 @@
+<div class="confirmation-dialog" [attr.id]="componentId">
+  <div class="confirmation-content">
+    <p class="confirmation-message">{{ message() }}</p>
+  </div>
+  <i-dialog-actions
+    [title]="header()"
+    [submitLabel]="acceptLabel"
+    [cancelLabel]="rejectLabel"
+    [severity]="severity()"
+    (cancelEvent)="onCancel()"
+    (submitEvent)="onConfirm()"
+  ></i-dialog-actions>
+</div>

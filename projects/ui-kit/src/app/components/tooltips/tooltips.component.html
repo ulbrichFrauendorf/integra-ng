@@ -11,8 +11,9 @@
   <div class="cards-container">
     <!-- Basic Tooltip Positions -->
     <app-demo-card
-      title="Basic Tooltip Positions"
+      [title]="'Basic Tooltip Positions'"
       [sourceCode]="codeExamples.basic"
+      [tsCode]="tsExamples.basic"
     >
       <div class="tooltip-examples">
         <i-button iTooltip="This is a tooltip above" tooltipPosition="above"
@@ -36,7 +37,7 @@
 
     <!-- Styled Button Tooltips -->
     <app-demo-card
-      title="Styled Button Tooltips"
+      [title]="'Styled Button Tooltips'"
       [sourceCode]="codeExamples.styled"
     >
       <div class="tooltip-examples">
@@ -76,7 +77,7 @@
 
     <!-- HTML Element Tooltips -->
     <app-demo-card
-      title="HTML Element Tooltips"
+      [title]="'HTML Element Tooltips'"
       [sourceCode]="codeExamples.elements"
     >
       <div class="tooltip-examples">
@@ -108,7 +109,7 @@
     </app-demo-card>
 
     <!-- Custom Delay Tooltips -->
-    <app-demo-card title="Custom Timing" [sourceCode]="codeExamples.timing">
+    <app-demo-card [title]="'Custom Timing'" [sourceCode]="codeExamples.timing">
       <div class="tooltip-examples">
         <i-button
           iTooltip="Fast tooltip (100ms)"
@@ -136,7 +137,7 @@
 
     <!-- Long Text Tooltips -->
     <app-demo-card
-      title="Long Text Tooltips"
+      [title]="'Long Text Tooltips'"
       [sourceCode]="codeExamples.longText"
     >
       <div class="tooltip-examples">
@@ -157,15 +158,8 @@
     </app-demo-card>
 
     <!-- Features Overview -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

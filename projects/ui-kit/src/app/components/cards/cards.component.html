@@ -9,9 +9,9 @@
 
   <div class="cards-container">
     <!-- Basic Card -->
-    <app-demo-card title="Basic Card" [sourceCode]="codeExamples.basic">
+    <app-demo-card [title]="'Basic Card'" [sourceCode]="codeExamples.basic">
       <div class="card-example">
-        <i-card title="Card Title" subtitle="Optional subtitle">
+        <i-card [title]="'Card Title'">
           <p>This is the card content in the body section.</p>
         </i-card>
       </div>
@@ -19,11 +19,11 @@
 
     <!-- Card with Footer -->
     <app-demo-card
-      title="Card with Footer Actions"
+      [title]="'Card with Footer Actions'"
       [sourceCode]="codeExamples.withFooter"
     >
       <div class="card-example">
-        <i-card title="Card with Actions">
+        <i-card [title]="'Card with Actions'">
           <p>This card includes footer content with action buttons.</p>
           <div slot="footer">
             <i-dialog-actions
@@ -37,7 +37,7 @@
 
     <!-- Custom Header -->
     <app-demo-card
-      title="Custom Header Content"
+      [title]="'Custom Header Content'"
       [sourceCode]="codeExamples.customHeader"
     >
       <div class="card-example">
@@ -57,7 +57,7 @@
 
     <!-- Content Only -->
     <app-demo-card
-      title="Content Only Card"
+      [title]="'Content Only Card'"
       [sourceCode]="codeExamples.contentOnly"
     >
       <div class="card-example">
@@ -72,11 +72,11 @@
     </app-demo-card>
 
     <!-- Closable Card -->
-    <app-demo-card title="Closable Card" [sourceCode]="codeExamples.closable">
+    <app-demo-card [title]="'Closable Card'" [sourceCode]="codeExamples.closable">
       <div class="card-example">
         @if (showClosableCard) {
         <i-card
-          title="Closable Card"
+          [title]="'Closable Card'"
           [closable]="true"
           (closeCard)="onCardClosed()"
         >
@@ -94,15 +94,8 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

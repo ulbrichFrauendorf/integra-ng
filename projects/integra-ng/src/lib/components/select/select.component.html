@@ -1,0 +1,66 @@
+<div class="i-select-wrapper" [class.i-select--fluid]="fluid" #dropdown>
+  <!-- Reuse the input-text component for consistent styling and form integration -->
+  <div class="i-select-input-container" (click)="toggleDropdown()">
+    <i-input-text
+      #inputText
+      [label]="label"
+      [id]="id"
+      [fluid]="fluid"
+      [errorMessages]="errorMessages"
+      [(ngModel)]="inputValue"
+      [type]="'text'"
+      [externalInvalid]="showErrors"
+      [externalErrorMessage]="showErrors ? getErrorMessage() || '' : ''"
+      [readonly]="readonly"
+    >
+      <!-- Icons overlay on the input -->
+      <div class="i-select-icons">
+        @if (showClear && value !== null && value !== undefined) {
+        <i
+          class="pi pi-times i-select-clear"
+          (click)="clearSelection(); $event.stopPropagation()"
+        ></i>
+        }
+        <i
+          class="pi pi-chevron-down i-multi-select-arrow"
+          [class.flipped]="isOpen"
+        ></i>
+      </div>
+    </i-input-text>
+  </div>
+
+  <!-- Dropdown overlay -->
+  @if (isOpen) {
+  <div class="i-select-dropdown">
+    @if (filter) {
+    <div class="i-select-filter">
+      <i-input-text
+        #searchInput
+        [useFloatLabel]="false"
+        placeholder="Search..."
+        [ngModel]="filterValue()"
+        (ngModelChange)="filterValue.set($event)"
+        [fluid]="true"
+        [icon]="'pi pi-search'"
+      >
+      </i-input-text>
+    </div>
+    }
+
+    <div class="i-select-options">
+      <div
+        *ngFor="let option of filteredOptions()"
+        class="i-select-option"
+        [class.selected]="isOptionSelected(option)"
+        (click)="selectOption(option)"
+      >
+        {{ getOptionLabel(option) }}
+      </div>
+
+      @if (filteredOptions().length === 0) {
+      <div class="i-select-no-options">No options found</div>
+      }
+    </div>
+  </div>
+  }
+</div>

@@ -13,12 +13,14 @@ import { CodeDisplayComponent } from '../code-display/code-display.component';
         <div class="demo-section">
           <ng-content></ng-content>
         </div>
-
-        @if (sourceCode) {
-        <app-code-display [sourceCode]="sourceCode"></app-code-display>
-        }
       </div>
     </i-card>
+    @if (sourceCode || tsCode) {
+    <app-code-display
+      [sourceCode]="sourceCode || ''"
+      [tsCode]="tsCode || ''"
+    ></app-code-display>
+    }
   `,
   styles: [
     `
@@ -35,4 +37,5 @@ import { CodeDisplayComponent } from '../code-display/code-display.component';
 export class DemoCardComponent {
   @Input() title!: string;
   @Input() sourceCode?: string;
+  @Input() tsCode?: string;
 }

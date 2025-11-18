@@ -1,0 +1,48 @@
+<div
+  class="i-input-wrapper"
+  [class.invalid]="showErrors"
+  [class.i-input--fluid]="fluid"
+  [class.i-input--no-float]="!useFloatLabel"
+  [attr.id]="componentId"
+>
+  <div
+    [ngClass]="useFloatLabel ? 'float-label' : 'normal-input'"
+    class="i-input-container"
+    [class.has-icon]="icon"
+  >
+    <div class="i-input-icon-wrapper">
+      @if (icon) {
+      <span class="i-input-icon" [attr.aria-hidden]="true">
+        <i [class]="icon" [attr.aria-hidden]="true"></i>
+      </span>
+      }
+      <input
+        [id]="id || componentId"
+        [type]="type"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [value]="hideText ? '' : value || ''"
+        (input)="handleInput($event)"
+        (blur)="touch()"
+        [placeholder]="useFloatLabel ? ' ' : placeholder || label"
+        class="i-input"
+        [class.has-icon]="icon"
+        [class.hide-text]="hideText"
+        [class.readonly]="readonly"
+        [class.component-border]="backgroundStyle === 'component'"
+        [iTooltip]="showErrors ? (getErrorMessage() || '') : ''"
+        tooltipPosition="below"
+        [tooltipDelay]="100"
+      />
+    </div>
+    @if (useFloatLabel) {
+    <label
+      [for]="id || componentId"
+      class="i-label"
+      [class.floated]="forceFloated || (value && value.length) || false"
+      >{{ label }}</label
+    >
+    }
+    <ng-content></ng-content>
+  </div>
+</div>

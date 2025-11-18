@@ -10,28 +10,25 @@
 
   <div class="cards-container">
     <!-- Features -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <h4>{{ feature.title }}</h4>
-          <p>{{ feature.description }}</p>
-        </div>
-        }
-      </div>
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
 
     <!-- Basic Usage -->
-    <app-demo-card title="Basic Tree" [sourceCode]="codeExamples.basic">
+    <app-demo-card
+      [title]="'Basic Tree'"
+      [sourceCode]="codeExamples.basic"
+      [tsCode]="tsExamples.basic"
+    >
       <p>Basic tree structure with expand/collapse functionality.</p>
 
       <div class="demo-actions">
-        <button type="button" class="demo-btn" (click)="expandAll()">
+        <i-button severity="secondary" (clicked)="expandAll()">
           Expand All
-        </button>
-        <button type="button" class="demo-btn" (click)="collapseAll()">
+        </i-button>
+        <i-button severity="secondary" (clicked)="collapseAll()">
           Collapse All
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view [value]="basicTreeData" scrollHeight="300px"> </i-tree-view>
@@ -39,17 +36,18 @@
 
     <!-- Single Selection -->
     <app-demo-card
-      title="Single Selection"
+      [title]="'Single Selection'"
       [sourceCode]="codeExamples.selection"
+      [tsCode]="tsExamples.selection"
     >
       <p>
         Click on any node to select it. Only one node can be selected at a time.
       </p>
 
       <div class="demo-actions">
-        <button type="button" class="demo-btn" (click)="clearSingleSelection()">
+        <i-button severity="secondary" (clicked)="clearSingleSelection()">
           Clear Selection
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view
@@ -74,17 +72,13 @@
     </app-demo-card>
 
     <!-- Multiple Selection -->
-    <app-demo-card title="Multiple Selection">
+    <app-demo-card [title]="'Multiple Selection'">
       <p>Hold Ctrl/Cmd and click to select multiple nodes.</p>
 
       <div class="demo-actions">
-        <button
-          type="button"
-          class="demo-btn"
-          (click)="clearMultipleSelection()"
-        >
+        <i-button severity="secondary" (clicked)="clearMultipleSelection()">
           Clear Selection
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view
@@ -116,20 +110,16 @@
     </app-demo-card>
 
     <!-- Checkbox Selection -->
-    <app-demo-card title="Checkbox Selection">
+    <app-demo-card [title]="'Checkbox Selection'">
       <p>
         Select nodes using checkboxes. Child selections propagate to parents.
         The component includes an integrated "Select All" checkbox.
       </p>
 
       <div class="demo-actions">
-        <button
-          type="button"
-          class="demo-btn"
-          (click)="clearCheckboxSelection()"
-        >
+        <i-button severity="secondary" (clicked)="clearCheckboxSelection()">
           Clear Selection
-        </button>
+        </i-button>
       </div>
 
       <i-tree-view
@@ -162,7 +152,7 @@
     </app-demo-card>
 
     <!-- Filtering -->
-    <app-demo-card title="Filtering" [sourceCode]="codeExamples.filtering">
+    <app-demo-card [title]="'Filtering'" [sourceCode]="codeExamples.filtering">
       <p>Search through tree nodes using the built-in filter.</p>
 
       <i-tree-view
@@ -175,7 +165,7 @@
     </app-demo-card>
 
     <!-- Events -->
-    <app-demo-card title="Events" [sourceCode]="codeExamples.events">
+    <app-demo-card [title]="'Events'" [sourceCode]="codeExamples.events">
       <p>
         TreeView emits various events for node interactions. Check the console
         for event logs.
@@ -195,7 +185,7 @@
 
     <!-- Scrollable -->
     <app-demo-card
-      title="Scrollable TreeView"
+      [title]="'Scrollable TreeView'"
       [sourceCode]="codeExamples.scrollable"
     >
       <p>Set a fixed height for the tree to make it scrollable.</p>
@@ -205,7 +195,7 @@
     </app-demo-card>
 
     <!-- API Documentation -->
-    <app-demo-card title="TreeView API">
+    <app-demo-card [title]="'TreeView API'">
       <div class="api-section">
         <h4>Inputs</h4>
         <table class="api-table">

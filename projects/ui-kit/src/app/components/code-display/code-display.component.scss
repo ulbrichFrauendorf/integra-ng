@@ -1,86 +1,68 @@
+// Rider Dark (Darcula-like) palette
+$rider-bg: #2b2b2b;
+$rider-panel: #3c3f41;
+$rider-border: #4b4e50;
+$rider-text: #a9b7c6;
+$rider-comment: #808080;
+$rider-keyword: #cc7832;
+$rider-string: #6a8759;
+$rider-number: #6897bb;
+$rider-function: #ffc66d;
+$rider-tag: #e8bf6a;
+$rider-attr-name: #bababa; // neutral attr name
+$rider-interpolation: #e8bf6a;
+$rider-binding: #9876aa; // annotations / angular bindings (purple tone)
+$rider-event: #cc7832; // reuse keyword color for events
+
 .code-display-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-
-  .ui-section {
-    width: 1024px;
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    padding: 16px;
-    border: 1px solid var(--color-surface-border);
-    border-radius: 8px;
-
-    &.fluid-container {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
+  padding: 20px 0;
+  width: 100%;
 
   .code-section {
-    width: 1024px;
+    width: 100%;
     position: relative;
-    border: 1px solid var(--color-surface-border);
-    border-radius: 8px;
-    background-color: black;
-    overflow: hidden;
+    border: 1px solid $rider-border;
+    background-color: $rider-bg;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 
     .code-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 1rem;
-      background-color: var(--color-surface-100);
-      border-bottom: 1px solid var(--color-surface-border);
+      padding: 0.5rem 0.75rem;
+      background-color: $rider-panel;
+      border-bottom: 1px solid $rider-border;
+
+      .tab-container {
+        display: flex;
+        gap: 2px;
+      }
 
       .code-title {
-        font-size: 0.875rem;
+        font-size: 0.75em;
         font-weight: 600;
-        color: white;
+        color: $rider-text;
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
 
-      .copy-button {
-        background: transparent;
-        border: 1px solid var(--color-surface-border);
-        border-radius: 4px;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        color: var(--color-text-secondary);
-        transition: all 0.2s ease;
-        font-size: 0.875rem;
 
-        &:hover {
-          background-color: var(--color-surface-hover);
-          color: var(--color-text-primary);
-        }
-
-        i {
-          font-size: 0.75rem;
-        }
-      }
     }
 
     .code-block {
-      max-height: 300px;
-      overflow-y: overlay;
-      overflow-x: overlay;
-      position: relative;
+      background: $rider-bg;
 
       pre {
         margin: 0;
-        padding: 1rem;
-        padding-right: 2rem; // Add extra padding for scrollbar space
+        padding: 0.75rem 1rem 1rem 1rem;
         background: transparent;
-        color: white;
-        font-family: "Consolas", "Monaco", "Courier New", monospace;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        white-space: pre-wrap;
-        word-wrap: break-word;
+        color: $rider-text;
+        font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New",
+          monospace;
+        font-size:  0.75em;
+        line-height: 1.6;
+        white-space: pre;
+        tab-size: 2;
 
         code {
           background: transparent;
@@ -88,103 +70,84 @@
           border: none;
           font-family: inherit;
           font-size: inherit;
+          color: inherit;
 
-          // Syntax highlighting styles
           .html-tag {
-            color: #e06c75; // Red for HTML tags
+            color: $rider-tag;
           }
-
-          .html-attrs {
-            color: var(--color-text-primary);
-          }
-
           .html-attr-name {
-            color: #d19a66; // Orange for attribute names
+            color: $rider-attr-name;
           }
-
-          .html-attr-value {
-            color: #98c379; // Green for attribute values
+          .html-attr-value,
+          .code-string {
+            color: $rider-string;
           }
-
-          .html-equals {
-            color: var(--color-text-primary);
-          }
-
           .angular-binding {
-            color: #61dafb; // Light blue for Angular property bindings
+            color: $rider-binding;
             font-weight: 600;
           }
-
           .angular-event {
-            color: #c678dd; // Purple for Angular event bindings
+            color: $rider-event;
             font-weight: 600;
           }
-
           .angular-interpolation {
-            color: #e5c07b; // Yellow for Angular interpolation
-            font-weight: 600;
+            color: $rider-interpolation;
+          }
+          .code-keyword {
+            color: $rider-keyword;
+          }
+          .code-number {
+            color: $rider-number;
+          }
+          .code-function {
+            color: $rider-function;
+          }
+          .code-comment {
+            color: $rider-comment;
+            font-style: italic;
           }
         }
       }
 
-      // Custom scrollbar styling - overlay inside the content
+      /* Scrollbar styling */
       &::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
       }
-
       &::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        margin: 4px;
+        background: $rider-bg;
       }
-
       &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 4px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.5);
-        }
+        background: $rider-panel;
+        border: 1px solid $rider-border;
+        border-radius: 6px;
       }
-
-      &::-webkit-scrollbar-corner {
-        background: transparent;
+      &::-webkit-scrollbar-thumb:hover {
+        background: $rider-border;
       }
-
-      // Make scrollbar overlay on top of content
       scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1);
+      scrollbar-color: $rider-panel $rider-bg;
     }
   }
 }
 
-// Dark theme adjustments
-@media (prefers-color-scheme: dark) {
-  .code-display-container .code-section .code-block pre code {
-    .html-tag {
-      color: #ff7b7b; // Lighter red for dark theme
+@media (max-width: 768px) {
+  .code-display-container {
+    .code-section {
+      max-width: 100%;
     }
+  }
+}
 
-    .html-attr-name {
-      color: #ffd07b; // Lighter orange for dark theme
+/* Optional light mode fallback if user switches themes */
+@media (prefers-color-scheme: light) {
+  .code-display-container .code-section {
+    background: #fafafa;
+    .code-header {
+      background: #f0f0f0;
     }
-
-    .html-attr-value {
-      color: #7bff7b; // Lighter green for dark theme
-    }
-
-    .angular-binding {
-      color: #7bdfff; // Lighter blue for dark theme
-    }
-
-    .angular-event {
-      color: #df7bff; // Lighter purple for dark theme
-    }
-
-    .angular-interpolation {
-      color: #ffdf7b; // Lighter yellow for dark theme
+    .code-block pre {
+      color: #333;
     }
   }
 }

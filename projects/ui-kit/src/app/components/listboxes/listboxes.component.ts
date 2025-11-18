@@ -13,6 +13,10 @@ import {
   ListboxOption,
 } from '@shared/components/listbox/listbox.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-listboxes',
@@ -25,6 +29,7 @@ import { DemoCardComponent } from '../demo-card/demo-card.component';
     ReactiveFormsModule,
     IListbox,
     DemoCardComponent,
+    FeaturesListComponent,
   ],
   templateUrl: './listboxes.component.html',
   styleUrls: ['./listboxes.component.scss', '../shared-demo-styles.scss'],
@@ -139,7 +144,7 @@ export class ListboxesComponent implements OnInit, OnDestroy {
   }
 
   // Features list for the component
-  features = [
+  features: Feature[] = [
     {
       title: 'Always Visible Options',
       description:

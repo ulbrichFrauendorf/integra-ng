@@ -1,34 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { IChip } from '@shared/components/chip/chip.component';
-import { IChips } from '@shared/components/chips/chips.component';
-import { IButton } from '@shared/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-chips',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IChip,
-    IChips,
-    IButton,
-    DemoCardComponent,
-  ],
+  imports: [CommonModule, IChip, DemoCardComponent, FeaturesListComponent],
   templateUrl: './chips.component.html',
   styleUrls: ['./chips.component.scss'],
 })
 export class ChipsComponent implements OnInit {
-  basicForm: FormGroup;
-  validationForm: FormGroup;
-
   // Code examples organized by category
   codeExamples = {
     basicChips: `<i-chip label="Action" />
@@ -36,38 +22,6 @@ export class ChipsComponent implements OnInit {
 <i-chip label="Mystery" />
 <i-chip label="Thriller" [removable]="true" (onRemove)="onChipRemove($event)" />
 <i-chip label="Apple" icon="pi pi-apple" />`,
-
-    chipsInput: `// 1. Import required modules and component
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { IChips } from 'invensys-angular-shared/components/chips/chips.component';
-
-// 2. Create your form
-form = this.fb.group({
-  tags: [['angular', 'typescript']]
-});
-
-// 3. Use in template
-<form [formGroup]="form">
-  <i-chips
-    placeholder="Enter tags and press Enter"
-    formControlName="tags">
-  </i-chips>
-</form>`,
-
-    validation: `// With validation
-form = this.fb.group({
-  requiredTags: [[], [Validators.required, this.minArrayLengthValidator(2)]]
-});
-
-<form [formGroup]="form">
-  <i-chips
-    placeholder="Enter at least 2 tags"
-    formControlName="requiredTags">
-  </i-chips>
-  @if (form.get('requiredTags')?.invalid && form.get('requiredTags')?.touched) {
-    <div class="error-message">At least 2 tags are required</div>
-  }
-</form>`,
   };
 
   // Chip examples data
@@ -79,7 +33,7 @@ form = this.fb.group({
     { label: 'Apple', icon: 'pi pi-apple' },
   ];
 
-  features = [
+  features: Feature[] = [
     {
       title: 'Basic Chips',
       description: 'Display static information as compact chips',
@@ -92,74 +46,13 @@ form = this.fb.group({
       title: 'Icon Support',
       description: 'Chips can display icons (using PrimeIcons)',
     },
-    {
-      title: 'Chips Input',
-      description: 'Interactive input for creating multiple chips/tags',
-    },
-    {
-      title: 'Reactive Forms',
-      description: 'Full integration with Angular reactive forms',
-    },
-    { title: 'Float Labels', description: 'PrimeNG-style float label support' },
-    { title: 'Validation', description: 'Works with Angular form validators' },
-    {
-      title: 'Keyboard Support',
-      description: 'Enter, Tab, and Backspace key handling',
-    },
-    {
-      title: 'Paste Support',
-      description: 'Parse multiple values from clipboard',
-    },
   ];
 
-  constructor(private fb: FormBuilder) {
-    this.basicForm = this.fb.group({
-      tags: [['angular', 'typescript']],
-    });
-
-    this.validationForm = this.fb.group({
-      requiredTags: [
-        [],
-        [Validators.required, this.minArrayLengthValidator(2)],
-      ],
-    });
-  }
+  constructor() {}
 
   ngOnInit() {}
 
   onChipRemove(event: Event) {
     console.log('Chip removed:', event);
-  }
-
-  onSubmit(form: FormGroup, formName: string) {
-    if (form.valid) {
-      console.log(`${formName} form submitted:`, form.value);
-    } else {
-      this.markFormGroupTouched(form);
-    }
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach((key) => {
-      const control = formGroup.get(key);
-      if (control?.invalid) {
-        control.markAsTouched();
-      }
-    });
-  }
-
-  private minArrayLengthValidator(minLength: number) {
-    return (control: any) => {
-      const value = control.value;
-      if (!value || !Array.isArray(value) || value.length < minLength) {
-        return {
-          minArrayLength: {
-            requiredLength: minLength,
-            actualLength: value?.length || 0,
-          },
-        };
-      }
-      return null;
-    };
   }
 }

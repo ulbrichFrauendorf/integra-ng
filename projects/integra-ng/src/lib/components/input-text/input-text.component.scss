@@ -1,0 +1,171 @@
+@use "./input-text.component.theme.scss" as theme;
+
+@include theme.i-input-theme();
+
+.i-input-wrapper {
+  font-size: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 20px;
+
+  &.i-input--fluid {
+    width: 100%;
+  }
+
+  &.i-input--no-float {
+    margin-top: 0;
+    height: auto;
+  }
+
+  .i-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .float-label {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+
+    .i-input-icon-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+    }
+
+    .i-input-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 16px;
+      width: 16px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+    }
+
+    .i-input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px 10px 14px;
+      border-radius: 4px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .i-input.has-icon {
+      padding-left: 34px; /* space for icon */
+    }
+
+    .i-input-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      height: 16px;
+      width: 16px;
+    }
+
+    .i-input:focus {
+      outline: none;
+    }
+
+    .i-input.hide-text {
+      color: transparent;
+      text-shadow: none;
+      cursor: pointer;
+    }
+
+    .i-input.readonly {
+      cursor: pointer;
+      user-select: none;
+      caret-color: transparent;
+    }
+
+    .i-label {
+      position: absolute;
+      left: 8px;
+      top: 14px;
+      pointer-events: none;
+      transition: all 0.15s ease;
+      padding: 0 4px;
+    }
+
+    /* Float when input has value or is focused */
+    .i-input:focus + .i-label,
+    .i-input:not(:placeholder-shown) + .i-label,
+    .i-label.floated {
+      top: -20px;
+    }
+
+    /* Adjust label position when icon is present */
+    &.has-icon .i-label:not(.floated) {
+      left: 34px; /* Position after the icon */
+    }
+  }
+
+  .normal-input {
+    position: relative;
+
+    .i-input-icon-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+    }
+
+    .i-input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 16px;
+      width: 16px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+    }
+
+    .i-input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .i-input.has-icon {
+      padding-left: 38px; /* space for icon */
+    }
+
+    .i-input:focus {
+      outline: none;
+    }
+
+    .i-input.hide-text {
+      color: transparent;
+      text-shadow: none;
+    }
+
+    .i-input.readonly {
+      cursor: pointer;
+      user-select: none;
+      caret-color: transparent;
+    }
+
+    .i-input-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      height: 16px;
+      width: 16px;
+    }
+  }
+}

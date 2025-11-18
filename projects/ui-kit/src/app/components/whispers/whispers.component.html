@@ -13,7 +13,11 @@
 
   <div class="cards-container">
     <!-- Basic Message Types -->
-    <app-demo-card title="Message Types" [sourceCode]="codeExamples.usage">
+    <app-demo-card
+      [title]="'Message Types'"
+      [sourceCode]="codeExamples.buttons"
+      [tsCode]="tsExamples.usage"
+    >
       <div class="button-grid">
         <i-button
           severity="success"
@@ -48,8 +52,9 @@
 
     <!-- Key-based Messages -->
     <app-demo-card
-      title="Key-based Messages"
-      [sourceCode]="codeExamples.advanced"
+      [title]="'Key-based Messages'"
+      [sourceCode]="codeExamples.keyed"
+      [tsCode]="tsExamples.advanced"
     >
       <div class="demo-section">
         <p class="section-description">
@@ -97,7 +102,11 @@
     </app-demo-card>
 
     <!-- Real-world Example -->
-    <app-demo-card title="Real-world Example" [sourceCode]="codeExamples.basic">
+    <app-demo-card
+      [title]="'Real-world Example'"
+      [sourceCode]="codeExamples.basic"
+      [tsCode]="tsExamples.basic"
+    >
       <div class="demo-section">
         <p class="section-description">
           Simulate a user link action like the one in your request:
@@ -114,21 +123,14 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
 
     <!-- Positioning Setup -->
     <app-demo-card
-      title="Setup & Positioning"
-      [sourceCode]="codeExamples.positioning"
+      [title]="'Setup & Positioning'"
+      [sourceCode]="codeExamples.basic"
     >
       <div class="setup-info">
         <p>

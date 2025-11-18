@@ -1,0 +1,118 @@
+@use "./select.component.theme.scss" as theme;
+@use "../../themes/scrollbar-mixins.scss" as scrollbar;
+
+@include theme.i-select-theme();
+
+.i-select-wrapper {
+  position: relative;
+  display: block;
+
+  &.i-select--fluid {
+    width: 100%;
+  }
+
+  .i-select-input-container {
+    position: relative;
+    cursor: pointer;
+
+    // Ensure readonly input has pointer cursor
+    .i-input-text .i-input.readonly {
+      cursor: pointer !important;
+    }
+
+    .i-select-icons {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+
+      .i-select-clear {
+        pointer-events: auto;
+        cursor: pointer;
+        font-size: 0.8em;
+        opacity: 0.6;
+        transition: opacity 0.15s ease;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .i-select-arrow {
+        font-size: 0.7rem; // 10px
+        transition: transform 0.15s ease;
+        opacity: 0.6;
+
+        &.flipped {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  .i-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-radius: 4px;
+    overflow: visible;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 4px;
+    margin-bottom: 8px;
+
+    .i-select-filter {
+      padding: 8px;
+
+      .i-select-search {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid;
+        border-radius: 4px;
+        font-size: 1em;
+        outline: none;
+      }
+    }
+
+    .i-select-options {
+      max-height: min(
+        160px,
+        calc(100vh - 150px)
+      ); // Better viewport calculation with safe margin
+      overflow-y: auto;
+      overflow-x: hidden; // Hide horizontal overflow
+      border-radius: 0 0 4px 4px; // Round bottom corners
+      @include scrollbar.dropdown-scrollbar();
+
+      // Ensure scrollbar area is properly visible
+      padding-right: 2px; // Small padding to prevent scrollbar cutoff
+
+      .i-select-option {
+        font-size: 1em;
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &.selected {
+          font-weight: 500;
+        }
+      }
+
+      .i-select-no-options {
+        padding: 12px;
+        text-align: center;
+        font-style: italic;
+        opacity: 0.6;
+      }
+    }
+  }
+}

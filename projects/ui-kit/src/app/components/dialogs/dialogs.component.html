@@ -11,8 +11,9 @@
   <div class="cards-container">
     <!-- Dynamic Dialog Example -->
     <app-demo-card
-      title="Dynamic Dialog Service"
+      [title]="'Dynamic Dialog Service'"
       [sourceCode]="codeExamples.dynamic"
+      [tsCode]="dynamicDialogTsCode"
     >
       <div class="demo-content">
         <p>
@@ -27,7 +28,7 @@
 
     <!-- Basic Template Dialog -->
     <app-demo-card
-      title="Basic Template Dialog"
+      [title]="'Basic Template Dialog'"
       [sourceCode]="codeExamples.basic"
     >
       <div class="demo-content">
@@ -71,7 +72,7 @@
 
     <!-- Responsive Dialog -->
     <app-demo-card
-      title="Responsive Dialog"
+      [title]="'Responsive Dialog'"
       [sourceCode]="codeExamples.responsive"
     >
       <div class="demo-content">
@@ -110,7 +111,7 @@
     </app-demo-card>
 
     <!-- Large Dialog -->
-    <app-demo-card title="Large Dialog" [sourceCode]="codeExamples.fullscreen">
+    <app-demo-card [title]="'Large Dialog'" [sourceCode]="codeExamples.fullscreen">
       <div class="demo-content">
         <p>Dialogs with larger dimensions for complex content.</p>
         <i-button severity="warning" (clicked)="showFullscreenDialogModal()"
@@ -181,16 +182,9 @@
       </i-dialog>
     </app-demo-card>
 
-    <!-- Features Overview -->
-    <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

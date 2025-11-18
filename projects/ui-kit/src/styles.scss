@@ -1,29 +1,46 @@
-@use "../../invensys-angular-shared/src/lib/themes/colors.theme.scss" as
+@use "../../integra-ng/src/lib/themes/colors.theme.scss" as
   colors-theme;
 
-@use "../../invensys-angular-shared/src/lib/themes/color-variables.scss" as vars;
+@use "../../integra-ng/src/lib/themes/color-variables.scss" as vars;
 
 @import "primeicons/primeicons.css";
 
 @include colors-theme.define-color-palette(light);
 @include colors-theme.define-color-palette(dark);
 
-body {
-  font-family: "Roboto", sans-serif;
-  background-color: vars.$color-surface-ground;
+* {
   box-sizing: border-box;
-  scrollbar-gutter: stable;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  background-color: vars.$color-surface-ground;
+  color: vars.$color-text-primary;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .component-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  max-width: 100%;
+  overflow-x: auto;
 
   .ui-section {
     display: flex;
     align-items: baseline;
     gap: 16px;
     padding: 16px;
+    flex-wrap: wrap;
   }
 }
