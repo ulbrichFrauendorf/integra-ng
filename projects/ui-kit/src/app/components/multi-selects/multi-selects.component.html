@@ -11,7 +11,7 @@
   <div class="cards-container">
     <!-- Basic Multi-Select Examples -->
     <app-demo-card
-      title="Basic Multi-Select"
+      [title]="'Basic Multi-Select'"
       [sourceCode]="codeExamples.reactiveForm"
       [tsCode]="tsExamples.reactiveForm"
     >
@@ -91,7 +91,7 @@
 
     <!-- Validation Example -->
     <app-demo-card
-      title="Required Validation"
+      [title]="'Required Validation'"
       [sourceCode]="codeExamples.validation"
       [tsCode]="tsExamples.validation"
     >
@@ -130,7 +130,7 @@
 
     <!-- Advanced Configuration -->
     <app-demo-card
-      title="Advanced Features"
+      [title]="'Advanced Features'"
       [sourceCode]="codeExamples.advanced"
     >
       <form
@@ -159,7 +159,7 @@
     </app-demo-card>
 
     <!-- Fluid Layout Example -->
-    <app-demo-card title="Fluid Layout" [sourceCode]="codeExamples.fluid">
+    <app-demo-card [title]="'Fluid Layout'" [sourceCode]="codeExamples.fluid">
       <form
         [formGroup]="fluidForm"
         (ngSubmit)="onSubmit(fluidForm, 'fluid')"
@@ -181,7 +181,7 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>

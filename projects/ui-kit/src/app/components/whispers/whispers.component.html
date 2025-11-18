@@ -14,7 +14,7 @@
   <div class="cards-container">
     <!-- Basic Message Types -->
     <app-demo-card
-      title="Message Types"
+      [title]="'Message Types'"
       [sourceCode]="codeExamples.buttons"
       [tsCode]="tsExamples.usage"
     >
@@ -52,7 +52,7 @@
 
     <!-- Key-based Messages -->
     <app-demo-card
-      title="Key-based Messages"
+      [title]="'Key-based Messages'"
       [sourceCode]="codeExamples.keyed"
       [tsCode]="tsExamples.advanced"
     >
@@ -103,7 +103,7 @@
 
     <!-- Real-world Example -->
     <app-demo-card
-      title="Real-world Example"
+      [title]="'Real-world Example'"
       [sourceCode]="codeExamples.basic"
       [tsCode]="tsExamples.basic"
     >
@@ -123,13 +123,13 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
 
     <!-- Positioning Setup -->
     <app-demo-card
-      title="Setup & Positioning"
+      [title]="'Setup & Positioning'"
       [sourceCode]="codeExamples.basic"
     >
       <div class="setup-info">

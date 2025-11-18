@@ -12,7 +12,7 @@
   <div class="cards-container">
     <!-- Multiple Selection -->
     <app-demo-card
-      title="Multiple Selection Listbox"
+      [title]="'Multiple Selection Listbox'"
       [sourceCode]="codeExamples.multiple"
     >
       <i-listbox
@@ -30,7 +30,7 @@
 
     <!-- Single Selection -->
     <app-demo-card
-      title="Single Selection Listbox"
+      [title]="'Single Selection Listbox'"
       [sourceCode]="codeExamples.single"
     >
       <i-listbox
@@ -48,7 +48,7 @@
 
     <!-- Advanced Features -->
     <app-demo-card
-      title="Advanced Features (Filtering & Clear)"
+      [title]="'Advanced Features (Filtering & Clear)'"
       [sourceCode]="codeExamples.filter"
     >
       <div class="demo-form">
@@ -66,7 +66,7 @@
     </app-demo-card>
 
     <!-- Fluid Layout -->
-    <app-demo-card title="Fluid Layout" [sourceCode]="codeExamples.fluid">
+    <app-demo-card [title]="'Fluid Layout'" [sourceCode]="codeExamples.fluid">
       <div class="demo-form">
         <i-listbox
           label="Full Width Listbox"
@@ -81,7 +81,7 @@
     </app-demo-card>
 
     <!-- Disabled State -->
-    <app-demo-card title="Disabled State" [sourceCode]="codeExamples.disabled">
+    <app-demo-card [title]="'Disabled State'" [sourceCode]="codeExamples.disabled">
       <div class="demo-form">
         <i-listbox
           label="Disabled Listbox"
@@ -97,7 +97,7 @@
 
     <!-- Reactive Forms with Observable Data -->
     <app-demo-card
-      title="Reactive Forms + Observable Data"
+      [title]="'Reactive Forms + Observable Data'"
       [sourceCode]="codeExamples.reactive"
     >
       <div class="demo-form">
@@ -139,7 +139,7 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card title="Features">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>

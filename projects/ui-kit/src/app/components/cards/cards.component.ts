@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { ICard } from '../../../../../invensys-angular-shared/src/lib/components/card/card.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { IDialogActions } from '@shared/components/dialog/inner/dialog-actions/dialog-actions.component';
@@ -14,6 +14,8 @@ import {
   styleUrl: './cards.component.scss',
 })
 export class CardsComponent {
+  private cdr = inject(ChangeDetectorRef);
+  
   onSubmit() {
     throw new Error('Method not implemented.');
   }
@@ -25,11 +27,11 @@ export class CardsComponent {
   // Code examples organized by category
   codeExamples = {
     basic: `
-<i-card title="Card Title" subtitle="Optional subtitle">
+<i-card [title]="'Card Title'" sub[title]="'Optional subtitle'">
   <p>This is the card content in the body section.</p>
 </i-card>`,
 
-    withFooter: `<i-card title="Card with Actions">
+    withFooter: `<i-card [title]="'Card with Actions'">
   <p>This card includes footer content.</p>
   <div slot="footer">
     <i-button severity="primary">Action</i-button>
@@ -48,7 +50,7 @@ export class CardsComponent {
 </i-card>`,
 
     closable: `<i-card
-  title="Closable Card"
+  [title]="'Closable Card'"
   [closable]="true"
   (closeCard)="onCardClosed()"
 >
@@ -94,9 +96,14 @@ export class CardsComponent {
 
   onCardClosed() {
     this.showClosableCard = false;
+    this.cdr.detectChanges();
+    console.log('Card closed, will reappear in 3 seconds');
+    
     // Reset after 3 seconds for demo purposes
     setTimeout(() => {
       this.showClosableCard = true;
+      this.cdr.detectChanges();
+      console.log('Card reshown');
     }, 3000);
   }
 }
