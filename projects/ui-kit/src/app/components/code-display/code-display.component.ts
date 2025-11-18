@@ -37,7 +37,11 @@ import { IButton } from '../../../../../invensys-angular-shared/src/lib/componen
           <span class="code-title" *ngIf="!showTabs || !tsCode">
             {{ activeTab === 'html' ? 'HTML' : 'TypeScript' }}
           </span>
-          <i-button severity="secondary" (clicked)="copyCode()" title="Copy code">
+          <i-button
+            severity="secondary"
+            (clicked)="copyCode()"
+            title="Copy code"
+          >
             <i class="pi pi-copy"></i>
           </i-button>
         </div>
