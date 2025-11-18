@@ -11,6 +11,10 @@ import {
   ITreeNode,
 } from '../../../../../invensys-angular-shared/src/public-api';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-tree-views',
@@ -20,6 +24,7 @@ import { DemoCardComponent } from '../demo-card/demo-card.component';
     FormsModule,
     ReactiveFormsModule,
     JsonPipe,
+    FeaturesListComponent,
   ],
   templateUrl: './tree-views.component.html',
   styleUrl: './tree-views.component.scss',
@@ -220,7 +225,7 @@ export class TreeViewsComponent {
   filteredTreeData = [...this.basicTreeData];
 
   // Features list
-  features = [
+  features: Feature[] = [
     {
       title: 'Multiple Selection Modes',
       description: 'Single, multiple, and checkbox selection modes',
@@ -255,68 +260,90 @@ export class TreeViewsComponent {
     },
   ];
 
-  // Code examples
+  // HTML Code examples
   codeExamples = {
-    basic: `// 1. Import the component
-import { ITreeView, ITreeNode } from '../../../../../invensys-angular-shared/src/public-api';
+    basic: `<i-tree-view [value]="treeData"></i-tree-view>`,
 
-// 2. Define tree data
-treeData: ITreeNode[] = [
-  {
-    key: '0',
-    label: 'Documents',
-    icon: 'pi pi-folder',
-    children: [
-      {
-        key: '0-0',
-        label: 'Work',
-        icon: 'pi pi-folder',
-        children: [
-          { key: '0-0-0', label: 'Resume.doc', icon: 'pi pi-file' }
-        ]
-      }
-    ]
-  }
-];
-
-// 3. Use in template
-<i-tree-view [value]="treeData"></i-tree-view>`,
-
-    selection: `// Single selection
-selection: ITreeNode | null = null;
-
+    selection: `<!-- Single selection -->
 <i-tree-view 
   [value]="treeData" 
   selectionMode="single"
-  [(selection)]="selection">
+  [(selection)]="singleSelection">
 </i-tree-view>
 
-// Multiple selection
-multiSelection: ITreeNode[] = [];
-
+<!-- Multiple selection -->
 <i-tree-view 
   [value]="treeData" 
   selectionMode="multiple"
-  [(selection)]="multiSelection">
+  [(selection)]="multipleSelection">
 </i-tree-view>
 
-// Checkbox selection
-checkboxSelection: ITreeNode[] = [];
-
+<!-- Checkbox selection -->
 <i-tree-view 
   [value]="treeData" 
   selectionMode="checkbox"
   [(selection)]="checkboxSelection">
 </i-tree-view>`,
 
-    events: `// Handle selection events
-<i-tree-view 
+    events: `<i-tree-view 
   [value]="treeData"
   (onNodeSelect)="onNodeSelect($event)"
   (onNodeUnselect)="onNodeUnselect($event)"
   (onNodeExpand)="onNodeExpand($event)"
   (onNodeCollapse)="onNodeCollapse($event)">
-</i-tree-view>
+</i-tree-view>`,
+
+    filtering: `<i-tree-view 
+  [value]="treeData"
+  [filter]="true"
+  filterPlaceholder="Search nodes..."
+  filterBy="label">
+</i-tree-view>`,
+
+    scrollable: `<i-tree-view 
+  [value]="treeData"
+  scrollHeight="400px">
+</i-tree-view>`,
+
+    customization: `<i-tree-view 
+  [value]="customTreeData"
+  [scrollHeight]="'400px'">
+</i-tree-view>`,
+  };
+
+  // TypeScript examples
+  tsExamples = {
+    basic: `import { ITreeView, ITreeNode } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ITreeView],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  treeData: ITreeNode[] = [
+    {
+      key: '0',
+      label: 'Documents',
+      icon: 'pi pi-folder',
+      children: [
+        {
+          key: '0-0',
+          label: 'Work',
+          icon: 'pi pi-folder',
+          children: [
+            { key: '0-0-0', label: 'Resume.doc', icon: 'pi pi-file' }
+          ]
+        }
+      ]
+    }
+  ];
+}`,
+
+    selection: `// Selection handling
+singleSelection: ITreeNode | null = null;
+multipleSelection: ITreeNode[] = [];
+checkboxSelection: ITreeNode[] = [];
 
 onNodeSelect(event: any) {
   console.log('Node selected:', event.node);
@@ -326,21 +353,7 @@ onNodeUnselect(event: any) {
   console.log('Node unselected:', event.node);
 }`,
 
-    filtering: `// Enable filtering
-<i-tree-view 
-  [value]="treeData"
-  [filter]="true"
-  filterPlaceholder="Search nodes..."
-  filterBy="label">
-</i-tree-view>`,
-
-    scrollable: `// Scrollable tree view
-<i-tree-view 
-  [value]="treeData"
-  scrollHeight="400px">
-</i-tree-view>`,
-
-    customization: `// Custom node properties
+    customization: `// Custom tree node interface
 interface ITreeNode {
   key?: string;
   label?: string;
@@ -356,7 +369,7 @@ interface ITreeNode {
 }
 
 // Custom icons example
-treeData: ITreeNode[] = [
+customTreeData: ITreeNode[] = [
   {
     key: '0',
     label: 'Folder',
@@ -374,6 +387,18 @@ treeData: ITreeNode[] = [
   }
 ];`,
   };
+
+  // Component setup
+  initializationCode = `import { ITreeView, ITreeNode } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ITreeView],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  treeData: ITreeNode[] = [];
+}`;
 
   constructor() {
     // Initialize some nodes as expanded

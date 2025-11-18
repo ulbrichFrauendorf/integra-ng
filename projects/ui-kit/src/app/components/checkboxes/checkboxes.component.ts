@@ -8,6 +8,10 @@ import {
 import { ICheckbox } from '../../../../../invensys-angular-shared/src/lib/components/checkbox/checkbox.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { JsonPipe } from '@angular/common';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-checkboxes',
@@ -17,6 +21,7 @@ import { JsonPipe } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     JsonPipe,
+    FeaturesListComponent,
   ],
   templateUrl: './checkboxes.component.html',
   styleUrl: './checkboxes.component.scss',
@@ -44,81 +49,90 @@ export class CheckboxesComponent {
     analytics: new FormControl(true),
   });
 
-  // Code examples organized by category
+  // HTML Code examples organized by category
   codeExamples = {
-    basic: `// 1. Import the component and FormsModule
-import { ICheckbox } from '../../../../../invensys-angular-shared/src/lib/components/checkbox/checkbox.component';
-import { FormsModule } from '@angular/forms';
+    ngModel: `<i-checkbox [(ngModel)]="basicChecked" />
+<i-checkbox [(ngModel)]="checkedWithLabel" label="Accept terms and conditions" />
+<i-checkbox [(ngModel)]="disabledChecked" [disabled]="true" label="Disabled checkbox" />
+<i-checkbox [(ngModel)]="readonlyChecked" [readonly]="true" label="Readonly checkbox" />`,
 
-// 2. Add to your component imports
-@Component({
-  selector: 'your-component',
-  imports: [ICheckbox, FormsModule],
-  // ...
-})
-
-// 3. Component property
-checked = false;
-
-// 4. Use in template
-<i-checkbox [(ngModel)]="checked" />
-
-// 5. Handle changes
-<i-checkbox [(ngModel)]="checked" (onChange)="onCheckboxChange($event)" />
-
-onCheckboxChange(isChecked: boolean) {
-  console.log('Checkbox is now:', isChecked);
-}`,
-
-    withLabel: `// Basic usage with label
-<i-checkbox [(ngModel)]="checked" label="Accept terms and conditions" />
-
-// Custom input id
-<i-checkbox [(ngModel)]="checked" inputId="terms" label="Accept terms" />`,
-
-    states: `// Disabled state
-<i-checkbox [(ngModel)]="checked" [disabled]="true" label="Disabled checkbox" />
-
-// Readonly state
-<i-checkbox [(ngModel)]="checked" [readonly]="true" label="Readonly checkbox" />`,
-
-    sizes: `// Different sizes
-<i-checkbox [(ngModel)]="checked" size="small" label="Small checkbox" />
-<i-checkbox [(ngModel)]="checked" size="medium" label="Medium checkbox" />
-<i-checkbox [(ngModel)]="checked" size="large" label="Large checkbox" />`,
-
-    formControl: `// 1. Import ReactiveFormsModule
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-
-// 2. Component property
-checkboxControl = new FormControl(false);
-
-// 3. Use in template
-<i-checkbox [formControl]="checkboxControl" label="FormControl checkbox" />
-
-// 4. Access value
-console.log(this.checkboxControl.value);`,
-
-    formGroup: `// FormGroup example
-import { FormGroup, FormControl } from '@angular/forms';
-
-// Component property
-userForm = new FormGroup({
-  notifications: new FormControl(true),
-  newsletter: new FormControl(false)
-});
-
-// Template usage
-<form [formGroup]="userForm">
+    reactiveForm: `<form [formGroup]="userPreferencesForm">
   <i-checkbox formControlName="notifications" label="Email notifications" />
   <i-checkbox formControlName="newsletter" label="Subscribe to newsletter" />
-</form>
+  <i-checkbox formControlName="marketing" label="Marketing communications" />
+  <i-checkbox formControlName="analytics" label="Usage analytics" />
+</form>`,
 
-// Access values
-console.log(this.userForm.value);`,
+    sizes: `<i-checkbox [(ngModel)]="smallChecked" size="small" label="Small checkbox" />
+<i-checkbox [(ngModel)]="mediumChecked" size="medium" label="Medium checkbox" />
+<i-checkbox [(ngModel)]="largeChecked" size="large" label="Large checkbox" />`,
+
+    formControl: `<i-checkbox [formControl]="formControlExample" label="FormControl checkbox" />`,
   };
 
-  features = [
+  // TypeScript examples
+  tsExamples = {
+    ngModel: `import { FormsModule } from '@angular/forms';
+import { ICheckbox } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [FormsModule, ICheckbox],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  basicChecked = false;
+  checkedWithLabel = true;
+  disabledChecked = false;
+  readonlyChecked = true;
+
+  onCheckboxChange(isChecked: boolean) {
+    console.log('Checkbox is now:', isChecked);
+  }
+}`,
+
+    reactiveForm: `import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ICheckbox } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ReactiveFormsModule, ICheckbox],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  userPreferencesForm = new FormGroup({
+    notifications: new FormControl(true),
+    newsletter: new FormControl(false),
+    marketing: new FormControl(false),
+    analytics: new FormControl(true)
+  });
+
+  onFormSubmit() {
+    console.log('Form submitted:', this.userPreferencesForm.value);
+  }
+}`,
+
+    formControl: `import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
+formControlExample = new FormControl(false);
+
+// Access value
+console.log(this.formControlExample.value);`,
+  };
+
+  // Component setup
+  initializationCode = `import { ICheckbox } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ICheckbox],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  checked = false;
+}`;
+
+  features: Feature[] = [
     {
       title: 'Two-way Data Binding',
       description: 'Full support for ngModel and reactive forms',

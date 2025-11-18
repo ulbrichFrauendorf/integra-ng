@@ -11,7 +11,7 @@
     <!-- Basic Select Examples -->
     <app-demo-card
       title="Basic Select Options"
-      [sourceCode]="codeExamples.basic"
+      [sourceCode]="codeExamples.reactiveForm"
     >
       <form [formGroup]="basicForm" class="demo-form">
         <div class="input-grid">
@@ -157,14 +157,7 @@
 
     <!-- Features -->
     <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

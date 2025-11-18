@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IChip } from '@shared/components/chip/chip.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-chips',
   standalone: true,
-  imports: [CommonModule, IChip, DemoCardComponent],
+  imports: [CommonModule, IChip, DemoCardComponent, FeaturesListComponent],
   templateUrl: './chips.component.html',
   styleUrls: ['./chips.component.scss'],
 })
@@ -29,7 +33,7 @@ export class ChipsComponent implements OnInit {
     { label: 'Apple', icon: 'pi pi-apple' },
   ];
 
-  features = [
+  features: Feature[] = [
     {
       title: 'Basic Chips',
       description: 'Display static information as compact chips',

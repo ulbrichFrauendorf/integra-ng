@@ -4,10 +4,15 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms';
-import { IInputText } from '@shared/components/input-text/input-text.component';
-import { IButton } from '@shared/components/button/button.component';
+import { IInputText } from '../../../../../invensys-angular-shared/src/lib/components/input-text/input-text.component';
+import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 interface InputExample {
   label: string;
@@ -20,7 +25,14 @@ interface InputExample {
 
 @Component({
   selector: 'app-input-texts',
-  imports: [IInputText, IButton, ReactiveFormsModule, DemoCardComponent],
+  imports: [
+    IInputText,
+    IButton,
+    ReactiveFormsModule,
+    FormsModule,
+    DemoCardComponent,
+    FeaturesListComponent,
+  ],
   templateUrl: './input-texts.component.html',
   styleUrl: './input-texts.component.scss',
 })
@@ -28,6 +40,12 @@ export class InputTextsComponent implements OnInit {
   basicForm: FormGroup;
   validationForm: FormGroup;
   fluidForm: FormGroup;
+
+  // NgModel examples
+  textValue = '';
+  emailValue = '';
+  passwordValue = '';
+  numberValue = 0;
 
   // Organized input examples by category
   inputExamples = {
@@ -85,51 +103,91 @@ export class InputTextsComponent implements OnInit {
     ],
   };
 
-  // Code examples organized by category
+  // HTML Code examples organized by category
   codeExamples = {
-    basic: `// 1. Import required modules and component
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { IInputText } from '../../../../../invensys-angular-shared/src/lib/components/input-text/input-text.component';
+    ngModel: `<i-input-text label="Text Input" type="text" [(ngModel)]="textValue" />
+<i-input-text label="Email Input" type="email" [(ngModel)]="emailValue" />
+<i-input-text label="Password Input" type="password" [(ngModel)]="passwordValue" />
+<i-input-text label="Number Input" type="number" [(ngModel)]="numberValue" />`,
 
-// 2. Create your form
-form = this.fb.group({
-  textInput: [''],
-  emailInput: [''],
-  passwordInput: [''],
-  numberInput: ['']
-});
-
-// 3. Use in template
-<form [formGroup]="form">
+    reactiveForm: `<form [formGroup]="basicForm">
   <i-input-text label="Text Input" type="text" formControlName="textInput" />
   <i-input-text label="Email Input" type="email" formControlName="emailInput" />
   <i-input-text label="Password Input" type="password" formControlName="passwordInput" />
   <i-input-text label="Number Input" type="number" formControlName="numberInput" />
 </form>`,
 
-    validation: `// With validation
-import { Validators } from '@angular/forms';
-
-validationForm = this.fb.group({
-  requiredField: ['', [Validators.required]],
-  minLengthField: ['', [Validators.minLength(5)]],
-  emailValidation: ['', [Validators.required, Validators.email]],
-  patternField: ['', [Validators.pattern(/^[A-Za-z]+$/)]]
-});
-
-<form [formGroup]="validationForm">
+    validation: `<form [formGroup]="validationForm">
   <i-input-text label="Required Field" type="text" formControlName="requiredField" />
   <i-input-text label="Min Length (5 chars)" type="text" formControlName="minLengthField" />
   <i-input-text label="Email Validation" type="email" formControlName="emailValidation" />
   <i-input-text label="Pattern (Letters only)" type="text" formControlName="patternField" />
 </form>`,
 
-    fluid: `<i-input-text label="Fluid Text Input" type="text" formControlName="fluidText" [fluid]="true" />
-<i-input-text label="Fluid Email Input" type="email" formControlName="fluidEmail" [fluid]="true" />
-<i-input-text label="Fluid Password Input" type="password" formControlName="fluidPassword" [fluid]="true" />`,
+    fluid: `<i-input-text label="Fluid Text Input" type="text" [fluid]="true" formControlName="fluidText" />
+<i-input-text label="Fluid Email Input" type="email" [fluid]="true" formControlName="fluidEmail" />
+<i-input-text label="Fluid Password Input" type="password" [fluid]="true" formControlName="fluidPassword" />`,
   };
 
-  features = [
+  // TypeScript examples
+  tsExamples = {
+    ngModel: `import { FormsModule } from '@angular/forms';
+import { IInputText } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [FormsModule, IInputText],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  textValue = '';
+  emailValue = '';
+  passwordValue = '';
+  numberValue = 0;
+}`,
+
+    reactiveForm: `import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { IInputText } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ReactiveFormsModule, IInputText],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  basicForm = this.fb.group({
+    textInput: [''],
+    emailInput: [''],
+    passwordInput: [''],
+    numberInput: ['']
+  });
+
+  constructor(private fb: FormBuilder) {}
+}`,
+
+    validation: `import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+validationForm = this.fb.group({
+  requiredField: ['', [Validators.required]],
+  minLengthField: ['', [Validators.minLength(5)]],
+  emailValidation: ['', [Validators.required, Validators.email]],
+  patternField: ['', [Validators.pattern(/^[A-Za-z]+$/)]]
+});`,
+  };
+
+  // Component setup
+  initializationCode = `import { IInputText } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [IInputText],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  // Component is ready to use
+}`;
+
+  features: Feature[] = [
     {
       title: 'Input Types',
       description: 'Text, email, password, number, tel, url, and search inputs',

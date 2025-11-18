@@ -8,8 +8,52 @@
   </header>
 
   <div class="cards-container">
-    <!-- Basic Input Types -->
-    <app-demo-card title="Basic Input Types" [sourceCode]="codeExamples.basic">
+    <!-- NgModel Binding (Template-driven) -->
+    <app-demo-card
+      title="Template-driven Forms (NgModel)"
+      [sourceCode]="codeExamples.ngModel"
+      [tsCode]="tsExamples.ngModel"
+    >
+      <div class="demo-form">
+        <div class="input-grid">
+          <i-input-text
+            label="Text Input"
+            type="text"
+            [(ngModel)]="textValue"
+          />
+          <i-input-text
+            label="Email Input"
+            type="email"
+            [(ngModel)]="emailValue"
+          />
+          <i-input-text
+            label="Password Input"
+            type="password"
+            [(ngModel)]="passwordValue"
+          />
+          <i-input-text
+            label="Number Input"
+            type="number"
+            [(ngModel)]="numberValue"
+          />
+        </div>
+
+        <div class="values-display">
+          <h4>Current Values:</h4>
+          <p><strong>Text:</strong> {{ textValue || "(empty)" }}</p>
+          <p><strong>Email:</strong> {{ emailValue || "(empty)" }}</p>
+          <p><strong>Password:</strong> {{ passwordValue || "(empty)" }}</p>
+          <p><strong>Number:</strong> {{ numberValue }}</p>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Reactive Forms -->
+    <app-demo-card
+      title="Reactive Forms"
+      [sourceCode]="codeExamples.reactiveForm"
+      [tsCode]="tsExamples.reactiveForm"
+    >
       <form [formGroup]="basicForm" class="demo-form">
         <div class="input-grid">
           @for (input of inputExamples.basic; track input.formControlName) {
@@ -30,8 +74,9 @@
 
     <!-- Validation Examples -->
     <app-demo-card
-      title="Validation Examples"
+      title="Form Validation"
       [sourceCode]="codeExamples.validation"
+      [tsCode]="tsExamples.validation"
     >
       <form [formGroup]="validationForm" class="demo-form">
         <div class="input-grid">
@@ -105,14 +150,7 @@
 
     <!-- Features -->
     <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

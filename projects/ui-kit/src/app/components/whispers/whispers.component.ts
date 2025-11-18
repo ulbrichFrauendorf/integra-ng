@@ -5,10 +5,14 @@ import { IWhisper } from '../../../../../invensys-angular-shared/src/lib/compone
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { IWhisperMessage } from '../../../../../invensys-angular-shared/src/lib/components/whisper/services/whisper.interfaces';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-whispers',
-  imports: [IButton, IWhisper, DemoCardComponent],
+  imports: [IButton, IWhisper, DemoCardComponent, FeaturesListComponent],
   templateUrl: './whispers.component.html',
   styleUrl: './whispers.component.scss',
 })
@@ -182,50 +186,25 @@ export class WhispersComponent {
     }, 1000);
   }
 
-  // Code examples
+  // HTML Code examples
   codeExamples = {
-    basic: `// 1. Import the service and component
-import { WhisperService } from '../../../../../invensys-angular-shared/src/lib/components/whisper/services/whisper.service';
-import { IWhisper } from '../../../../../invensys-angular-shared/src/lib/components/whisper/whisper.component';
+    basic: `<!-- Add whisper container to your app.component.html -->
+<i-whisper></i-whisper>
 
-// 2. Add to your component
-@Component({
-  selector: 'your-component',
-  imports: [IWhisper],
-  template: \`
-    <!-- Add whisper container to your app.component.html -->
-    <i-whisper></i-whisper>
-  \`
-})
-export class YourComponent {
-  constructor(private whisperService: WhisperService) {}
-}`,
+<!-- Different positions -->
+<i-whisper position="top-right"></i-whisper>
+<i-whisper position="top-left" key="left"></i-whisper>
+<i-whisper position="bottom-center"></i-whisper>`,
 
-    usage: `// Show success message
-this.whisperService.add({
-  severity: 'success',
-  summary: 'User Link Success',
-  detail: 'The selected users have been linked.',
-  key: 'global',
-  life: 30000,
-});
-
-// Show error message
-this.whisperService.add({
-  severity: 'error',
-  summary: 'Error',
-  detail: 'Something went wrong. Please try again.',
-  life: 5000,
-});
-
-// Show custom message with icon
-this.whisperService.add({
-  severity: 'custom',
-  summary: 'Custom Message',
-  detail: 'This is a custom styled message.',
-  icon: 'favorite',
-  life: 4000,
-});`,
+    buttons: `<i-button (click)="showSuccessMessage()" severity="success">
+  Show Success
+</i-button>
+<i-button (click)="showErrorMessage()" severity="danger">
+  Show Error
+</i-button>
+<i-button (click)="showStickyMessage()" severity="info">
+  Show Sticky
+</i-button>`,
 
     positioning: `<!-- Different positions -->
 <i-whisper position="top-right"></i-whisper>
@@ -236,37 +215,95 @@ this.whisperService.add({
 <i-whisper key="notifications"></i-whisper>  <!-- Only shows messages with key="notifications" -->
 <i-whisper></i-whisper>                       <!-- Only shows messages with no key -->`,
 
-    advanced: `// Messages with keys for specific containers
-this.whisperService.add({
-  severity: 'info',
-  summary: 'Left Message',
-  detail: 'Shows in left whisper container',
-  key: 'left',
-  life: 5000
-});
-
-this.whisperService.add({
-  severity: 'success', 
-  summary: 'Right Message',
-  detail: 'Shows in right whisper container',
-  key: 'right',
-  life: 5000
-});
-
-// Multiple messages with different keys
-const messages = [
-  { severity: 'success', summary: 'First', detail: 'Message 1', key: 'left' },
-  { severity: 'info', summary: 'Second', detail: 'Message 2', key: 'right' },
-  { severity: 'warning', summary: 'Third', detail: 'Global message' } // no key = shows in unkeyed containers
-];
-this.whisperService.addAll(messages);
-
-// Clear messages by key
-this.whisperService.clear('left');  // Clear only left messages
-this.whisperService.clear();        // Clear all messages`,
+    keyed: `<!-- Key-based filtering -->
+<i-whisper key="notifications"></i-whisper>
+<i-whisper key="alerts"></i-whisper>
+<i-whisper></i-whisper> <!-- Shows unkeyed messages -->`,
   };
 
-  features = [
+  // TypeScript examples
+  tsExamples = {
+    basic: `import { WhisperService } from 'invensys-angular-shared';
+import { IWhisper } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [IWhisper],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  constructor(private whisperService: WhisperService) {}
+}`,
+
+    usage: `// Show success message
+showSuccessMessage() {
+  this.whisperService.add({
+    severity: 'success',
+    summary: 'User Link Success',
+    detail: 'The selected users have been linked.',
+    key: 'global',
+    life: 30000
+  });
+}
+
+// Show error message
+showErrorMessage() {
+  this.whisperService.add({
+    severity: 'danger',
+    summary: 'Error',
+    detail: 'Something went wrong. Please try again.',
+    life: 5000
+  });
+}`,
+
+    advanced: `// Messages with keys for specific containers
+showKeyedMessages() {
+  this.whisperService.add({
+    severity: 'info',
+    summary: 'Left Message',
+    detail: 'Shows in left whisper container',
+    key: 'left',
+    life: 5000
+  });
+
+  // Multiple messages
+  const messages = [
+    { severity: 'success', summary: 'First', detail: 'Message 1', key: 'left' },
+    { severity: 'info', summary: 'Second', detail: 'Message 2', key: 'right' },
+    { severity: 'warning', summary: 'Third', detail: 'Global message' }
+  ];
+  this.whisperService.addAll(messages);
+}
+
+// Clear messages by key
+clearMessages() {
+  this.whisperService.clear('left');  // Clear only left messages
+  this.whisperService.clear();        // Clear all messages
+}`,
+  };
+
+  // Component setup
+  initializationCode = `import { WhisperService } from 'invensys-angular-shared';
+import { IWhisper } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [IWhisper],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  constructor(private whisperService: WhisperService) {}
+
+  showMessage() {
+    this.whisperService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Operation completed successfully'
+    });
+  }
+}`;
+
+  features: Feature[] = [
     {
       title: 'Multiple Severities',
       description: 'Success, info, warning, error, and custom message types',

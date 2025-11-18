@@ -22,16 +22,9 @@
       </div>
     </app-demo-card>
 
-    <!-- Features Demonstration -->
+    <!-- Features -->
     <app-demo-card title="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

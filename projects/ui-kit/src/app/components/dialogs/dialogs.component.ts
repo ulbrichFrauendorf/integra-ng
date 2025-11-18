@@ -5,6 +5,10 @@ import { IButton } from '@shared/components/button/button.component';
 import { IDynamicDialogRef } from '@shared/components/dialog/services/dialog.interfaces';
 import { DialogService } from '@shared/components/dialog/services/dialog.service';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 import { IDialogActions } from '@shared/components/dialog/inner/dialog-actions/dialog-actions.component';
 import { CommonModule } from '@angular/common';
 import {
@@ -30,6 +34,7 @@ import {
     IDialog,
     IButton,
     DemoCardComponent,
+    FeaturesListComponent,
     IDialogActions,
     IListbox,
   ],
@@ -191,7 +196,7 @@ displayExampleDialog() {
 </i-dialog>`,
   };
 
-  features = [
+  features: Feature[] = [
     {
       title: 'Dynamic Dialog Service',
       description: 'Programmatically open dialogs with the DialogService',

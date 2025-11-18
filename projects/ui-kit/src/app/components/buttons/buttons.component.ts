@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 interface ButtonExample {
   severity:
@@ -22,7 +26,7 @@ interface ButtonExample {
 
 @Component({
   selector: 'app-buttons',
-  imports: [IButton, DemoCardComponent],
+  imports: [IButton, DemoCardComponent, FeaturesListComponent],
   templateUrl: './buttons.component.html',
   styleUrl: './buttons.component.scss',
 })
@@ -131,18 +135,7 @@ export class ButtonsComponent {
 
   // Code examples organized by category
   codeExamples = {
-    contrast: `// 1. Import the component
-import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
-
-// 2. Add to your component imports
-@Component({
-  selector: 'your-component',
-  imports: [IButton],
-  // ...
-})
-
-// 3. Use in template
-<i-button severity="contrast" [text]="true" icon="pi pi-cloud-download" size="small" />
+    contrast: `<i-button severity="contrast" [text]="true" icon="pi pi-cloud-download" size="small" />
 <i-button severity="contrast" [text]="true" icon="pi pi-cloud-download" size="medium" />
 <i-button severity="contrast" [text]="true" icon="pi pi-cloud-download" size="large" />`,
 
@@ -163,7 +156,19 @@ import { IButton } from '../../../../../invensys-angular-shared/src/lib/componen
 <i-button severity="success" [fluid]="true" [raised]="true">Fluid Raised Button</i-button>`,
   };
 
-  features = [
+  // TypeScript initialization example
+  initializationCode = `import { IButton } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [IButton],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  // Component is ready to use in template
+}`;
+
+  features: Feature[] = [
     {
       title: 'Multiple Severities',
       description:

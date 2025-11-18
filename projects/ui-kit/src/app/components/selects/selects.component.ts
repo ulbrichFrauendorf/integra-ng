@@ -4,10 +4,15 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms';
 import { ISelect } from '@shared/components/select/select.component';
 import { IButton } from '@shared/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 export interface SelectOption {
   value: any;
@@ -17,7 +22,14 @@ export interface SelectOption {
 
 @Component({
   selector: 'app-selects',
-  imports: [ISelect, IButton, ReactiveFormsModule, DemoCardComponent],
+  imports: [
+    ISelect,
+    IButton,
+    ReactiveFormsModule,
+    FormsModule,
+    DemoCardComponent,
+    FeaturesListComponent,
+  ],
   templateUrl: './selects.component.html',
   styleUrl: './selects.component.scss',
 })
@@ -26,6 +38,11 @@ export class SelectsComponent implements OnInit {
   validationForm: FormGroup;
   advancedForm: FormGroup;
   fluidForm: FormGroup;
+
+  // NgModel examples
+  countryValue: string = '';
+  statusValue: string = '';
+  preselectedValue: string = 'us';
 
   // Sample data organized by category
   selectData = {
@@ -62,39 +79,51 @@ export class SelectsComponent implements OnInit {
     ],
   };
 
-  // Code examples organized by category
+  // HTML Code examples organized by category
   codeExamples = {
-    basic: `// Two approaches available:
-
-// 1. Extract specific value (traditional approach)
-<i-select 
+    ngModel: `<i-select 
   label="Country" 
   [options]="countries" 
   optionLabel="label" 
-  optionValue="value"        // Stores just the value: "us"
-  formControlName="country">
-</i-select>
+  optionValue="value"
+  [(ngModel)]="countryValue"
+  placeholder="Select country" />
 
-// 2. Store full object (new optional approach) 
 <i-select 
-  label="Country" 
-  [options]="countries" 
-  optionLabel="label"        // optionValue is now optional!
-  formControlName="fullObjectSelect"> // Stores full object: {value: "us", label: "United States"}
-</i-select>
-
-// Form values comparison:
-// With optionValue:    { country: "us" }
-// Without optionValue: { fullObjectSelect: { value: "us", label: "United States" } }`,
-
-    validation: `<i-select 
-  label="Status (Required)" 
+  label="Status" 
   [options]="statuses" 
   optionLabel="label" 
   optionValue="value"
-  placeholder="Select status" 
-  formControlName="status">
-</i-select>`,
+  [(ngModel)]="statusValue"
+  placeholder="Select status" />`,
+
+    reactiveForm: `<form [formGroup]="basicForm">
+  <i-select 
+    label="Country" 
+    [options]="countries" 
+    optionLabel="label" 
+    optionValue="value"
+    formControlName="country"
+    placeholder="Select country" />
+
+  <i-select 
+    label="Status" 
+    [options]="statuses" 
+    optionLabel="label" 
+    optionValue="value"
+    formControlName="status"
+    placeholder="Select status" />
+</form>`,
+
+    validation: `<form [formGroup]="validationForm">
+  <i-select 
+    label="Status (Required)" 
+    [options]="statuses" 
+    optionLabel="label" 
+    optionValue="value"
+    placeholder="Select status" 
+    formControlName="status" />
+</form>`,
 
     advanced: `<i-select 
   [options]="reports" 
@@ -104,8 +133,7 @@ export class SelectsComponent implements OnInit {
   optionLabel="name" 
   optionValue="value" 
   placeholder="Select Report" 
-  formControlName="selectedReport">
-</i-select>`,
+  formControlName="selectedReport" />`,
 
     fluid: `<i-select 
   label="Fluid Select" 
@@ -114,11 +142,71 @@ export class SelectsComponent implements OnInit {
   optionValue="value"
   [fluid]="true" 
   placeholder="Select option" 
-  formControlName="fluidSelect">
-</i-select>`,
+  formControlName="fluidSelect" />`,
   };
 
-  features = [
+  // TypeScript examples
+  tsExamples = {
+    ngModel: `import { FormsModule } from '@angular/forms';
+import { ISelect } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [FormsModule, ISelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  countryValue: string = '';
+  statusValue: string = '';
+  
+  countries = [
+    { value: 'us', label: 'United States' },
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'de', label: 'Germany' }
+  ];
+}`,
+
+    reactiveForm: `import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ISelect } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ReactiveFormsModule, ISelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  basicForm = this.fb.group({
+    country: [''],
+    status: [''],
+    preselected: ['us']
+  });
+
+  constructor(private fb: FormBuilder) {}
+}`,
+
+    validation: `import { FormBuilder, Validators } from '@angular/forms';
+
+validationForm = this.fb.group({
+  status: ['', [Validators.required]]
+});`,
+  };
+
+  // Component setup
+  initializationCode = `import { ISelect } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ISelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' }
+  ];
+}`;
+
+  features: Feature[] = [
     {
       title: 'Option Configuration',
       description:

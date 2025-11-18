@@ -7,6 +7,18 @@
     </p>
   </header>
 
+  <!-- Component Setup -->
+  <app-demo-card
+    header="Component Setup"
+    [sourceCode]="''"
+    [tsCode]="initializationCode"
+  >
+    <p>
+      Import and register the IButton component to start using it in your
+      templates:
+    </p>
+  </app-demo-card>
+
   <div class="cards-container">
     <!-- Contrast Buttons -->
     <app-demo-card
@@ -96,15 +108,8 @@
     </app-demo-card>
 
     <!-- Features -->
-    <app-demo-card header="Features">
-      <div class="features-grid">
-        @for (feature of features; track feature.title) {
-        <div class="feature-item">
-          <strong>{{ feature.title }}:</strong>
-          <span>{{ feature.description }}</span>
-        </div>
-        }
-      </div>
+    <app-demo-card title="Features">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

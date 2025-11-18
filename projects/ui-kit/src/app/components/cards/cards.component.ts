@@ -2,10 +2,14 @@ import { Component } from '@angular/core';
 import { ICard } from '../../../../../invensys-angular-shared/src/lib/components/card/card.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { IDialogActions } from '@shared/components/dialog/inner/dialog-actions/dialog-actions.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'i-cards',
-  imports: [ICard, DemoCardComponent, IDialogActions],
+  imports: [ICard, DemoCardComponent, IDialogActions, FeaturesListComponent],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss',
 })
@@ -62,7 +66,7 @@ import { ICard } from '../../../../../invensys-angular-shared/src/lib/components
 </i-card>`,
   };
 
-  features = [
+  features: Feature[] = [
     {
       title: 'Flexible Content',
       description:

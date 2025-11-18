@@ -11,7 +11,8 @@
     <!-- Basic Usage -->
     <app-demo-card
       title="Basic ngModel Usage"
-      [sourceCode]="codeExamples.basic"
+      [sourceCode]="codeExamples.ngModel"
+      [tsCode]="tsExamples.ngModel"
     >
       <div class="checkbox-examples">
         <div class="example-row">
@@ -29,7 +30,7 @@
     <!-- With Labels -->
     <app-demo-card
       title="Checkboxes with Labels"
-      [sourceCode]="codeExamples.withLabel"
+      [sourceCode]="codeExamples.ngModel"
     >
       <div class="checkbox-examples">
         <div class="example-row">
@@ -49,7 +50,7 @@
     </app-demo-card>
 
     <!-- States -->
-    <app-demo-card title="Checkbox States" [sourceCode]="codeExamples.states">
+    <app-demo-card title="Checkbox States" [sourceCode]="codeExamples.ngModel">
       <div class="checkbox-examples">
         <div class="example-row">
           <i-checkbox
@@ -69,7 +70,11 @@
     </app-demo-card>
 
     <!-- Sizes -->
-    <app-demo-card title="Checkbox Sizes" [sourceCode]="codeExamples.sizes">
+    <app-demo-card
+      title="Checkbox Sizes"
+      [sourceCode]="codeExamples.sizes"
+      [tsCode]="tsExamples.ngModel"
+    >
       <div class="checkbox-examples">
         <div class="example-row">
           <i-checkbox
@@ -99,6 +104,7 @@
     <app-demo-card
       title="Reactive Forms - FormControl"
       [sourceCode]="codeExamples.formControl"
+      [tsCode]="tsExamples.formControl"
     >
       <div class="checkbox-examples">
         <div class="example-row">
@@ -136,7 +142,8 @@
     <!-- FormGroup -->
     <app-demo-card
       title="Reactive Forms - FormGroup"
-      [sourceCode]="codeExamples.formGroup"
+      [sourceCode]="codeExamples.reactiveForm"
+      [tsCode]="tsExamples.reactiveForm"
     >
       <div class="checkbox-examples">
         <form [formGroup]="userPreferencesForm" (ngSubmit)="onFormSubmit()">
@@ -184,18 +191,10 @@
         </div>
       </div>
     </app-demo-card>
-  </div>
 
-  <!-- Features Section -->
-  <div class="features-section">
-    <h2>Features</h2>
-    <div class="features-grid">
-      @for (feature of features; track feature.title) {
-      <div class="feature-card">
-        <h3>{{ feature.title }}</h3>
-        <p>{{ feature.description }}</p>
-      </div>
-      }
-    </div>
+    <!-- Features -->
+    <app-demo-card title="Features">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
   </div>
 </div>

@@ -2,10 +2,14 @@ import { Component, inject } from '@angular/core';
 import { ConfirmationDialogService } from '@shared/components/confirmation-dialog/services/confirmation-dialog.service';
 import { IButton } from '@shared/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 @Component({
   selector: 'app-confirmation-dialogs',
-  imports: [IButton, DemoCardComponent],
+  imports: [IButton, DemoCardComponent, FeaturesListComponent],
   templateUrl: './confirmation-dialogs.component.html',
   styleUrl: './confirmation-dialogs.component.scss',
 })
@@ -73,7 +77,7 @@ async showConfirmation() {
 });`,
   };
 
-  features = [
+  features: Feature[] = [
     {
       title: 'Service-Based',
       description: 'Use ConfirmationDialogService for programmatic dialogs',

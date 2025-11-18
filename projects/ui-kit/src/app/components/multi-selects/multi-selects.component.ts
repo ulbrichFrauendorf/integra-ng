@@ -4,10 +4,15 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms';
 import { IMultiSelect } from '@shared/components/multi-select/multi-select.component';
 import { IButton } from '@shared/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import {
+  FeaturesListComponent,
+  Feature,
+} from '../features-list/features-list.component';
 
 export interface MultiSelectOption {
   value: any;
@@ -17,7 +22,14 @@ export interface MultiSelectOption {
 
 @Component({
   selector: 'app-multi-selects',
-  imports: [IMultiSelect, IButton, ReactiveFormsModule, DemoCardComponent],
+  imports: [
+    IMultiSelect,
+    IButton,
+    ReactiveFormsModule,
+    FormsModule,
+    DemoCardComponent,
+    FeaturesListComponent,
+  ],
   templateUrl: './multi-selects.component.html',
   styleUrl: './multi-selects.component.scss',
 })
@@ -26,6 +38,11 @@ export class MultiSelectsComponent implements OnInit {
   validationForm: FormGroup;
   advancedForm: FormGroup;
   fluidForm: FormGroup;
+
+  // NgModel examples
+  skillsValue: string[] = [];
+  departmentsValue: number[] = [];
+  preselectedValue: string[] = ['javascript', 'angular'];
 
   // Sample data organized by category
   selectData = {
@@ -85,38 +102,127 @@ export class MultiSelectsComponent implements OnInit {
     ],
   };
 
-  // Code examples organized by category
+  // HTML Code examples organized by category
   codeExamples = {
-    basic: `// Two approaches available:
-
-// 1. Extract specific values (traditional approach)
-<i-multi-select
+    ngModel: `<i-multi-select
   label="Skills"
   [options]="skills"
   optionLabel="label"
-  optionValue="value"        // Stores just the values: ["javascript", "angular"]
-  formControlName="skills">
-</i-multi-select>
+  optionValue="value"
+  [(ngModel)]="skillsValue"
+  placeholder="Select your skills" />
 
-// 2. Store full objects (new optional approach)
 <i-multi-select
-  label="Skills"
+  label="Departments"
+  [options]="departments"
+  optionLabel="label"
+  optionValue="value"
+  [(ngModel)]="departmentsValue"
+  placeholder="Select departments" />`,
+
+    reactiveForm: `<form [formGroup]="basicForm">
+  <i-multi-select
+    label="Skills"
+    [options]="skills"
+    optionLabel="label"
+    optionValue="value"
+    formControlName="skills"
+    placeholder="Select your skills" />
+
+  <i-multi-select
+    label="Departments"
+    [options]="departments"
+    optionLabel="label"
+    optionValue="value"
+    formControlName="departments"
+    placeholder="Select departments" />
+</form>`,
+
+    validation: `<form [formGroup]="validationForm">
+  <i-multi-select
+    label="Required Skills (At least 1)"
+    [options]="skills"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Select at least 1 skill"
+    formControlName="requiredSkills" />
+
+  <i-multi-select
+    label="Minimum Skills (At least 2)"
+    [options]="skills"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Select at least 2 skills"
+    formControlName="minimumSkills" />
+</form>`,
+
+    advanced: `<i-multi-select
+  [options]="categories"
+  [filter]="true"
+  [showClear]="true"
+  filterBy="name"
+  optionLabel="name"
+  optionValue="value"
+  placeholder="Select Categories"
+  [maxSelectedLabels]="3"
+  formControlName="selectedCategories" />`,
+
+    fluid: `<i-multi-select
+  label="Fluid Multi-Select"
   [options]="skills"
-  optionLabel="label"        // optionValue is now optional!
-  formControlName="fullObjectSkills"> // Stores full objects: [{value: "javascript", label: "JavaScript"}, ...]
-</i-multi-select>
+  optionLabel="label"
+  optionValue="value"
+  [fluid]="true"
+  placeholder="Select options"
+  formControlName="fluidSelect" />`,
+  };
 
-// Form values comparison:
-// With optionValue:    { skills: ["javascript", "angular"] }
-// Without optionValue: { fullObjectSkills: [{value: "javascript", label: "JavaScript"}, {value: "angular", label: "Angular"}] }`,
+  // TypeScript examples
+  tsExamples = {
+    ngModel: `import { FormsModule } from '@angular/forms';
+import { IMultiSelect } from 'invensys-angular-shared';
 
-    validation: `// Form setup with different validation requirements
-form = this.fb.group({
-  requiredSkills: [[], [Validators.required]], // At least 1 selection required
-  minimumSkills: [[], [this.minArrayLengthValidator(2)]] // At least 2 selections required
+@Component({
+  selector: 'app-example',
+  imports: [FormsModule, IMultiSelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  skillsValue: string[] = [];
+  departmentsValue: number[] = [];
+  
+  skills = [
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'typescript', label: 'TypeScript' },
+    { value: 'angular', label: 'Angular' }
+  ];
+}`,
+
+    reactiveForm: `import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { IMultiSelect } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [ReactiveFormsModule, IMultiSelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  basicForm = this.fb.group({
+    skills: [[]],
+    departments: [[]],
+    preselected: [['javascript', 'angular']]
+  });
+
+  constructor(private fb: FormBuilder) {}
+}`,
+
+    validation: `import { FormBuilder, Validators } from '@angular/forms';
+
+validationForm = this.fb.group({
+  requiredSkills: [[], [Validators.required]],
+  minimumSkills: [[], [this.minArrayLengthValidator(2)]]
 });
 
-// Custom validator for minimum array length
 private minArrayLengthValidator(minLength: number) {
   return (control: any) => {
     const value = control.value;
@@ -130,51 +236,25 @@ private minArrayLengthValidator(minLength: number) {
     }
     return null;
   };
-}
-
-<!-- Template usage -->
-<i-multi-select
-  label="Required Skills (At least 1)"
-  [options]="skills"
-  optionLabel="label"
-  optionValue="value"
-  placeholder="Select at least 1 skill"
-  formControlName="requiredSkills">
-</i-multi-select>
-
-<i-multi-select
-  label="Minimum Skills (At least 2)"
-  [options]="skills"
-  optionLabel="label"
-  optionValue="value"
-  placeholder="Select at least 2 skills"
-  formControlName="minimumSkills">
-</i-multi-select>`,
-
-    advanced: `<i-multi-select
-  [options]="categories"
-  [filter]="true"
-  [showClear]="true"
-  filterBy="name"
-  optionLabel="name"
-  optionValue="value"
-  placeholder="Select Categories"
-  [maxSelectedLabels]="3"
-  formControlName="selectedCategories">
-</i-multi-select>`,
-
-    fluid: `<i-multi-select
-  label="Fluid Multi-Select"
-  [options]="skills"
-  optionLabel="label"
-  optionValue="value"
-  [fluid]="true"
-  placeholder="Select options"
-  formControlName="fluidSelect">
-</i-multi-select>`,
+}`,
   };
 
-  features = [
+  // Component setup
+  initializationCode = `import { IMultiSelect } from 'invensys-angular-shared';
+
+@Component({
+  selector: 'app-example',
+  imports: [IMultiSelect],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' }
+  ];
+}`;
+
+  features: Feature[] = [
     {
       title: 'Multiple Selection',
       description: 'Select multiple options with chip-based display',

@@ -17,13 +17,36 @@ import { CommonModule } from '@angular/common';
     <div class="code-display-container">
       <div class="code-section">
         <div class="code-header">
-          <span class="code-title">HTML</span>
+          <div class="tab-container" *ngIf="showTabs && tsCode">
+            <button
+              class="tab-button"
+              [class.active]="activeTab === 'html'"
+              (click)="activeTab = 'html'"
+            >
+              HTML
+            </button>
+            <button
+              class="tab-button"
+              [class.active]="activeTab === 'ts'"
+              (click)="activeTab = 'ts'"
+            >
+              TypeScript
+            </button>
+          </div>
+          <span class="code-title" *ngIf="!showTabs || !tsCode">
+            {{ activeTab === 'html' ? 'HTML' : 'TypeScript' }}
+          </span>
           <button class="copy-button" (click)="copyCode()" title="Copy code">
             <i class="pi pi-copy"></i>
           </button>
         </div>
         <div class="code-block">
-          <pre><code [innerHTML]="formattedCode"></code></pre>
+          <pre
+            *ngIf="activeTab === 'html'"
+          ><code [innerHTML]="formattedCode"></code></pre>
+          <pre
+            *ngIf="activeTab === 'ts'"
+          ><code [innerHTML]="formattedTsCode"></code></pre>
         </div>
       </div>
     </div>
@@ -33,10 +56,15 @@ import { CommonModule } from '@angular/common';
 })
 export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() sourceCode: string = '';
+  @Input() tsCode: string = '';
+  @Input() showTabs: boolean = false;
   @ViewChild('uiContent', { static: false }) uiContent!: ElementRef;
 
   formattedCode: string = '';
+  formattedTsCode: string = '';
   rawSourceCode: string = '';
+  rawTsCode: string = '';
+  activeTab: 'html' | 'ts' = 'html';
   hasFluidComponents: boolean = false;
   private observer: MutationObserver | null = null;
 
@@ -45,6 +73,11 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
       this.rawSourceCode = this.sourceCode;
       this.formattedCode = this.formatSourceCode(this.sourceCode);
       this.detectFluidButtons();
+    }
+    if (this.tsCode) {
+      this.rawTsCode = this.tsCode;
+      this.formattedTsCode = this.formatTypeScriptCode(this.tsCode);
+      this.showTabs = true;
     }
   }
 
@@ -110,6 +143,14 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Apply syntax highlighting to the source code
     return this.applySyntaxHighlighting(sourceCode);
+  }
+
+  private formatTypeScriptCode(tsCode: string): string {
+    // Store the raw TypeScript code
+    this.rawTsCode = tsCode;
+
+    // Apply TypeScript syntax highlighting
+    return this.applyTypeScriptHighlighting(tsCode);
   }
 
   private formatHtml(html: string): string {
@@ -224,29 +265,110 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
     return highlighted;
   }
 
+  private applyTypeScriptHighlighting(code: string): string {
+    // First, protect strings by temporarily replacing them with placeholders
+    const stringMap = new Map();
+    let stringCounter = 0;
+
+    // Extract and replace all string literals
+    let processed = code.replace(
+      /(["'`])((?:\\.|(?!\1)[^\\])*)\1/g,
+      (match, quote, content) => {
+        const placeholder = `__STRING_${stringCounter++}__`;
+        stringMap.set(placeholder, match);
+        return placeholder;
+      }
+    );
+
+    // Extract and replace all comments
+    const commentMap = new Map();
+    let commentCounter = 0;
+    processed = processed.replace(/(\/\/.*$)/gm, (match) => {
+      const placeholder = `__COMMENT_${commentCounter++}__`;
+      commentMap.set(placeholder, match);
+      return placeholder;
+    });
+
+    // Now escape HTML in the remaining content
+    processed = processed
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    // Apply highlighting to keywords, numbers, functions, etc.
+    processed = processed.replace(
+      /\b(import|from|export|class|interface|type|const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|try|catch|finally|throw|new|this|super|extends|implements|public|private|protected|readonly|static|abstract|async|await|enum|namespace|module|declare)\b/g,
+      '<span class="code-keyword">$1</span>'
+    );
+
+    processed = processed.replace(
+      /\b(\d+)\b/g,
+      '<span class="code-number">$1</span>'
+    );
+
+    processed = processed.replace(
+      /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
+      '<span class="code-function">$1</span>('
+    );
+
+    processed = processed.replace(
+      /:\s*([A-Z][a-zA-Z0-9_$]*)/g,
+      ': <span class="code-function">$1</span>'
+    );
+
+    // Restore comments with highlighting
+    commentMap.forEach((original, placeholder) => {
+      const highlighted = `<span class="code-comment">${original
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')}</span>`;
+      processed = processed.replace(placeholder, highlighted);
+    });
+
+    // Restore strings with highlighting
+    stringMap.forEach((original, placeholder) => {
+      const highlighted = `<span class="code-string">${original
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')}</span>`;
+      processed = processed.replace(placeholder, highlighted);
+    });
+
+    return processed;
+  }
+
   copyCode() {
     let codeToCopy = '';
 
-    if (this.sourceCode && this.rawSourceCode) {
-      // Use the original source code if provided
-      codeToCopy = this.rawSourceCode;
-    } else {
-      // Fallback: Get the raw HTML and clean it up for copying
-      let htmlContent = this.uiContent.nativeElement.innerHTML;
-
-      // Remove Angular generated attributes and comments
-      htmlContent = htmlContent.replace(/<!--[\s\S]*?-->/g, '');
-      htmlContent = htmlContent.replace(/\s+ng-reflect-\w+="[^"]*"/g, '');
-      htmlContent = htmlContent.replace(/\s+_ngcontent-[^=]*="[^"]*"/g, '');
-      htmlContent = htmlContent.replace(/\s+_nghost-[^=]*="[^"]*"/g, '');
-
-      // Format it nicely
-      codeToCopy = this.prettifyHtml(htmlContent);
+    if (this.activeTab === 'html') {
+      codeToCopy =
+        this.sourceCode && this.rawSourceCode
+          ? this.rawSourceCode
+          : this.getCleanedHtml();
+    } else if (this.activeTab === 'ts') {
+      codeToCopy = this.rawTsCode;
     }
 
     navigator.clipboard.writeText(codeToCopy).then(() => {
-      // Could add a toast notification here
       console.log('Code copied to clipboard');
     });
+  }
+
+  private getCleanedHtml(): string {
+    if (!this.uiContent?.nativeElement) return '';
+
+    let htmlContent = this.uiContent.nativeElement.innerHTML;
+
+    // Remove Angular generated attributes and comments
+    htmlContent = htmlContent.replace(/<!--[\s\S]*?-->/g, '');
+    htmlContent = htmlContent.replace(/\s+ng-reflect-\w+="[^"]*"/g, '');
+    htmlContent = htmlContent.replace(/\s+_ngcontent-[^=]*="[^"]*"/g, '');
+    htmlContent = htmlContent.replace(/\s+_nghost-[^=]*="[^"]*"/g, '');
+
+    return this.prettifyHtml(htmlContent);
   }
 }
