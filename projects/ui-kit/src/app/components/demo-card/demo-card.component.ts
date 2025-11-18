@@ -8,8 +8,7 @@ import { CodeDisplayComponent } from '../code-display/code-display.component';
   standalone: true,
   imports: [CommonModule, ICard, CodeDisplayComponent],
   template: `
-    <h2>{{ title }}</h2>
-    <i-card>
+    <i-card [title]="title">
       <div class="demo-card-content">
         <div class="demo-section">
           <ng-content></ng-content>
