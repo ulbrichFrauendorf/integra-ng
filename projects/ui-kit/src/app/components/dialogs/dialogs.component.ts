@@ -123,35 +123,46 @@ export class DialogsComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
+  // TypeScript code example for Dynamic Dialog Service
+  dynamicDialogTsCode = `import { Component, inject } from '@angular/core';
+import { DialogService } from 'invensys-angular-shared';
+import { IDynamicDialogRef } from 'invensys-angular-shared';
+import { ExampleDialogComponent } from './example-dialog.component';
+
+@Component({
+  selector: 'app-example',
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  ref: IDynamicDialogRef | undefined;
+  dialogService = inject(DialogService);
+
+  displayExampleDialog() {
+    this.ref = this.dialogService.open(ExampleDialogComponent, {
+      header: 'Example Dynamic Dialog',
+      width: '600px',
+      contentStyle: { overflow: 'auto' },
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw',
+      },
+      data: {
+        message: 'Hello from Dialog Service!',
+        timestamp: new Date().toISOString(),
+        user: 'Test User',
+      },
+    });
+
+    // Optional: Handle dialog close event
+    this.ref.onClose.subscribe((result) => {
+      console.log('Dialog closed with result:', result);
+    });
+  }
+}`;
+
   // Code examples organized by category
   codeExamples = {
-    dynamic: `// 1. Import and inject the service
-import { DialogService } from '../../../../../invensys-angular-shared/src/lib/components/dialog/services/dialog.service';
-import { DynamicDialogRef } from '../../../../../invensys-angular-shared/src/lib/components/dialog/services/dialog.interfaces';
-
-// In your component
-ref: DynamicDialogRef | undefined;
-
-constructor(private dialogService = inject(DialogService)) {}
-
-// 2. Create your method
-displayExampleDialog() {
-  this.ref = this.dialogService.open(ExampleDialogComponent, {
-    header: 'Example Dynamic Dialog',
-    width: '300px',
-    data: { message: 'Hello from Dialog Service!' },
-    onSubmit: () => {
-      console.log('Submit clicked!');
-      // Handle submit logic
-    },
-    onCancel: () => {
-      console.log('Cancel clicked!');
-      // Handle cancel logic
-    }
-  });
-}
-
-// 3. Use in template
+    dynamic: `
 <i-button severity="primary" (clicked)="displayExampleDialog()">
   Open Dynamic Dialog
 </i-button>`,
