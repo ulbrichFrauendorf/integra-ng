@@ -5,8 +5,8 @@ import {
   FormControl,
   FormGroup,
 } from '@angular/forms';
-import { ICheckbox } from '../../../../../invensys-angular-shared/src/lib/components/checkbox/checkbox.component';
-import { IButton } from '../../../../../invensys-angular-shared/src/lib/components/button/button.component';
+import { ICheckbox } from '../../../../../integra-ng/src/lib/components/checkbox/checkbox.component';
+import { IButton } from '../../../../../integra-ng/src/lib/components/button/button.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { JsonPipe } from '@angular/common';
 import {
@@ -75,7 +75,7 @@ export class CheckboxesComponent {
   // TypeScript examples
   tsExamples = {
     ngModel: `import { FormsModule } from '@angular/forms';
-import { ICheckbox } from 'invensys-angular-shared';
+import { ICheckbox } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -94,7 +94,7 @@ export class ExampleComponent {
 }`,
 
     reactiveForm: `import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ICheckbox } from 'invensys-angular-shared';
+import { ICheckbox } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -123,7 +123,7 @@ console.log(this.formControlExample.value);`,
   };
 
   // Component setup
-  initializationCode = `import { ICheckbox } from 'invensys-angular-shared';
+  initializationCode = `import { ICheckbox } from 'integra-ng';
 
 @Component({
   selector: 'app-example',

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
-import { ICard } from '../../../../../invensys-angular-shared/src/lib/components/card/card.component';
+import { ICard } from '../../../../../integra-ng/src/lib/components/card/card.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { IDialogActions } from '@shared/components/dialog/inner/dialog-actions/dialog-actions.component';
 import {

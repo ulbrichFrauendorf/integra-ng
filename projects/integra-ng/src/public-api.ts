@@ -1,5 +1,5 @@
 /*
- * Public API Surface of invensys-angular-shared
+ * Public API Surface of integra-ng
  */
 
 /* Components - organized by folder structure */

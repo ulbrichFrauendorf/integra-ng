@@ -35,20 +35,20 @@ jobs:
 
       - name: Install library dependencies
         run: |
-          cd projects/invensys-angular-shared
+          cd projects/integra-ng
           npm install
 
       - name: Update version in package.json
         run: |
-          cd projects/invensys-angular-shared
+          cd projects/integra-ng
           npm version $VERSION --no-git-tag-version
 
       - name: Build Angular library
-        run: npm run build invensys-angular-shared
+        run: npm run build integra-ng
 
       - name: Publish to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd dist/invensys-angular-shared
+          cd dist/integra-ng
           npm publish --access public

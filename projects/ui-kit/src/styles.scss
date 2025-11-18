@@ -1,7 +1,7 @@
-@use "../../invensys-angular-shared/src/lib/themes/colors.theme.scss" as
+@use "../../integra-ng/src/lib/themes/colors.theme.scss" as
   colors-theme;
 
-@use "../../invensys-angular-shared/src/lib/themes/color-variables.scss" as vars;
+@use "../../integra-ng/src/lib/themes/color-variables.scss" as vars;
 
 @import "primeicons/primeicons.css";
 
@@ -21,7 +21,8 @@ body {
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
   background-color: vars.$color-surface-ground;
   color: vars.$color-text-primary;
   box-sizing: border-box;

@@ -71,8 +71,8 @@ export class TooltipsComponent {
 
   // TypeScript examples
   tsExamples = {
-    basic: `import { TooltipDirective } from 'invensys-angular-shared';
-import { IButton } from 'invensys-angular-shared';
+    basic: `import { TooltipDirective } from 'integra-ng';
+import { IButton } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -100,7 +100,7 @@ export class ExampleComponent {
   };
 
   // Component setup
-  initializationCode = `import { TooltipDirective } from 'invensys-angular-shared';
+  initializationCode = `import { TooltipDirective } from 'integra-ng';
 
 @Component({
   selector: 'app-example',

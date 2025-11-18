@@ -148,7 +148,7 @@ export class SelectsComponent implements OnInit {
   // TypeScript examples
   tsExamples = {
     ngModel: `import { FormsModule } from '@angular/forms';
-import { ISelect } from 'invensys-angular-shared';
+import { ISelect } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -167,7 +167,7 @@ export class ExampleComponent {
 }`,
 
     reactiveForm: `import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ISelect } from 'invensys-angular-shared';
+import { ISelect } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -192,7 +192,7 @@ validationForm = this.fb.group({
   };
 
   // Component setup
-  initializationCode = `import { ISelect } from 'invensys-angular-shared';
+  initializationCode = `import { ISelect } from 'integra-ng';
 
 @Component({
   selector: 'app-example',

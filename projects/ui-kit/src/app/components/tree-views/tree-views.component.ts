@@ -10,7 +10,7 @@ import {
   ITreeView,
   ITreeNode,
   IButton,
-} from '../../../../../invensys-angular-shared/src/public-api';
+} from '../../../../../integra-ng/src/public-api';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,
@@ -315,7 +315,7 @@ export class TreeViewsComponent {
 
   // TypeScript examples
   tsExamples = {
-    basic: `import { ITreeView, ITreeNode } from 'invensys-angular-shared';
+    basic: `import { ITreeView, ITreeNode } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -391,7 +391,7 @@ customTreeData: ITreeNode[] = [
   };
 
   // Component setup
-  initializationCode = `import { ITreeView, ITreeNode } from 'invensys-angular-shared';
+  initializationCode = `import { ITreeView, ITreeNode } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
