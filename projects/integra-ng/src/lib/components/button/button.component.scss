@@ -41,6 +41,12 @@
       align-items: center;
     }
 
+    &--xtra-small {
+      height: 20px;
+      font-size: 10px;
+      padding: 0 10px;
+    }
+
     &--small {
       height: 28px;
     }
@@ -51,6 +57,10 @@
 
     &--large {
       height: 40px;
+    }
+
+    &--xtra-small .icon-only {
+      font-size: 12px;
     }
 
     &--small .icon-only {

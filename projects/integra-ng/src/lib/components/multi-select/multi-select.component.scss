@@ -119,10 +119,6 @@
         align-items: center;
         gap: 8px;
 
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.05);
-        }
-
         .i-multi-select-checkbox {
           pointer-events: none; // Let the parent handle clicks
         }

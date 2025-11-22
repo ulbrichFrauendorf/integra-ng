@@ -1,6 +1,8 @@
 @use "../shared-demo-styles.scss" as *;
 
 .whispers-demo {
+  @extend .demo-component;
+
   .whisper-container {
     position: relative;
     z-index: 1000;

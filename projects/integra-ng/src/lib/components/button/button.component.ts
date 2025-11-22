@@ -12,7 +12,7 @@ import {
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 
-export type IButtonSize = 'small' | 'medium' | 'large';
+export type IButtonSize = 'xtra-small' | 'small' | 'medium' | 'large';
 
 @Component({
   selector: 'i-button',

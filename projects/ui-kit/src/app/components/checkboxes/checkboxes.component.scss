@@ -1,6 +1,8 @@
 @use "../shared-demo-styles.scss" as *;
 
 .checkboxes-demo {
+  @extend .demo-component;
+
   .checkbox-examples {
     display: flex;
     flex-direction: column;

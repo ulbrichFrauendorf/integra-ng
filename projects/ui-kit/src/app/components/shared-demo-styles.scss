@@ -1,8 +1,9 @@
-
 .demo-component {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 // Header styling for all demo pages
