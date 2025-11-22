@@ -1,24 +1,55 @@
-.no-results-container {
+// Empty state component styles
+.i-empty-state {
+  &__container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 80vh;
+    justify-content: center;
     width: 100%;
-}
+    height: 80vh;
+  }
 
-.no-results-image {
+  &__image {
     height: auto;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
+
+    &--dynamic {
+      max-width: 40%;
+    }
+
+    &--fixed {
+      width: 30rem;
+    }
+
+    &--loaded {
+      opacity: 0.5;
+    }
+  }
 }
 
-.no-results-image.dynamic {
+// Legacy class names for backward compatibility
+.no-results-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80vh;
+}
+
+.no-results-image {
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+
+  &.dynamic {
     max-width: 40%;
-}
+  }
 
-.no-results-image.fixed {
+  &.fixed {
     width: 30rem;
-}
-.no-results-image.loaded {
+  }
+
+  &.loaded {
     opacity: 0.5;
+  }
 }

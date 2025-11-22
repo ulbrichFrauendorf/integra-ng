@@ -14,6 +14,9 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ICheckbox } from '../checkbox/checkbox.component';
 import { IInputText } from '../input-text/input-text.component';
 
+/**
+ * Tree node data structure
+ */
 export interface ITreeNode {
   key?: string;
   label?: string;
@@ -34,8 +37,58 @@ export interface ITreeNode {
   loading?: boolean;
 }
 
+/**
+ * Supported tree selection modes
+ */
 export type TreeSelectionMode = 'single' | 'multiple' | 'checkbox';
 
+/**
+ * Tree View Component
+ *
+ * A hierarchical tree component with support for single/multiple/checkbox selection modes.
+ * Features filtering, expand/collapse functionality, and parent-child selection propagation.
+ *
+ * @example
+ * ```html
+ * <!-- Basic tree view -->
+ * <i-tree-view
+ *   [value]="treeData"
+ *   selectionMode="single"
+ *   [(selection)]="selectedNode">
+ * </i-tree-view>
+ *
+ * <!-- Tree with checkbox selection -->
+ * <i-tree-view
+ *   [value]="treeData"
+ *   selectionMode="checkbox"
+ *   [(selection)]="selectedNodes"
+ *   [propagateSelectionUp]="true"
+ *   [propagateSelectionDown]="true">
+ * </i-tree-view>
+ *
+ * <!-- Tree with filtering -->
+ * <i-tree-view
+ *   [value]="treeData"
+ *   [filter]="true"
+ *   filterBy="label"
+ *   filterPlaceholder="Search tree..."
+ *   [(selection)]="selectedNode">
+ * </i-tree-view>
+ *
+ * <!-- Tree with select all (checkbox mode) -->
+ * <i-tree-view
+ *   [value]="treeData"
+ *   selectionMode="checkbox"
+ *   [selectAll]="true"
+ *   [(selection)]="selectedNodes">
+ * </i-tree-view>
+ * ```
+ *
+ * @remarks
+ * Supports three selection modes: single, multiple, and checkbox.
+ * In checkbox mode, supports selection propagation to parent and child nodes.
+ * Includes filtering capability to search through tree nodes.
+ */
 @Component({
   selector: 'i-tree-view',
   standalone: true,
@@ -44,45 +97,164 @@ export type TreeSelectionMode = 'single' | 'multiple' | 'checkbox';
   styleUrl: './tree-view.component.scss',
 })
 export class ITreeView implements OnInit, OnChanges {
+  /**
+   * Array of tree nodes to display
+   * @default []
+   */
   @Input() value: ITreeNode[] = [];
-  @Input() selectionMode: TreeSelectionMode = 'single';
-  @Input() selection: ITreeNode | ITreeNode[] | null = null;
-  @Input() scrollHeight?: string;
-  @Input() loading = false;
-  @Input() emptyMessage = 'No data found';
-  @Input() togglerTemplate?: string;
-  @Input() filter = false;
-  @Input() filterBy = 'label';
-  @Input() filterMode = 'lenient';
-  @Input() filterPlaceholder = 'Search';
-  @Input() filteredNodes: ITreeNode[] = [];
-  @Input() validateDrop = false;
-  @Input() propagateSelectionUp = true;
-  @Input() propagateSelectionDown = true;
-  @Input() selectAll = false; // Show select all checkbox for checkbox mode
 
+  /**
+   * Selection mode for the tree
+   * @default 'single'
+   */
+  @Input() selectionMode: TreeSelectionMode = 'single';
+
+  /**
+   * Currently selected node(s)
+   */
+  @Input() selection: ITreeNode | ITreeNode[] | null = null;
+
+  /**
+   * Fixed scroll height for the tree container
+   */
+  @Input() scrollHeight?: string;
+
+  /**
+   * Whether the tree is in loading state
+   * @default false
+   */
+  @Input() loading = false;
+
+  /**
+   * Message to display when tree is empty
+   * @default 'No data found'
+   */
+  @Input() emptyMessage = 'No data found';
+
+  /**
+   * Custom template for the expand/collapse toggler
+   */
+  @Input() togglerTemplate?: string;
+
+  /**
+   * Enables filtering of tree nodes
+   * @default false
+   */
+  @Input() filter = false;
+
+  /**
+   * Property name to use for filtering
+   * @default 'label'
+   */
+  @Input() filterBy = 'label';
+
+  /**
+   * Filter matching mode
+   * @default 'lenient'
+   */
+  @Input() filterMode = 'lenient';
+
+  /**
+   * Placeholder text for the filter input
+   * @default 'Search'
+   */
+  @Input() filterPlaceholder = 'Search';
+
+  /**
+   * Filtered nodes array (for internal use)
+   * @default []
+   */
+  @Input() filteredNodes: ITreeNode[] = [];
+
+  /**
+   * Validates drop operations (for drag and drop)
+   * @default false
+   */
+  @Input() validateDrop = false;
+
+  /**
+   * Whether selecting a child node should propagate selection up to parents
+   * @default true
+   */
+  @Input() propagateSelectionUp = true;
+
+  /**
+   * Whether selecting a parent node should propagate selection down to children
+   * @default true
+   */
+  @Input() propagateSelectionDown = true;
+
+  /**
+   * Shows a "select all" checkbox for checkbox selection mode
+   * @default false
+   */
+  @Input() selectAll = false;
+
+  /**
+   * Event emitted when a node is selected
+   */
   @Output() onNodeSelect = new EventEmitter<{
     originalEvent: Event;
     node: ITreeNode;
   }>();
+
+  /**
+   * Event emitted when a node is unselected
+   */
   @Output() onNodeUnselect = new EventEmitter<{
     originalEvent: Event;
     node: ITreeNode;
   }>();
+
+  /**
+   * Event emitted when a node is expanded
+   */
   @Output() onNodeExpand = new EventEmitter<{
     originalEvent: Event;
     node: ITreeNode;
   }>();
+
+  /**
+   * Event emitted when a node is collapsed
+   */
   @Output() onNodeCollapse = new EventEmitter<{
     originalEvent: Event;
     node: ITreeNode;
   }>();
+
+  /**
+   * Event emitted when selection changes
+   */
   @Output() selectionChange = new EventEmitter<ITreeNode | ITreeNode[]>();
 
+  /**
+   * Unique component identifier
+   * @internal
+   */
   componentId = UniqueComponentId('i-tree-view-');
+
+  /**
+   * Filtered tree nodes after applying search
+   * @internal
+   */
   filteredValue: ITreeNode[] = [];
+
+  /**
+   * Current filter/search value
+   * @internal
+   */
   filterValue = '';
+
+  /**
+   * State of the "select all" checkbox
+   * @internal
+   */
   selectAllChecked = false;
+
+  /**
+   * Set of temporarily highlighted nodes (for visual feedback)
+   * @internal
+   */
   private temporaryHighlighted = new Set<ITreeNode>();
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -181,8 +353,6 @@ export class ITreeView implements OnInit, OnChanges {
   }
 
   isNodeHighlighted(node: ITreeNode): boolean {
-    // Only highlight selected nodes for single and multiple selection modes
-    // For checkbox mode, only show temporary highlights
     if (this.selectionMode === 'checkbox') {
       return this.temporaryHighlighted.has(node);
     }
@@ -212,8 +382,6 @@ export class ITreeView implements OnInit, OnChanges {
     );
     const totalChildren = node.children.length;
 
-    // Node is partially selected when some (but not all) children are selected
-    // This will trigger the indeterminate state in the checkbox
     return (
       selectedChildren.length > 0 && selectedChildren.length < totalChildren
     );
@@ -224,8 +392,6 @@ export class ITreeView implements OnInit, OnChanges {
       return;
     }
 
-    // In checkbox mode, don't handle node selection through node clicks
-    // Selection should only happen through the checkbox component
     if (this.selectionMode === 'checkbox') {
       return;
     }
@@ -250,6 +416,7 @@ export class ITreeView implements OnInit, OnChanges {
 
   selectMultipleNode(event: Event, node: ITreeNode) {
     const selection = Array.isArray(this.selection) ? [...this.selection] : [];
+    this.selection = selection;
     const index = selection.indexOf(node);
 
     if (index >= 0) {
@@ -259,8 +426,6 @@ export class ITreeView implements OnInit, OnChanges {
       selection.push(node);
       this.onNodeSelect.emit({ originalEvent: event, node });
     }
-
-    this.selection = selection;
     this.selectionChange.emit(this.selection);
   }
 
@@ -270,10 +435,8 @@ export class ITreeView implements OnInit, OnChanges {
 
     if (selected) {
       this.unselectNode(node, selection);
-      this.onNodeUnselect.emit({ originalEvent: event, node });
     } else {
       this.selectNode(node, selection);
-      this.onNodeSelect.emit({ originalEvent: event, node });
     }
 
     if (this.propagateSelectionDown && node.children) {
@@ -285,21 +448,26 @@ export class ITreeView implements OnInit, OnChanges {
     }
 
     this.selection = selection;
-    this.updateSelectAllState();
     this.selectionChange.emit(this.selection);
+    this.updateSelectAllState();
+
+    setTimeout(() => {
+      if (selected) {
+        this.onNodeUnselect.emit({ originalEvent: event, node });
+      } else {
+        this.onNodeSelect.emit({ originalEvent: event, node });
+      }
+    }, 0);
   }
 
   onCheckboxChange(checked: boolean, node: ITreeNode) {
-    // Add temporary highlight when checkbox is clicked
     this.addTemporaryHighlight(node);
 
-    // Create a fake event for compatibility with existing methods
     const fakeEvent = new MouseEvent('click', {
       bubbles: true,
       cancelable: true,
     });
 
-    // Call the checkbox selection logic
     this.selectCheckboxNode(fakeEvent, node);
   }
 
@@ -334,20 +502,16 @@ export class ITreeView implements OnInit, OnChanges {
 
   propagateUp(node: ITreeNode, selection: ITreeNode[]) {
     if (node.children) {
-      // Count selected children based on the working selection array
       const selectedChildren = node.children.filter((child) =>
         selection.includes(child)
       );
       const totalChildren = node.children.length;
 
       if (selectedChildren.length === totalChildren) {
-        // All children selected - select parent (will show as fully checked)
         this.selectNode(node, selection);
       } else if (selectedChildren.length > 0) {
-        // Some children selected - select parent (will show as indeterminate)
         this.selectNode(node, selection);
       } else {
-        // No children selected - unselect parent
         this.unselectNode(node, selection);
       }
 
@@ -406,7 +570,6 @@ export class ITreeView implements OnInit, OnChanges {
   }
 
   getCheckboxId(node: ITreeNode): string {
-    // Generate a safe ID for the checkbox using the component ID and node key
     const safeKey = (node.key || node.label || 'node')
       .replace(/[^a-zA-Z0-9\-_]/g, '-')
       .replace(/^-+|-+$/g, '')
@@ -418,11 +581,32 @@ export class ITreeView implements OnInit, OnChanges {
   onSelectAllChange() {
     if (this.selectionMode !== 'checkbox') return;
 
+    const allNodes = this.flattenNodes(this.filteredValue);
+    const previousSelection = Array.isArray(this.selection)
+      ? this.selection
+      : [];
+
+    const fakeEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+    });
+
     if (this.selectAllChecked) {
-      this.selection = this.flattenNodes(this.filteredValue);
+      this.selection = allNodes;
+
+      allNodes.forEach((node) => {
+        if (!previousSelection.includes(node)) {
+          this.onNodeSelect.emit({ originalEvent: fakeEvent, node });
+        }
+      });
     } else {
       this.selection = [];
+
+      previousSelection.forEach((node) => {
+        this.onNodeUnselect.emit({ originalEvent: fakeEvent, node });
+      });
     }
+
     this.selectionChange.emit(this.selection);
   }
 

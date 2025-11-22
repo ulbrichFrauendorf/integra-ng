@@ -20,7 +20,7 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
         <div class="code-header">
           <div class="tab-container" *ngIf="showTabs && tsCode">
             <i-button
-              [size]="'small'"
+              [size]="'xtra-small'"
               severity="primary"
               [text]="true"
               [class.active]="activeTab === 'html'"
@@ -29,7 +29,7 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
               HTML
             </i-button>
             <i-button
-              [size]="'small'"
+              [size]="'xtra-small'"
               severity="primary"
               [text]="true"
               [class.active]="activeTab === 'ts'"

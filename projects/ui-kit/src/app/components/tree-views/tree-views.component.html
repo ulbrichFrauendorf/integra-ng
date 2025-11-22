@@ -9,11 +9,6 @@
   </header>
 
   <div class="cards-container">
-    <!-- Features -->
-    <app-demo-card [title]="'Features'">
-      <app-features-list [features]="features"></app-features-list>
-    </app-demo-card>
-
     <!-- Basic Usage -->
     <app-demo-card
       [title]="'Basic Tree'"
@@ -32,6 +27,48 @@
       </div>
 
       <i-tree-view [value]="basicTreeData" scrollHeight="300px"> </i-tree-view>
+    </app-demo-card>
+
+    <!-- Checkbox Selection -->
+    <app-demo-card [title]="'Checkbox Selection'">
+      <p>
+        Select nodes using checkboxes. Child selections propagate to parents.
+        The component includes an integrated "Select All" checkbox.
+      </p>
+
+      <div class="demo-actions">
+        <i-button severity="secondary" (clicked)="clearCheckboxSelection()">
+          Clear Selection
+        </i-button>
+      </div>
+
+      <i-tree-view
+        [value]="organizationData"
+        selectionMode="checkbox"
+        [selectAll]="true"
+        [(selection)]="checkboxSelection"
+        (onNodeSelect)="onCheckboxNodeSelect($event)"
+        (onNodeUnselect)="onCheckboxNodeUnselect($event)"
+        scrollHeight="300px"
+      >
+      </i-tree-view>
+
+      @if (checkboxSelection.length > 0) {
+      <div class="selection-info">
+        <strong>Selected ({{ checkboxSelection.length }} items):</strong>
+        <ul>
+          @for (node of checkboxSelection; track node.key) {
+          <li>
+            {{ node.label }} <small>({{ node.key }})</small>
+          </li>
+          }
+        </ul>
+        <details>
+          <summary>View Details</summary>
+          <pre>{{ getMultipleNodesSummary(checkboxSelection) | json }}</pre>
+        </details>
+      </div>
+      }
     </app-demo-card>
 
     <!-- Single Selection -->
@@ -104,48 +141,6 @@
         <details>
           <summary>View Details</summary>
           <pre>{{ getMultipleNodesSummary(multipleSelection) | json }}</pre>
-        </details>
-      </div>
-      }
-    </app-demo-card>
-
-    <!-- Checkbox Selection -->
-    <app-demo-card [title]="'Checkbox Selection'">
-      <p>
-        Select nodes using checkboxes. Child selections propagate to parents.
-        The component includes an integrated "Select All" checkbox.
-      </p>
-
-      <div class="demo-actions">
-        <i-button severity="secondary" (clicked)="clearCheckboxSelection()">
-          Clear Selection
-        </i-button>
-      </div>
-
-      <i-tree-view
-        [value]="organizationData"
-        selectionMode="checkbox"
-        [selectAll]="true"
-        [(selection)]="checkboxSelection"
-        (onNodeSelect)="onCheckboxNodeSelect($event)"
-        (onNodeUnselect)="onCheckboxNodeUnselect($event)"
-        scrollHeight="300px"
-      >
-      </i-tree-view>
-
-      @if (checkboxSelection.length > 0) {
-      <div class="selection-info">
-        <strong>Selected ({{ checkboxSelection.length }} items):</strong>
-        <ul>
-          @for (node of checkboxSelection; track node.key) {
-          <li>
-            {{ node.label }} <small>({{ node.key }})</small>
-          </li>
-          }
-        </ul>
-        <details>
-          <summary>View Details</summary>
-          <pre>{{ getMultipleNodesSummary(checkboxSelection) | json }}</pre>
         </details>
       </div>
       }
@@ -307,6 +302,10 @@
         <h4>ITreeNode Interface</h4>
         <pre class="code-block">{{ codeExamples.customization }}</pre>
       </div>
+    </app-demo-card>
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
     </app-demo-card>
   </div>
 </div>

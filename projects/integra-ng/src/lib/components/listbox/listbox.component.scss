@@ -3,6 +3,12 @@
 
 @include theme.i-listbox-theme();
 
+// SCSS variables
+$listbox-border-radius: 4px;
+$listbox-transition: 0.15s ease;
+$listbox-dropdown-max-height: 160px;
+$listbox-dropdown-viewport-margin: 150px;
+
 .i-listbox-wrapper {
   position: relative;
   width: 100%;
@@ -11,53 +17,56 @@
     width: 100%;
   }
 
+  // Input container
   .i-listbox-input-container {
     position: relative;
     cursor: pointer;
 
-    // Ensure readonly input has pointer cursor
+    // Readonly input cursor override (needed for proper UX)
     .i-input-text .i-input.readonly {
-      cursor: pointer !important;
+      cursor: pointer;
     }
 
+    // Chips overlay
     .i-listbox-chips-overlay {
       position: absolute;
       top: 50%;
       left: 12px;
       right: 60px;
-      transform: translateY(-50%);
       z-index: 2;
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
       align-items: center;
+      gap: 4px;
       pointer-events: none;
+      transform: translateY(-50%);
 
       i-chip {
         pointer-events: all;
       }
 
-      // For single chip (single select mode), ensure proper alignment
+      // Single chip alignment
       &:has(i-chip:only-child) {
         justify-content: flex-start;
       }
     }
 
+    // Icons overlay
     .i-listbox-icons-overlay {
       position: absolute;
       top: 50%;
       right: 12px;
-      transform: translateY(-50%);
       z-index: 2;
       display: flex;
       align-items: center;
       gap: 8px;
+      transform: translateY(-50%);
 
       .i-listbox-clear {
-        cursor: pointer;
         font-size: 0.8em;
         opacity: 0.6;
-        transition: opacity 0.15s ease;
+        cursor: pointer;
+        transition: opacity $listbox-transition;
 
         &:hover {
           opacity: 1;
@@ -66,12 +75,14 @@
     }
   }
 
+  // Dropdown
   .i-listbox-dropdown {
-    border-radius: 4px;
-    overflow: visible;
     margin-top: 4px;
     margin-bottom: 8px;
+    border-radius: $listbox-border-radius;
+    overflow: visible;
 
+    // Filter section
     .i-listbox-filter {
       padding: 8px;
 
@@ -79,41 +90,32 @@
         width: 100%;
         padding: 8px;
         border: 1px solid;
-        border-radius: 4px;
+        border-radius: $listbox-border-radius;
         font-size: 1em;
         outline: none;
       }
     }
 
+    // Options list
     .i-listbox-options {
-      max-height: min(
-        160px,
-        calc(100vh - 150px)
-      ); // Better viewport calculation with safe margin
-      overflow-y: auto;
+      max-height: min($listbox-dropdown-max-height, calc(100vh - $listbox-dropdown-viewport-margin));
       overflow-x: hidden;
-      border-radius: 0 0 4px 4px;
+      overflow-y: auto;
+      border-radius: 0 0 $listbox-border-radius $listbox-border-radius;
       @include scrollbar.dropdown-scrollbar();
 
+      // Individual option
       .i-listbox-option {
-        font-size: 1em;
-        padding: 8px 12px;
-        cursor: pointer;
-        transition: background-color 0.15s ease;
         display: flex;
         align-items: center;
         gap: 8px;
+        padding: 8px 12px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color $listbox-transition;
 
         &:hover {
           background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .i-listbox-checkbox {
-          pointer-events: none; // Let the parent handle clicks
-        }
-
-        .i-listbox-option-label {
-          flex: 1;
         }
 
         &.selected {
@@ -121,14 +123,23 @@
         }
 
         &:not(:has(.i-listbox-checkbox)) {
-          padding-left: 16px; // More padding when no checkbox
+          padding-left: 16px;
+        }
+
+        .i-listbox-checkbox {
+          pointer-events: none;
+        }
+
+        .i-listbox-option-label {
+          flex: 1;
         }
       }
 
+      // No options message
       .i-listbox-no-options {
         padding: 12px;
-        text-align: center;
         font-style: italic;
+        text-align: center;
         opacity: 0.6;
       }
     }

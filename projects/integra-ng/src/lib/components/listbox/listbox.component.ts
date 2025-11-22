@@ -24,11 +24,61 @@ import {
 import { IInputText } from '../input-text/input-text.component';
 import { IChip } from '../chip/chip.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
+import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
+/**
+ * Option data structure for the listbox component
+ */
 export interface ListboxOption {
   [key: string]: any;
 }
 
+/**
+ * Listbox Component
+ *
+ * A versatile listbox component supporting both single and multiple selection modes.
+ * Features filtering, chips display, and full form control integration.
+ * Uses Angular signals for reactive state management.
+ *
+ * @example
+ * ```html
+ * <!-- Single selection listbox -->
+ * <i-listbox
+ *   label="Choose One"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   [multiple]="false"
+ *   formControlName="selectedItem">
+ * </i-listbox>
+ *
+ * <!-- Multiple selection listbox -->
+ * <i-listbox
+ *   label="Choose Multiple"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   [multiple]="true"
+ *   formControlName="selectedItems">
+ * </i-listbox>
+ *
+ * <!-- Listbox with filtering -->
+ * <i-listbox
+ *   label="Search and Select"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   [filter]="true"
+ *   filterBy="name"
+ *   formControlName="selection">
+ * </i-listbox>
+ * ```
+ *
+ * @remarks
+ * This component implements ControlValueAccessor for seamless integration with Angular Forms.
+ * Supports both single and multiple selection modes.
+ * Uses signals for efficient filtering and option management.
+ */
 @Component({
   selector: 'i-listbox',
   standalone: true,
@@ -44,6 +94,10 @@ export interface ListboxOption {
   ],
 })
 export class IListbox implements ControlValueAccessor {
+  /**
+   * Label text displayed for the listbox
+   * @default 'List Box'
+   */
   @Input() label = 'List Box';
   // Convert options to signal input
   options: InputSignal<ListboxOption[] | null | undefined> = input<
@@ -79,7 +133,6 @@ export class IListbox implements ControlValueAccessor {
     const currentOptions = this.options() || [];
     const currentFilterValue = this.filterValue();
 
-    // Guard against null/undefined options
     if (!Array.isArray(currentOptions)) {
       return [];
     }
@@ -113,14 +166,31 @@ export class IListbox implements ControlValueAccessor {
     }
   }
 
-  // ControlValueAccessor properties
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onChangeCallback: (value: any[] | any) => void = () => {};
+
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onTouchedCallback: () => void = () => {};
 
+  /**
+   * NgControl reference for form validation
+   * @internal
+   */
   public ngControl: NgControl | null = null;
 
+  /**
+   * Unique component identifier
+   * @internal
+   */
+  componentId = UniqueComponentId('i-listbox-');
+
   constructor(private injector: Injector) {
-    // Get NgControl in a non-circular way
     setTimeout(() => {
       this.ngControl = this.injector.get(NgControl, null);
     });
@@ -131,9 +201,7 @@ export class IListbox implements ControlValueAccessor {
     return this.getDisplayLabel();
   }
 
-  set inputValue(value: string) {
-    // Read-only, prevents any text input in the display field
-  }
+  set inputValue(value: string) {}
 
   toggleOption(option: ListboxOption) {
     const optionValue = this.getOptionValue(option);
@@ -150,15 +218,14 @@ export class IListbox implements ControlValueAccessor {
 
       this.value = currentValues;
       this.onChange.emit(currentValues);
-      this.onChangeCallback(currentValues); // Notify form control
-      this.onTouchedCallback(); // Mark as touched
+      this.onChangeCallback(currentValues);
+      this.onTouchedCallback();
     } else {
-      // Single select mode
       const newValue = this.value === optionValue ? null : optionValue;
       this.value = newValue;
       this.onChange.emit(newValue);
-      this.onChangeCallback(newValue); // Notify form control
-      this.onTouchedCallback(); // Mark as touched
+      this.onChangeCallback(newValue);
+      this.onTouchedCallback();
     }
   }
 
@@ -176,8 +243,8 @@ export class IListbox implements ControlValueAccessor {
     const newValue = this.multiple ? [] : null;
     this.value = newValue;
     this.onClear.emit();
-    this.onChangeCallback(newValue); // Notify form control
-    this.onTouchedCallback(); // Mark as touched
+    this.onChangeCallback(newValue);
+    this.onTouchedCallback();
   }
 
   removeSelectedItem(value: any, event: Event) {
@@ -190,16 +257,15 @@ export class IListbox implements ControlValueAccessor {
         currentValues.splice(index, 1);
         this.value = currentValues;
         this.onChange.emit(currentValues);
-        this.onChangeCallback(currentValues); // Notify form control
-        this.onTouchedCallback(); // Mark as touched
+        this.onChangeCallback(currentValues);
+        this.onTouchedCallback();
       }
     } else {
-      // Single select mode - clear the selection
       if (this.value === value) {
         this.value = null;
         this.onChange.emit(null);
-        this.onChangeCallback(null); // Notify form control
-        this.onTouchedCallback(); // Mark as touched
+        this.onChangeCallback(null);
+        this.onTouchedCallback();
       }
     }
   }
@@ -220,7 +286,6 @@ export class IListbox implements ControlValueAccessor {
   }
 
   getSelectedLabels(): string[] {
-    // Guard against null/undefined options
     const currentOptions = this.options() || [];
     if (!Array.isArray(currentOptions)) {
       return [];
@@ -293,7 +358,7 @@ export class IListbox implements ControlValueAccessor {
     if (this.multiple) {
       return this.value.length <= this.maxSelectedLabels;
     } else {
-      return true; // Hide text when showing chip in single select mode
+      return true;
     }
   }
 
@@ -356,11 +421,8 @@ export class IListbox implements ControlValueAccessor {
     this.onTouchedCallback = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
-    // Implementation can be added if disabled state is needed
-  }
+  setDisabledState?(isDisabled: boolean): void {}
 
-  // Validation helper methods
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
   }

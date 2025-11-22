@@ -1,3 +1,6 @@
+@use "../../../../../../integra-ng/src/lib/themes/scrollbar-mixins.scss" as
+  scrollbar;
+
 .layout {
   .layout-wrapper {
     display: flex;
@@ -14,6 +17,8 @@
         flex-shrink: 0;
         width: 300px;
         overflow-y: auto;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        opacity: 1;
       }
 
       .layout-main-container {
@@ -21,6 +26,8 @@
         min-width: 0; // Prevent flex item from overflowing
         overflow-y: auto;
         padding: 2rem;
+        transition: margin-left 0.3s ease;
+        @include scrollbar.dropdown-scrollbar();
 
         .layout-main {
           width: 100%;
@@ -30,14 +37,20 @@
     }
 
     &.layout-static-inactive {
+      .layout-sidebar-container {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+
       .layout-main-container {
-        margin-left: 0;
+        margin-left: -300px;
       }
     }
 
-    &.layout-mobile-inactive {
+    &.layout-mobile-active {
       .layout-sidebar-container {
-        transform: translateX(-100%);
+        transform: translateX(0);
+        opacity: 1;
       }
     }
 
@@ -88,9 +101,10 @@
       }
 
       &.layout-overlay-active,
-      &.layout-mobile-inactive {
+      &.layout-mobile-active {
         .layout-sidebar-container {
           transform: translateX(0);
+          opacity: 1;
         }
 
         .layout-mask {

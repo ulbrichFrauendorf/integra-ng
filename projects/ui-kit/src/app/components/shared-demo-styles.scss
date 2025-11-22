@@ -1,8 +1,6 @@
-// Shared Demo Component Styles
-// Common styles used across all UI kit demo components
-
-// Base demo component layout
 .demo-component {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -14,14 +12,15 @@
   text-align: center;
 
   h1 {
+    font-family: "Montserrat", sans-serif;
     margin-bottom: 16px;
-    color: var(--primary-color, #007bff);
+    color: var(--color-primary);
     font-size: 2rem;
     font-weight: 600;
   }
 
   p {
-    color: var(--text-color-secondary, #6c757d);
+    color: var(--text-color-secondary);
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
@@ -66,13 +65,13 @@
 
   strong {
     display: block;
-    color: var(--primary-color, #007bff);
+    color: var(--primary-color);
     margin-bottom: 4px;
     font-weight: 600;
   }
 
   span {
-    color: var(--text-color, #212529);
+    color: var(--text-color-secondary);
     font-size: 14px;
     line-height: 1.4;
   }
@@ -128,7 +127,7 @@
 // Content within demo cards
 .demo-content {
   p {
-    color: var(--text-color-secondary, #6c757d);
+    color: var(--text-color-secondary);
     margin-bottom: 16px;
     line-height: 1.6;
   }
@@ -168,29 +167,5 @@
   .button-examples,
   .demo-examples {
     gap: 12px;
-  }
-}
-
-// Dark theme support
-@media (prefers-color-scheme: dark) {
-  .feature-item {
-    background: var(--surface-800, #2d3748);
-    border-color: var(--surface-600, #4a5568);
-
-    &:hover {
-      background: var(--surface-700, #374151);
-    }
-
-    strong {
-      color: var(--primary-300, #60a5fa);
-    }
-
-    span {
-      color: var(--text-color-dark, #e2e8f0);
-    }
-  }
-
-  .demo-content p {
-    color: var(--text-color-secondary-dark, #a0aec0);
   }
 }

@@ -3,6 +3,12 @@
 
 @include theme.i-select-theme();
 
+// SCSS variables
+$select-border-radius: 4px;
+$select-transition: 0.15s ease;
+$select-dropdown-max-height: 160px;
+$select-dropdown-viewport-margin: 150px;
+
 .i-select-wrapper {
   position: relative;
   display: block;
@@ -11,31 +17,33 @@
     width: 100%;
   }
 
+  // Input container
   .i-select-input-container {
     position: relative;
     cursor: pointer;
 
-    // Ensure readonly input has pointer cursor
+    // Readonly input cursor override (needed for proper UX)
     .i-input-text .i-input.readonly {
-      cursor: pointer !important;
+      cursor: pointer;
     }
 
+    // Icons container
     .i-select-icons {
       position: absolute;
-      right: 10px;
       top: 50%;
-      transform: translateY(-50%);
+      right: 10px;
       display: flex;
       align-items: center;
       gap: 8px;
       pointer-events: none;
+      transform: translateY(-50%);
 
       .i-select-clear {
-        pointer-events: auto;
-        cursor: pointer;
         font-size: 0.8em;
         opacity: 0.6;
-        transition: opacity 0.15s ease;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: opacity $select-transition;
 
         &:hover {
           opacity: 1;
@@ -43,9 +51,9 @@
       }
 
       .i-select-arrow {
-        font-size: 0.7rem; // 10px
-        transition: transform 0.15s ease;
+        font-size: 0.7rem;
         opacity: 0.6;
+        transition: transform $select-transition;
 
         &.flipped {
           transform: rotate(180deg);
@@ -54,18 +62,20 @@
     }
   }
 
+  // Dropdown
   .i-select-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
     z-index: 1000;
-    border-radius: 4px;
-    overflow: visible;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     margin-top: 4px;
     margin-bottom: 8px;
+    border-radius: $select-border-radius;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: visible;
 
+    // Filter section
     .i-select-filter {
       padding: 8px;
 
@@ -73,44 +83,38 @@
         width: 100%;
         padding: 8px;
         border: 1px solid;
-        border-radius: 4px;
+        border-radius: $select-border-radius;
         font-size: 1em;
         outline: none;
       }
     }
 
+    // Options list
     .i-select-options {
-      max-height: min(
-        160px,
-        calc(100vh - 150px)
-      ); // Better viewport calculation with safe margin
+      max-height: min($select-dropdown-max-height, calc(100vh - $select-dropdown-viewport-margin));
+      padding-right: 2px;
+      overflow-x: hidden;
       overflow-y: auto;
-      overflow-x: hidden; // Hide horizontal overflow
-      border-radius: 0 0 4px 4px; // Round bottom corners
+      border-radius: 0 0 $select-border-radius $select-border-radius;
       @include scrollbar.dropdown-scrollbar();
 
-      // Ensure scrollbar area is properly visible
-      padding-right: 2px; // Small padding to prevent scrollbar cutoff
-
+      // Individual option
       .i-select-option {
-        font-size: 1em;
         padding: 12px;
+        font-size: 1em;
         cursor: pointer;
-        transition: background-color 0.15s ease;
-
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.05);
-        }
+        transition: background-color $select-transition;
 
         &.selected {
           font-weight: 500;
         }
       }
 
+      // No options message
       .i-select-no-options {
         padding: 12px;
-        text-align: center;
         font-style: italic;
+        text-align: center;
         opacity: 0.6;
       }
     }
