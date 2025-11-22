@@ -8,6 +8,62 @@ import {
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 
+/**
+ * Supported background style options for the input
+ */
+export type IInputBackgroundStyle = 'surface' | 'component';
+
+/**
+ * Input Text Component
+ *
+ * A form control text input component with floating labels, icons, and validation support.
+ * Fully compatible with Angular Reactive Forms and Template-driven Forms.
+ *
+ * @example
+ * ```html
+ * <!-- Basic input -->
+ * <i-input-text label="Username"></i-input-text>
+ *
+ * <!-- Input with reactive form -->
+ * <i-input-text
+ *   label="Email"
+ *   type="email"
+ *   formControlName="email">
+ * </i-input-text>
+ *
+ * <!-- Input with icon -->
+ * <i-input-text
+ *   label="Search"
+ *   icon="pi pi-search"
+ *   [(ngModel)]="searchTerm">
+ * </i-input-text>
+ *
+ * <!-- Password input -->
+ * <i-input-text
+ *   label="Password"
+ *   type="password"
+ *   formControlName="password">
+ * </i-input-text>
+ *
+ * <!-- Full width input -->
+ * <i-input-text
+ *   label="Address"
+ *   [fluid]="true"
+ *   formControlName="address">
+ * </i-input-text>
+ *
+ * <!-- Input with custom error messages -->
+ * <i-input-text
+ *   label="Phone"
+ *   formControlName="phone"
+ *   [errorMessages]="{pattern: 'Please enter a valid phone number'}">
+ * </i-input-text>
+ * ```
+ *
+ * @remarks
+ * This component implements ControlValueAccessor for seamless integration with Angular Forms.
+ * Supports floating labels, custom validation messages, and external validation state.
+ */
 @Component({
   selector: 'i-input-text',
   standalone: true,
@@ -16,26 +72,114 @@ import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
   styleUrls: ['./input-text.component.scss'],
 })
 export class IInputText implements ControlValueAccessor {
+  /**
+   * Label text displayed for the input
+   * @default 'Label'
+   */
   @Input() label = 'Label';
+
+  /**
+   * HTML input type attribute
+   * @default 'text'
+   */
   @Input() type: string = 'text';
+
+  /**
+   * HTML id attribute for the input element
+   */
   @Input() id?: string;
+
+  /**
+   * Whether the input should take full width of its container
+   * @default false
+   */
   @Input() fluid = false;
+
+  /**
+   * Forces the label to stay in floated position
+   * @default false
+   */
   @Input() forceFloated = false;
+
+  /**
+   * Hides the input text (useful for password fields with toggle)
+   * @default false
+   */
   @Input() hideText = false;
+
+  /**
+   * Enables floating label animation
+   * @default true
+   */
   @Input() useFloatLabel = true;
+
+  /**
+   * Placeholder text for the input
+   */
   @Input() placeholder?: string;
-  @Input() externalInvalid = false; // Allow parent to override validation state
-  @Input() externalErrorMessage?: string; // Allow parent to provide error message
-  @Input() backgroundStyle: 'surface' | 'component' = 'surface';
+
+  /**
+   * Allows external control to override validation state
+   * @default false
+   */
+  @Input() externalInvalid = false;
+
+  /**
+   * External error message to display (overrides internal validation)
+   */
+  @Input() externalErrorMessage?: string;
+
+  /**
+   * Background style of the input
+   * @default 'surface'
+   */
+  @Input() backgroundStyle: IInputBackgroundStyle = 'surface';
+
+  /**
+   * Icon class name to display (e.g., 'pi pi-search')
+   */
   @Input() icon?: string;
+
+  /**
+   * Whether the input is readonly
+   * @default false
+   */
   @Input() readonly = false;
 
+  /**
+   * Whether the input is disabled
+   * @default false
+   */
+  @Input() disabled = false;
+
+  /**
+   * Custom error messages for validation rules
+   * @default {}
+   */
+  @Input() errorMessages: { [key: string]: string } = {};
+
+  /**
+   * Current input value
+   * @internal
+   */
   value: string | null = null;
-  @Input() disabled = false; // allow external disabling
 
-  componentId = UniqueComponentId('i-input-text');
+  /**
+   * Unique component identifier
+   * @internal
+   */
+  componentId = UniqueComponentId('i-input-text-');
 
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onChange: (v: string | null) => void = () => {};
+
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onTouched: () => void = () => {};
 
   constructor(@Optional() @Self() public ngControl: NgControl | null) {
@@ -44,47 +188,88 @@ export class IInputText implements ControlValueAccessor {
     }
   }
 
-  @Input() errorMessages: { [key: string]: string } = {};
-
+  /**
+   * Writes a value to the input (ControlValueAccessor)
+   * @internal
+   */
   writeValue(obj: string | null): void {
     this.value = obj == null ? null : obj;
   }
+
+  /**
+   * Registers the onChange callback (ControlValueAccessor)
+   * @internal
+   */
   registerOnChange(fn: (v: string | null) => void): void {
     this.onChange = fn;
   }
+
+  /**
+   * Registers the onTouched callback (ControlValueAccessor)
+   * @internal
+   */
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
+
+  /**
+   * Sets the disabled state (ControlValueAccessor)
+   * @internal
+   */
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
+  /**
+   * Handles input event and updates value
+   * @internal
+   */
   handleInput(event: Event) {
     const v = (event.target as HTMLInputElement).value;
     this.value = v;
     this.onChange(v);
   }
 
+  /**
+   * Marks the input as touched
+   * @internal
+   */
   touch() {
     this.onTouched();
   }
 
+  /**
+   * Gets the form control instance
+   * @internal
+   */
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
   }
 
+  /**
+   * Determines if validation errors should be shown
+   * @internal
+   */
   get showErrors(): boolean {
     if (this.externalInvalid) return true;
     const c = this.control;
     return !!(c && c.invalid && c.dirty);
   }
 
+  /**
+   * Gets the first validation error key
+   * @internal
+   */
   get firstErrorKey(): string | null {
     const c = this.control;
     if (!c || !c.errors) return null;
     return Object.keys(c.errors)[0] || null;
   }
 
+  /**
+   * Gets the error message to display
+   * @internal
+   */
   getErrorMessage(): string | null {
     if (this.externalInvalid && this.externalErrorMessage) {
       return this.externalErrorMessage;

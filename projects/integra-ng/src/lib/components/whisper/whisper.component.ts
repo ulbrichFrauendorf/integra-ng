@@ -19,6 +19,63 @@ import { ZIndexUtils } from '../../utils/zindexutils';
 import { IButton } from '../button/button.component';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 
+/**
+ * Supported whisper/toast positions
+ */
+export type IWhisperPosition =
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right';
+
+/**
+ * Whisper (Toast Notification) Component
+ *
+ * A notification/toast component that displays temporary messages.
+ * Supports multiple positions, severities, and automatic dismissal.
+ *
+ * @example
+ * ```html
+ * <!-- Basic whisper container (place in app root) -->
+ * <i-whisper></i-whisper>
+ *
+ * <!-- Whisper with custom position -->
+ * <i-whisper position="bottom-right"></i-whisper>
+ *
+ * <!-- Keyed whisper for specific notifications -->
+ * <i-whisper key="global-notifications"></i-whisper>
+ * ```
+ *
+ * ```typescript
+ * // In your component:
+ * constructor(private whisperService: WhisperService) {}
+ *
+ * showSuccess() {
+ *   this.whisperService.add({
+ *     severity: 'success',
+ *     summary: 'Success',
+ *     detail: 'Operation completed successfully',
+ *     life: 3000
+ *   });
+ * }
+ *
+ * showError() {
+ *   this.whisperService.add({
+ *     severity: 'danger',
+ *     summary: 'Error',
+ *     detail: 'An error occurred',
+ *     life: 5000
+ *   });
+ * }
+ * ```
+ *
+ * @remarks
+ * This component uses OnPush change detection for optimal performance.
+ * Works with WhisperService to display notifications.
+ * Supports auto-dismissal with configurable life time.
+ */
 @Component({
   selector: 'i-whisper',
   standalone: true,
@@ -26,26 +83,73 @@ import { ISeverity } from '@shared/enums/IButtonSeverity';
   templateUrl: './whisper.component.html',
   styleUrl: './whisper.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IWhisper implements OnInit, OnDestroy {
+  /**
+   * Key to filter which messages this whisper container displays
+   * If set, only messages with matching key will be shown
+   */
   @Input() key?: string;
+
+  /**
+   * Whether to automatically manage z-index
+   * @default true
+   */
   @Input() autoZIndex = true;
+
+  /**
+   * Base z-index value for the whisper container
+   * @default 0
+   */
   @Input() baseZIndex = 0;
+
+  /**
+   * Custom inline styles to apply to the container
+   */
   @Input() style?: { [key: string]: any };
-  @Input() position:
-    | 'top-left'
-    | 'top-center'
-    | 'top-right'
-    | 'bottom-left'
-    | 'bottom-center'
-    | 'bottom-right' = 'top-right';
+
+  /**
+   * Position of the whisper container on screen
+   * @default 'top-right'
+   */
+  @Input() position: IWhisperPosition = 'top-right';
+
+  /**
+   * Prevents duplicate messages from being shown at the same time
+   * Removes existing message before showing the duplicate
+   * @default false
+   */
   @Input() preventOpenDuplicates = false;
+
+  /**
+   * Prevents duplicate messages from being added at all
+   * @default false
+   */
   @Input() preventDuplicates = false;
 
+  /**
+   * Array of current whisper messages
+   * @internal
+   */
   messages: IWhisperMessage[] = [];
+
+  /**
+   * Subscription to message events from the service
+   * @internal
+   */
   messageSubscription?: Subscription;
+
+  /**
+   * Subscription to clear events from the service
+   * @internal
+   */
   clearSubscription?: Subscription;
 
+  /**
+   * Unique component identifier
+   * @internal
+   */
   componentId = UniqueComponentId('i-whisper-');
 
   constructor(
@@ -123,20 +227,36 @@ export class IWhisper implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Removes a specific message from the display
+   * @internal
+   */
   remove(message: IWhisperMessage): void {
     this.messages = this.messages.filter((m) => m.id !== message.id);
     this.cd.markForCheck();
   }
 
+  /**
+   * Removes all messages from the display
+   * @internal
+   */
   removeAll(): void {
     this.messages = [];
     this.cd.markForCheck();
   }
 
+  /**
+   * Handles the close button click for a message
+   * @internal
+   */
   onClose(message: IWhisperMessage): void {
     this.remove(message);
   }
 
+  /**
+   * Gets the appropriate icon class for a message severity
+   * @internal
+   */
   getMessageIcon(severity: ISeverity): string {
     switch (severity) {
       case 'success':
@@ -152,10 +272,18 @@ export class IWhisper implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Gets CSS classes for the whisper container
+   * @internal
+   */
   getContainerClass(): string {
     return `i-whisper i-whisper-${this.position}`;
   }
 
+  /**
+   * Gets CSS classes for a specific message
+   * @internal
+   */
   getMessageClass(message: IWhisperMessage): string {
     let classes = 'i-whisper-message';
     if (message.severity) {
@@ -164,6 +292,10 @@ export class IWhisper implements OnInit, OnDestroy {
     return classes;
   }
 
+  /**
+   * TrackBy function for ngFor optimization
+   * @internal
+   */
   trackByMessage(index: number, message: IWhisperMessage): any {
     return message.id;
   }

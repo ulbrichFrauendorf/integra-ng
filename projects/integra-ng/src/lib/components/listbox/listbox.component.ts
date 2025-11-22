@@ -24,11 +24,61 @@ import {
 import { IInputText } from '../input-text/input-text.component';
 import { IChip } from '../chip/chip.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
+import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
+/**
+ * Option data structure for the listbox component
+ */
 export interface ListboxOption {
   [key: string]: any;
 }
 
+/**
+ * Listbox Component
+ *
+ * A versatile listbox component supporting both single and multiple selection modes.
+ * Features filtering, chips display, and full form control integration.
+ * Uses Angular signals for reactive state management.
+ *
+ * @example
+ * ```html
+ * <!-- Single selection listbox -->
+ * <i-listbox
+ *   label="Choose One"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   [multiple]="false"
+ *   formControlName="selectedItem">
+ * </i-listbox>
+ *
+ * <!-- Multiple selection listbox -->
+ * <i-listbox
+ *   label="Choose Multiple"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   [multiple]="true"
+ *   formControlName="selectedItems">
+ * </i-listbox>
+ *
+ * <!-- Listbox with filtering -->
+ * <i-listbox
+ *   label="Search and Select"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   [filter]="true"
+ *   filterBy="name"
+ *   formControlName="selection">
+ * </i-listbox>
+ * ```
+ *
+ * @remarks
+ * This component implements ControlValueAccessor for seamless integration with Angular Forms.
+ * Supports both single and multiple selection modes.
+ * Uses signals for efficient filtering and option management.
+ */
 @Component({
   selector: 'i-listbox',
   standalone: true,
@@ -44,6 +94,10 @@ export interface ListboxOption {
   ],
 })
 export class IListbox implements ControlValueAccessor {
+  /**
+   * Label text displayed for the listbox
+   * @default 'List Box'
+   */
   @Input() label = 'List Box';
   // Convert options to signal input
   options: InputSignal<ListboxOption[] | null | undefined> = input<
@@ -112,11 +166,29 @@ export class IListbox implements ControlValueAccessor {
     }
   }
 
-  // ControlValueAccessor properties
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onChangeCallback: (value: any[] | any) => void = () => {};
+
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onTouchedCallback: () => void = () => {};
 
+  /**
+   * NgControl reference for form validation
+   * @internal
+   */
   public ngControl: NgControl | null = null;
+
+  /**
+   * Unique component identifier
+   * @internal
+   */
+  componentId = UniqueComponentId('i-listbox-');
 
   constructor(private injector: Injector) {
     setTimeout(() => {
@@ -129,8 +201,7 @@ export class IListbox implements ControlValueAccessor {
     return this.getDisplayLabel();
   }
 
-  set inputValue(value: string) {
-  }
+  set inputValue(value: string) {}
 
   toggleOption(option: ListboxOption) {
     const optionValue = this.getOptionValue(option);
@@ -350,8 +421,7 @@ export class IListbox implements ControlValueAccessor {
     this.onTouchedCallback = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
-  }
+  setDisabledState?(isDisabled: boolean): void {}
 
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;

@@ -1,15 +1,35 @@
-.no-results-table-container {
-    height: 13rem;
+// Empty state table component styles
+.i-empty-state-table {
+  &__container {
     width: 13rem;
-}
+    height: 13rem;
+  }
 
-.no-results-image-fixed {
+  &__image {
     width: 13rem;
     height: auto;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
+
+    &--loaded {
+      opacity: 0.5;
+    }
+  }
 }
 
-.no-results-image-fixed.loaded {
+// Legacy class names for backward compatibility
+.no-results-table-container {
+  width: 13rem;
+  height: 13rem;
+}
+
+.no-results-image-fixed {
+  width: 13rem;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+
+  &.loaded {
     opacity: 0.5;
+  }
 }

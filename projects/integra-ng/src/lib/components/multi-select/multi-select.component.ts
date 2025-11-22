@@ -24,11 +24,68 @@ import {
 import { IInputText } from '../input-text/input-text.component';
 import { IChip } from '../chip/chip.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
+import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
+/**
+ * Option data structure for the multi-select component
+ */
 export interface MultiSelectOption {
   [key: string]: any;
 }
 
+/**
+ * Multi-Select Component
+ *
+ * A multi-selection dropdown component with filtering, chips display, and form control support.
+ * Uses Angular signals for reactive state management and is fully compatible with Angular Forms.
+ *
+ * @example
+ * ```html
+ * <!-- Basic multi-select -->
+ * <i-multi-select
+ *   label="Skills"
+ *   [options]="skills"
+ *   optionLabel="name"
+ *   optionValue="id"
+ *   formControlName="selectedSkills">
+ * </i-multi-select>
+ *
+ * <!-- Multi-select with filtering -->
+ * <i-multi-select
+ *   label="Countries"
+ *   [options]="countries"
+ *   optionLabel="name"
+ *   [filter]="true"
+ *   filterBy="name"
+ *   formControlName="countries">
+ * </i-multi-select>
+ *
+ * <!-- Multi-select with clear button -->
+ * <i-multi-select
+ *   label="Tags"
+ *   [options]="tags"
+ *   optionLabel="label"
+ *   [showClear]="true"
+ *   [maxSelectedLabels]="5"
+ *   (onClear)="handleClear()"
+ *   formControlName="tags">
+ * </i-multi-select>
+ *
+ * <!-- Full width multi-select -->
+ * <i-multi-select
+ *   label="Permissions"
+ *   [options]="permissions"
+ *   optionLabel="name"
+ *   [fluid]="true"
+ *   formControlName="permissions">
+ * </i-multi-select>
+ * ```
+ *
+ * @remarks
+ * This component implements ControlValueAccessor for seamless integration with Angular Forms.
+ * Uses signals for efficient filtering and option management.
+ * Selected items are displayed as chips when count is within maxSelectedLabels.
+ */
 @Component({
   selector: 'i-multi-select',
   standalone: true,
@@ -44,37 +101,138 @@ export interface MultiSelectOption {
   ],
 })
 export class IMultiSelect implements ControlValueAccessor {
+  /**
+   * Label text displayed for the multi-select
+   * @default 'Multi Select'
+   */
   @Input() label = 'Multi Select';
-  // Convert options to signal input
+
+  /**
+   * Array of options to display in the dropdown
+   */
   options: InputSignal<MultiSelectOption[] | null | undefined> = input<
     MultiSelectOption[] | null | undefined
   >([]);
+
+  /**
+   * Property name to use as the display label for options
+   */
   @Input({ required: true }) optionLabel!: string;
+
+  /**
+   * Property name to use as the value for options (if not set, entire object is used)
+   */
   @Input() optionValue?: string;
+
+  /**
+   * Placeholder text when no options are selected
+   * @default 'Select options'
+   */
   @Input() placeholder = 'Select options';
+
+  /**
+   * HTML id attribute for the multi-select element
+   */
   @Input() id?: string;
+
+  /**
+   * Whether the multi-select should take full width of its container
+   * @default false
+   */
   @Input() fluid = false;
+
+  /**
+   * Whether to show a clear button to reset all selections
+   * @default false
+   */
   @Input() showClear = false;
+
+  /**
+   * Enables filtering/searching of options
+   * @default true
+   */
   @Input() filter = true;
+
+  /**
+   * Property name to use for filtering
+   * @default 'label'
+   */
   @Input() filterBy = 'label';
+
+  /**
+   * Maximum number of selected items to display as labels before showing count
+   * @default 3
+   */
   @Input() maxSelectedLabels = 3;
+
+  /**
+   * Template string for selected items count label (use {0} for count placeholder)
+   * @default '{0} items selected'
+   */
   @Input() selectedItemsLabel = '{0} items selected';
+
+  /**
+   * Custom error messages for validation rules
+   * @default {}
+   */
   @Input() errorMessages: { [key: string]: string } = {};
+
+  /**
+   * Whether the multi-select is disabled
+   * @default false
+   */
   @Input() disabled = false;
+
+  /**
+   * Whether the multi-select input is readonly
+   * @default true
+   */
   @Input() readonly = true;
 
+  /**
+   * Event emitted when selection changes
+   */
   @Output() onChange = new EventEmitter<any[]>();
+
+  /**
+   * Event emitted when all selections are cleared
+   */
   @Output() onClear = new EventEmitter<void>();
 
+  /**
+   * Reference to the input text component
+   * @internal
+   */
   @ViewChild('inputText') inputTextRef!: IInputText;
+
+  /**
+   * Reference to the dropdown element
+   * @internal
+   */
   @ViewChild('dropdown', { static: false }) dropdownRef!: ElementRef;
+
+  /**
+   * Reference to the search input element
+   * @internal
+   */
   @ViewChild('searchInput', { static: false }) searchInputRef!: ElementRef;
 
+  /**
+   * Whether the dropdown is currently open
+   * @internal
+   */
   isOpen = false;
-  // Convert filter value to signal
+
+  /**
+   * Current filter/search value
+   * @internal
+   */
   filterValue = signal('');
 
-  // Create computed signal for filtered options
+  /**
+   * Computed filtered options based on search value
+   * @internal
+   */
   filteredOptions = computed(() => {
     const currentOptions = this.options() || [];
     const currentFilterValue = this.filterValue();
@@ -94,25 +252,54 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   });
 
+  /**
+   * Internal selected values storage
+   * @internal
+   */
   private _value: any[] = [];
 
+  /**
+   * Gets the current selected values array
+   * @internal
+   */
   get value(): any[] {
     return this._value;
   }
 
+  /**
+   * Sets the selected values and updates the display
+   * @internal
+   */
   set value(val: any[]) {
     this._value = val || [];
-    // Update the underlying input-text component through ngModel
     if (this.inputTextRef) {
       this.inputTextRef.value = this.getDisplayLabel() || null;
     }
   }
 
-  // ControlValueAccessor properties
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onChangeCallback: (value: any[]) => void = () => {};
+
+  /**
+   * Callback for ControlValueAccessor
+   * @internal
+   */
   private onTouchedCallback: () => void = () => {};
 
+  /**
+   * NgControl reference for form validation
+   * @internal
+   */
   public ngControl: NgControl | null = null;
+
+  /**
+   * Unique component identifier
+   * @internal
+   */
+  componentId = UniqueComponentId('i-multi-select-');
 
   constructor(private injector: Injector) {
     setTimeout(() => {
@@ -120,14 +307,22 @@ export class IMultiSelect implements ControlValueAccessor {
     });
   }
 
-  // This will be bound to the underlying input-text component
+  /**
+   * Display value for the input text component
+   * @internal
+   */
   get inputValue(): string {
     return this.getDisplayLabel();
   }
 
   set inputValue(value: string) {
+    // Setter required for binding, but value is managed internally
   }
 
+  /**
+   * Toggles the dropdown open/closed state
+   * @internal
+   */
   toggleDropdown() {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
@@ -144,6 +339,10 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Toggles selection state of an option
+   * @internal
+   */
   toggleOption(option: MultiSelectOption) {
     const currentValues = [...this.value];
 
@@ -172,6 +371,10 @@ export class IMultiSelect implements ControlValueAccessor {
     this.onTouchedCallback();
   }
 
+  /**
+   * Checks if an option is currently selected
+   * @internal
+   */
   isOptionSelected(option: MultiSelectOption): boolean {
     if (!this.optionValue) {
       return this.value.some(
@@ -183,6 +386,10 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Clears all selections
+   * @internal
+   */
   clearSelection() {
     this.value = [];
     this.onClear.emit();
@@ -190,6 +397,10 @@ export class IMultiSelect implements ControlValueAccessor {
     this.onTouchedCallback();
   }
 
+  /**
+   * Removes a specific selected item
+   * @internal
+   */
   removeSelectedItem(value: any, event: Event) {
     event.stopPropagation();
     const currentValues = [...this.value];
@@ -212,10 +423,18 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Gets the display label for an option
+   * @internal
+   */
   getOptionLabel(option: MultiSelectOption): string {
     return option[this.optionLabel] || option['label'] || String(option);
   }
 
+  /**
+   * Gets the value for an option
+   * @internal
+   */
   getOptionValue(option: MultiSelectOption): any {
     if (!this.optionValue) {
       return option;
@@ -223,6 +442,10 @@ export class IMultiSelect implements ControlValueAccessor {
     return option[this.optionValue] || option['value'] || option;
   }
 
+  /**
+   * Gets the searchable value for filtering
+   * @internal
+   */
   getOptionSearchValue(option: MultiSelectOption): string {
     if (this.filterBy && option[this.filterBy]) {
       return String(option[this.filterBy]);
@@ -230,6 +453,10 @@ export class IMultiSelect implements ControlValueAccessor {
     return this.getOptionLabel(option);
   }
 
+  /**
+   * Gets labels for all selected items
+   * @internal
+   */
   getSelectedLabels(): string[] {
     const currentOptions = this.options() || [];
     if (!Array.isArray(currentOptions)) {
@@ -248,6 +475,10 @@ export class IMultiSelect implements ControlValueAccessor {
     });
   }
 
+  /**
+   * Gets the display label for the input (shows labels or count)
+   * @internal
+   */
   getDisplayLabel(): string {
     if (!this.value || this.value.length === 0) {
       return '';
@@ -265,10 +496,18 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   }
 
+  /**
+   * TrackBy function for ngFor optimization
+   * @internal
+   */
   trackByValue(index: number, value: any): any {
     return value;
   }
 
+  /**
+   * Handles clicks outside the dropdown to close it
+   * @internal
+   */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (
@@ -280,7 +519,10 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   }
 
-  // ControlValueAccessor implementation
+  /**
+   * Writes a value to the multi-select (ControlValueAccessor)
+   * @internal
+   */
   writeValue(value: any[]): void {
     this._value = value || [];
     if (this.inputTextRef) {
@@ -288,32 +530,61 @@ export class IMultiSelect implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Registers the onChange callback (ControlValueAccessor)
+   * @internal
+   */
   registerOnChange(fn: (value: any[]) => void): void {
     this.onChangeCallback = fn;
   }
 
+  /**
+   * Registers the onTouched callback (ControlValueAccessor)
+   * @internal
+   */
   registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
+  /**
+   * Sets the disabled state (ControlValueAccessor)
+   * @internal
+   */
   setDisabledState?(isDisabled: boolean): void {
+    // Not implemented - can be added if needed
   }
 
+  /**
+   * Gets the form control instance
+   * @internal
+   */
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
   }
 
+  /**
+   * Determines if validation errors should be shown
+   * @internal
+   */
   get showErrors(): boolean {
     const c = this.control;
     return !!(c && c.invalid && c.dirty);
   }
 
+  /**
+   * Gets the first validation error key
+   * @internal
+   */
   get firstErrorKey(): string | null {
     const c = this.control;
     if (!c || !c.errors) return null;
     return Object.keys(c.errors)[0] || null;
   }
 
+  /**
+   * Gets the error message to display
+   * @internal
+   */
   getErrorMessage(): string | null {
     const key = this.firstErrorKey;
     if (!key) return null;
