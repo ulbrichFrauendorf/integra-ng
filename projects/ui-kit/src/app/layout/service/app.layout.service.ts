@@ -40,13 +40,13 @@ export class LayoutService {
 
   public colorScheme = signal(this.config().colorScheme);
 
-  state: LayoutState = {
+  state: WritableSignal<LayoutState> = signal<LayoutState>({
     staticMenuDesktopInactive: false,
     overlayMenuActive: false,
     profileSidebarVisible: false,
     staticMenuMobileActive: false,
     menuHoverActive: false,
-  };
+  });
 
   private configUpdate = new Subject<AppConfig>();
 
@@ -75,9 +75,40 @@ export class LayoutService {
     );
   }
 
+  onMenuToggle() {
+    const currentState = this.state();
+
+    if (this.isOverlay()) {
+      this.state.set({
+        ...currentState,
+        overlayMenuActive: !currentState.overlayMenuActive,
+      });
+      if (!currentState.overlayMenuActive) {
+        this.overlayOpen.next();
+      }
+    } else if (this.isDesktop()) {
+      this.state.set({
+        ...currentState,
+        staticMenuDesktopInactive: !currentState.staticMenuDesktopInactive,
+      });
+    } else {
+      this.state.set({
+        ...currentState,
+        staticMenuMobileActive: !currentState.staticMenuMobileActive,
+      });
+      if (!currentState.staticMenuMobileActive) {
+        this.overlayOpen.next();
+      }
+    }
+  }
+
   showProfileSidebar() {
-    this.state.profileSidebarVisible = !this.state.profileSidebarVisible;
-    if (this.state.profileSidebarVisible) {
+    const currentState = this.state();
+    this.state.set({
+      ...currentState,
+      profileSidebarVisible: !currentState.profileSidebarVisible,
+    });
+    if (!currentState.profileSidebarVisible) {
       this.overlayOpen.next();
     }
   }
