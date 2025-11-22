@@ -29,7 +29,10 @@ describe('ITreeView', () => {
 
     fixture = TestBed.createComponent(ITreeView);
     component = fixture.componentInstance;
-    component.value = mockTreeData;
+
+    // Use a deep clone of the mock data for each test to avoid shared mutable state
+    const clonedData: any = JSON.parse(JSON.stringify(mockTreeData));
+    component.value = clonedData;
     fixture.detectChanges();
   });
 
@@ -66,7 +69,7 @@ describe('ITreeView', () => {
     it('should expand a node', () => {
       const node = mockTreeData[0];
       const mockEvent = new Event('click');
-      
+
       component.expandNode(mockEvent, node);
       expect(node.expanded).toBe(true);
     });
@@ -75,18 +78,18 @@ describe('ITreeView', () => {
       const node = mockTreeData[0];
       node.expanded = true;
       const mockEvent = new Event('click');
-      
+
       component.collapseNode(mockEvent, node);
       expect(node.expanded).toBe(false);
     });
 
     it('should toggle node expansion', () => {
-      const node = mockTreeData[0];
+      const node = component.value[0];
       const mockEvent = new Event('click');
-      
+
       component.toggleNode(mockEvent, node);
       expect(node.expanded).toBe(true);
-      
+
       component.toggleNode(mockEvent, node);
       expect(node.expanded).toBe(false);
     });
@@ -95,7 +98,7 @@ describe('ITreeView', () => {
       const node = mockTreeData[0];
       const mockEvent = new Event('click');
       spyOn(component.onNodeExpand, 'emit');
-      
+
       component.expandNode(mockEvent, node);
       expect(component.onNodeExpand.emit).toHaveBeenCalledWith({
         originalEvent: mockEvent,
@@ -112,7 +115,7 @@ describe('ITreeView', () => {
     it('should select a node', () => {
       const node = mockTreeData[0];
       const mockEvent = new Event('click');
-      
+
       component.selectSingleNode(mockEvent, node);
       expect(component.selection).toBe(node);
     });
@@ -121,7 +124,7 @@ describe('ITreeView', () => {
       const node = mockTreeData[0];
       component.selection = node;
       const mockEvent = new Event('click');
-      
+
       component.selectSingleNode(mockEvent, node);
       expect(component.selection).toBeNull();
     });
@@ -130,7 +133,7 @@ describe('ITreeView', () => {
       const node = mockTreeData[0];
       const mockEvent = new Event('click');
       spyOn(component.selectionChange, 'emit');
-      
+
       component.selectSingleNode(mockEvent, node);
       expect(component.selectionChange.emit).toHaveBeenCalled();
     });
@@ -146,10 +149,10 @@ describe('ITreeView', () => {
       const node1 = mockTreeData[0];
       const node2 = mockTreeData[1];
       const mockEvent = new Event('click');
-      
+
       component.selectMultipleNode(mockEvent, node1);
       component.selectMultipleNode(mockEvent, node2);
-      
+
       expect(Array.isArray(component.selection)).toBe(true);
       expect((component.selection as ITreeNode[]).length).toBe(2);
     });
@@ -158,7 +161,7 @@ describe('ITreeView', () => {
       const node = mockTreeData[0];
       component.selection = [node];
       const mockEvent = new Event('click');
-      
+
       component.selectMultipleNode(mockEvent, node);
       expect((component.selection as ITreeNode[]).length).toBe(0);
     });
@@ -173,7 +176,7 @@ describe('ITreeView', () => {
     it('should select node with checkbox', () => {
       const node = mockTreeData[0].children![0];
       const mockEvent = new Event('click');
-      
+
       component.selectCheckboxNode(mockEvent, node);
       expect((component.selection as ITreeNode[]).includes(node)).toBe(true);
     });
@@ -182,9 +185,9 @@ describe('ITreeView', () => {
       component.propagateSelectionDown = true;
       const parentNode = mockTreeData[0];
       const mockEvent = new Event('click');
-      
+
       component.selectCheckboxNode(mockEvent, parentNode);
-      
+
       const selection = component.selection as ITreeNode[];
       expect(selection.includes(parentNode.children![0])).toBe(true);
       expect(selection.includes(parentNode.children![1])).toBe(true);
@@ -192,12 +195,12 @@ describe('ITreeView', () => {
 
     it('should propagate selection up to parent', () => {
       component.propagateSelectionUp = true;
-      const childNode = mockTreeData[0].children![0];
-      const parentNode = mockTreeData[0];
+      const childNode = component.value[0].children![0];
+      const parentNode = component.value[0];
       const mockEvent = new Event('click');
-      
+
       component.selectCheckboxNode(mockEvent, childNode);
-      
+
       const selection = component.selection as ITreeNode[];
       expect(selection.includes(parentNode)).toBe(true);
     });
@@ -206,7 +209,7 @@ describe('ITreeView', () => {
       const parentNode = mockTreeData[0];
       const child1 = parentNode.children![0];
       component.selection = [child1];
-      
+
       expect(component.isPartiallySelected(parentNode)).toBe(true);
     });
   });
@@ -219,21 +222,21 @@ describe('ITreeView', () => {
     it('should filter nodes by label', () => {
       component.filterValue = 'Child 1-1';
       component.applyFilter();
-      
+
       expect(component.filteredValue.length).toBeGreaterThan(0);
     });
 
     it('should show all nodes when filter is empty', () => {
       component.filterValue = '';
       component.applyFilter();
-      
+
       expect(component.filteredValue.length).toBe(mockTreeData.length);
     });
 
     it('should expand parent nodes when children match filter', () => {
       component.filterValue = 'Child 1-1';
       component.applyFilter();
-      
+
       const filteredParent = component.filteredValue[0];
       expect(filteredParent.expanded).toBe(true);
     });
@@ -243,7 +246,7 @@ describe('ITreeView', () => {
     it('should detect if node has children', () => {
       const parentNode = mockTreeData[0];
       const leafNode = mockTreeData[0].children![0];
-      
+
       expect(component.hasChildren(parentNode)).toBe(true);
       expect(component.hasChildren(leafNode)).toBe(false);
     });
@@ -251,9 +254,9 @@ describe('ITreeView', () => {
     it('should get toggle icon based on expansion state', () => {
       const node = mockTreeData[0];
       node.expanded = false;
-      
+
       expect(component.getToggleIcon(node)).toBe('pi pi-chevron-right');
-      
+
       node.expanded = true;
       expect(component.getToggleIcon(node)).toBe('pi pi-chevron-down');
     });
@@ -261,7 +264,7 @@ describe('ITreeView', () => {
     it('should get node icon based on node type', () => {
       const parentNode = mockTreeData[0];
       const leafNode = mockTreeData[0].children![0];
-      
+
       expect(component.getNodeIcon(parentNode)).toContain('pi-folder');
       expect(component.getNodeIcon(leafNode)).toBe('pi pi-file');
     });
@@ -276,16 +279,20 @@ describe('ITreeView', () => {
     it('should select all nodes', () => {
       component.selectAllChecked = true;
       component.onSelectAllChange();
-      
-      const allNodesCount = component.flattenNodes(component.filteredValue).length;
+
+      const allNodesCount = (component as any).flattenNodes(
+        component.filteredValue
+      ).length;
       expect((component.selection as ITreeNode[]).length).toBe(allNodesCount);
     });
 
     it('should deselect all nodes', () => {
-      component.selection = component.flattenNodes(component.filteredValue);
+      component.selection = (component as any).flattenNodes(
+        component.filteredValue
+      );
       component.selectAllChecked = false;
       component.onSelectAllChange();
-      
+
       expect((component.selection as ITreeNode[]).length).toBe(0);
     });
   });
@@ -299,6 +306,289 @@ describe('ITreeView', () => {
       const node = mockTreeData[0];
       const id = component.getCheckboxId(node);
       expect(id).toMatch(/^i-tree-view-.*-checkbox-/);
+    });
+  });
+
+  describe('Node click handling', () => {
+    it('should not select node if selectable is false', () => {
+      const node: ITreeNode = { key: 'test', label: 'Test', selectable: false };
+      const mockEvent = new Event('click');
+      const initialSelection = component.selection;
+
+      component.onNodeClick(mockEvent, node);
+      expect(component.selection).toBe(initialSelection);
+    });
+
+    it('should not handle click in checkbox mode', () => {
+      component.selectionMode = 'checkbox';
+      const node = mockTreeData[0];
+      const mockEvent = new Event('click');
+      const initialSelection = component.selection;
+
+      component.onNodeClick(mockEvent, node);
+      expect(component.selection).toBe(initialSelection);
+    });
+  });
+
+  describe('Checkbox change handling', () => {
+    it('should handle checkbox change', (done) => {
+      component.selectionMode = 'checkbox';
+      component.selection = [];
+      const node = mockTreeData[0].children![0];
+
+      component.onCheckboxChange(true, node);
+
+      setTimeout(() => {
+        expect((component.selection as ITreeNode[]).includes(node)).toBe(true);
+        done();
+      }, 100);
+    });
+  });
+
+  describe('Selection state', () => {
+    it('should identify selected node in single mode', () => {
+      component.selectionMode = 'single';
+      const node = mockTreeData[0];
+      component.selection = node;
+
+      expect(component.isSelected(node)).toBe(true);
+      expect(component.isSelected(mockTreeData[1])).toBe(false);
+    });
+
+    it('should identify selected nodes in multiple mode', () => {
+      component.selectionMode = 'multiple';
+      const node = mockTreeData[0];
+      component.selection = [node];
+
+      expect(component.isSelected(node)).toBe(true);
+      expect(component.isSelected(mockTreeData[1])).toBe(false);
+    });
+
+    it('should identify selected nodes in checkbox mode', () => {
+      component.selectionMode = 'checkbox';
+      const node = mockTreeData[0];
+      component.selection = [node];
+
+      expect(component.isSelected(node)).toBe(true);
+      expect(component.isSelected(mockTreeData[1])).toBe(false);
+    });
+  });
+
+  describe('Node highlighting', () => {
+    it('should highlight selected node in non-checkbox mode', () => {
+      component.selectionMode = 'single';
+      const node = mockTreeData[0];
+      component.selection = node;
+
+      expect(component.isNodeHighlighted(node)).toBe(true);
+    });
+  });
+
+  describe('Parent references', () => {
+    it('should initialize parent references', () => {
+      const nodes: ITreeNode[] = [
+        {
+          key: '1',
+          label: 'Parent',
+          children: [{ key: '1-1', label: 'Child' }],
+        },
+      ];
+
+      component.value = nodes;
+      component.ngOnInit();
+
+      expect(nodes[0].children![0].parent).toBe(nodes[0]);
+    });
+  });
+
+  describe('Filter keyup handling', () => {
+    it('should update filter value on keyup', () => {
+      component.filter = true;
+      const mockEvent = {
+        target: { value: 'test filter' },
+      } as any;
+
+      component.onFilterKeyup(mockEvent);
+      expect(component.filterValue).toBe('test filter');
+    });
+  });
+
+  describe('Node matching', () => {
+    it('should match node by label', () => {
+      const node: ITreeNode = { key: '1', label: 'Test Node' };
+      expect(component.isNodeMatch(node, 'test')).toBe(true);
+      expect(component.isNodeMatch(node, 'xyz')).toBe(false);
+    });
+
+    it('should handle node without label', () => {
+      const node: ITreeNode = { key: '1' };
+      expect(component.isNodeMatch(node, 'test')).toBe(false);
+    });
+  });
+
+  describe('Select all state update', () => {
+    it('should update select all checked state', () => {
+      component.selectionMode = 'checkbox';
+      component.selectAll = true;
+      const allNodes = (component as any).flattenNodes(component.filteredValue);
+      component.selection = allNodes;
+
+      component.updateSelectAllState();
+      expect(component.selectAllChecked).toBe(true);
+    });
+
+    it('should uncheck select all when not all selected', () => {
+      component.selectionMode = 'checkbox';
+      component.selectAll = true;
+      component.selection = [mockTreeData[0]];
+
+      component.updateSelectAllState();
+      expect(component.selectAllChecked).toBe(false);
+    });
+  });
+
+  describe('Custom icons', () => {
+    it('should use custom expanded and collapsed icons', () => {
+      const node: ITreeNode = {
+        key: '1',
+        label: 'Test',
+        expandedIcon: 'pi pi-minus',
+        collapsedIcon: 'pi pi-plus',
+      };
+
+      node.expanded = false;
+      expect(component.getToggleIcon(node)).toBe('pi pi-plus');
+
+      node.expanded = true;
+      expect(component.getToggleIcon(node)).toBe('pi pi-minus');
+    });
+
+    it('should use custom node icon', () => {
+      const node: ITreeNode = {
+        key: '1',
+        label: 'Test',
+        icon: 'pi pi-star',
+      };
+
+      expect(component.getNodeIcon(node)).toBe('pi pi-star');
+    });
+
+    it('should show loading icon when node is loading', () => {
+      const node: ITreeNode = {
+        key: '1',
+        label: 'Test',
+        loading: true,
+      };
+
+      expect(component.getToggleIcon(node)).toBe('pi pi-spin pi-spinner');
+    });
+  });
+
+  describe('Event emissions', () => {
+    it('should emit onNodeSelect event', (done) => {
+      const node = mockTreeData[0].children![0];
+      const mockEvent = new Event('click');
+
+      component.onNodeSelect.subscribe((event) => {
+        expect(event.node).toBe(node);
+        expect(event.originalEvent).toBe(mockEvent);
+        done();
+      });
+
+      component.selectCheckboxNode(mockEvent, node);
+    });
+
+    it('should emit onNodeUnselect event', (done) => {
+      component.selectionMode = 'checkbox';
+      const node = mockTreeData[0].children![0];
+      component.selection = [node];
+      const mockEvent = new Event('click');
+
+      component.onNodeUnselect.subscribe((event) => {
+        expect(event.node).toBe(node);
+        done();
+      });
+
+      component.selectCheckboxNode(mockEvent, node);
+    });
+
+    it('should emit onNodeCollapse event', () => {
+      const node = mockTreeData[0];
+      node.expanded = true;
+      const mockEvent = new Event('click');
+      spyOn(component.onNodeCollapse, 'emit');
+
+      component.collapseNode(mockEvent, node);
+      expect(component.onNodeCollapse.emit).toHaveBeenCalledWith({
+        originalEvent: mockEvent,
+        node,
+      });
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('should handle empty tree data', () => {
+      component.value = [];
+      component.ngOnInit();
+      expect(component.filteredValue).toEqual([]);
+    });
+
+    it('should handle nodes without children', () => {
+      const leafNode: ITreeNode = { key: '1', label: 'Leaf', leaf: true };
+      expect(component.hasChildren(leafNode)).toBe(false);
+    });
+
+    it('should handle propagation without parent', () => {
+      component.selectionMode = 'checkbox';
+      const selection: ITreeNode[] = [];
+      const node: ITreeNode = { key: '1', label: 'Test' };
+
+      component.selectNode(node, selection);
+      expect(selection.includes(node)).toBe(true);
+    });
+  });
+
+  describe('Lifecycle hooks', () => {
+    it('should initialize on ngOnInit', () => {
+      spyOn(component, 'updateSerializedValue');
+      spyOn(component, 'updateSelectAllState');
+
+      component.ngOnInit();
+
+      expect(component.updateSerializedValue).toHaveBeenCalled();
+      expect(component.updateSelectAllState).toHaveBeenCalled();
+    });
+
+    it('should update on value changes', () => {
+      spyOn(component, 'updateSerializedValue');
+      spyOn(component, 'updateSelectAllState');
+
+      component.ngOnChanges({
+        value: {
+          previousValue: [],
+          currentValue: mockTreeData,
+          firstChange: false,
+          isFirstChange: () => false,
+        },
+      });
+
+      expect(component.updateSerializedValue).toHaveBeenCalled();
+      expect(component.updateSelectAllState).toHaveBeenCalled();
+    });
+
+    it('should update on selection changes', () => {
+      spyOn(component, 'updateSelectAllState');
+
+      component.ngOnChanges({
+        selection: {
+          previousValue: null,
+          currentValue: [mockTreeData[0]],
+          firstChange: false,
+          isFirstChange: () => false,
+        },
+      });
+
+      expect(component.updateSelectAllState).toHaveBeenCalled();
     });
   });
 });

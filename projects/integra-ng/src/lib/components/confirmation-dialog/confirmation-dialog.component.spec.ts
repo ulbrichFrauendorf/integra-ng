@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
-import { IDynamicDialogConfig, IDynamicDialogRef } from '../dialog/services/dialog.interfaces';
+import {
+  IDynamicDialogConfig,
+  IDynamicDialogRef,
+} from '../dialog/services/dialog.interfaces';
 
 describe('ConfirmationDialogComponent', () => {
   let component: ConfirmationDialogComponent;
@@ -40,9 +43,9 @@ describe('ConfirmationDialogComponent', () => {
           severity: 'danger',
         },
       };
-      
+
       component.ngOnInit();
-      
+
       expect(component.message()).toBe('Delete this item?');
       expect(component.header()).toBe('Confirm Delete');
       expect(component.severity()).toBe('danger');
@@ -51,7 +54,7 @@ describe('ConfirmationDialogComponent', () => {
     it('should use default values when config data is missing', () => {
       component.config = {};
       component.ngOnInit();
-      
+
       expect(component.header()).toBe('Are you sure?');
       expect(component.severity()).toBe('primary');
     });
@@ -79,7 +82,7 @@ describe('ConfirmationDialogComponent', () => {
     it('should update signals', () => {
       component.severity.set('warning');
       expect(component.severity()).toBe('warning');
-      
+
       component.message.set('New message');
       expect(component.message()).toBe('New message');
     });

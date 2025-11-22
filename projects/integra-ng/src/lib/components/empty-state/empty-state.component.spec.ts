@@ -44,7 +44,7 @@ describe('EmptyStateComponent', () => {
     it('should set imageLoaded to true after delay', (done) => {
       expect(component.imageLoaded).toBe(false);
       component.onImageLoad();
-      
+
       setTimeout(() => {
         expect(component.imageLoaded).toBe(true);
         done();
@@ -53,11 +53,11 @@ describe('EmptyStateComponent', () => {
 
     it('should have a 200ms delay before marking image as loaded', (done) => {
       component.onImageLoad();
-      
+
       setTimeout(() => {
         expect(component.imageLoaded).toBe(false);
       }, 100);
-      
+
       setTimeout(() => {
         expect(component.imageLoaded).toBe(true);
         done();

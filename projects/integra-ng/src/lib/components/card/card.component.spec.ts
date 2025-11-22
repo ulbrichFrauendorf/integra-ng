@@ -78,7 +78,7 @@ describe('ICard', () => {
       const cardElement = testFixture.nativeElement;
       cardElement.innerHTML = testContent;
       testFixture.detectChanges();
-      
+
       expect(cardElement.textContent).toContain(testContent);
     });
   });

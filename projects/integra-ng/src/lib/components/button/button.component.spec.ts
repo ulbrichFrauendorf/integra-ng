@@ -104,7 +104,7 @@ describe('IButton', () => {
     it('should not be icon-only with text content', (done) => {
       component.icon = 'pi pi-check';
       fixture.detectChanges();
-      
+
       setTimeout(() => {
         expect(component.iconOnly).toBe(false);
         done();
@@ -123,7 +123,7 @@ describe('IButton', () => {
       component.disabled = true;
       fixture.detectChanges();
       spyOn(component.clicked, 'emit');
-      
+
       buttonElement.nativeElement.click();
       expect(component.clicked.emit).not.toHaveBeenCalled();
     });

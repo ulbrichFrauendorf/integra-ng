@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ISelect, SelectOption } from './select.component';
-import { signal } from '@angular/core';
 
 describe('ISelect', () => {
   let component: ISelect;
@@ -20,7 +19,7 @@ describe('ISelect', () => {
 
     fixture = TestBed.createComponent(ISelect);
     component = fixture.componentInstance;
-    component.options = signal(mockOptions);
+    fixture.componentRef.setInput('options', mockOptions);
     component.optionLabel = 'label';
     component.optionValue = 'id';
     fixture.detectChanges();
@@ -49,7 +48,7 @@ describe('ISelect', () => {
 
     it('should accept options signal', () => {
       const newOptions = [{ id: 4, label: 'New Option' }];
-      component.options = signal(newOptions);
+      fixture.componentRef.setInput('options', newOptions);
       fixture.detectChanges();
       expect(component.options()).toEqual(newOptions);
     });
@@ -75,7 +74,7 @@ describe('ISelect', () => {
     it('should select an option', () => {
       const option = mockOptions[0];
       component.selectOption(option);
-      expect(component.value).toBe(option.id);
+      expect(component.value).toBe(option['id']);
       expect(component.isOpen).toBe(false);
     });
 
@@ -83,7 +82,7 @@ describe('ISelect', () => {
       spyOn(component.onChange, 'emit');
       const option = mockOptions[0];
       component.selectOption(option);
-      expect(component.onChange.emit).toHaveBeenCalledWith(option.id);
+      expect(component.onChange.emit).toHaveBeenCalledWith(option['id']);
     });
 
     it('should store full object when optionValue is not provided', () => {
@@ -96,7 +95,7 @@ describe('ISelect', () => {
 
   describe('Clear functionality', () => {
     it('should clear selection', () => {
-      component.value = mockOptions[0].id;
+      component.value = mockOptions[0]['id'];
       component.clearSelection();
       expect(component.value).toBeNull();
     });
@@ -120,7 +119,7 @@ describe('ISelect', () => {
     });
 
     it('should get selected label', () => {
-      component.value = mockOptions[0].id;
+      component.value = mockOptions[0]['id'];
       expect(component.getSelectedLabel()).toBe('First Option');
     });
 
@@ -132,7 +131,7 @@ describe('ISelect', () => {
 
   describe('Option selection state', () => {
     it('should identify selected option with value', () => {
-      component.value = mockOptions[0].id;
+      component.value = mockOptions[0]['id'];
       expect(component.isOptionSelected(mockOptions[0])).toBe(true);
       expect(component.isOptionSelected(mockOptions[1])).toBe(false);
     });
@@ -150,7 +149,7 @@ describe('ISelect', () => {
       fixture.detectChanges();
       const filtered = component.filteredOptions();
       expect(filtered.length).toBe(1);
-      expect(filtered[0].label).toContain('First');
+      expect(filtered[0]['label']).toContain('First');
     });
 
     it('should show all options when filter is empty', () => {
@@ -165,14 +164,14 @@ describe('ISelect', () => {
       fixture.detectChanges();
       const filtered = component.filteredOptions();
       expect(filtered.length).toBe(1);
-      expect(filtered[0].name).toBe('Option 2');
+      expect(filtered[0]['name']).toBe('Option 2');
     });
   });
 
   describe('ControlValueAccessor implementation', () => {
     it('should write value', () => {
-      component.writeValue(mockOptions[0].id);
-      expect(component.value).toBe(mockOptions[0].id);
+      component.writeValue(mockOptions[0]['id']);
+      expect(component.value).toBe(mockOptions[0]['id']);
     });
 
     it('should register onChange callback', () => {
@@ -217,15 +216,83 @@ describe('ISelect', () => {
 
   describe('Edge cases', () => {
     it('should handle null options array', () => {
-      component.options = signal(null);
+      fixture.componentRef.setInput('options', null);
       fixture.detectChanges();
       expect(component.filteredOptions()).toEqual([]);
     });
 
     it('should handle undefined options array', () => {
-      component.options = signal(undefined);
+      fixture.componentRef.setInput('options', undefined);
       fixture.detectChanges();
       expect(component.filteredOptions()).toEqual([]);
+    });
+
+    it('should handle non-array options', () => {
+      fixture.componentRef.setInput('options', 'not an array' as any);
+      fixture.detectChanges();
+      expect(component.filteredOptions()).toEqual([]);
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('should have a unique component id', () => {
+      expect(component.componentId).toContain('i-select-');
+    });
+
+    it('should use custom id when provided', () => {
+      component.id = 'custom-select';
+      fixture.detectChanges();
+      expect(component.id).toBe('custom-select');
+    });
+  });
+
+  describe('Custom error messages', () => {
+    it('should use custom error messages', () => {
+      component.errorMessages = { required: 'Please select an option' };
+      component.ngControl = {
+        control: {
+          invalid: true,
+          dirty: true,
+          errors: { required: true },
+        },
+      } as any;
+      expect(component.getErrorMessage()).toBe('Please select an option');
+    });
+
+    it('should return default message for unknown error', () => {
+      component.ngControl = {
+        control: {
+          invalid: true,
+          dirty: true,
+          errors: { customError: { some: 'data' } },
+        },
+      } as any;
+      expect(component.getErrorMessage()).toBe('Invalid selection');
+    });
+
+    it('should handle string error values', () => {
+      component.ngControl = {
+        control: {
+          invalid: true,
+          dirty: true,
+          errors: { customError: 'Custom error string' },
+        },
+      } as any;
+      expect(component.getErrorMessage()).toBe('Custom error string');
+    });
+  });
+
+  describe('Option search value', () => {
+    it('should get search value from filterBy property', () => {
+      component.filterBy = 'name';
+      const option = mockOptions[0];
+      expect(component.getOptionSearchValue(option)).toBe(option['name']);
+    });
+
+    it('should fallback to label when filterBy property not found', () => {
+      component.filterBy = 'nonexistent';
+      const option = mockOptions[0];
+      expect(component.getOptionSearchValue(option)).toBe(option['label']);
     });
   });
 });

@@ -117,13 +117,13 @@ describe('IDialog', () => {
       component.modal = true;
       component.closable = true;
       component.visible = true;
-      
+
       const mockEvent = {
         target: document.createElement('div'),
         currentTarget: document.createElement('div'),
       };
       mockEvent.target = mockEvent.currentTarget;
-      
+
       spyOn(component, 'hide');
       component.onOverlayClick(mockEvent as any);
       expect(component.hide).toHaveBeenCalled();
@@ -132,13 +132,13 @@ describe('IDialog', () => {
     it('should not close on overlay click if not closable', () => {
       component.modal = true;
       component.closable = false;
-      
+
       const mockEvent = {
         target: document.createElement('div'),
         currentTarget: document.createElement('div'),
       };
       mockEvent.target = mockEvent.currentTarget;
-      
+
       spyOn(component, 'hide');
       component.onOverlayClick(mockEvent as any);
       expect(component.hide).not.toHaveBeenCalled();

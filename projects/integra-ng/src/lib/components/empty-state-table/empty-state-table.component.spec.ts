@@ -37,7 +37,7 @@ describe('EmptyStateTableComponent', () => {
     it('should set imageLoaded to true after delay', (done) => {
       expect(component.imageLoaded).toBe(false);
       component.onImageLoad();
-      
+
       setTimeout(() => {
         expect(component.imageLoaded).toBe(true);
         done();

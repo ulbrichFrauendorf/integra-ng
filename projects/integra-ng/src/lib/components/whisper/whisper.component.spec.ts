@@ -27,7 +27,9 @@ describe('IWhisper', () => {
 
     fixture = TestBed.createComponent(IWhisper);
     component = fixture.componentInstance;
-    whisperService = TestBed.inject(WhisperService) as jasmine.SpyObj<WhisperService>;
+    whisperService = TestBed.inject(
+      WhisperService
+    ) as jasmine.SpyObj<WhisperService>;
     fixture.detectChanges();
   });
 
@@ -110,7 +112,7 @@ describe('IWhisper', () => {
 
       messageSubject.next(mockMessage);
       messageSubject.next(mockMessage);
-      
+
       expect(component.messages.length).toBe(1);
     });
 
@@ -131,7 +133,7 @@ describe('IWhisper', () => {
 
       messageSubject.next(mockMessage1);
       messageSubject.next(mockMessage2);
-      
+
       expect(component.messages.length).toBe(1);
       expect(component.messages[0].id).toBe('2');
     });
@@ -172,7 +174,12 @@ describe('IWhisper', () => {
     it('should remove all messages', () => {
       component.messages = [
         { id: '1', severity: 'info', summary: 'Test 1', detail: 'Message 1' },
-        { id: '2', severity: 'success', summary: 'Test 2', detail: 'Message 2' },
+        {
+          id: '2',
+          severity: 'success',
+          summary: 'Test 2',
+          detail: 'Message 2',
+        },
       ];
 
       component.removeAll();
@@ -198,7 +205,12 @@ describe('IWhisper', () => {
     it('should clear all messages when no key provided', () => {
       component.messages = [
         { id: '1', severity: 'info', summary: 'Test 1', detail: 'Message 1' },
-        { id: '2', severity: 'success', summary: 'Test 2', detail: 'Message 2' },
+        {
+          id: '2',
+          severity: 'success',
+          summary: 'Test 2',
+          detail: 'Message 2',
+        },
       ];
 
       clearSubject.next(undefined);
@@ -207,8 +219,20 @@ describe('IWhisper', () => {
 
     it('should clear messages by key', () => {
       component.messages = [
-        { id: '1', severity: 'info', summary: 'Test 1', detail: 'Message 1', key: 'app' },
-        { id: '2', severity: 'success', summary: 'Test 2', detail: 'Message 2', key: 'system' },
+        {
+          id: '1',
+          severity: 'info',
+          summary: 'Test 1',
+          detail: 'Message 1',
+          key: 'app',
+        },
+        {
+          id: '2',
+          severity: 'success',
+          summary: 'Test 2',
+          detail: 'Message 2',
+          key: 'system',
+        },
       ];
 
       clearSubject.next('app');
@@ -221,13 +245,17 @@ describe('IWhisper', () => {
     it('should get correct icon for severity', () => {
       expect(component.getMessageIcon('success')).toBe('pi-check-circle');
       expect(component.getMessageIcon('info')).toBe('pi-info-circle');
-      expect(component.getMessageIcon('warning')).toBe('pi-exclamation-triangle');
+      expect(component.getMessageIcon('warning')).toBe(
+        'pi-exclamation-triangle'
+      );
       expect(component.getMessageIcon('danger')).toBe('pi-times-circle');
     });
 
     it('should get correct container class', () => {
       component.position = 'bottom-right';
-      expect(component.getContainerClass()).toBe('i-whisper i-whisper-bottom-right');
+      expect(component.getContainerClass()).toBe(
+        'i-whisper i-whisper-bottom-right'
+      );
     });
 
     it('should get correct message class', () => {
@@ -237,7 +265,9 @@ describe('IWhisper', () => {
         summary: 'Test',
         detail: 'Message',
       };
-      expect(component.getMessageClass(message)).toContain('i-whisper-message-success');
+      expect(component.getMessageClass(message)).toContain(
+        'i-whisper-message-success'
+      );
     });
   });
 
@@ -245,9 +275,9 @@ describe('IWhisper', () => {
     it('should unsubscribe on destroy', () => {
       spyOn(component.messageSubscription!, 'unsubscribe');
       spyOn(component.clearSubscription!, 'unsubscribe');
-      
+
       component.ngOnDestroy();
-      
+
       expect(component.messageSubscription!.unsubscribe).toHaveBeenCalled();
       expect(component.clearSubscription!.unsubscribe).toHaveBeenCalled();
     });
@@ -266,6 +296,127 @@ describe('IWhisper', () => {
         detail: 'Message',
       };
       expect(component.trackByMessage(0, message)).toBe('test-123');
+    });
+  });
+
+  describe('Position variants', () => {
+    it('should apply top-left position class', () => {
+      component.position = 'top-left';
+      expect(component.getContainerClass()).toBe(
+        'i-whisper i-whisper-top-left'
+      );
+    });
+
+    it('should apply top-center position class', () => {
+      component.position = 'top-center';
+      expect(component.getContainerClass()).toBe(
+        'i-whisper i-whisper-top-center'
+      );
+    });
+
+    it('should apply bottom-center position class', () => {
+      component.position = 'bottom-center';
+      expect(component.getContainerClass()).toBe(
+        'i-whisper i-whisper-bottom-center'
+      );
+    });
+
+    it('should apply bottom-left position class', () => {
+      component.position = 'bottom-left';
+      expect(component.getContainerClass()).toBe(
+        'i-whisper i-whisper-bottom-left'
+      );
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('should handle message without life property', () => {
+      const mockMessage: IWhisperMessage = {
+        id: '1',
+        severity: 'info',
+        summary: 'Test',
+        detail: 'Test message',
+      };
+
+      messageSubject.next(mockMessage);
+      expect(component.messages.length).toBe(1);
+    });
+
+    it('should handle message with zero life', () => {
+      const mockMessage: IWhisperMessage = {
+        id: '1',
+        severity: 'info',
+        summary: 'Test',
+        detail: 'Test message',
+        life: 0,
+      };
+
+      messageSubject.next(mockMessage);
+      expect(component.messages.length).toBe(1);
+    });
+
+    it('should not show messages without key when component has key', () => {
+      component.key = 'app';
+      const mockMessage: IWhisperMessage = {
+        id: '1',
+        severity: 'info',
+        summary: 'Test',
+        detail: 'Test message',
+      };
+
+      messageSubject.next(mockMessage);
+      expect(component.messages.length).toBe(0);
+    });
+
+    it('should show messages without key when component has no key', () => {
+      component.key = undefined;
+      const mockMessage: IWhisperMessage = {
+        id: '1',
+        severity: 'info',
+        summary: 'Test',
+        detail: 'Test message',
+      };
+
+      messageSubject.next(mockMessage);
+      expect(component.messages.length).toBe(1);
+    });
+
+    it('should handle null message', () => {
+      messageSubject.next(null);
+      expect(component.messages.length).toBe(0);
+    });
+
+    it('should get default icon for unknown severity', () => {
+      expect(component.getMessageIcon('unknown' as any)).toBe('pi-info-circle');
+    });
+
+    it('should get message class without severity', () => {
+      const message: any = {
+        id: '1',
+        summary: 'Test',
+        detail: 'Message',
+      };
+      expect(component.getMessageClass(message)).toBe('i-whisper-message');
+    });
+  });
+
+  describe('Custom styles', () => {
+    it('should accept custom style input', () => {
+      component.style = { marginTop: '10px' };
+      fixture.detectChanges();
+      expect(component.style).toEqual({ marginTop: '10px' });
+    });
+
+    it('should accept custom baseZIndex', () => {
+      component.baseZIndex = 1000;
+      fixture.detectChanges();
+      expect(component.baseZIndex).toBe(1000);
+    });
+
+    it('should accept autoZIndex input', () => {
+      component.autoZIndex = false;
+      fixture.detectChanges();
+      expect(component.autoZIndex).toBe(false);
     });
   });
 });
