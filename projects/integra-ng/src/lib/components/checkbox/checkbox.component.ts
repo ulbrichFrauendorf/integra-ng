@@ -49,11 +49,12 @@ export class ICheckbox implements ControlValueAccessor {
 
   toggle() {
     if (this.disabled || this.readonly) return;
-    // When indeterminate, treat next toggle as selecting the checkbox
-    if (this.indeterminate && !this._checked) {
+    // When indeterminate, clicking should uncheck everything (parent and all children)
+    if (this.indeterminate) {
       this.indeterminate = false;
-      this._checked = true;
+      this._checked = false;
     } else {
+      // Normal toggle behavior when not indeterminate
       this._checked = !this._checked;
     }
     this.onChangeCallback(this._checked);

@@ -418,6 +418,7 @@ export class ExampleComponent {
 
   onMultipleNodeSelect(event: any) {
     console.log('Multiple node selected:', event.node);
+    console.log('Object', this.checkboxSelection);
   }
 
   onMultipleNodeUnselect(event: any) {
@@ -426,10 +427,12 @@ export class ExampleComponent {
 
   onCheckboxNodeSelect(event: any) {
     console.log('Checkbox node selected:', event.node);
+    console.log('Object', this.checkboxSelection);
   }
 
   onCheckboxNodeUnselect(event: any) {
     console.log('Checkbox node unselected:', event.node);
+    console.log('Object', this.checkboxSelection);
   }
 
   onNodeExpand(event: any) {

@@ -250,6 +250,7 @@ export class ITreeView implements OnInit, OnChanges {
 
   selectMultipleNode(event: Event, node: ITreeNode) {
     const selection = Array.isArray(this.selection) ? [...this.selection] : [];
+    this.selection = selection;
     const index = selection.indexOf(node);
 
     if (index >= 0) {
@@ -259,8 +260,6 @@ export class ITreeView implements OnInit, OnChanges {
       selection.push(node);
       this.onNodeSelect.emit({ originalEvent: event, node });
     }
-
-    this.selection = selection;
     this.selectionChange.emit(this.selection);
   }
 
@@ -270,10 +269,8 @@ export class ITreeView implements OnInit, OnChanges {
 
     if (selected) {
       this.unselectNode(node, selection);
-      this.onNodeUnselect.emit({ originalEvent: event, node });
     } else {
       this.selectNode(node, selection);
-      this.onNodeSelect.emit({ originalEvent: event, node });
     }
 
     if (this.propagateSelectionDown && node.children) {
@@ -284,9 +281,19 @@ export class ITreeView implements OnInit, OnChanges {
       this.propagateUp(node.parent, selection);
     }
 
+    // Update selection and emit selectionChange FIRST so parent component's binding updates
     this.selection = selection;
-    this.updateSelectAllState();
     this.selectionChange.emit(this.selection);
+    this.updateSelectAllState();
+
+    // Use setTimeout to ensure parent component's binding is updated before these events fire
+    setTimeout(() => {
+      if (selected) {
+        this.onNodeUnselect.emit({ originalEvent: event, node });
+      } else {
+        this.onNodeSelect.emit({ originalEvent: event, node });
+      }
+    }, 0);
   }
 
   onCheckboxChange(checked: boolean, node: ITreeNode) {
@@ -418,11 +425,37 @@ export class ITreeView implements OnInit, OnChanges {
   onSelectAllChange() {
     if (this.selectionMode !== 'checkbox') return;
 
+    const allNodes = this.flattenNodes(this.filteredValue);
+    const previousSelection = Array.isArray(this.selection)
+      ? this.selection
+      : [];
+
+    // Create a fake event for the emissions
+    const fakeEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+    });
+
     if (this.selectAllChecked) {
-      this.selection = this.flattenNodes(this.filteredValue);
+      // Selecting all nodes
+      this.selection = allNodes;
+
+      // Emit select events for newly selected nodes
+      allNodes.forEach((node) => {
+        if (!previousSelection.includes(node)) {
+          this.onNodeSelect.emit({ originalEvent: fakeEvent, node });
+        }
+      });
     } else {
+      // Deselecting all nodes
       this.selection = [];
+
+      // Emit unselect events for previously selected nodes
+      previousSelection.forEach((node) => {
+        this.onNodeUnselect.emit({ originalEvent: fakeEvent, node });
+      });
     }
+
     this.selectionChange.emit(this.selection);
   }
 

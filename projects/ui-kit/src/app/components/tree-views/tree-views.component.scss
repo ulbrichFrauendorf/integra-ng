@@ -27,14 +27,14 @@
 .selection-info {
   margin-top: 16px;
   padding: 12px;
-  background: #f8f9fa;
+  background: var(--surface-elevated);
   border-radius: 4px;
   border-left: 4px solid #007bff;
 
   pre {
     margin: 8px 0 0 0;
     padding: 8px;
-    background: white;
+    background: var(--surface-elevated);
     border-radius: 3px;
     font-size: 12px;
     overflow-x: auto;
