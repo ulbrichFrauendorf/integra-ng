@@ -1,11 +1,7 @@
-// Import shared styles but use classes directly
 @use "../shared-demo-styles.scss" as *;
 
-// Component-specific styles that aren't in the shared file
 .tree-views-demo {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  @extend .demo-component;
 }
 
 .demo-actions {
@@ -49,7 +45,7 @@
 
     li {
       margin: 2px 0;
-      
+
       small {
         color: #6c757d;
         font-weight: normal;
@@ -59,19 +55,19 @@
 
   details {
     margin-top: 8px;
-    
+
     summary {
       cursor: pointer;
       font-size: 13px;
       color: #007bff;
       padding: 4px 0;
-      
+
       &:hover {
         color: #0056b3;
         text-decoration: underline;
       }
     }
-    
+
     &[open] summary {
       margin-bottom: 8px;
     }
