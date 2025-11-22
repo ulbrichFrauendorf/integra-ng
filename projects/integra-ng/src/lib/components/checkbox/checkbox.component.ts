@@ -29,7 +29,7 @@ export class ICheckbox implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() readonly = false;
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
-  @Input() indeterminate = false; // visual tri-state support
+  @Input() indeterminate = false;
 
   @Input()
   set checked(value: boolean) {
@@ -49,24 +49,19 @@ export class ICheckbox implements ControlValueAccessor {
 
   toggle() {
     if (this.disabled || this.readonly) return;
-    // When indeterminate, clicking should uncheck everything (parent and all children)
     if (this.indeterminate) {
       this.indeterminate = false;
       this._checked = false;
     } else {
-      // Normal toggle behavior when not indeterminate
       this._checked = !this._checked;
     }
     this.onChangeCallback(this._checked);
     this.onTouchedCallback();
 
-    // Emit onChange after the ngModel has been updated
     setTimeout(() => {
       this.onChange.emit(this._checked);
     }, 0);
   }
-
-  // ControlValueAccessor implementation
   writeValue(value: boolean): void {
     this._checked = !!value;
   }

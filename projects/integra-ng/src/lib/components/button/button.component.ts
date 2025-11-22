@@ -44,7 +44,6 @@ export class IButton implements AfterViewInit {
     var text = this.projected?.nativeElement?.textContent;
     const hasProjected = text && text.trim()?.length > 0;
     this.iconOnly = !!this.icon && !hasProjected;
-    // Trigger change detection to ensure CSS classes are applied correctly
     this.cdr.detectChanges();
   }
 }

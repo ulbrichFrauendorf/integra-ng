@@ -57,16 +57,11 @@ export class IWhisper implements OnInit, OnDestroy {
     this.messageSubscription = this.whisperService.messageObserver.subscribe(
       (message) => {
         if (message) {
-          // Key filtering logic:
-          // - If component has a key, only show messages with the exact same key
-          // - If component has no key, only show messages with no key
           if (this.key) {
-            // Component has a key - only show messages with matching key
             if (message.key !== this.key) {
               return;
             }
           } else {
-            // Component has no key - only show messages with no key
             if (message.key) {
               return;
             }

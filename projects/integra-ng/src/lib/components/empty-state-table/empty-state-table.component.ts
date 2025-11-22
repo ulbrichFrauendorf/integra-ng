@@ -13,6 +13,6 @@ export class EmptyStateTableComponent {
   onImageLoad() {
     setTimeout(() => {
       this.imageLoaded = true;
-    }, 200); // Delay before marking as loaded
+    }, 200);
   }
 }

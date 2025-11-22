@@ -50,7 +50,7 @@ export class IMultiSelect implements ControlValueAccessor {
     MultiSelectOption[] | null | undefined
   >([]);
   @Input({ required: true }) optionLabel!: string;
-  @Input() optionValue?: string; // Made optional - if not provided, stores full objects
+  @Input() optionValue?: string;
   @Input() placeholder = 'Select options';
   @Input() id?: string;
   @Input() fluid = false;
@@ -79,7 +79,6 @@ export class IMultiSelect implements ControlValueAccessor {
     const currentOptions = this.options() || [];
     const currentFilterValue = this.filterValue();
 
-    // Guard against null/undefined options
     if (!Array.isArray(currentOptions)) {
       return [];
     }
@@ -116,7 +115,6 @@ export class IMultiSelect implements ControlValueAccessor {
   public ngControl: NgControl | null = null;
 
   constructor(private injector: Injector) {
-    // Get NgControl in a non-circular way
     setTimeout(() => {
       this.ngControl = this.injector.get(NgControl, null);
     });
@@ -128,7 +126,6 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   set inputValue(value: string) {
-    // Read-only, prevents any text input in the display field
   }
 
   toggleDropdown() {
@@ -151,7 +148,6 @@ export class IMultiSelect implements ControlValueAccessor {
     const currentValues = [...this.value];
 
     if (!this.optionValue) {
-      // When storing full objects
       const index = currentValues.findIndex(
         (val) => JSON.stringify(val) === JSON.stringify(option)
       );
@@ -161,7 +157,6 @@ export class IMultiSelect implements ControlValueAccessor {
         currentValues.push(option);
       }
     } else {
-      // When storing extracted values
       const optionValue = this.getOptionValue(option);
       const index = currentValues.findIndex((val) => val === optionValue);
       if (index > -1) {
@@ -173,18 +168,16 @@ export class IMultiSelect implements ControlValueAccessor {
 
     this.value = currentValues;
     this.onChange.emit(currentValues);
-    this.onChangeCallback(currentValues); // Notify form control
-    this.onTouchedCallback(); // Mark as touched
+    this.onChangeCallback(currentValues);
+    this.onTouchedCallback();
   }
 
   isOptionSelected(option: MultiSelectOption): boolean {
     if (!this.optionValue) {
-      // When storing full objects, do deep comparison
       return this.value.some(
         (val) => JSON.stringify(val) === JSON.stringify(option)
       );
     } else {
-      // When storing extracted values, do simple comparison
       const optionValue = this.getOptionValue(option);
       return this.value.includes(optionValue);
     }
@@ -193,8 +186,8 @@ export class IMultiSelect implements ControlValueAccessor {
   clearSelection() {
     this.value = [];
     this.onClear.emit();
-    this.onChangeCallback([]); // Notify form control
-    this.onTouchedCallback(); // Mark as touched
+    this.onChangeCallback([]);
+    this.onTouchedCallback();
   }
 
   removeSelectedItem(value: any, event: Event) {
@@ -203,12 +196,10 @@ export class IMultiSelect implements ControlValueAccessor {
 
     let index: number;
     if (!this.optionValue) {
-      // When storing full objects, use deep comparison
       index = currentValues.findIndex(
         (val) => JSON.stringify(val) === JSON.stringify(value)
       );
     } else {
-      // When storing extracted values, use simple comparison
       index = currentValues.findIndex((val) => val === value);
     }
 
@@ -216,8 +207,8 @@ export class IMultiSelect implements ControlValueAccessor {
       currentValues.splice(index, 1);
       this.value = currentValues;
       this.onChange.emit(currentValues);
-      this.onChangeCallback(currentValues); // Notify form control
-      this.onTouchedCallback(); // Mark as touched
+      this.onChangeCallback(currentValues);
+      this.onTouchedCallback();
     }
   }
 
@@ -226,11 +217,9 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   getOptionValue(option: MultiSelectOption): any {
-    // If optionValue is not provided, return the entire object
     if (!this.optionValue) {
       return option;
     }
-    // Otherwise, extract the specified property value
     return option[this.optionValue] || option['value'] || option;
   }
 
@@ -249,10 +238,8 @@ export class IMultiSelect implements ControlValueAccessor {
 
     return this.value.map((val) => {
       if (!this.optionValue) {
-        // When storing full objects, val is already the option object
         return this.getOptionLabel(val);
       } else {
-        // When storing extracted values, find the option by value
         const option = currentOptions.find(
           (opt: MultiSelectOption) => this.getOptionValue(opt) === val
         );
@@ -310,10 +297,8 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    // Implementation can be added if disabled state is needed
   }
 
-  // Validation helper methods
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
   }

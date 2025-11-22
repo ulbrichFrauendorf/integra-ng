@@ -79,7 +79,6 @@ export class IListbox implements ControlValueAccessor {
     const currentOptions = this.options() || [];
     const currentFilterValue = this.filterValue();
 
-    // Guard against null/undefined options
     if (!Array.isArray(currentOptions)) {
       return [];
     }
@@ -120,7 +119,6 @@ export class IListbox implements ControlValueAccessor {
   public ngControl: NgControl | null = null;
 
   constructor(private injector: Injector) {
-    // Get NgControl in a non-circular way
     setTimeout(() => {
       this.ngControl = this.injector.get(NgControl, null);
     });
@@ -132,7 +130,6 @@ export class IListbox implements ControlValueAccessor {
   }
 
   set inputValue(value: string) {
-    // Read-only, prevents any text input in the display field
   }
 
   toggleOption(option: ListboxOption) {
@@ -150,15 +147,14 @@ export class IListbox implements ControlValueAccessor {
 
       this.value = currentValues;
       this.onChange.emit(currentValues);
-      this.onChangeCallback(currentValues); // Notify form control
-      this.onTouchedCallback(); // Mark as touched
+      this.onChangeCallback(currentValues);
+      this.onTouchedCallback();
     } else {
-      // Single select mode
       const newValue = this.value === optionValue ? null : optionValue;
       this.value = newValue;
       this.onChange.emit(newValue);
-      this.onChangeCallback(newValue); // Notify form control
-      this.onTouchedCallback(); // Mark as touched
+      this.onChangeCallback(newValue);
+      this.onTouchedCallback();
     }
   }
 
@@ -176,8 +172,8 @@ export class IListbox implements ControlValueAccessor {
     const newValue = this.multiple ? [] : null;
     this.value = newValue;
     this.onClear.emit();
-    this.onChangeCallback(newValue); // Notify form control
-    this.onTouchedCallback(); // Mark as touched
+    this.onChangeCallback(newValue);
+    this.onTouchedCallback();
   }
 
   removeSelectedItem(value: any, event: Event) {
@@ -190,16 +186,15 @@ export class IListbox implements ControlValueAccessor {
         currentValues.splice(index, 1);
         this.value = currentValues;
         this.onChange.emit(currentValues);
-        this.onChangeCallback(currentValues); // Notify form control
-        this.onTouchedCallback(); // Mark as touched
+        this.onChangeCallback(currentValues);
+        this.onTouchedCallback();
       }
     } else {
-      // Single select mode - clear the selection
       if (this.value === value) {
         this.value = null;
         this.onChange.emit(null);
-        this.onChangeCallback(null); // Notify form control
-        this.onTouchedCallback(); // Mark as touched
+        this.onChangeCallback(null);
+        this.onTouchedCallback();
       }
     }
   }
@@ -220,7 +215,6 @@ export class IListbox implements ControlValueAccessor {
   }
 
   getSelectedLabels(): string[] {
-    // Guard against null/undefined options
     const currentOptions = this.options() || [];
     if (!Array.isArray(currentOptions)) {
       return [];
@@ -293,7 +287,7 @@ export class IListbox implements ControlValueAccessor {
     if (this.multiple) {
       return this.value.length <= this.maxSelectedLabels;
     } else {
-      return true; // Hide text when showing chip in single select mode
+      return true;
     }
   }
 
@@ -357,10 +351,8 @@ export class IListbox implements ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    // Implementation can be added if disabled state is needed
   }
 
-  // Validation helper methods
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
   }

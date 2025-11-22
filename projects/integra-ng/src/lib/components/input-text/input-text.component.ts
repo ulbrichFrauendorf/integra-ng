@@ -26,12 +26,8 @@ export class IInputText implements ControlValueAccessor {
   @Input() placeholder?: string;
   @Input() externalInvalid = false; // Allow parent to override validation state
   @Input() externalErrorMessage?: string; // Allow parent to provide error message
-  @Input() backgroundStyle: 'surface' | 'component' = 'surface'; // Toggle between surface-border and component-background
-
-  /** Optional icon name or path to display on the left of the input */
+  @Input() backgroundStyle: 'surface' | 'component' = 'surface';
   @Input() icon?: string;
-
-  /** Make the input readonly with pointer cursor */
   @Input() readonly = false;
 
   value: string | null = null;
@@ -48,7 +44,6 @@ export class IInputText implements ControlValueAccessor {
     }
   }
 
-  // optional custom error messages
   @Input() errorMessages: { [key: string]: string } = {};
 
   writeValue(obj: string | null): void {
@@ -79,7 +74,6 @@ export class IInputText implements ControlValueAccessor {
   }
 
   get showErrors(): boolean {
-    // Use external validation state if provided, otherwise use internal
     if (this.externalInvalid) return true;
     const c = this.control;
     return !!(c && c.invalid && c.dirty);
@@ -92,7 +86,6 @@ export class IInputText implements ControlValueAccessor {
   }
 
   getErrorMessage(): string | null {
-    // Use external error message if provided
     if (this.externalInvalid && this.externalErrorMessage) {
       return this.externalErrorMessage;
     }
@@ -118,6 +111,4 @@ export class IInputText implements ControlValueAccessor {
           : 'Invalid value';
     }
   }
-
-  // PrimeIcon-only: icon should be a class like 'pi pi-search'
 }

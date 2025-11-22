@@ -181,8 +181,6 @@ export class ITreeView implements OnInit, OnChanges {
   }
 
   isNodeHighlighted(node: ITreeNode): boolean {
-    // Only highlight selected nodes for single and multiple selection modes
-    // For checkbox mode, only show temporary highlights
     if (this.selectionMode === 'checkbox') {
       return this.temporaryHighlighted.has(node);
     }
@@ -212,8 +210,6 @@ export class ITreeView implements OnInit, OnChanges {
     );
     const totalChildren = node.children.length;
 
-    // Node is partially selected when some (but not all) children are selected
-    // This will trigger the indeterminate state in the checkbox
     return (
       selectedChildren.length > 0 && selectedChildren.length < totalChildren
     );
@@ -224,8 +220,6 @@ export class ITreeView implements OnInit, OnChanges {
       return;
     }
 
-    // In checkbox mode, don't handle node selection through node clicks
-    // Selection should only happen through the checkbox component
     if (this.selectionMode === 'checkbox') {
       return;
     }
@@ -281,12 +275,10 @@ export class ITreeView implements OnInit, OnChanges {
       this.propagateUp(node.parent, selection);
     }
 
-    // Update selection and emit selectionChange FIRST so parent component's binding updates
     this.selection = selection;
     this.selectionChange.emit(this.selection);
     this.updateSelectAllState();
 
-    // Use setTimeout to ensure parent component's binding is updated before these events fire
     setTimeout(() => {
       if (selected) {
         this.onNodeUnselect.emit({ originalEvent: event, node });
@@ -297,16 +289,13 @@ export class ITreeView implements OnInit, OnChanges {
   }
 
   onCheckboxChange(checked: boolean, node: ITreeNode) {
-    // Add temporary highlight when checkbox is clicked
     this.addTemporaryHighlight(node);
 
-    // Create a fake event for compatibility with existing methods
     const fakeEvent = new MouseEvent('click', {
       bubbles: true,
       cancelable: true,
     });
 
-    // Call the checkbox selection logic
     this.selectCheckboxNode(fakeEvent, node);
   }
 
@@ -341,20 +330,16 @@ export class ITreeView implements OnInit, OnChanges {
 
   propagateUp(node: ITreeNode, selection: ITreeNode[]) {
     if (node.children) {
-      // Count selected children based on the working selection array
       const selectedChildren = node.children.filter((child) =>
         selection.includes(child)
       );
       const totalChildren = node.children.length;
 
       if (selectedChildren.length === totalChildren) {
-        // All children selected - select parent (will show as fully checked)
         this.selectNode(node, selection);
       } else if (selectedChildren.length > 0) {
-        // Some children selected - select parent (will show as indeterminate)
         this.selectNode(node, selection);
       } else {
-        // No children selected - unselect parent
         this.unselectNode(node, selection);
       }
 
@@ -413,7 +398,6 @@ export class ITreeView implements OnInit, OnChanges {
   }
 
   getCheckboxId(node: ITreeNode): string {
-    // Generate a safe ID for the checkbox using the component ID and node key
     const safeKey = (node.key || node.label || 'node')
       .replace(/[^a-zA-Z0-9\-_]/g, '-')
       .replace(/^-+|-+$/g, '')
@@ -430,27 +414,22 @@ export class ITreeView implements OnInit, OnChanges {
       ? this.selection
       : [];
 
-    // Create a fake event for the emissions
     const fakeEvent = new MouseEvent('click', {
       bubbles: true,
       cancelable: true,
     });
 
     if (this.selectAllChecked) {
-      // Selecting all nodes
       this.selection = allNodes;
 
-      // Emit select events for newly selected nodes
       allNodes.forEach((node) => {
         if (!previousSelection.includes(node)) {
           this.onNodeSelect.emit({ originalEvent: fakeEvent, node });
         }
       });
     } else {
-      // Deselecting all nodes
       this.selection = [];
 
-      // Emit unselect events for previously selected nodes
       previousSelection.forEach((node) => {
         this.onNodeUnselect.emit({ originalEvent: fakeEvent, node });
       });

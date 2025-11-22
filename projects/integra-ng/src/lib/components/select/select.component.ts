@@ -48,7 +48,7 @@ export class ISelect implements ControlValueAccessor {
     SelectOption[] | null | undefined
   >([]);
   @Input({ required: true }) optionLabel!: string;
-  @Input() optionValue?: string; // Made optional - if not provided, stores full object
+  @Input() optionValue?: string;
   @Input() placeholder = 'Select an option';
   @Input() id?: string;
   @Input() fluid = false;
@@ -74,7 +74,6 @@ export class ISelect implements ControlValueAccessor {
     const currentOptions = this.options() || [];
     const currentFilterValue = this.filterValue();
 
-    // Guard against null/undefined options
     if (!Array.isArray(currentOptions)) {
       return [];
     }
@@ -96,7 +95,6 @@ export class ISelect implements ControlValueAccessor {
   }
 
   set inputValue(value: string) {
-    // Read-only, but needed for ngModel binding
   }
 
   private _value: any = null;
@@ -120,7 +118,6 @@ export class ISelect implements ControlValueAccessor {
   public ngControl: NgControl | null = null;
 
   constructor(private injector: Injector) {
-    // Get NgControl in a non-circular way
     setTimeout(() => {
       this.ngControl = this.injector.get(NgControl, null);
     });
@@ -146,8 +143,8 @@ export class ISelect implements ControlValueAccessor {
     const newValue = this.getOptionValue(option);
     this.value = newValue;
     this.onChange.emit(newValue);
-    this.onChangeCallback(newValue); // Notify form control
-    this.onTouchedCallback(); // Mark as touched
+    this.onChangeCallback(newValue);
+    this.onTouchedCallback();
     this.isOpen = false;
     this.filterValue.set('');
   }
@@ -155,8 +152,8 @@ export class ISelect implements ControlValueAccessor {
   clearSelection() {
     this.value = null;
     this.onClear.emit();
-    this.onChangeCallback(null); // Notify form control
-    this.onTouchedCallback(); // Mark as touched
+    this.onChangeCallback(null);
+    this.onTouchedCallback();
   }
 
   getOptionLabel(option: SelectOption): string {
@@ -164,11 +161,9 @@ export class ISelect implements ControlValueAccessor {
   }
 
   getOptionValue(option: SelectOption): any {
-    // If optionValue is not provided, return the entire object
     if (!this.optionValue) {
       return option;
     }
-    // Otherwise, extract the specified property value
     return option[this.optionValue] || option['value'] || String(option);
   }
 
@@ -178,10 +173,8 @@ export class ISelect implements ControlValueAccessor {
     }
 
     if (!this.optionValue) {
-      // When storing full objects, do deep comparison
       return JSON.stringify(option) === JSON.stringify(this.value);
     } else {
-      // When storing extracted values, do simple comparison
       return this.getOptionValue(option) === this.value;
     }
   }
@@ -240,10 +233,8 @@ export class ISelect implements ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    // Implementation can be added if disabled state is needed
   }
 
-  // Validation helper methods
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
   }
