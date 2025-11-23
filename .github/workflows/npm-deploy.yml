@@ -46,9 +46,25 @@ jobs:
       - name: Build Angular library
         run: npm run build integra-ng
 
+      - name: Build UI Kit application
+        run: npm run ng -- build ui-kit --configuration production
+
       - name: Publish to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd dist/integra-ng
           npm publish --access public
+
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.invensys.web.za
+          username: ${{ secrets.INVENSYS_INTEGRA_GIT_FTP_USER }}
+          password: ${{ secrets.INVENSYS_INTEGRA_GIT_FTP_PASS }}
+          protocol: ftps
+          security: loose
+          local-dir: ./dist/ui-kit/browser/
+          server-dir: ./wwwroot/
+          exclude: |
+            appsettings.json

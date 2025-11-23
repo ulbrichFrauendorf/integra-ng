@@ -45,8 +45,6 @@ $rider-event: #cc7832; // reuse keyword color for events
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
-
-
     }
 
     .code-block {
@@ -57,9 +55,8 @@ $rider-event: #cc7832; // reuse keyword color for events
         padding: 0.75rem 1rem 1rem 1rem;
         background: transparent;
         color: $rider-text;
-        font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New",
-          monospace;
-        font-size:  0.75em;
+        font-family: "Consolas", "Monaco", "Courier New", monospace;
+        font-size: 0.75em;
         line-height: 1.6;
         white-space: pre;
         tab-size: 2;
