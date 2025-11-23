@@ -52,12 +52,12 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
           </i-button>
         </div>
         <div class="code-block">
-          <pre
-            *ngIf="activeTab === 'html'"
-          ><code [innerHTML]="formattedCode"></code></pre>
-          <pre
-            *ngIf="activeTab === 'ts'"
-          ><code [innerHTML]="formattedTsCode"></code></pre>
+          <div class="code-scroll" role="region" aria-label="Code block scroll">
+            <pre *ngIf="activeTab === 'html'"><code [innerHTML]="formattedCode"></code></pre>
+            <pre *ngIf="activeTab === 'ts'"><code [innerHTML]="formattedTsCode"></code></pre>
+          </div>
+          <div class="scroll-indicator left" aria-hidden="true"></div>
+          <div class="scroll-indicator right" aria-hidden="true"></div>
         </div>
       </div>
     </div>
