@@ -60,6 +60,6 @@ jobs:
           protocol: ftps
           security: loose
           local-dir: ./dist/ui-kit/browser/
-          server-dir: ./wwwroot/
+          server-dir: ./wwwroot/integra.web.za/
           exclude: |
             appsettings.json
