@@ -18,13 +18,14 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
     <div class="code-display-container">
       <div class="code-section">
         <div class="code-header">
-          <div class="tab-container" *ngIf="showTabs && tsCode">
+          <div class="tab-container" *ngIf="showTabs && (tsCode || scssCode)">
             <i-button
               [size]="'xtra-small'"
               severity="primary"
               [text]="true"
               [class.active]="activeTab === 'html'"
               (clicked)="activeTab = 'html'"
+              *ngIf="sourceCode"
             >
               HTML
             </i-button>
@@ -34,12 +35,23 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
               [text]="true"
               [class.active]="activeTab === 'ts'"
               (clicked)="activeTab = 'ts'"
+              *ngIf="tsCode"
             >
               TypeScript
             </i-button>
+            <i-button
+              [size]="'xtra-small'"
+              severity="primary"
+              [text]="true"
+              [class.active]="activeTab === 'scss'"
+              (clicked)="activeTab = 'scss'"
+              *ngIf="scssCode"
+            >
+              SCSS
+            </i-button>
           </div>
-          <span class="code-title" *ngIf="!showTabs || !tsCode">
-            {{ activeTab === 'html' ? 'HTML' : 'TypeScript' }}
+          <span class="code-title" *ngIf="!showTabs || (!tsCode && !scssCode)">
+            {{ activeTab === 'html' ? 'HTML' : activeTab === 'ts' ? 'TypeScript' : 'SCSS' }}
           </span>
           <i-button
             [size]="'small'"
@@ -59,6 +71,9 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
             <pre
               *ngIf="activeTab === 'ts'"
             ><code [innerHTML]="formattedTsCode"></code></pre>
+            <pre
+              *ngIf="activeTab === 'scss'"
+            ><code [innerHTML]="formattedScssCode"></code></pre>
           </div>
           <div class="scroll-indicator left" aria-hidden="true"></div>
           <div class="scroll-indicator right" aria-hidden="true"></div>
@@ -72,26 +87,48 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
 export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() sourceCode: string = '';
   @Input() tsCode: string = '';
+  @Input() scssCode: string = '';
+  @Input() language: 'html' | 'ts' | 'scss' = 'html';
   @Input() showTabs: boolean = false;
   @ViewChild('uiContent', { static: false }) uiContent!: ElementRef;
 
   formattedCode: string = '';
   formattedTsCode: string = '';
+  formattedScssCode: string = '';
   rawSourceCode: string = '';
   rawTsCode: string = '';
-  activeTab: 'html' | 'ts' = 'html';
+  rawScssCode: string = '';
+  activeTab: 'html' | 'ts' | 'scss' = 'html';
   hasFluidComponents: boolean = false;
   private observer: MutationObserver | null = null;
 
   ngOnInit() {
+    // Set activeTab based on language input
+    this.activeTab = this.language;
+
     if (this.sourceCode) {
       this.rawSourceCode = this.sourceCode;
-      this.formattedCode = this.formatSourceCode(this.sourceCode);
-      this.detectFluidButtons();
+
+      // Format based on language parameter
+      if (this.language === 'ts') {
+        this.formattedTsCode = this.formatTypeScriptCode(this.sourceCode);
+        this.rawTsCode = this.sourceCode;
+      } else if (this.language === 'scss') {
+        this.formattedScssCode = this.formatScssCode(this.sourceCode);
+        this.rawScssCode = this.sourceCode;
+      } else {
+        this.formattedCode = this.formatSourceCode(this.sourceCode);
+        this.detectFluidButtons();
+      }
     }
     if (this.tsCode) {
       this.rawTsCode = this.tsCode;
       this.formattedTsCode = this.formatTypeScriptCode(this.tsCode);
+      this.showTabs = true;
+    }
+    if (this.scssCode) {
+      this.rawScssCode = this.scssCode;
+      this.formattedScssCode = this.formatScssCode(this.scssCode);
       this.showTabs = true;
     }
   }
@@ -100,7 +137,7 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
     // Check for fluid buttons in the content
     this.detectFluidButtons();
 
-    if (!this.sourceCode) {
+    if (!this.sourceCode && this.uiContent) {
       // Fallback: generate code from DOM if no source code provided
       this.generateCode();
       this.setupMutationObserver();
@@ -133,6 +170,8 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setupMutationObserver() {
+    if (!this.uiContent?.nativeElement) return;
+
     this.observer = new MutationObserver(() => {
       this.generateCode();
     });
@@ -166,6 +205,14 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Apply TypeScript syntax highlighting
     return this.applyTypeScriptHighlighting(tsCode);
+  }
+
+  private formatScssCode(scssCode: string): string {
+    // Store the raw SCSS code
+    this.rawScssCode = scssCode;
+
+    // Apply SCSS syntax highlighting
+    return this.applyScssHighlighting(scssCode);
   }
 
   private formatHtml(html: string): string {
@@ -356,6 +403,116 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
     return processed;
   }
 
+  private applyScssHighlighting(code: string): string {
+    // First, protect strings by temporarily replacing them with placeholders
+    const stringMap = new Map();
+    let stringCounter = 0;
+
+    // Extract and replace all string literals
+    let processed = code.replace(
+      /(["'])((?:\\.|(?!\1)[^\\])*)\1/g,
+      (match, quote, content) => {
+        const placeholder = `__STRING_${stringCounter++}__`;
+        stringMap.set(placeholder, match);
+        return placeholder;
+      }
+    );
+
+    // Extract and replace all comments
+    const commentMap = new Map();
+    let commentCounter = 0;
+    // Multi-line comments
+    processed = processed.replace(/(\/\*[\s\S]*?\*\/)/g, (match) => {
+      const placeholder = `__COMMENT_${commentCounter++}__`;
+      commentMap.set(placeholder, match);
+      return placeholder;
+    });
+    // Single-line comments
+    processed = processed.replace(/(\/\/.*$)/gm, (match) => {
+      const placeholder = `__COMMENT_${commentCounter++}__`;
+      commentMap.set(placeholder, match);
+      return placeholder;
+    });
+
+    // Now escape HTML in the remaining content
+    processed = processed
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    // SCSS @ directives and keywords
+    processed = processed.replace(
+      /(@use|@import|@mixin|@include|@extend|@if|@else|@for|@each|@while|@function|@return|@media|@keyframes|@supports)\b/g,
+      '<span class="code-keyword">$1</span>'
+    );
+
+    // CSS properties (word followed by colon)
+    processed = processed.replace(
+      /\b([a-z-]+)(\s*:)/g,
+      '<span class="scss-property">$1</span>$2'
+    );
+
+    // Class selectors
+    processed = processed.replace(
+      /(\.[a-zA-Z_-][a-zA-Z0-9_-]*)/g,
+      '<span class="scss-selector">$1</span>'
+    );
+
+    // ID selectors
+    processed = processed.replace(
+      /(#[a-zA-Z_-][a-zA-Z0-9_-]*)/g,
+      '<span class="scss-selector">$1</span>'
+    );
+
+    // Pseudo-classes and pseudo-elements
+    processed = processed.replace(
+      /(::?[a-z-]+)/g,
+      '<span class="scss-pseudo">$1</span>'
+    );
+
+    // CSS variables
+    processed = processed.replace(
+      /(--[a-zA-Z0-9-]+)/g,
+      '<span class="scss-variable">$1</span>'
+    );
+
+    // Color values (hex)
+    processed = processed.replace(
+      /(#[0-9a-fA-F]{3,8})\b/g,
+      '<span class="code-number">$1</span>'
+    );
+
+    // Numbers with units
+    processed = processed.replace(
+      /\b(\d+(?:\.\d+)?)(px|em|rem|%|vh|vw|pt|cm|mm|in|ex|ch|vmin|vmax|s|ms)?\b/g,
+      '<span class="code-number">$1$2</span>'
+    );
+
+    // Restore comments with highlighting
+    commentMap.forEach((original, placeholder) => {
+      const highlighted = `<span class="code-comment">${original
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')}</span>`;
+      processed = processed.replace(placeholder, highlighted);
+    });
+
+    // Restore strings with highlighting
+    stringMap.forEach((original, placeholder) => {
+      const highlighted = `<span class="code-string">${original
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')}</span>`;
+      processed = processed.replace(placeholder, highlighted);
+    });
+
+    return processed;
+  }
+
   copyCode() {
     let codeToCopy = '';
 
@@ -366,6 +523,8 @@ export class CodeDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
           : this.getCleanedHtml();
     } else if (this.activeTab === 'ts') {
       codeToCopy = this.rawTsCode;
+    } else if (this.activeTab === 'scss') {
+      codeToCopy = this.rawScssCode;
     }
 
     navigator.clipboard.writeText(codeToCopy).then(() => {

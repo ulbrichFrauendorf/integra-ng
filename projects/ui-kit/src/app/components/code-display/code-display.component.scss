@@ -112,6 +112,18 @@ $rider-event: #cc7832; // reuse keyword color for events
             color: $rider-comment;
             font-style: italic;
           }
+          .scss-property {
+            color: #9876aa; // Purple for CSS properties
+          }
+          .scss-selector {
+            color: $rider-tag; // Yellow for class/id selectors
+          }
+          .scss-pseudo {
+            color: $rider-keyword; // Orange for pseudo-classes/elements
+          }
+          .scss-variable {
+            color: $rider-binding; // Purple for CSS variables
+          }
         }
       }
     }

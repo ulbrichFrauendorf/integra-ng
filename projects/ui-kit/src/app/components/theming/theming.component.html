@@ -30,7 +30,8 @@
     <!-- Step 1: Create Theme File -->
     <app-demo-card
       [title]="'Step 1: Create Your Theme File'"
-      [sourceCode]="themeFileCode"
+      [scssCode]="themeFileCode"
+      [language]="'scss'"
     >
       <div class="theming-content">
         <p>
@@ -50,7 +51,8 @@
     <!-- Step 2: Import Theme -->
     <app-demo-card
       [title]="'Step 2: Import in styles.scss'"
-      [sourceCode]="importThemeCode"
+      [scssCode]="importThemeCode"
+      [language]="'scss'"
     >
       <div class="theming-content">
         <p>
@@ -64,6 +66,7 @@
     <app-demo-card
       [title]="'Step 3: Add Class to Body'"
       [sourceCode]="addClassToBodyCode"
+      [language]="'html'"
     >
       <div class="theming-content">
         <p>
@@ -81,6 +84,7 @@
     <app-demo-card
       [title]="'Toggle Theme at Runtime (Optional)'"
       [sourceCode]="toggleThemeCode"
+      [language]="'ts'"
     >
       <div class="theming-content">
         <p>
