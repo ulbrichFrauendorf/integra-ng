@@ -13,6 +13,8 @@ import { ListboxesComponent } from './components/listboxes/listboxes.component';
 import { WhispersComponent } from './components/whispers/whispers.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
+import { InstallationComponent } from './components/installation/installation.component';
+import { ThemingComponent } from './components/theming/theming.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +26,14 @@ export const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
+      {
+        path: 'getting-started',
+        children: [
+          { path: 'installation', component: InstallationComponent },
+          { path: 'theming', component: ThemingComponent },
+          { path: '', redirectTo: 'installation', pathMatch: 'full' },
+        ],
+      },
       {
         path: 'components',
         children: [

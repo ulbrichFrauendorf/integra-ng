@@ -124,6 +124,13 @@ export class IButton implements AfterViewInit {
   projected?: ElementRef<HTMLElement>;
 
   /**
+   * Reference to the native button element
+   * @internal
+   */
+  @ViewChild('buttonElement', { read: ElementRef })
+  private buttonElement?: ElementRef<HTMLButtonElement>;
+
+  /**
    * Whether the button is icon-only (no text content)
    * @internal
    */
@@ -135,12 +142,20 @@ export class IButton implements AfterViewInit {
    */
   componentId = UniqueComponentId('i-button-');
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, public el: ElementRef) {}
 
   ngAfterViewInit(): void {
     const text = this.projected?.nativeElement?.textContent;
     const hasProjected = text && text.trim()?.length > 0;
     this.iconOnly = !!this.icon && !hasProjected;
     this.cdr.detectChanges();
+  }
+
+  /**
+   * Focuses the underlying native button element.
+   * Use this instead of accessing `nativeElement` directly.
+   */
+  focus(): void {
+    this.buttonElement?.nativeElement?.focus();
   }
 }
