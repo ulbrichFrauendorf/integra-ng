@@ -1,0 +1,218 @@
+<div class="theming-demo">
+  <header class="demo-header">
+    <h1>Theming</h1>
+    <p>
+      Learn how to customize the appearance of Integra-NG components using CSS
+      variables for light and dark themes.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Overview -->
+    <app-demo-card [title]="'How Theming Works'">
+      <div class="theming-content">
+        <p>
+          Integra-NG uses CSS variables (custom properties) for theming. You
+          define variables for both <code>.light</code> and
+          <code>.dark</code> classes, then add the appropriate class to your
+          page's <code>&lt;body&gt;</code> element.
+        </p>
+        <div class="info-box">
+          <i class="pi pi-lightbulb"></i>
+          <span
+            >All components automatically use these CSS variables, so changing
+            the theme is as simple as switching the body class!</span
+          >
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Step 1: Create Theme File -->
+    <app-demo-card
+      [title]="'Step 1: Create Your Theme File'"
+      [sourceCode]="themeFileCode"
+    >
+      <div class="theming-content">
+        <p>
+          Create a SCSS file (e.g., <code>theme.scss</code>) in your project's
+          styles folder. Define the CSS variables for both light and dark modes:
+        </p>
+        <div class="warning-box">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span
+            >Important: Use the exact variable names shown above. The components
+            depend on these specific names.</span
+          >
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Step 2: Import Theme -->
+    <app-demo-card
+      [title]="'Step 2: Import in styles.scss'"
+      [sourceCode]="importThemeCode"
+    >
+      <div class="theming-content">
+        <p>
+          Import your theme file in your global <code>styles.scss</code> or
+          <code>styles.css</code> file:
+        </p>
+      </div>
+    </app-demo-card>
+
+    <!-- Step 3: Add Class to Body -->
+    <app-demo-card
+      [title]="'Step 3: Add Class to Body'"
+      [sourceCode]="addClassToBodyCode"
+    >
+      <div class="theming-content">
+        <p>
+          Add either <code>light</code> or <code>dark</code> class to your
+          <code>&lt;body&gt;</code> element in <code>index.html</code>:
+        </p>
+        <p>
+          This sets the default theme when your app loads. To start with dark
+          mode, use <code>class="dark"</code> instead.
+        </p>
+      </div>
+    </app-demo-card>
+
+    <!-- Toggle Theme at Runtime -->
+    <app-demo-card
+      [title]="'Toggle Theme at Runtime (Optional)'"
+      [sourceCode]="toggleThemeCode"
+    >
+      <div class="theming-content">
+        <p>
+          You can allow users to switch themes by toggling the class on the body
+          element:
+        </p>
+      </div>
+    </app-demo-card>
+
+    <!-- Template Usage -->
+    <app-demo-card
+      [title]="'Add a Theme Toggle Button'"
+      [sourceCode]="themeButtonCode"
+    >
+      <div class="theming-content">
+        <p>Add a button in your template to toggle the theme:</p>
+        <div class="success-box">
+          <i class="pi pi-check-circle"></i>
+          <span>That's it! Your app now supports light and dark themes.</span>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- CSS Variables Reference -->
+    <app-demo-card [title]="'CSS Variables Reference'">
+      <div class="theming-content">
+        <p>Here's a breakdown of the theme variables:</p>
+
+        <div class="variable-section">
+          <h3>Color Variables</h3>
+          <ul class="variable-list">
+            <li>
+              <code>--color-primary</code>: Main brand color
+            </li>
+            <li>
+              <code>--color-success</code>: Success state color (green)
+            </li>
+            <li>
+              <code>--color-info</code>: Info state color (blue)
+            </li>
+            <li>
+              <code>--color-warning</code>: Warning state color (yellow)
+            </li>
+            <li>
+              <code>--color-danger</code>: Danger state color (red)
+            </li>
+            <li>
+              <code>--color-contrast</code>: High contrast color
+            </li>
+            <li>
+              <code>--color-contrast-inverse</code>: Inverse of contrast color
+            </li>
+          </ul>
+        </div>
+
+        <div class="variable-section">
+          <h3>Text Colors</h3>
+          <ul class="variable-list">
+            <li>
+              <code>--color-text-primary</code>: Main text color
+            </li>
+            <li>
+              <code>--color-text-secondary</code>: Secondary text color
+            </li>
+            <li>
+              <code>--color-text-tertiary</code>: Tertiary text color
+            </li>
+            <li>
+              <code>--color-text-contrast</code>: Text on contrast backgrounds
+            </li>
+          </ul>
+        </div>
+
+        <div class="variable-section">
+          <h3>Component Background Colors</h3>
+          <ul class="variable-list">
+            <li>
+              <code>--color-component-background</code>: Primary component background
+            </li>
+            <li>
+              <code>--color-component-background-secondary</code>: Secondary component background
+            </li>
+            <li>
+              <code>--color-component-background-solid</code>: Solid component background
+            </li>
+          </ul>
+        </div>
+
+        <div class="variable-section">
+          <h3>Border Colors</h3>
+          <ul class="variable-list">
+            <li>
+              <code>--color-border</code>: Component border color
+            </li>
+            <li>
+              <code>--surface-border</code>: Surface border color
+            </li>
+          </ul>
+        </div>
+
+        <div class="variable-section">
+          <h3>Surface Colors</h3>
+          <ul class="variable-list">
+            <li>
+              <code>--surface-ground</code>: Page background
+            </li>
+            <li>
+              <code>--surface-elevated</code>: Elevated surface background
+            </li>
+            <li>
+              <code>--surface-section</code>: Section background
+            </li>
+            <li>
+              <code>--surface-card</code>: Card backgrounds
+            </li>
+            <li>
+              <code>--surface-overlay</code>: Overlay/dropdown backgrounds
+            </li>
+            <li>
+              <code>--surface-hover</code>: Hover state background
+            </li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <i class="pi pi-star"></i>
+          <div>
+            <strong>Pro Tip:</strong> You can customize these colors to match
+            your brand. Just make sure to keep the variable names the same!
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+  </div>
+</div>

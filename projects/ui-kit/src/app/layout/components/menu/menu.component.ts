@@ -17,6 +17,21 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     this.model = [
       {
+        label: 'Getting Started',
+        items: [
+          {
+            label: 'Installation',
+            icon: 'pi pi-fw pi-download',
+            routerLink: ['/getting-started/installation'],
+          },
+          {
+            label: 'Theming',
+            icon: 'pi pi-fw pi-palette',
+            routerLink: ['/getting-started/theming'],
+          },
+        ],
+      },
+      {
         label: 'UI Components',
         items: [
           {

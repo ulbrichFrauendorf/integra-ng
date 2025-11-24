@@ -4,33 +4,31 @@ import { Subject } from 'rxjs';
 export const LocalStorageThemeKey = 'viewModeTheme';
 export const LocalStorageColorSchemeKey = 'viewModeColorScheme';
 
-export type MenuMode = 'static' | 'overlay';
+const MOBILE_BREAKPOINT = 991;
 
 export interface AppConfig {
   inputStyle: string;
   colorScheme: string;
   theme: string;
   ripple: boolean;
-  menuMode: MenuMode;
   scale: number;
 }
 
 interface LayoutState {
-  staticMenuDesktopInactive: boolean;
-  overlayMenuActive: boolean;
+  isSidebarOpen: boolean;
+  isMobileViewport: boolean;
   profileSidebarVisible: boolean;
-  staticMenuMobileActive: boolean;
-  menuHoverActive: boolean;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class LayoutService {
+  private readonly mobileBreakpoint = MOBILE_BREAKPOINT;
+
   _config: AppConfig = {
     ripple: true,
     inputStyle: 'outlined',
-    menuMode: 'static',
     colorScheme: localStorage.getItem(LocalStorageColorSchemeKey) || 'light',
     theme: localStorage.getItem(LocalStorageThemeKey) || 'aura-light-amber',
     scale: 12,
@@ -40,21 +38,13 @@ export class LayoutService {
 
   public colorScheme = signal(this.config().colorScheme);
 
-  state: WritableSignal<LayoutState> = signal<LayoutState>({
-    staticMenuDesktopInactive: false,
-    overlayMenuActive: false,
-    profileSidebarVisible: false,
-    staticMenuMobileActive: false,
-    menuHoverActive: false,
-  });
+  state: WritableSignal<LayoutState> = signal<LayoutState>(
+    this.createInitialLayoutState()
+  );
 
   private configUpdate = new Subject<AppConfig>();
 
-  private overlayOpen = new Subject<void>();
-
   configUpdate$ = this.configUpdate.asObservable();
-
-  overlayOpen$ = this.overlayOpen.asObservable();
 
   constructor() {
     effect(() => {
@@ -68,6 +58,15 @@ export class LayoutService {
     });
   }
 
+  private createInitialLayoutState(): LayoutState {
+    const isMobileViewport = this.isMobileViewport();
+    return {
+      isSidebarOpen: !isMobileViewport,
+      isMobileViewport,
+      profileSidebarVisible: false,
+    };
+  }
+
   updateStyle(config: AppConfig) {
     return (
       config.theme !== this._config.theme ||
@@ -75,54 +74,53 @@ export class LayoutService {
     );
   }
 
-  onMenuToggle() {
-    const currentState = this.state();
+  toggleSidebar() {
+    this.state.update((currentState) => ({
+      ...currentState,
+      isSidebarOpen: !currentState.isSidebarOpen,
+    }));
+  }
 
-    if (this.isOverlay()) {
-      this.state.set({
-        ...currentState,
-        overlayMenuActive: !currentState.overlayMenuActive,
-      });
-      if (!currentState.overlayMenuActive) {
-        this.overlayOpen.next();
+  closeSidebar() {
+    this.state.update((currentState) =>
+      currentState.isSidebarOpen
+        ? { ...currentState, isSidebarOpen: false }
+        : currentState
+    );
+  }
+
+  syncViewport(width: number) {
+    const isMobileViewport = this.isMobileViewport(width);
+    this.state.update((currentState) => {
+      if (currentState.isMobileViewport === isMobileViewport) {
+        return currentState;
       }
-    } else if (this.isDesktop()) {
-      this.state.set({
+
+      return {
         ...currentState,
-        staticMenuDesktopInactive: !currentState.staticMenuDesktopInactive,
-      });
-    } else {
-      this.state.set({
-        ...currentState,
-        staticMenuMobileActive: !currentState.staticMenuMobileActive,
-      });
-      if (!currentState.staticMenuMobileActive) {
-        this.overlayOpen.next();
-      }
-    }
+        isMobileViewport,
+        isSidebarOpen: isMobileViewport ? false : true,
+      };
+    });
   }
 
   showProfileSidebar() {
-    const currentState = this.state();
-    this.state.set({
+    this.state.update((currentState) => ({
       ...currentState,
       profileSidebarVisible: !currentState.profileSidebarVisible,
-    });
-    if (!currentState.profileSidebarVisible) {
-      this.overlayOpen.next();
+    }));
+  }
+
+  private isMobileViewport(width: number = this.getViewportWidth()) {
+    return width <= this.mobileBreakpoint;
+  }
+
+  private getViewportWidth(): number {
+    if (typeof window !== 'undefined' && window?.innerWidth) {
+      return window.innerWidth;
     }
-  }
 
-  isOverlay() {
-    return this.config().menuMode === 'overlay';
-  }
-
-  isDesktop() {
-    return window.innerWidth > 991;
-  }
-
-  isMobile() {
-    return !this.isDesktop();
+    return 0;
   }
 
   onConfigUpdate() {

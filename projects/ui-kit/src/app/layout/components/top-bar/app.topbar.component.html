@@ -10,14 +10,13 @@
     />
     <span>Integra-NG</span>
   </a>
-    <i-button
-        #menubutton
-        [severity]="'contrast'"
-        size="medium"
-        [text]="true"
-        [icon]="'pi pi-bars'"
-        (clicked)="layoutService.onMenuToggle()"
-    ></i-button>
+  <i-button
+    [severity]="'contrast'"
+    size="medium"
+    [text]="true"
+    [icon]="'pi pi-bars'"
+    (clicked)="layoutService.toggleSidebar()"
+  ></i-button>
   <i-button
     class="layout-topbar-menu-button"
     [severity]="'contrast'"

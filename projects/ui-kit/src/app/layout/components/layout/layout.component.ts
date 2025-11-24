@@ -1,10 +1,11 @@
 import {
   Component,
-  inject,
+  HostListener,
   OnDestroy,
-  Renderer2,
-  ViewChild,
+  OnInit,
   computed,
+  effect,
+  inject,
 } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -20,113 +21,68 @@ import { COLOR_SCHEME } from '../../service/color-scheme-injection';
   styleUrls: ['./layout.component.scss'],
   imports: [NgClass, AppTopBarComponent, SideBarStickyComponent, RouterOutlet],
 })
-export class LayoutComponent implements OnDestroy {
-  overlayMenuOpenSubscription: Subscription;
-
-  menuOutsideClickListener: any;
-
-  @ViewChild(SideBarStickyComponent) appSidebar!: SideBarStickyComponent;
-
-  @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
+export class LayoutComponent implements OnInit, OnDestroy {
+  private routerSubscription: Subscription;
 
   theme = inject(COLOR_SCHEME);
 
-  constructor(
-    public layoutService: LayoutService,
-    public renderer: Renderer2,
-    public router: Router
-  ) {
-    this.overlayMenuOpenSubscription =
-      this.layoutService.overlayOpen$.subscribe(() => {
-        if (!this.menuOutsideClickListener) {
-          this.menuOutsideClickListener = this.renderer.listen(
-            'document',
-            'click',
-            (event) => {
-              const isOutsideClicked = !(
-                this.appSidebar.el.nativeElement.isSameNode(event.target) ||
-                this.appSidebar.el.nativeElement.contains(event.target) ||
-                this.appTopbar.menuButton.nativeElement.isSameNode(
-                  event.target
-                ) ||
-                this.appTopbar.menuButton.nativeElement.contains(event.target)
-              );
+  constructor(public layoutService: LayoutService, public router: Router) {
+    effect(() => {
+      if (typeof document === 'undefined') {
+        return;
+      }
 
-              if (isOutsideClicked) {
-                this.hideMenu();
-              }
-            }
-          );
-        }
+      const state = this.layoutService.state();
+      const shouldBlockScroll = state.isMobileViewport && state.isSidebarOpen;
+      document.body.classList.toggle('blocked-scroll', shouldBlockScroll);
+    });
 
-        if (this.layoutService.state().staticMenuMobileActive) {
-          this.blockBodyScroll();
-        }
-      });
-
-    this.router.events
+    this.routerSubscription = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.hideMenu();
+        const state = this.layoutService.state();
+        if (state.isMobileViewport) {
+          this.layoutService.closeSidebar();
+        }
       });
+  }
+
+  ngOnInit(): void {
+    this.syncViewportToCurrentWindow();
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.syncViewportToCurrentWindow();
   }
 
   hideMenu() {
-    const currentState = this.layoutService.state();
-    this.layoutService.state.set({
-      ...currentState,
-      overlayMenuActive: false,
-      staticMenuMobileActive: false,
-      menuHoverActive: false,
-    });
-    if (this.menuOutsideClickListener) {
-      this.menuOutsideClickListener();
-      this.menuOutsideClickListener = null;
-    }
-    this.unblockBodyScroll();
+    this.layoutService.closeSidebar();
   }
 
-  blockBodyScroll(): void {
-    if (document.body.classList) {
-      document.body.classList.add('blocked-scroll');
-    } else {
-      document.body.className += ' blocked-scroll';
+  private syncViewportToCurrentWindow() {
+    if (typeof window === 'undefined') {
+      return;
     }
+
+    this.layoutService.syncViewport(window.innerWidth);
   }
 
-  unblockBodyScroll(): void {
-    if (document.body.classList) {
-      document.body.classList.remove('blocked-scroll');
-    } else {
-      document.body.className = document.body.className.replace(
-        new RegExp(
-          '(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)',
-          'gi'
-        ),
-        ' '
-      );
-    }
-  }
-
-  containerClass = computed(() => ({
-    'layout-overlay': this.layoutService.config().menuMode === 'overlay',
-    'layout-static': this.layoutService.config().menuMode === 'static',
-    'layout-static-inactive':
-      this.layoutService.state().staticMenuDesktopInactive &&
-      this.layoutService.config().menuMode === 'static',
-    'layout-overlay-active': this.layoutService.state().overlayMenuActive,
-    'layout-mobile-active': this.layoutService.state().staticMenuMobileActive,
-    'p-input-filled': this.layoutService.config().inputStyle === 'filled',
-    'p-ripple-disabled': !this.layoutService.config().ripple,
-  }));
+  containerClass = computed(() => {
+    const layoutConfig = this.layoutService.config();
+    const state = this.layoutService.state();
+    return {
+      'layout-static': true,
+      'layout-static-inactive': !state.isMobileViewport && !state.isSidebarOpen,
+      'layout-mobile-active': state.isMobileViewport && state.isSidebarOpen,
+      'p-input-filled': layoutConfig.inputStyle === 'filled',
+      'p-ripple-disabled': !layoutConfig.ripple,
+    };
+  });
 
   ngOnDestroy() {
-    if (this.overlayMenuOpenSubscription) {
-      this.overlayMenuOpenSubscription.unsubscribe();
-    }
-
-    if (this.menuOutsideClickListener) {
-      this.menuOutsideClickListener();
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 }

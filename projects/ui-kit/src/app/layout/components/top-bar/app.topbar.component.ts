@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   LayoutService,
   LocalStorageColorSchemeKey,
@@ -15,8 +15,6 @@ import { IButton } from '@shared/components/button/button.component';
   imports: [RouterLink, NgClass, IButton],
 })
 export class AppTopBarComponent implements OnInit {
-  @ViewChild('menubutton') menuButton!: ElementRef;
-
   isDark: boolean = false;
 
   constructor(public layoutService: LayoutService) {}

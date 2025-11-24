@@ -1,5 +1,5 @@
 <div class="i-button-wrapper">
-    <button primary [attr.id]="componentId" class="i-button" [ngClass]="[
+    <button #buttonElement primary [attr.id]="componentId" class="i-button" [ngClass]="[
         'i-button--' + severity,
         'i-button--' + size,
         outlined && !text ? 'i-button--outlined' : '',

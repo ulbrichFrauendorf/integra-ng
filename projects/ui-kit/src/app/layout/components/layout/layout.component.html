@@ -2,7 +2,13 @@
   <div class="layout-wrapper" [ngClass]="containerClass()">
     <app-topbar />
     <div class="layout-body">
-      <div class="layout-sidebar-container">
+      <div
+        class="layout-sidebar-container"
+        [ngClass]="{
+          'sidebar-open': layoutService.state().isSidebarOpen,
+          'sidebar-closed': !layoutService.state().isSidebarOpen
+        }"
+      >
         <app-side-bar-sticky />
       </div>
       <div class="layout-main-container">
@@ -11,6 +17,6 @@
         </div>
       </div>
     </div>
-    <div class="layout-mask"></div>
+    <div class="layout-mask" (click)="hideMenu()"></div>
   </div>
 </div>
