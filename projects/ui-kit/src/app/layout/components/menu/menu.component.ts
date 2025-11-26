@@ -60,6 +60,11 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/checkboxes'],
           },
           {
+            label: 'Radio Buttons',
+            icon: 'pi pi-fw pi-circle',
+            routerLink: ['/components/radio-buttons'],
+          },
+          {
             label: 'Cards',
             icon: 'pi pi-fw pi-id-card',
             routerLink: ['/components/cards'],
@@ -108,6 +113,8 @@ export class MenuComponent implements OnInit {
             label: 'Tables',
             icon: 'pi pi-fw pi-table',
             routerLink: ['/components/tables'],
+          },
+          {
             label: 'Tabs',
             icon: 'pi pi-fw pi-folder',
             routerLink: ['/components/tabs'],

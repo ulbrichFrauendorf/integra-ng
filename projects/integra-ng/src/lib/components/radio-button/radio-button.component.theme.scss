@@ -1,0 +1,57 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-radio-button-theme() {
+  .i-radio-button-wrapper {
+    .i-radio-button {
+      border: 1px solid colors.$color-surface-border;
+      background-color: colors.$color-surface-ground;
+
+      &:hover:not(.i-radio-button--disabled) {
+        border-color: colors.$color-primary;
+      }
+
+      &:focus {
+        box-shadow: colors.$color-box-shadow;
+      }
+
+      &.i-radio-button--checked {
+        border-color: colors.$color-primary;
+
+        .i-radio-button-icon {
+          background-color: colors.$color-primary;
+        }
+
+        &:hover {
+          border-color: color-mix(
+            in srgb,
+            colors.$color-primary 80%,
+            transparent
+          );
+        }
+      }
+    }
+
+    .i-radio-button-label {
+      color: colors.$color-text-primary;
+    }
+
+    &.i-radio-button--disabled {
+      .i-radio-button {
+        border-color: colors.$color-disabled-border;
+        background-color: colors.$color-disabled-background;
+
+        &.i-radio-button--checked {
+          border-color: colors.$color-disabled-border;
+
+          .i-radio-button-icon {
+            background-color: colors.$color-text-disabled;
+          }
+        }
+      }
+
+      .i-radio-button-label {
+        color: colors.$color-text-disabled;
+      }
+    }
+  }
+}
