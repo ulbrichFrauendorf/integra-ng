@@ -14,7 +14,6 @@
     [attr.aria-labelledby]="label ? effectiveInputId + '-label' : null"
     tabindex="0"
     (keydown.space)="$event.preventDefault(); select()"
-    (keydown.enter)="$event.preventDefault(); select()"
   >
     <span class="i-radio-button-icon"></span>
   </div>

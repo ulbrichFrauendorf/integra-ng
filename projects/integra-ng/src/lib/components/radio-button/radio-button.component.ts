@@ -13,7 +13,7 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
  * RadioButton Component
  *
  * A form control radio button component for single selection within a group.
- * Supports indeterminate state and is fully compatible with Angular Reactive Forms.
+ * Fully compatible with Angular Reactive Forms and Template-driven Forms.
  *
  * @example
  * ```html
@@ -157,6 +157,8 @@ export class IRadioButton implements ControlValueAccessor {
       this.onChangeCallback(this.value);
       this.onTouchedCallback();
 
+      // Emit after the current change detection cycle completes
+      // This ensures Angular forms have processed the value change
       setTimeout(() => {
         this.onChange.emit(this.value);
       }, 0);
