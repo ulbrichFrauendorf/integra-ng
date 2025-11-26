@@ -15,6 +15,7 @@ import { ListboxesComponent } from './components/listboxes/listboxes.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { WhispersComponent } from './components/whispers/whispers.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
+import { RadioButtonsComponent } from './components/radio-buttons/radio-buttons.component';
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { InstallationComponent } from './components/installation/installation.component';
@@ -46,6 +47,7 @@ export const routes: Routes = [
           { path: 'buttons', component: ButtonsComponent },
           { path: 'calendars', component: CalendarsComponent },
           { path: 'checkboxes', component: CheckboxesComponent },
+          { path: 'radio-buttons', component: RadioButtonsComponent },
           { path: 'input-texts', component: InputTextsComponent },
           { path: 'cards', component: CardsComponent },
           { path: 'dialogs', component: DialogsComponent },

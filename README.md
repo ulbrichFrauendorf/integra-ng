@@ -19,6 +19,7 @@ The library includes the following components:
 - **Input Text** - Text input component
 - **Listbox** - Listbox selection component
 - **Multi-Select** - Multi-select dropdown component
+- **Radio Button** - Radio button component for single selection
 - **Select** - Single select dropdown component
 - **Tree View** - Hierarchical tree view component
 - **Whisper** - Tooltip/whisper component

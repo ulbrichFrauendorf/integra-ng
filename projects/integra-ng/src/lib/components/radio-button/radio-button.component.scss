@@ -1,0 +1,64 @@
+@use "./radio-button.component.theme.scss" as theme;
+
+@include theme.i-radio-button-theme();
+
+.i-radio-button-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1em;
+
+  &.i-radio-button--fluid {
+    display: flex;
+    width: 100%;
+  }
+
+  &.i-radio-button--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    .i-radio-button,
+    .i-radio-button-label {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  .i-radio-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
+
+    .i-radio-button-icon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transition: all 0.15s ease;
+      transform: scale(0);
+    }
+
+    &.i-radio-button--checked {
+      .i-radio-button-icon {
+        transform: scale(1);
+      }
+    }
+  }
+
+  .i-radio-button-label {
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+}

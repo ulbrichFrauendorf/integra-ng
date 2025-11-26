@@ -1,0 +1,29 @@
+<div
+  class="i-radio-button-wrapper"
+  [class.i-radio-button--disabled]="disabled"
+  [class.i-radio-button--fluid]="fluid"
+>
+  <div
+    class="i-radio-button"
+    [class.i-radio-button--checked]="checked"
+    (click)="select()"
+    [attr.id]="effectiveInputId"
+    role="radio"
+    [attr.aria-checked]="checked"
+    [attr.aria-disabled]="disabled"
+    [attr.aria-labelledby]="label ? effectiveInputId + '-label' : null"
+    tabindex="0"
+    (keydown.space)="$event.preventDefault(); select()"
+  >
+    <span class="i-radio-button-icon"></span>
+  </div>
+  @if (label) {
+  <label
+    [id]="effectiveInputId + '-label'"
+    class="i-radio-button-label"
+    (click)="select()"
+  >
+    {{ label }}
+  </label>
+  }
+</div>
