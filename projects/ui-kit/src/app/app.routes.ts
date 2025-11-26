@@ -13,6 +13,7 @@ import { ListboxesComponent } from './components/listboxes/listboxes.component';
 import { WhispersComponent } from './components/whispers/whispers.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
+import { TabsComponent } from './components/tabs/tabs.component';
 import { InstallationComponent } from './components/installation/installation.component';
 import { ThemingComponent } from './components/theming/theming.component';
 
@@ -52,6 +53,7 @@ export const routes: Routes = [
           { path: 'chips', component: ChipsComponent },
           { path: 'listboxes', component: ListboxesComponent },
           { path: 'tree-views', component: TreeViewsComponent },
+          { path: 'tabs', component: TabsComponent },
           { path: 'whispers', component: WhispersComponent },
           { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
         ],
