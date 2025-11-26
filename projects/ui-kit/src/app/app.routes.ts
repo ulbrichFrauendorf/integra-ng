@@ -15,6 +15,7 @@ import { CheckboxesComponent } from './components/checkboxes/checkboxes.componen
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
 import { InstallationComponent } from './components/installation/installation.component';
 import { ThemingComponent } from './components/theming/theming.component';
+import { TabsComponent } from './components/tabs/tabs.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,7 @@ export const routes: Routes = [
           { path: 'multi-selects', component: MultiSelectsComponent },
           { path: 'chips', component: ChipsComponent },
           { path: 'listboxes', component: ListboxesComponent },
+          { path: 'tabs', component: TabsComponent },
           { path: 'tree-views', component: TreeViewsComponent },
           { path: 'whispers', component: WhispersComponent },
           { path: '', redirectTo: 'input-texts', pathMatch: 'full' },

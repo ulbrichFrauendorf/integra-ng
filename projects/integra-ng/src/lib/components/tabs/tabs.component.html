@@ -1,0 +1,61 @@
+<div class="i-tabs" [attr.id]="componentId">
+  <!-- Tab headers -->
+  <div class="i-tabs__header" role="tablist">
+    @for (tab of tabPanels; track tab.componentId; let i = $index) {
+      <button
+        [id]="getTabId(i)"
+        class="i-tabs__tab"
+        [ngClass]="{
+          'i-tabs__tab--active': activeIndex === i,
+          'i-tabs__tab--disabled': tab.disabled,
+          'i-tabs__tab--icon-only': tab.icon && !tab.header
+        }"
+        [attr.tabindex]="tab.disabled ? -1 : 0"
+        [attr.aria-selected]="activeIndex === i"
+        [attr.aria-controls]="getPanelId(i)"
+        [disabled]="tab.disabled"
+        role="tab"
+        type="button"
+        (click)="selectTab($event, i)"
+        (keydown)="onKeyDown($event, i)"
+      >
+        @if (tab.icon) {
+          <i [ngClass]="tab.icon" class="i-tabs__tab-icon"></i>
+        }
+        @if (tab.header) {
+          <span class="i-tabs__tab-label">{{ tab.header }}</span>
+        }
+        @if (tab.closable && !tab.disabled) {
+          <button
+            class="i-tabs__tab-close"
+            type="button"
+            tabindex="-1"
+            aria-label="Close tab"
+            (click)="closeTab($event, i)"
+          >
+            <i class="pi pi-times"></i>
+          </button>
+        }
+      </button>
+    }
+    <div class="i-tabs__ink-bar"></div>
+  </div>
+
+  <!-- Tab content panels -->
+  <div class="i-tabs__content">
+    @for (tab of tabPanels; track tab.componentId; let i = $index) {
+      <div
+        [id]="getPanelId(i)"
+        class="i-tabs__panel"
+        [ngClass]="{ 'i-tabs__panel--active': activeIndex === i }"
+        [attr.aria-labelledby]="getTabId(i)"
+        [attr.hidden]="activeIndex !== i ? true : null"
+        role="tabpanel"
+      >
+        @if (activeIndex === i) {
+          <ng-container [ngTemplateOutlet]="tab.contentTemplate"></ng-container>
+        }
+      </div>
+    }
+  </div>
+</div>

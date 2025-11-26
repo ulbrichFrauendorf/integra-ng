@@ -1,0 +1,155 @@
+<div class="tabs-demo">
+  <header class="demo-header">
+    <h1>Tabs Components</h1>
+    <p>
+      Tabbed interface components for organizing content into multiple panels.
+      Supports icons, text labels, keyboard navigation, and accessibility features.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Icon + Text Tabs -->
+    <app-demo-card
+      [title]="'Icon + Text Tabs'"
+      [sourceCode]="codeExamples.iconText"
+    >
+      <i-tabs [(activeIndex)]="iconTextTabIndex">
+        <i-tab-panel header="Home" icon="pi pi-home">
+          <div class="tab-content">
+            <h3>Welcome Home</h3>
+            <p>This is the home panel content. You can put any content here including text, images, forms, or other components.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel header="Profile" icon="pi pi-user">
+          <div class="tab-content">
+            <h3>User Profile</h3>
+            <p>View and edit your profile information here. This panel demonstrates how content changes when switching tabs.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel header="Settings" icon="pi pi-cog">
+          <div class="tab-content">
+            <h3>Settings Panel</h3>
+            <p>Configure your application settings in this panel. The tabs component handles keyboard navigation automatically.</p>
+          </div>
+        </i-tab-panel>
+      </i-tabs>
+    </app-demo-card>
+
+    <!-- Icon Only Tabs -->
+    <app-demo-card
+      [title]="'Icon Only Tabs'"
+      [sourceCode]="codeExamples.iconOnly"
+    >
+      <i-tabs [(activeIndex)]="iconOnlyTabIndex">
+        <i-tab-panel icon="pi pi-home">
+          <div class="tab-content">
+            <h3>Home</h3>
+            <p>Icon-only tabs are useful when space is limited or when icons are self-explanatory.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel icon="pi pi-user">
+          <div class="tab-content">
+            <h3>Users</h3>
+            <p>This tab shows user information. The pi pi-user icon is universally recognized.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel icon="pi pi-cog">
+          <div class="tab-content">
+            <h3>Settings</h3>
+            <p>Configuration options go here. Use icon-only tabs for a more compact UI.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel icon="pi pi-bell">
+          <div class="tab-content">
+            <h3>Notifications</h3>
+            <p>Notification center with icon-only tab. Easy to recognize and navigate.</p>
+          </div>
+        </i-tab-panel>
+      </i-tabs>
+    </app-demo-card>
+
+    <!-- Text Only Tabs -->
+    <app-demo-card
+      [title]="'Text Only Tabs (with Disabled)'"
+      [sourceCode]="codeExamples.textOnly"
+    >
+      <i-tabs [(activeIndex)]="textOnlyTabIndex">
+        <i-tab-panel header="Overview">
+          <div class="tab-content">
+            <h3>Overview</h3>
+            <p>Text-only tabs are clean and straightforward. Perfect when icons aren't necessary.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel header="Details">
+          <div class="tab-content">
+            <h3>Details</h3>
+            <p>Detailed information goes in this panel. Each tab panel can contain any content.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel header="Disabled Tab" [disabled]="true">
+          <div class="tab-content">
+            <h3>Disabled Content</h3>
+            <p>This content is not accessible because the tab is disabled.</p>
+          </div>
+        </i-tab-panel>
+        <i-tab-panel header="History">
+          <div class="tab-content">
+            <h3>History</h3>
+            <p>Historical data and audit logs. Navigate using arrow keys and Enter/Space.</p>
+          </div>
+        </i-tab-panel>
+      </i-tabs>
+    </app-demo-card>
+
+    <!-- Closable Tabs -->
+    <app-demo-card
+      [title]="'Closable Tabs'"
+      [sourceCode]="codeExamples.closable"
+    >
+      <div class="closable-demo">
+        @if (closableTabs.length === 0) {
+          <div class="no-tabs-message">
+            <p>All tabs have been closed.</p>
+            <button class="reset-button" (click)="resetClosableTabs()">Reset Tabs</button>
+          </div>
+        } @else {
+          <i-tabs [(activeIndex)]="closableTabIndex" (onClose)="onTabClose($event)">
+            @for (tab of closableTabs; track $index) {
+              <i-tab-panel [header]="tab.header" [icon]="tab.icon" [closable]="true">
+                <div class="tab-content">
+                  <h3>{{ tab.header }}</h3>
+                  <p>{{ tab.content }}</p>
+                </div>
+              </i-tab-panel>
+            }
+          </i-tabs>
+          <button class="reset-button" (click)="resetClosableTabs()">Reset Tabs</button>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Initialization Code -->
+    <app-demo-card
+      [title]="'Usage'"
+      [sourceCode]="initializationCode"
+      [language]="'ts'"
+    >
+      <div class="usage-info">
+        <h4>Getting Started</h4>
+        <p>Import the <code>ITabs</code> and <code>ITabPanel</code> components in your module or component:</p>
+        <ul>
+          <li>Use <code>&lt;i-tabs&gt;</code> as the container element</li>
+          <li>Add <code>&lt;i-tab-panel&gt;</code> for each tab</li>
+          <li>Set <code>header</code> for text labels</li>
+          <li>Set <code>icon</code> for icon display (using PrimeIcons)</li>
+          <li>Use <code>[(activeIndex)]</code> for two-way binding</li>
+        </ul>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

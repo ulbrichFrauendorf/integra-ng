@@ -1,0 +1,99 @@
+@use "./tabs.component.theme.scss" as theme;
+
+@include theme.i-tabs-theme();
+
+.i-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    gap: 4px;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    transition: color 0.2s, background-color 0.2s;
+    position: relative;
+    white-space: nowrap;
+
+    &--icon-only {
+      padding: 12px 16px;
+    }
+
+    &--active {
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: inherit;
+        border-radius: 2px 2px 0 0;
+      }
+    }
+  }
+
+  &__tab-icon {
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__tab-label {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__tab-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-left: 4px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    transition: color 0.2s, background-color 0.2s;
+
+    i {
+      font-size: 10px;
+    }
+  }
+
+  &__ink-bar {
+    display: none; // Hidden, using ::after on active tab instead
+  }
+
+  &__content {
+    padding: 16px 0;
+  }
+
+  &__panel {
+    &:not(&--active) {
+      display: none;
+    }
+
+    &--active {
+      display: block;
+    }
+  }
+}

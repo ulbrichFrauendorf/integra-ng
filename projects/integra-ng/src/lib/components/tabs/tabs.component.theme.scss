@@ -1,0 +1,56 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-tabs-theme() {
+  .i-tabs {
+    &__header {
+      border-bottom: 1px solid colors.$color-surface-border;
+    }
+
+    &__tab {
+      color: colors.$color-text-secondary;
+      background: transparent;
+
+      &:hover:not(:disabled) {
+        color: colors.$color-text-primary;
+        background: colors.$color-surface-hover;
+      }
+
+      &:focus-visible {
+        outline: 2px solid colors.$color-primary;
+        outline-offset: -2px;
+      }
+
+      &--active {
+        color: colors.$color-primary;
+
+        &:hover:not(:disabled) {
+          color: colors.$color-primary;
+        }
+      }
+
+      &--disabled {
+        color: colors.$color-text-tertiary;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
+    &__tab-close {
+      color: colors.$color-text-secondary;
+      background: transparent;
+
+      &:hover {
+        color: colors.$color-danger;
+        background: color-mix(in srgb, colors.$color-danger 10%, transparent);
+      }
+    }
+
+    &__ink-bar {
+      background: colors.$color-primary;
+    }
+
+    &__panel {
+      color: colors.$color-text-primary;
+    }
+  }
+}
