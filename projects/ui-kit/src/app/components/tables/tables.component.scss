@@ -1,0 +1,33 @@
+@use "../shared-demo-styles.scss" as *;
+
+.tables-demo {
+  @extend .demo-component;
+}
+
+.demo-description {
+  margin-bottom: 16px;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.visual-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .visual-example {
+    h4 {
+      margin-bottom: 12px;
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+.selection-info {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: var(--surface-100, #f8f9fa);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
