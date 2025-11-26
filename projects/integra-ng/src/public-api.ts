@@ -25,6 +25,7 @@ export * from './lib/components/tree-view/tree-view.component';
 export * from './lib/components/whisper/whisper.component';
 export * from './lib/components/whisper/services/whisper.service';
 export * from './lib/components/whisper/services/whisper.interfaces';
+export * from './lib/components/table/table.component';
 
 /* Directives */
 export * from './lib/directives/tooltip/tooltip.component';

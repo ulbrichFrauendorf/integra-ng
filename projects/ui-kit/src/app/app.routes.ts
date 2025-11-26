@@ -15,6 +15,7 @@ import { CheckboxesComponent } from './components/checkboxes/checkboxes.componen
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
 import { InstallationComponent } from './components/installation/installation.component';
 import { ThemingComponent } from './components/theming/theming.component';
+import { TablesComponent } from './components/tables/tables.component';
 
 export const routes: Routes = [
   {
@@ -53,6 +54,7 @@ export const routes: Routes = [
           { path: 'listboxes', component: ListboxesComponent },
           { path: 'tree-views', component: TreeViewsComponent },
           { path: 'whispers', component: WhispersComponent },
+          { path: 'tables', component: TablesComponent },
           { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
         ],
       },

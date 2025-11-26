@@ -95,6 +95,11 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/tree-views'],
           },
           {
+            label: 'Tables',
+            icon: 'pi pi-fw pi-table',
+            routerLink: ['/components/tables'],
+          },
+          {
             label: 'Whispers',
             icon: 'pi pi-fw pi-comment',
             routerLink: ['/components/whispers'],
