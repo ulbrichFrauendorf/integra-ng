@@ -1,10 +1,10 @@
 @use "./select.component.theme.scss" as theme;
 @use "../../themes/scrollbar-mixins.scss" as scrollbar;
+@use "../../themes/variables" as vars;
 
 @include theme.i-select-theme();
 
 // SCSS variables
-$select-border-radius: 4px;
 $select-transition: 0.15s ease;
 $select-dropdown-max-height: 160px;
 $select-dropdown-viewport-margin: 150px;
@@ -71,7 +71,7 @@ $select-dropdown-viewport-margin: 150px;
     z-index: 1000;
     margin-top: 4px;
     margin-bottom: 8px;
-    border-radius: $select-border-radius;
+    border-radius: vars.$componentBorderRadius;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: visible;
 
@@ -83,7 +83,7 @@ $select-dropdown-viewport-margin: 150px;
         width: 100%;
         padding: 8px;
         border: 1px solid;
-        border-radius: $select-border-radius;
+        border-radius: vars.$componentBorderRadius;
         font-size: 1em;
         outline: none;
       }
@@ -91,11 +91,14 @@ $select-dropdown-viewport-margin: 150px;
 
     // Options list
     .i-select-options {
-      max-height: min($select-dropdown-max-height, calc(100vh - $select-dropdown-viewport-margin));
+      max-height: min(
+        $select-dropdown-max-height,
+        calc(100vh - $select-dropdown-viewport-margin)
+      );
       padding-right: 2px;
       overflow-x: hidden;
       overflow-y: auto;
-      border-radius: 0 0 $select-border-radius $select-border-radius;
+      border-radius: 0 0 vars.$componentBorderRadius vars.$componentBorderRadius;
       @include scrollbar.dropdown-scrollbar();
 
       // Individual option

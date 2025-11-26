@@ -1,104 +1,104 @@
 <div class="i-table-wrapper" [ngClass]="getTableClasses()">
   <!-- Global Filter -->
   @if (globalFilter) {
-    <div class="i-table-header">
-      <div class="i-table-global-filter">
-        <i-input-text
-          [useFloatLabel]="false"
-          placeholder="Search..."
-          [ngModel]="globalFilterValue()"
-          (ngModelChange)="onGlobalFilterInput($event)"
-          [fluid]="false"
-          [icon]="'pi pi-search'"
-        ></i-input-text>
-      </div>
+  <div class="i-table-header">
+    <div class="i-table-global-filter">
+      <i-input-text
+        [useFloatLabel]="false"
+        placeholder="Search..."
+        [ngModel]="globalFilterValue()"
+        (ngModelChange)="onGlobalFilterInput($event)"
+        [fluid]="false"
+        [icon]="'pi pi-search'"
+      ></i-input-text>
     </div>
+  </div>
   }
 
   <!-- Loading Overlay -->
   @if (loading) {
-    <div class="i-table-loading-overlay">
-      <i class="pi pi-spin pi-spinner i-table-loading-icon"></i>
-    </div>
+  <div class="i-table-loading-overlay">
+    <i class="pi pi-spin pi-spinner i-table-loading-icon"></i>
+  </div>
   }
 
-  <!-- Table Container -->
-  <div 
-    class="i-table-container" 
-    [style.max-height]="scrollHeight"
-    [class.i-table-container--scrollable]="scrollable || scrollHeight"
+  <!-- Scrollable Table Container -->
+  <div
+    class="i-table-container"
+    [class.i-table-container--scrollable]="scrollable || height || scrollHeight"
+    [style.max-height]="height || scrollHeight || null"
   >
-    <table>
-      <!-- Table Header -->
+    <table class="i-table">
+      <!-- Table Header (sticky when scrollable) -->
       <thead>
         <!-- Column Filters Row -->
         @if (filterable) {
-          <tr class="i-table-filter-row">
-            @if (selectionMode === 'multiple') {
-              <th class="i-table-selection-header"></th>
+        <tr class="i-table-filter-row">
+          @if (selectionMode === 'multiple') {
+          <th class="i-table-selection-header"></th>
+          }
+          @if (rowExpandable) {
+          <th class="i-table-expand-header"></th>
+          }
+          @for (column of columns(); track trackByColumn($index, column)) {
+            @if (column.filterable !== false) {
+            <th [style.width]="getColumnWidth(column)">
+              <input
+                type="text"
+                class="i-table-column-filter"
+                placeholder="Filter..."
+                [ngModel]="columnFilters()[column.field] || ''"
+                (ngModelChange)="onColumnFilterInput(column.field, $event)"
+              />
+            </th>
+            } @else {
+            <th [style.width]="getColumnWidth(column)"></th>
             }
-            @if (rowExpandable) {
-              <th class="i-table-expand-header"></th>
-            }
-            @for (column of columns(); track trackByColumn($index, column)) {
-              @if (column.filterable !== false) {
-                <th [style.width]="getColumnWidth(column)">
-                  <input
-                    type="text"
-                    class="i-table-column-filter"
-                    placeholder="Filter..."
-                    [ngModel]="columnFilters()[column.field] || ''"
-                    (ngModelChange)="onColumnFilterInput(column.field, $event)"
-                  />
-                </th>
-              } @else {
-                <th [style.width]="getColumnWidth(column)"></th>
-              }
-            }
-            @if (showActions && actions.length > 0) {
-              <th class="i-table-actions-header"></th>
-            }
-          </tr>
+          }
+          @if (showActions && actions.length > 0) {
+          <th class="i-table-actions-header"></th>
+          }
+        </tr>
         }
 
         <!-- Column Headers Row -->
         <tr>
           @if (selectionMode === 'multiple') {
-            <th class="i-table-selection-header">
-              <i-checkbox
-                [ngModel]="areAllRowsSelected()"
-                [indeterminate]="areSomeRowsSelected()"
-                (ngModelChange)="toggleAllSelection()"
-              ></i-checkbox>
-            </th>
+          <th class="i-table-selection-header">
+            <i-checkbox
+              [ngModel]="areAllRowsSelected()"
+              [indeterminate]="areSomeRowsSelected()"
+              (ngModelChange)="toggleAllSelection()"
+            ></i-checkbox>
+          </th>
           }
           @if (rowExpandable) {
-            <th class="i-table-expand-header"></th>
+          <th class="i-table-expand-header"></th>
           }
           @for (column of columns(); track trackByColumn($index, column)) {
-            <th
-              [style.width]="getColumnWidth(column)"
-              [style.text-align]="column.align || 'left'"
-              [class.i-table-sortable-column]="sortable && column.sortable"
-              [class.i-table-sorted]="sortField === column.field"
-              (click)="onSortColumn(column)"
-            >
-              <div class="i-table-header-content">
-                <span class="i-table-header-text">{{ column.header }}</span>
-                @if (sortable && column.sortable) {
-                  <i [class]="getSortIcon(column)" class="i-table-sort-icon"></i>
-                }
-              </div>
-              @if (resizableColumns) {
-                <span
-                  class="i-table-column-resizer"
-                  (mousedown)="onColumnResizeStart($event, column)"
-                ></span>
+          <th
+            [style.width]="getColumnWidth(column)"
+            [style.text-align]="column.align || 'left'"
+            [class.i-table-sortable-column]="sortable && column.sortable"
+            [class.i-table-sorted]="sortField === column.field"
+            (click)="onSortColumn(column)"
+          >
+            <div class="i-table-header-content">
+              <span class="i-table-header-text">{{ column.header }}</span>
+              @if (sortable && column.sortable) {
+              <i [class]="getSortIcon(column)" class="i-table-sort-icon"></i>
               }
-            </th>
+            </div>
+            @if (resizableColumns) {
+            <span
+              class="i-table-column-resizer"
+              (mousedown)="onColumnResizeStart($event, column)"
+            ></span>
+            }
+          </th>
           }
           @if (showActions && actions.length > 0) {
-            <th class="i-table-actions-header">Actions</th>
+          <th class="i-table-actions-header">Actions</th>
           }
         </tr>
       </thead>
@@ -106,76 +106,90 @@
       <!-- Table Body -->
       <tbody>
         @if (paginatedData().length === 0) {
-          <tr class="i-table-empty-row">
-            <td [attr.colspan]="columns().length + (selectionMode === 'multiple' ? 1 : 0) + (rowExpandable ? 1 : 0) + (showActions && actions.length > 0 ? 1 : 0)">
-              <i-empty-state-table></i-empty-state-table>
-            </td>
-          </tr>
+        <tr class="i-table-empty-row">
+          <td
+            [attr.colspan]="
+              columns().length +
+              (selectionMode === 'multiple' ? 1 : 0) +
+              (rowExpandable ? 1 : 0) +
+              (showActions && actions.length > 0 ? 1 : 0)
+            "
+          >
+            <i-empty-state-table></i-empty-state-table>
+          </td>
+        </tr>
         } @else {
           @for (row of paginatedData(); track trackByRow($index, row); let rowIndex = $index) {
-            <tr
-              [class.i-table-row-odd]="$odd"
-              [class.i-table-row-selected]="isRowSelected(row)"
-              (click)="toggleRowSelection(row)"
-            >
-              @if (selectionMode === 'multiple') {
-                <td class="i-table-selection-cell">
-                  <i-checkbox
-                    [ngModel]="isRowSelected(row)"
-                    (ngModelChange)="toggleRowSelection(row, $event)"
-                  ></i-checkbox>
-                </td>
-              }
-              @if (rowExpandable) {
-                <td class="i-table-expand-cell">
-                  <i-button
-                    severity="secondary"
-                    [text]="true"
-                    size="small"
-                    [icon]="isRowExpanded(row) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                    (clicked)="toggleRowExpansion(row, $event)"
-                  ></i-button>
-                </td>
-              }
-              @for (column of columns(); track trackByColumn($index, column)) {
-                <td
-                  [style.text-align]="column.align || 'left'"
-                  [style.width]="getColumnWidth(column)"
-                >
-                  {{ formatCellValue(getCellValue(row, column.field), column) }}
-                </td>
-              }
-              @if (showActions && actions.length > 0) {
-                <td class="i-table-actions-cell">
-                  <div class="i-table-actions">
-                    @for (action of actions; track action.id) {
-                      <i-button
-                        [severity]="action.severity || 'secondary'"
-                        [text]="true"
-                        size="small"
-                        [icon]="action.icon || ''"
-                        [disabled]="isActionDisabled(action, row)"
-                        (clicked)="onActionClick(action, row, $event)"
-                      >
-                        @if (action.label) {
-                          {{ action.label }}
-                        }
-                      </i-button>
-                    }
-                  </div>
-                </td>
-              }
-            </tr>
-            <!-- Expanded Row Content -->
-            @if (rowExpandable && isRowExpanded(row)) {
-              <tr class="i-table-expanded-row">
-                <td [attr.colspan]="columns().length + (selectionMode === 'multiple' ? 1 : 0) + 1 + (showActions && actions.length > 0 ? 1 : 0)">
-                  <div class="i-table-expanded-content">
-                    <pre>{{ row | json }}</pre>
-                  </div>
-                </td>
-              </tr>
+          <tr
+            [class.i-table-row-odd]="$odd"
+            [class.i-table-row-selected]="isRowSelected(row)"
+            (click)="toggleRowSelection(row)"
+          >
+            @if (selectionMode === 'multiple') {
+            <td class="i-table-selection-cell">
+              <i-checkbox
+                [ngModel]="isRowSelected(row)"
+                (ngModelChange)="toggleRowSelection(row, $event)"
+              ></i-checkbox>
+            </td>
             }
+            @if (rowExpandable) {
+            <td class="i-table-expand-cell">
+              <i-button
+                severity="secondary"
+                [text]="true"
+                size="small"
+                [icon]="isRowExpanded(row) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                (clicked)="toggleRowExpansion(row, $event)"
+              ></i-button>
+            </td>
+            }
+            @for (column of columns(); track trackByColumn($index, column)) {
+            <td
+              [style.text-align]="column.align || 'left'"
+              [style.width]="getColumnWidth(column)"
+            >
+              {{ formatCellValue(getCellValue(row, column.field), column) }}
+            </td>
+            }
+            @if (showActions && actions.length > 0) {
+            <td class="i-table-actions-cell">
+              <div class="i-table-actions">
+                @for (action of actions; track action.id) {
+                <i-button
+                  [severity]="action.severity || 'secondary'"
+                  [text]="true"
+                  size="small"
+                  [icon]="action.icon || ''"
+                  [disabled]="isActionDisabled(action, row)"
+                  (clicked)="onActionClick(action, row, $event)"
+                >
+                  @if (action.label) {
+                  {{ action.label }}
+                  }
+                </i-button>
+                }
+              </div>
+            </td>
+            }
+          </tr>
+          <!-- Expanded Row Content -->
+          @if (rowExpandable && isRowExpanded(row)) {
+          <tr class="i-table-expanded-row">
+            <td
+              [attr.colspan]="
+                columns().length +
+                (selectionMode === 'multiple' ? 1 : 0) +
+                1 +
+                (showActions && actions.length > 0 ? 1 : 0)
+              "
+            >
+              <div class="i-table-expanded-content">
+                <pre>{{ row | json }}</pre>
+              </div>
+            </td>
+          </tr>
+          }
           }
         }
       </tbody>
@@ -184,69 +198,71 @@
 
   <!-- Paginator -->
   @if (paginator && paginatedData().length > 0) {
-    <div class="i-table-paginator">
-      <div class="i-table-paginator-left">
-        <span class="i-table-paginator-info">
-          Showing {{ first + 1 }} to {{ min(first + rows, totalRecordsCount) }} of {{ totalRecordsCount }} entries
-        </span>
-      </div>
-      <div class="i-table-paginator-center">
-        <div class="i-table-paginator-pages">
-          <i-button
-            severity="secondary"
-            [text]="true"
-            size="small"
-            icon="pi pi-angle-double-left"
-            [disabled]="currentPage === 0"
-            (clicked)="goToFirstPage()"
-          ></i-button>
-          <i-button
-            severity="secondary"
-            [text]="true"
-            size="small"
-            icon="pi pi-angle-left"
-            [disabled]="currentPage === 0"
-            (clicked)="goToPreviousPage()"
-          ></i-button>
-          @for (page of getPageNumbers(); track page) {
-            <i-button
-              [severity]="page === currentPage ? 'primary' : 'secondary'"
-              [text]="page !== currentPage"
-              size="small"
-              (clicked)="goToPage(page)"
-            >
-              {{ page + 1 }}
-            </i-button>
-          }
-          <i-button
-            severity="secondary"
-            [text]="true"
-            size="small"
-            icon="pi pi-angle-right"
-            [disabled]="currentPage >= pageCount - 1"
-            (clicked)="goToNextPage()"
-          ></i-button>
-          <i-button
-            severity="secondary"
-            [text]="true"
-            size="small"
-            icon="pi pi-angle-double-right"
-            [disabled]="currentPage >= pageCount - 1"
-            (clicked)="goToLastPage()"
-          ></i-button>
-        </div>
-      </div>
-      <div class="i-table-paginator-right">
-        <select
-          class="i-table-rows-per-page"
-          [ngModel]="rows"
-          (ngModelChange)="onRowsPerPageChange($event)"
+  <div class="i-table-paginator">
+    <div class="i-table-paginator-left">
+      <span class="i-table-paginator-info">
+        Showing {{ first + 1 }} to {{ min(first + rows, totalRecordsCount) }} of
+        {{ totalRecordsCount }} entries
+      </span>
+    </div>
+    <div class="i-table-paginator-center">
+      <div class="i-table-paginator-pages">
+        <i-button
+          severity="secondary"
+          [text]="true"
+          size="small"
+          icon="pi pi-angle-double-left"
+          [disabled]="currentPage === 0"
+          (clicked)="goToFirstPage()"
+        ></i-button>
+        <i-button
+          severity="secondary"
+          [text]="true"
+          size="small"
+          icon="pi pi-angle-left"
+          [disabled]="currentPage === 0"
+          (clicked)="goToPreviousPage()"
+        ></i-button>
+        @for (page of getPageNumbers(); track page) {
+        <i-button
+          [severity]="page === currentPage ? 'primary' : 'secondary'"
+          [text]="page !== currentPage"
+          size="small"
+          (clicked)="goToPage(page)"
         >
-          @for (option of rowsPerPageOptions; track option) {
-            <option [ngValue]="option">{{ option }} / page</option>
-          }
-        </select>
+          {{ page + 1 }}
+        </i-button>
+        }
+        <i-button
+          severity="secondary"
+          [text]="true"
+          size="small"
+          icon="pi pi-angle-right"
+          [disabled]="currentPage >= pageCount - 1"
+          (clicked)="goToNextPage()"
+        ></i-button>
+        <i-button
+          severity="secondary"
+          [text]="true"
+          size="small"
+          icon="pi pi-angle-double-right"
+          [disabled]="currentPage >= pageCount - 1"
+          (clicked)="goToLastPage()"
+        ></i-button>
       </div>
     </div>
+    <div class="i-table-paginator-right">
+      <i-select
+        [options]="rowsPerPageSelectOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [useFloatLabel]="false"
+        [fluid]="false"
+        [filter]="false"
+        [(ngModel)]="rows"
+        (onChange)="onRowsPerPageChange($event)"
+      ></i-select>
+    </div>
+  </div>
   }
 </div>

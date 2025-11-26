@@ -12,6 +12,7 @@ import { MultiSelectsComponent } from './components/multi-selects/multi-selects.
 import { SelectsComponent } from './components/selects/selects.component';
 import { ChipsComponent } from './components/chips/chips.component';
 import { ListboxesComponent } from './components/listboxes/listboxes.component';
+import { MessagesComponent } from './components/messages/messages.component';
 import { WhispersComponent } from './components/whispers/whispers.component';
 import { CheckboxesComponent } from './components/checkboxes/checkboxes.component';
 import { TreeViewsComponent } from './components/tree-views/tree-views.component';
@@ -57,6 +58,7 @@ export const routes: Routes = [
           { path: 'multi-selects', component: MultiSelectsComponent },
           { path: 'chips', component: ChipsComponent },
           { path: 'listboxes', component: ListboxesComponent },
+          { path: 'messages', component: MessagesComponent },
           { path: 'tree-views', component: TreeViewsComponent },
           { path: 'tabs', component: TabsComponent },
           { path: 'whispers', component: WhispersComponent },

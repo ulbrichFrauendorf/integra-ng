@@ -13,6 +13,8 @@ import {
   TableAction,
   TableColumn,
 } from '@shared/components/table/table.component';
+import { IWhisper } from '../../../../../integra-ng/src/lib/components/whisper/whisper.component';
+import { WhisperService } from '../../../../../integra-ng/src/lib/components/whisper/services/whisper.service';
 
 interface Product {
   id: number;
@@ -27,11 +29,13 @@ interface Product {
 @Component({
   selector: 'app-tables',
   standalone: true,
-  imports: [ITable, DemoCardComponent, FeaturesListComponent],
+  imports: [ITable, DemoCardComponent, FeaturesListComponent, IWhisper],
   templateUrl: './tables.component.html',
   styleUrl: './tables.component.scss',
 })
 export class TablesComponent {
+  constructor(private whisperService: WhisperService) {}
+
   // Sample product data
   products: Product[] = [
     {
@@ -234,6 +238,15 @@ export class TablesComponent {
   [sortable]="true">
 </i-table>`,
 
+    height: `<!-- Ensure a global whisper container exists in your app (e.g. in AppComponent): -->
+<!-- <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper> -->
+<i-table
+  [data]="products"
+  [columns]="sortableColumns"
+  [sortable]="true"
+  [height]="'300px'">
+</i-table>`,
+
     filtering: `<i-table
   [data]="products"
   [columns]="filterableColumns"
@@ -282,7 +295,9 @@ tableActions: TableAction[] = [
   size="small">
 </i-table>`,
 
-    full: `<i-table
+    full: `<!-- Ensure a global whisper container exists in your app (e.g. in AppComponent): -->
+<!-- <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper> -->
+<i-table
   [data]="products"
   [columns]="fullColumns"
   [sortable]="true"
@@ -366,32 +381,54 @@ export class ExampleComponent {
 
   // Event handlers
   onSort(event: SortEvent): void {
-    console.log('Sort:', event);
+    // Sorting handled by table; no global whisper should be shown for sort.
+    // Keep hook for consumers to react if needed.
+    console.debug('Table sorted', event);
   }
 
   onFilter(event: FilterEvent): void {
-    console.log('Filter:', event);
+    // Filtering handled by table; no global whisper should be shown for filter.
+    console.debug('Filter applied', event);
   }
 
   onPage(event: PageEvent): void {
-    console.log('Page:', event);
+    // Pagination handled by table; do not emit global whispers for paging.
+    console.debug('Page changed', event);
   }
 
   onSelectionChange(selection: Product[]): void {
-    console.log('Selection:', selection);
+    // Selection changes should not trigger global whispers in the demo.
+    console.debug('Selection changed', selection.length);
   }
 
   handleAction(event: { action: string; row: Product }): void {
-    console.log('Action:', event.action, 'Row:', event.row);
     switch (event.action) {
       case 'view':
-        alert(`Viewing: ${event.row.name}`);
+        this.whisperService.add({
+          severity: 'info',
+          summary: 'Viewing Product',
+          detail: `Viewing details for: ${event.row.name}`,
+          key: 'global',
+          life: 3000,
+        });
         break;
       case 'edit':
-        alert(`Editing: ${event.row.name}`);
+        this.whisperService.add({
+          severity: 'warning',
+          summary: 'Editing Product',
+          detail: `Editing: ${event.row.name}`,
+          key: 'global',
+          life: 3000,
+        });
         break;
       case 'delete':
-        alert(`Deleting: ${event.row.name}`);
+        this.whisperService.add({
+          severity: 'danger',
+          summary: 'Delete Product',
+          detail: `Are you sure you want to delete ${event.row.name}?`,
+          key: 'global',
+          life: 5000,
+        });
         break;
     }
   }

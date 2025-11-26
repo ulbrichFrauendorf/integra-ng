@@ -17,13 +17,10 @@
           <code>.dark</code> classes, then add the appropriate class to your
           page's <code>&lt;body&gt;</code> element.
         </p>
-        <div class="info-box">
-          <i class="pi pi-lightbulb"></i>
-          <span
-            >All components automatically use these CSS variables, so changing
-            the theme is as simple as switching the body class!</span
-          >
-        </div>
+        <i-message severity="info">
+          All components automatically use these CSS variables, so changing
+          the theme is as simple as switching the body class!
+        </i-message>
       </div>
     </app-demo-card>
 
@@ -38,13 +35,10 @@
           Create a SCSS file (e.g., <code>theme.scss</code>) in your project's
           styles folder. Define the CSS variables for both light and dark modes:
         </p>
-        <div class="warning-box">
-          <i class="pi pi-exclamation-triangle"></i>
-          <span
-            >Important: Use the exact variable names shown above. The components
-            depend on these specific names.</span
-          >
-        </div>
+        <i-message severity="warning">
+          <strong>Important:</strong> Use the exact variable names shown above. The components
+          depend on these specific names.
+        </i-message>
       </div>
     </app-demo-card>
 
@@ -101,10 +95,9 @@
     >
       <div class="theming-content">
         <p>Add a button in your template to toggle the theme:</p>
-        <div class="success-box">
-          <i class="pi pi-check-circle"></i>
-          <span>That's it! Your app now supports light and dark themes.</span>
-        </div>
+        <i-message severity="success">
+          That's it! Your app now supports light and dark themes.
+        </i-message>
       </div>
     </app-demo-card>
 
@@ -182,13 +175,10 @@
           </ul>
         </div>
 
-        <div class="tip-box">
-          <i class="pi pi-star"></i>
-          <div>
-            <strong>Pro Tip:</strong> You can customize these colors to match
-            your brand. Just make sure to keep the variable names the same!
-          </div>
-        </div>
+        <i-message severity="primary" icon="pi pi-star">
+          <strong>Pro Tip:</strong> You can customize these colors to match
+          your brand. Just make sure to keep the variable names the same!
+        </i-message>
       </div>
     </app-demo-card>
   </div>

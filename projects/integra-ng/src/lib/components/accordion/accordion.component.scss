@@ -1,5 +1,6 @@
 @use "./accordion.component.theme.scss" as theme;
 @use "../../themes/_variables.scss" as vars;
+@use "../../themes/color-variables.scss" as colors;
 
 @include theme.i-accordion-theme();
 
@@ -35,11 +36,6 @@
     .i-accordion-toggle-icon {
       font-size: 0.875rem;
       transition: transform vars.$transitionDuration ease;
-    }
-
-    &:focus {
-      outline: 2px solid var(--color-primary);
-      outline-offset: -2px;
     }
   }
 

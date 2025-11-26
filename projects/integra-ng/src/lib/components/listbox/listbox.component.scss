@@ -1,10 +1,10 @@
 @use "./listbox.component.theme.scss" as theme;
 @use "../../themes/scrollbar-mixins.scss" as scrollbar;
+@use "../../themes/variables" as vars;
 
 @include theme.i-listbox-theme();
 
 // SCSS variables
-$listbox-border-radius: 4px;
 $listbox-transition: 0.15s ease;
 $listbox-dropdown-max-height: 160px;
 $listbox-dropdown-viewport-margin: 150px;
@@ -79,7 +79,7 @@ $listbox-dropdown-viewport-margin: 150px;
   .i-listbox-dropdown {
     margin-top: 4px;
     margin-bottom: 8px;
-    border-radius: $listbox-border-radius;
+    border-radius: vars.$componentBorderRadius;
     overflow: visible;
 
     // Filter section
@@ -90,7 +90,7 @@ $listbox-dropdown-viewport-margin: 150px;
         width: 100%;
         padding: 8px;
         border: 1px solid;
-        border-radius: $listbox-border-radius;
+        border-radius: vars.$componentBorderRadius;
         font-size: 1em;
         outline: none;
       }
@@ -98,10 +98,13 @@ $listbox-dropdown-viewport-margin: 150px;
 
     // Options list
     .i-listbox-options {
-      max-height: min($listbox-dropdown-max-height, calc(100vh - $listbox-dropdown-viewport-margin));
+      max-height: min(
+        $listbox-dropdown-max-height,
+        calc(100vh - $listbox-dropdown-viewport-margin)
+      );
       overflow-x: hidden;
       overflow-y: auto;
-      border-radius: 0 0 $listbox-border-radius $listbox-border-radius;
+      border-radius: 0 0 vars.$componentBorderRadius vars.$componentBorderRadius;
       @include scrollbar.dropdown-scrollbar();
 
       // Individual option

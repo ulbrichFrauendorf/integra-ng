@@ -100,6 +100,11 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/listboxes'],
           },
           {
+            label: 'Messages',
+            icon: 'pi pi-fw pi-info-circle',
+            routerLink: ['/components/messages'],
+          },
+          {
             label: 'Tree Views',
             icon: 'pi pi-fw pi-sitemap',
             routerLink: ['/components/tree-views'],

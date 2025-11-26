@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
+import { ISelect } from '../select/select.component';
 import { EmptyStateTableComponent } from '../empty-state-table/empty-state-table.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
@@ -141,6 +142,7 @@ export interface PageEvent {
     IInputText,
     IButton,
     ICheckbox,
+    ISelect,
     EmptyStateTableComponent,
   ],
   templateUrl: './table.component.html',
@@ -174,15 +176,29 @@ export class ITable {
   @Input() sortable = false;
 
   /**
-   * Current sort field
+   * Current sort field (backed by a signal so computed can track changes)
    */
-  @Input() sortField = '';
+  private _sortField = signal('');
+  @Input()
+  set sortField(val: string) {
+    this._sortField.set(val ?? '');
+  }
+  get sortField(): string {
+    return this._sortField();
+  }
 
   /**
-   * Sort direction
+   * Sort direction (backed by a signal)
    * @default 'asc'
    */
-  @Input() sortOrder: 'asc' | 'desc' = 'asc';
+  private _sortOrder = signal<'asc' | 'desc'>('asc');
+  @Input()
+  set sortOrder(val: 'asc' | 'desc') {
+    this._sortOrder.set(val === 'desc' ? 'desc' : 'asc');
+  }
+  get sortOrder(): 'asc' | 'desc' {
+    return this._sortOrder();
+  }
 
   /**
    * Event emitted when sort changes
@@ -349,6 +365,11 @@ export class ITable {
    */
   @Input() scrollHeight?: string;
 
+  /**
+   * Alias Input for convenience — developer can set `height` or `scrollHeight`.
+   */
+  @Input() height?: string;
+
   // ===== ADDITIONAL FEATURES =====
 
   /**
@@ -435,6 +456,28 @@ export class ITable {
    */
   columnWidths = signal<{ [field: string]: number }>({});
 
+  /**
+   * Returns rows-per-page options formatted for `i-select`.
+   * Each option has `label` and `value` keys so `i-select` can render them.
+   */
+  rowsPerPageSelectOptions(): Array<{ label: string; value: number }> {
+    return (this.rowsPerPageOptions || []).map((n) => ({
+      label: `${n} / page`,
+      value: n,
+    }));
+  }
+
+  /**
+   * Compute minimum body height so pages have equal height even when last page has fewer rows.
+   * This does not hard-code a global fixed height — it computes based on `rows` and size.
+   */
+  computeBodyMinHeight(): string {
+    const baseRowHeight =
+      this.size === 'small' ? 36 : this.size === 'large' ? 56 : 48;
+    const minHeight = (this.rows || 1) * baseRowHeight;
+    return `${minHeight}px`;
+  }
+
   constructor(private el: ElementRef) {}
 
   /**
@@ -451,7 +494,9 @@ export class ITable {
       result = result.filter((row) =>
         cols.some((col) => {
           const value = this.getCellValue(row, col.field);
-          return String(value).toLowerCase().includes(globalFilter.toLowerCase());
+          return String(value)
+            .toLowerCase()
+            .includes(globalFilter.toLowerCase());
         })
       );
     }
@@ -463,7 +508,9 @@ export class ITable {
       if (filterValue) {
         result = result.filter((row) => {
           const value = this.getCellValue(row, field);
-          return String(value).toLowerCase().includes(filterValue.toLowerCase());
+          return String(value)
+            .toLowerCase()
+            .includes(filterValue.toLowerCase());
         });
       }
     });
@@ -485,7 +532,7 @@ export class ITable {
 
   /**
    * Get paginated data
-   * Note: Using a getter method instead of a computed signal because 
+   * Note: Using a getter method instead of a computed signal because
    * pagination properties (paginator, first, rows) are regular @Input()
    * properties that aren't tracked by computed signals.
    * @internal
@@ -627,7 +674,9 @@ export class ITable {
     if (this.sortField !== column.field) {
       return 'pi pi-sort-alt';
     }
-    return this.sortOrder === 'asc' ? 'pi pi-sort-amount-up' : 'pi pi-sort-amount-down';
+    return this.sortOrder === 'asc'
+      ? 'pi pi-sort-amount-up'
+      : 'pi pi-sort-amount-down';
   }
 
   // ===== FILTERING METHODS =====
@@ -815,7 +864,9 @@ export class ITable {
       }
     } else if (this.selectionMode === 'multiple') {
       if (isSelected) {
-        this.selection = this.selection.filter((s) => !this.compareObjects(s, row));
+        this.selection = this.selection.filter(
+          (s) => !this.compareObjects(s, row)
+        );
         this.onRowUnselect.emit(row);
       } else {
         this.selection = [...this.selection, row];
@@ -861,7 +912,9 @@ export class ITable {
   areAllRowsSelected(): boolean {
     const data = this.paginatedData();
     if (data.length === 0) return false;
-    return data.every((d) => this.selection?.some((s) => this.compareObjects(s, d)));
+    return data.every((d) =>
+      this.selection?.some((s) => this.compareObjects(s, d))
+    );
   }
 
   /**
@@ -956,7 +1009,8 @@ export class ITable {
     this.resizeStartX = event.pageX;
 
     const widths = this.columnWidths();
-    this.resizeStartWidth = widths[column.field] || this.getColumnDefaultWidth(column);
+    this.resizeStartWidth =
+      widths[column.field] || this.getColumnDefaultWidth(column);
   }
 
   /**
@@ -1024,7 +1078,8 @@ export class ITable {
       'i-table--small': this.size === 'small',
       'i-table--medium': this.size === 'medium',
       'i-table--large': this.size === 'large',
-      'i-table--scrollable': this.scrollable,
+      'i-table--scrollable':
+        this.scrollable || !!(this.height || this.scrollHeight),
       'i-table--loading': this.loading,
     };
   }

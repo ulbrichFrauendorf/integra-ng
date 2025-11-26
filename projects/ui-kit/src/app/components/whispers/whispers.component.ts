@@ -27,7 +27,7 @@ export class WhispersComponent {
       detail: 'Your action was completed successfully.',
       key: 'global',
       closable: false,
-      life: 300000,
+      life: 30000,
     },
     info: {
       severity: 'info' as ISeverity,

@@ -1,16 +1,16 @@
 @use "./table.component.theme.scss" as theme;
 @use "../../themes/scrollbar-mixins.scss" as scrollbar;
+@use "../../themes/variables" as vars;
 
 @include theme.i-table-theme();
 
 // SCSS variables
-$table-border-radius: 4px;
 $table-transition: 0.15s ease;
 
 .i-table-wrapper {
   position: relative;
   display: block;
-  border-radius: $table-border-radius;
+  border-radius: vars.$componentBorderRadius;
   overflow: hidden;
 
   // Header with global filter
@@ -47,8 +47,15 @@ $table-transition: 0.15s ease;
     overflow-x: auto;
     @include scrollbar.dropdown-scrollbar();
 
+    // Scrollable mode: container scrolls vertically, thead is sticky
     &--scrollable {
       overflow-y: auto;
+
+      thead {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
     }
   }
 
@@ -109,8 +116,9 @@ $table-transition: 0.15s ease;
             width: 100%;
             padding: 6px 10px;
             font-size: 0.875rem;
-            border-radius: $table-border-radius;
-            transition: border-color $table-transition, box-shadow $table-transition;
+            border-radius: vars.$componentBorderRadius;
+            transition: border-color $table-transition,
+              box-shadow $table-transition;
           }
         }
       }
@@ -143,7 +151,7 @@ $table-transition: 0.15s ease;
           .i-table-expanded-content {
             padding: 16px;
             margin: 8px 16px;
-            border-radius: $table-border-radius;
+            border-radius: vars.$componentBorderRadius;
 
             pre {
               margin: 0;
@@ -213,14 +221,16 @@ $table-transition: 0.15s ease;
     justify-content: space-between;
     padding: 12px 16px;
     gap: 16px;
+    overflow: visible;
 
-    .i-table-paginator-left,
-    .i-table-paginator-right {
+    .i-table-paginator-left {
       flex: 1;
     }
 
     .i-table-paginator-right {
-      text-align: right;
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
     }
 
     .i-table-paginator-center {
@@ -237,13 +247,6 @@ $table-transition: 0.15s ease;
       display: flex;
       align-items: center;
       gap: 4px;
-    }
-
-    .i-table-rows-per-page {
-      padding: 6px 10px;
-      font-size: 0.875rem;
-      border-radius: $table-border-radius;
-      cursor: pointer;
     }
   }
 
@@ -300,12 +303,7 @@ $table-transition: 0.15s ease;
     }
   }
 
-  // Striped variant (handled in theme file with colors)
-  &.i-table--striped {
-    table tbody tr:nth-child(odd) {
-      // Color applied in theme
-    }
-  }
+  // Striped variant (colors applied in theme file)
 
   // Scrollable variant
   &.i-table--scrollable {

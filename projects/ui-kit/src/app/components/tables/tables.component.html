@@ -1,4 +1,6 @@
 <div class="tables-demo">
+  <!-- Whisper container required for toast/whisper messages from demo actions -->
+  <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper>
   <header class="demo-header">
     <h1>Table Component</h1>
     <p>
@@ -25,6 +27,25 @@
         [data]="products"
         [columns]="sortableColumns"
         [sortable]="true"
+        (onSort)="onSort($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Height + Sorting Example -->
+    <app-demo-card
+      [title]="'Fixed Height + Sorting'"
+      [sourceCode]="codeExamples.height"
+    >
+      <p class="demo-description">
+        Table with a fixed height and vertical scroll. Sorting still works while
+        scrolling.
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="sortableColumns"
+        [sortable]="true"
+        [height]="'300px'"
         (onSort)="onSort($event)"
       >
       </i-table>
@@ -86,10 +107,7 @@
     </app-demo-card>
 
     <!-- Actions Table -->
-    <app-demo-card
-      [title]="'Row Actions'"
-      [sourceCode]="codeExamples.actions"
-    >
+    <app-demo-card [title]="'Row Actions'" [sourceCode]="codeExamples.actions">
       <p class="demo-description">
         Action buttons with conditional disable (delete disabled for out of
         stock items).

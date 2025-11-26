@@ -1,10 +1,9 @@
 @use "./input-text.component.theme.scss" as theme;
+@use "../../themes/variables" as vars;
 
 @include theme.i-input-theme();
 
-// SCSS variables for input component
 $input-icon-size: 16px;
-$input-border-radius: 4px;
 $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
 .i-input-wrapper {
@@ -35,7 +34,7 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
   .i-input {
     box-sizing: border-box;
     width: 100%;
-    border-radius: $input-border-radius;
+    border-radius: vars.$componentBorderRadius;
     transition: $input-transition;
 
     &:focus {

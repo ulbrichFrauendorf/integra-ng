@@ -154,8 +154,9 @@
         color: colors.$color-text-primary;
 
         &:focus {
-          border-color: colors.$color-primary;
           outline: none;
+          border-color: colors.$color-primary;
+          box-shadow: colors.$color-box-shadow;
         }
       }
     }
