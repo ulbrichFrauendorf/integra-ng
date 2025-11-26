@@ -128,6 +128,12 @@ export class ISelect implements ControlValueAccessor {
   @Input() placeholder = 'Select an option';
 
   /**
+   * Whether the internal input should use float label style
+   * @default true
+   */
+  @Input() useFloatLabel = true;
+
+  /**
    * HTML id attribute for the select element
    */
   @Input() id?: string;

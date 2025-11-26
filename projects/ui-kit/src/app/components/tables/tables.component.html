@@ -1,0 +1,169 @@
+<div class="tables-demo">
+  <!-- Whisper container required for toast/whisper messages from demo actions -->
+  <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper>
+  <header class="demo-header">
+    <h1>Table Component</h1>
+    <p>
+      A comprehensive table component with sorting, filtering,
+      selection, and row actions. All features are configurable via props.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Basic Table -->
+    <app-demo-card [title]="'Basic Table'" [sourceCode]="codeExamples.basic">
+      <i-table [data]="products" [columns]="basicColumns"> </i-table>
+    </app-demo-card>
+
+    <!-- Sortable Table -->
+    <app-demo-card
+      [title]="'Sortable Table'"
+      [sourceCode]="codeExamples.sortable"
+    >
+      <p class="demo-description">
+        Click on column headers to sort. Sortable columns show a sort icon.
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="sortableColumns"
+        [sortable]="true"
+        (onSort)="onSort($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Height + Sorting Example -->
+    <app-demo-card
+      [title]="'Fixed Height + Sorting'"
+      [sourceCode]="codeExamples.height"
+    >
+      <p class="demo-description">
+        Table with a fixed height and vertical scroll. Sorting still works while
+        scrolling.
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="sortableColumns"
+        [sortable]="true"
+        [height]="'300px'"
+        (onSort)="onSort($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Filtering Table -->
+    <app-demo-card
+      [title]="'Filtering (Global & Column)'"
+      [sourceCode]="codeExamples.filtering"
+    >
+      <p class="demo-description">
+        Use the global search or column filters to narrow down results.
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="filterableColumns"
+        [sortable]="true"
+        [filterable]="true"
+        [globalFilter]="true"
+        (onFilter)="onFilter($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Selection Table -->
+    <app-demo-card
+      [title]="'Row Selection (Multiple)'"
+      [sourceCode]="codeExamples.selection"
+    >
+      <p class="demo-description">
+        Selected: {{ selectedProducts.length }} products
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="basicColumns"
+        selectionMode="multiple"
+        [(selection)]="selectedProducts"
+        (onSelectionChange)="onSelectionChange($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Actions Table -->
+    <app-demo-card [title]="'Row Actions'" [sourceCode]="codeExamples.actions">
+      <p class="demo-description">
+        Action buttons with conditional disable (delete disabled for out of
+        stock items).
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="basicColumns"
+        [showActions]="true"
+        [actions]="tableActions"
+        (onAction)="handleAction($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Visual Variants -->
+    <app-demo-card
+      [title]="'Visual Variants'"
+      [sourceCode]="codeExamples.visual"
+    >
+      <div class="visual-examples">
+        <div class="visual-example">
+          <h4>Striped & Bordered (Small)</h4>
+          <i-table
+            [data]="products.slice(0, 5)"
+            [columns]="basicColumns"
+            [striped]="true"
+            [bordered]="true"
+            size="small"
+          >
+          </i-table>
+        </div>
+        <div class="visual-example">
+          <h4>Large Size</h4>
+          <i-table
+            [data]="products.slice(0, 3)"
+            [columns]="basicColumns"
+            size="large"
+          >
+          </i-table>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Full Featured Table -->
+    <app-demo-card
+      [title]="'Full Featured Table'"
+      [sourceCode]="codeExamples.full"
+    >
+      <p class="demo-description">
+        Combining sorting, filtering, pagination, selection, and actions.
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="fullColumns"
+        [sortable]="true"
+        [filterable]="true"
+        [globalFilter]="true"
+        selectionMode="multiple"
+        [(selection)]="selectedProducts"
+        [showActions]="true"
+        [actions]="tableActions"
+        [striped]="true"
+        [hoverable]="true"
+        (onSort)="onSort($event)"
+        (onFilter)="onFilter($event)"
+        (onSelectionChange)="onSelectionChange($event)"
+        (onAction)="handleAction($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

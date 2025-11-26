@@ -1,0 +1,30 @@
+<div
+  class="i-accordion"
+  [class.expanded]="expanded"
+  [class.disabled]="disabled"
+  [attr.id]="componentId"
+>
+  <div
+    class="i-accordion-header"
+    (click)="toggle()"
+    [attr.aria-expanded]="expanded"
+    [attr.aria-disabled]="disabled"
+    role="button"
+    tabindex="0"
+    (keydown.enter)="toggle()"
+    (keydown.space)="toggle(); $event.preventDefault()"
+  >
+    <div class="i-accordion-header-content">
+      @if (icon) {
+      <i [class]="icon" class="i-accordion-icon"></i>
+      }
+      <span class="i-accordion-title">{{ header }}</span>
+    </div>
+    <i class="pi i-accordion-toggle-icon" [class.pi-chevron-down]="!expanded" [class.pi-chevron-up]="expanded"></i>
+  </div>
+  <div class="i-accordion-content-wrapper" [class.collapsed]="!expanded">
+    <div class="i-accordion-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

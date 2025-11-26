@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
+import { IMessage } from '../../../../../integra-ng/src/lib/components/message/message.component';
 
 @Component({
   selector: 'app-theming',
-  imports: [DemoCardComponent],
+  imports: [DemoCardComponent, IMessage],
   templateUrl: './theming.component.html',
   styleUrl: './theming.component.scss',
 })

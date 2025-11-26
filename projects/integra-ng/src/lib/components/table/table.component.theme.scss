@@ -1,0 +1,158 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-table-theme() {
+  .i-table-wrapper {
+    color: colors.$color-text-primary;
+    background: colors.$color-component-background;
+
+    .i-table-header {
+      background: colors.$color-surface-section;
+      border-bottom: 1px solid colors.$color-surface-border;
+    }
+
+    .i-table-global-filter {
+      .i-input-text {
+        background: colors.$color-surface-ground;
+      }
+    }
+
+    .i-table-loading-overlay {
+      background: rgba(255, 255, 255, 0.7);
+
+      .i-table-loading-icon {
+        color: colors.$color-primary;
+      }
+    }
+
+    table {
+      thead {
+        tr {
+          background: colors.$color-surface-section;
+
+          th {
+            color: colors.$color-text-primary;
+            border-bottom: 1px solid colors.$color-surface-border;
+
+            &.i-table-sortable-column {
+              cursor: pointer;
+
+              &:hover {
+                background: colors.$color-surface-hover;
+              }
+            }
+
+            &.i-table-sorted {
+              background: colors.$color-surface-hover;
+              color: colors.$color-primary;
+            }
+
+            .i-table-sort-icon {
+              color: colors.$color-text-secondary;
+            }
+
+            &.i-table-sorted .i-table-sort-icon {
+              color: colors.$color-primary;
+            }
+          }
+        }
+
+        .i-table-filter-row {
+          th {
+            background: colors.$color-surface-ground;
+          }
+
+          .i-table-column-filter {
+            border: 1px solid colors.$color-surface-border;
+            background: colors.$color-component-background;
+            color: colors.$color-text-primary;
+
+            &:focus {
+              border-color: colors.$color-primary;
+              box-shadow: colors.$color-box-shadow;
+              outline: none;
+            }
+
+            &::placeholder {
+              color: colors.$color-text-tertiary;
+            }
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          background: colors.$color-component-background;
+          border-bottom: 1px solid colors.$color-surface-border;
+
+          td {
+            color: colors.$color-text-primary;
+          }
+
+          &.i-table-row-odd {
+            background: colors.$color-surface-ground;
+          }
+
+          &.i-table-row-selected {
+            background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.1);
+          }
+        }
+
+        .i-table-expanded-row {
+          background: colors.$color-surface-section;
+
+          .i-table-expanded-content {
+            background: colors.$color-surface-ground;
+            border: 1px solid colors.$color-surface-border;
+          }
+        }
+
+        .i-table-empty-row {
+          td {
+            background: colors.$color-surface-ground;
+          }
+        }
+      }
+    }
+
+    // Bordered variant
+    &.i-table--bordered {
+      table {
+        border: 1px solid colors.$color-surface-border;
+
+        th,
+        td {
+          border: 1px solid colors.$color-surface-border;
+        }
+      }
+    }
+
+    // Hoverable variant
+    &.i-table--hoverable {
+      table tbody tr:not(.i-table-empty-row):not(.i-table-expanded-row) {
+        &:hover {
+          background: colors.$color-surface-hover;
+        }
+
+        &.i-table-row-selected:hover {
+          background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.15);
+        }
+      }
+    }
+
+    // Column resizer
+    .i-table-column-resizer {
+      background: colors.$color-surface-border;
+
+      &:hover {
+        background: colors.$color-primary;
+      }
+    }
+  }
+
+  // Dark mode adjustments
+  :host-context([data-theme="dark"]) {
+    .i-table-loading-overlay {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  }
+}

@@ -3,7 +3,10 @@
  */
 
 /* Components - organized by folder structure */
+export * from './lib/components/accordion/accordion.component';
+export * from './lib/components/accordion-list/accordion-list.component';
 export * from './lib/components/button/button.component';
+export * from './lib/components/calendar/calendar.component';
 export * from './lib/components/card/card.component';
 export * from './lib/components/checkbox/checkbox.component';
 export * from './lib/components/chip/chip.component';
@@ -19,12 +22,17 @@ export * from './lib/components/empty-state/empty-state.component';
 export * from './lib/components/empty-state-table/empty-state-table.component';
 export * from './lib/components/input-text/input-text.component';
 export * from './lib/components/listbox/listbox.component';
+export * from './lib/components/radio-button/radio-button.component';
+export * from './lib/components/message/message.component';
 export * from './lib/components/multi-select/multi-select.component';
 export * from './lib/components/select/select.component';
+export * from './lib/components/tabs/tabs.component';
+export * from './lib/components/tabs/tab-panel.component';
 export * from './lib/components/tree-view/tree-view.component';
 export * from './lib/components/whisper/whisper.component';
 export * from './lib/components/whisper/services/whisper.service';
 export * from './lib/components/whisper/services/whisper.interfaces';
+export * from './lib/components/table/table.component';
 
 /* Directives */
 export * from './lib/directives/tooltip/tooltip.component';

@@ -1,0 +1,88 @@
+@use "../shared-demo-styles.scss" as *;
+
+.radio-buttons-demo {
+  @extend .demo-component;
+
+  .radio-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .example-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.25rem 0;
+    }
+
+    .status {
+      font-size: 0.875rem;
+      color: var(--text-color-secondary);
+      font-weight: 500;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: var(--surface-section);
+      border-radius: 4px;
+    }
+  }
+
+  .form-section {
+    margin-bottom: 1.5rem;
+
+    h4 {
+      margin-bottom: 1rem;
+      color: var(--text-color);
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    .group-label {
+      display: block;
+      margin-bottom: 0.75rem;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .form-output {
+    background: var(--surface-section);
+    border: 1px solid var(--surface-border);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-top: 1rem;
+
+    h5 {
+      margin: 0 0 0.5rem 0;
+      color: var(--text-color);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    pre {
+      margin: 0 0 1rem 0;
+      background: var(--surface-ground);
+      border: 1px solid var(--surface-border);
+      border-radius: 4px;
+      padding: 0.75rem;
+      font-size: 0.8125rem;
+      line-height: 1.4;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    pre:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

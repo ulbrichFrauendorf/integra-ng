@@ -1,0 +1,117 @@
+<div class="messages-demo">
+  <header class="demo-header">
+    <h1>Message Components</h1>
+    <p>
+      Static message components for displaying inline notifications, alerts, and
+      informational content. Similar to PrimeNG's p-message component.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- All Severity Types -->
+    <app-demo-card
+      [title]="'Message Severities'"
+      [sourceCode]="codeExamples.allSeverities"
+    >
+      <div class="message-examples">
+        <i-message severity="success">
+          <strong>Success!</strong> Operation completed successfully.
+        </i-message>
+
+        <i-message severity="info">
+          <strong>Information:</strong> Here is some helpful information for you.
+        </i-message>
+
+        <i-message severity="warning">
+          <strong>Warning!</strong> Please review your input before proceeding.
+        </i-message>
+
+        <i-message severity="danger">
+          <strong>Error!</strong> Something went wrong. Please try again.
+        </i-message>
+
+        <i-message severity="primary">
+          <strong>Important:</strong> This is a primary message with important information.
+        </i-message>
+      </div>
+    </app-demo-card>
+
+    <!-- Basic Usage -->
+    <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
+      <div class="message-examples">
+        <i-message severity="info">
+          All components automatically use these CSS variables, so changing the
+          theme is as simple as switching the body class!
+        </i-message>
+
+        <i-message severity="warning">
+          <strong>Important:</strong> Use the exact variable names shown above.
+          The components depend on these specific names.
+        </i-message>
+
+        <i-message severity="success">
+          That's it! Your app now supports light and dark themes.
+        </i-message>
+      </div>
+    </app-demo-card>
+
+    <!-- Closable Messages -->
+    <app-demo-card
+      [title]="'Closable Messages'"
+      [sourceCode]="codeExamples.closable"
+    >
+      <div class="message-examples">
+        <i-message
+          severity="info"
+          [closable]="true"
+          [(visible)]="showClosableInfo"
+        >
+          This info message can be closed by clicking the X button.
+        </i-message>
+
+        <i-message
+          severity="warning"
+          [closable]="true"
+          [(visible)]="showClosableWarning"
+        >
+          This warning message is also closable.
+        </i-message>
+
+        @if (!showClosableInfo || !showClosableWarning) {
+          <button
+            class="reset-button"
+            (click)="resetClosableMessages()"
+          >
+            Reset Closed Messages
+          </button>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Custom Icons -->
+    <app-demo-card
+      [title]="'Custom Icons'"
+      [sourceCode]="codeExamples.customIcon"
+    >
+      <div class="message-examples">
+        <i-message severity="primary" icon="pi pi-star">
+          <strong>Pro Tip:</strong> You can customize these colors to match your
+          brand. Just make sure to keep the variable names the same!
+        </i-message>
+
+        <i-message severity="info" icon="pi pi-bolt">
+          Custom icon example with a lightning bolt icon.
+        </i-message>
+
+        <i-message severity="success" icon="pi pi-thumbs-up">
+          Great job! You've customized the icon.
+        </i-message>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

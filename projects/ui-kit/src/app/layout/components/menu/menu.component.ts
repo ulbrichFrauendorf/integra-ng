@@ -35,9 +35,19 @@ export class MenuComponent implements OnInit {
         label: 'UI Components',
         items: [
           {
+            label: 'Accordions',
+            icon: 'pi pi-fw pi-list',
+            routerLink: ['/components/accordions'],
+          },
+          {
             label: 'Input Texts',
             icon: 'pi pi-fw pi-pencil',
             routerLink: ['/components/input-texts'],
+          },
+          {
+            label: 'Calendars',
+            icon: 'pi pi-fw pi-calendar',
+            routerLink: ['/components/calendars'],
           },
           {
             label: 'Buttons',
@@ -48,6 +58,11 @@ export class MenuComponent implements OnInit {
             label: 'Checkboxes',
             icon: 'pi pi-fw pi-check-square',
             routerLink: ['/components/checkboxes'],
+          },
+          {
+            label: 'Radio Buttons',
+            icon: 'pi pi-fw pi-circle',
+            routerLink: ['/components/radio-buttons'],
           },
           {
             label: 'Cards',
@@ -90,9 +105,24 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/listboxes'],
           },
           {
+            label: 'Messages',
+            icon: 'pi pi-fw pi-info-circle',
+            routerLink: ['/components/messages'],
+          },
+          {
             label: 'Tree Views',
             icon: 'pi pi-fw pi-sitemap',
             routerLink: ['/components/tree-views'],
+          },
+          {
+            label: 'Tables',
+            icon: 'pi pi-fw pi-table',
+            routerLink: ['/components/tables'],
+          },
+          {
+            label: 'Tabs',
+            icon: 'pi pi-fw pi-folder',
+            routerLink: ['/components/tabs'],
           },
           {
             label: 'Whispers',

@@ -51,7 +51,13 @@ import { IButton } from '../../../../../integra-ng/src/lib/components/button/but
             </i-button>
           </div>
           <span class="code-title" *ngIf="!showTabs || (!tsCode && !scssCode)">
-            {{ activeTab === 'html' ? 'HTML' : activeTab === 'ts' ? 'TypeScript' : 'SCSS' }}
+            {{
+              activeTab === 'html'
+                ? 'HTML'
+                : activeTab === 'ts'
+                ? 'TypeScript'
+                : 'SCSS'
+            }}
           </span>
           <i-button
             [size]="'small'"

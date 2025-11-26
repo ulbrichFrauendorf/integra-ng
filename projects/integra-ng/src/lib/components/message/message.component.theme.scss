@@ -1,0 +1,93 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-message-theme() {
+  .i-message {
+    background-color: colors.$color-surface-section;
+    border-left: 4px solid transparent;
+
+    .i-message-text {
+      color: colors.$color-text-primary;
+    }
+
+    .i-message-close {
+      color: colors.$color-text-secondary;
+
+      &:hover {
+        color: colors.$color-text-primary;
+        background-color: colors.$color-surface-hover;
+      }
+    }
+
+    // Success messages
+    &.i-message-success {
+      border-left-color: colors.$color-success;
+
+      .i-message-icon {
+        color: colors.$color-success;
+      }
+    }
+
+    // Info messages
+    &.i-message-info {
+      border-left-color: colors.$color-info;
+
+      .i-message-icon {
+        color: colors.$color-info;
+      }
+    }
+
+    // Warning messages
+    &.i-message-warning {
+      border-left-color: colors.$color-warning;
+
+      .i-message-icon {
+        color: colors.$color-warning;
+      }
+    }
+
+    // Danger/Error messages
+    &.i-message-danger {
+      border-left-color: colors.$color-danger;
+
+      .i-message-icon {
+        color: colors.$color-danger;
+      }
+    }
+
+    // Primary messages
+    &.i-message-primary {
+      border-left-color: colors.$color-primary;
+
+      .i-message-icon {
+        color: colors.$color-primary;
+      }
+    }
+
+    // Secondary messages
+    &.i-message-secondary {
+      border-left-color: colors.$color-text-secondary;
+
+      .i-message-icon {
+        color: colors.$color-text-secondary;
+      }
+    }
+
+    // Tertiary messages
+    &.i-message-tertiary {
+      border-left-color: colors.$color-text-tertiary;
+
+      .i-message-icon {
+        color: colors.$color-text-tertiary;
+      }
+    }
+
+    // Contrast messages
+    &.i-message-contrast {
+      border-left-color: colors.$color-contrast;
+
+      .i-message-icon {
+        color: colors.$color-contrast;
+      }
+    }
+  }
+}
