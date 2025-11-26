@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
-import {
-  ITable,
-  TableColumn,
-  TableAction,
-  SortEvent,
-  FilterEvent,
-  PageEvent,
-} from 'integra-ng';
+
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,
   Feature,
 } from '../features-list/features-list.component';
+import {
+  FilterEvent,
+  ITable,
+  PageEvent,
+  SortEvent,
+  TableAction,
+  TableColumn,
+} from '@shared/components/table/table.component';
 
 interface Product {
   id: number;

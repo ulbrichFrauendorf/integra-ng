@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { ITabs } from '../../../../../integra-ng/src/lib/components/tabs/tabs.component';
-import { ITabPanel } from '../../../../../integra-ng/src/lib/components/tabs/tab-panel.component';
+
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,
   Feature,
 } from '../features-list/features-list.component';
+import { ITabs } from '@shared/components/tabs/tabs.component';
+import { ITabPanel } from '@shared/components/tabs/tab-panel.component';
 
 @Component({
   selector: 'app-tabs',

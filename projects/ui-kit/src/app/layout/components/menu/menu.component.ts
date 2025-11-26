@@ -108,6 +108,8 @@ export class MenuComponent implements OnInit {
             label: 'Tables',
             icon: 'pi pi-fw pi-table',
             routerLink: ['/components/tables'],
+          },
+          {
             label: 'Tabs',
             icon: 'pi pi-fw pi-folder',
             routerLink: ['/components/tabs'],
