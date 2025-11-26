@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/components/layout/layout.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { InputTextsComponent } from './components/input-texts/input-texts.component';
+import { CalendarsComponent } from './components/calendars/calendars.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { DialogsComponent } from './components/dialogs/dialogs.component';
 import { ConfirmationDialogsComponent } from './components/confirmation-dialogs/confirmation-dialogs.component';
@@ -38,6 +39,7 @@ export const routes: Routes = [
         path: 'components',
         children: [
           { path: 'buttons', component: ButtonsComponent },
+          { path: 'calendars', component: CalendarsComponent },
           { path: 'checkboxes', component: CheckboxesComponent },
           { path: 'input-texts', component: InputTextsComponent },
           { path: 'cards', component: CardsComponent },

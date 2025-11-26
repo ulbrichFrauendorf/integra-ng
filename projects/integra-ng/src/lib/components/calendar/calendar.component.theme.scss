@@ -1,0 +1,28 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-calendar-theme() {
+  .i-calendar-panel {
+    background: colors.$color-component-background;
+    border: 1px solid colors.$color-surface-border;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .i-calendar-header {
+    background: colors.$color-component-background;
+    border-bottom: 1px solid colors.$color-surface-border;
+  }
+
+  .i-calendar-title-text {
+    color: colors.$color-text-tertiary;
+  }
+
+  .i-calendar-selection {
+    &.selected {
+      border: 1px solid colors.$color-primary;
+    }
+
+    &.today {
+      border: 1px solid colors.$color-text-tertiary;
+    }
+  }
+}

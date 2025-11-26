@@ -40,6 +40,11 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/input-texts'],
           },
           {
+            label: 'Calendars',
+            icon: 'pi pi-fw pi-calendar',
+            routerLink: ['/components/calendars'],
+          },
+          {
             label: 'Buttons',
             icon: 'pi pi-fw pi-external-link',
             routerLink: ['/components/buttons'],
