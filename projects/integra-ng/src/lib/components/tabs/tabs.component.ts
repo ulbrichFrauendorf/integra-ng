@@ -154,19 +154,19 @@ export class ITabs implements AfterContentInit {
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
-        this.navigateToPreviousTab(event, index);
+        this.navigateToPreviousTab(index);
         break;
       case 'ArrowRight':
         event.preventDefault();
-        this.navigateToNextTab(event, index);
+        this.navigateToNextTab(index);
         break;
       case 'Home':
         event.preventDefault();
-        this.navigateToFirstTab(event);
+        this.navigateToFirstTab();
         break;
       case 'End':
         event.preventDefault();
-        this.navigateToLastTab(event);
+        this.navigateToLastTab();
         break;
       case 'Enter':
       case ' ':
@@ -180,7 +180,7 @@ export class ITabs implements AfterContentInit {
    * Navigate to the previous enabled tab
    * @internal
    */
-  private navigateToPreviousTab(event: Event, currentIndex: number): void {
+  private navigateToPreviousTab(currentIndex: number): void {
     let newIndex = currentIndex - 1;
     while (newIndex >= 0) {
       if (!this.tabPanels[newIndex].disabled) {
@@ -204,7 +204,7 @@ export class ITabs implements AfterContentInit {
    * Navigate to the next enabled tab
    * @internal
    */
-  private navigateToNextTab(event: Event, currentIndex: number): void {
+  private navigateToNextTab(currentIndex: number): void {
     let newIndex = currentIndex + 1;
     while (newIndex < this.tabPanels.length) {
       if (!this.tabPanels[newIndex].disabled) {
@@ -228,7 +228,7 @@ export class ITabs implements AfterContentInit {
    * Navigate to the first enabled tab
    * @internal
    */
-  private navigateToFirstTab(event: Event): void {
+  private navigateToFirstTab(): void {
     for (let i = 0; i < this.tabPanels.length; i++) {
       if (!this.tabPanels[i].disabled) {
         this.focusTab(i);
@@ -241,7 +241,7 @@ export class ITabs implements AfterContentInit {
    * Navigate to the last enabled tab
    * @internal
    */
-  private navigateToLastTab(event: Event): void {
+  private navigateToLastTab(): void {
     for (let i = this.tabPanels.length - 1; i >= 0; i--) {
       if (!this.tabPanels[i].disabled) {
         this.focusTab(i);

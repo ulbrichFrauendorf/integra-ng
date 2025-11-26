@@ -79,10 +79,6 @@
     }
   }
 
-  &__ink-bar {
-    display: none; // Hidden, using ::after on active tab instead
-  }
-
   &__content {
     padding: 16px 0;
   }
