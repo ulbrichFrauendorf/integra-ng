@@ -139,28 +139,6 @@
       }
     }
 
-    // Paginator
-    .i-table-paginator {
-      background: colors.$color-surface-section;
-      border-top: 1px solid colors.$color-surface-border;
-
-      .i-table-paginator-info {
-        color: colors.$color-text-secondary;
-      }
-
-      .i-table-rows-per-page {
-        border: 1px solid colors.$color-surface-border;
-        background: colors.$color-component-background;
-        color: colors.$color-text-primary;
-
-        &:focus {
-          outline: none;
-          border-color: colors.$color-primary;
-          box-shadow: colors.$color-box-shadow;
-        }
-      }
-    }
-
     // Column resizer
     .i-table-column-resizer {
       background: colors.$color-surface-border;

@@ -11,7 +11,7 @@ $table-transition: 0.15s ease;
   position: relative;
   display: block;
   border-radius: vars.$componentBorderRadius;
-  overflow: hidden;
+  overflow: visible;
 
   // Header with global filter
   .i-table-header {
@@ -126,6 +126,8 @@ $table-transition: 0.15s ease;
 
     // Body
     tbody {
+      display: table-row-group;
+
       tr {
         transition: background-color $table-transition;
 
@@ -214,42 +216,6 @@ $table-transition: 0.15s ease;
     opacity: 0.5;
   }
 
-  // Paginator
-  .i-table-paginator {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    gap: 16px;
-    overflow: visible;
-
-    .i-table-paginator-left {
-      flex: 1;
-    }
-
-    .i-table-paginator-right {
-      flex: 0 0 auto;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .i-table-paginator-center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .i-table-paginator-info {
-      font-size: 0.875rem;
-    }
-
-    .i-table-paginator-pages {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-  }
-
   // Size variants
   &.i-table--small {
     table {
@@ -265,14 +231,6 @@ $table-transition: 0.15s ease;
 
       .i-table-filter-row th {
         padding: 4px 12px;
-      }
-    }
-
-    .i-table-paginator {
-      padding: 8px 12px;
-
-      .i-table-paginator-info {
-        font-size: 0.8rem;
       }
     }
   }
@@ -291,14 +249,6 @@ $table-transition: 0.15s ease;
 
       .i-table-filter-row th {
         padding: 12px 20px;
-      }
-    }
-
-    .i-table-paginator {
-      padding: 16px 20px;
-
-      .i-table-paginator-info {
-        font-size: 1rem;
       }
     }
   }
@@ -327,18 +277,6 @@ $table-transition: 0.15s ease;
 
       .i-table-global-filter {
         width: 100%;
-      }
-    }
-
-    .i-table-paginator {
-      flex-direction: column;
-      gap: 12px;
-
-      .i-table-paginator-left,
-      .i-table-paginator-center,
-      .i-table-paginator-right {
-        width: 100%;
-        text-align: center;
       }
     }
   }

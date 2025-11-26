@@ -8,7 +8,6 @@ import {
 import {
   FilterEvent,
   ITable,
-  PageEvent,
   SortEvent,
   TableAction,
   TableColumn,
@@ -238,9 +237,7 @@ export class TablesComponent {
   [sortable]="true">
 </i-table>`,
 
-    height: `<!-- Ensure a global whisper container exists in your app (e.g. in AppComponent): -->
-<!-- <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper> -->
-<i-table
+    height: `
   [data]="products"
   [columns]="sortableColumns"
   [sortable]="true"
@@ -253,14 +250,6 @@ export class TablesComponent {
   [sortable]="true"
   [filterable]="true"
   [globalFilter]="true">
-</i-table>`,
-
-    pagination: `<i-table
-  [data]="products"
-  [columns]="columns"
-  [paginator]="true"
-  [rows]="5"
-  [rowsPerPageOptions]="[5, 10, 25]">
 </i-table>`,
 
     selection: `<i-table
@@ -295,16 +284,13 @@ tableActions: TableAction[] = [
   size="small">
 </i-table>`,
 
-    full: `<!-- Ensure a global whisper container exists in your app (e.g. in AppComponent): -->
-<!-- <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper> -->
+    full: `
 <i-table
   [data]="products"
   [columns]="fullColumns"
   [sortable]="true"
   [filterable]="true"
   [globalFilter]="true"
-  [paginator]="true"
-  [rows]="5"
   selectionMode="multiple"
   [(selection)]="selectedProducts"
   [showActions]="true"
@@ -313,7 +299,6 @@ tableActions: TableAction[] = [
   [hoverable]="true"
   (onSort)="onSort($event)"
   (onFilter)="onFilter($event)"
-  (onPage)="onPage($event)"
   (onAction)="handleAction($event)">
 </i-table>`,
   };
@@ -354,11 +339,6 @@ export class ExampleComponent {
         'Global search and column-specific filtering with debounce support',
     },
     {
-      title: 'Pagination',
-      description:
-        'Built-in paginator with configurable page sizes and navigation',
-    },
-    {
       title: 'Selection',
       description:
         'Single and multiple row selection with checkbox support and two-way binding',
@@ -389,11 +369,6 @@ export class ExampleComponent {
   onFilter(event: FilterEvent): void {
     // Filtering handled by table; no global whisper should be shown for filter.
     console.debug('Filter applied', event);
-  }
-
-  onPage(event: PageEvent): void {
-    // Pagination handled by table; do not emit global whispers for paging.
-    console.debug('Page changed', event);
   }
 
   onSelectionChange(selection: Product[]): void {

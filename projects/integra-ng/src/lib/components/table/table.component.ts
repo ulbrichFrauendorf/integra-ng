@@ -15,7 +15,6 @@ import { FormsModule } from '@angular/forms';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
-import { ISelect } from '../select/select.component';
 import { EmptyStateTableComponent } from '../empty-state-table/empty-state-table.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
@@ -79,20 +78,6 @@ export interface FilterEvent {
 }
 
 /**
- * Page event emitted when pagination changes
- */
-export interface PageEvent {
-  /** First row offset */
-  first: number;
-  /** Number of rows per page */
-  rows: number;
-  /** Current page number (0-indexed) */
-  page: number;
-  /** Total number of pages */
-  pageCount: number;
-}
-
-/**
  * Table Component
  *
  * A comprehensive table component with sorting, filtering, pagination, selection,
@@ -142,7 +127,6 @@ export interface PageEvent {
     IInputText,
     IButton,
     ICheckbox,
-    ISelect,
     EmptyStateTableComponent,
   ],
   templateUrl: './table.component.html',
@@ -229,42 +213,6 @@ export class ITable {
    * Event emitted when filter changes
    */
   @Output() onFilter = new EventEmitter<FilterEvent>();
-
-  // ===== PAGINATION =====
-
-  /**
-   * Enable pagination
-   * @default false
-   */
-  @Input() paginator = false;
-
-  /**
-   * Number of rows per page
-   * @default 10
-   */
-  @Input() rows = 10;
-
-  /**
-   * Options for rows per page dropdown
-   * @default [10, 25, 50, 100]
-   */
-  @Input() rowsPerPageOptions: number[] = [10, 25, 50, 100];
-
-  /**
-   * Total records for server-side pagination
-   */
-  @Input() totalRecords?: number;
-
-  /**
-   * First row offset
-   * @default 0
-   */
-  @Input() first = 0;
-
-  /**
-   * Event emitted when page changes
-   */
-  @Output() onPage = new EventEmitter<PageEvent>();
 
   // ===== SELECTION =====
 
@@ -456,28 +404,6 @@ export class ITable {
    */
   columnWidths = signal<{ [field: string]: number }>({});
 
-  /**
-   * Returns rows-per-page options formatted for `i-select`.
-   * Each option has `label` and `value` keys so `i-select` can render them.
-   */
-  rowsPerPageSelectOptions(): Array<{ label: string; value: number }> {
-    return (this.rowsPerPageOptions || []).map((n) => ({
-      label: `${n} / page`,
-      value: n,
-    }));
-  }
-
-  /**
-   * Compute minimum body height so pages have equal height even when last page has fewer rows.
-   * This does not hard-code a global fixed height — it computes based on `rows` and size.
-   */
-  computeBodyMinHeight(): string {
-    const baseRowHeight =
-      this.size === 'small' ? 36 : this.size === 'large' ? 56 : 48;
-    const minHeight = (this.rows || 1) * baseRowHeight;
-    return `${minHeight}px`;
-  }
-
   constructor(private el: ElementRef) {}
 
   /**
@@ -529,53 +455,6 @@ export class ITable {
 
     return result;
   });
-
-  /**
-   * Get paginated data
-   * Note: Using a getter method instead of a computed signal because
-   * pagination properties (paginator, first, rows) are regular @Input()
-   * properties that aren't tracked by computed signals.
-   * @internal
-   */
-  get paginatedDataValue(): any[] {
-    const data = this.processedData();
-    if (!this.paginator) {
-      return data;
-    }
-    const start = this.first;
-    const end = start + this.rows;
-    return data.slice(start, end);
-  }
-
-  /**
-   * Computed paginated data (signal wrapper)
-   * @internal
-   */
-  paginatedData = () => this.paginatedDataValue;
-
-  /**
-   * Total number of records (computed or provided)
-   * @internal
-   */
-  get totalRecordsCount(): number {
-    return this.totalRecords ?? this.processedData().length;
-  }
-
-  /**
-   * Total number of pages
-   * @internal
-   */
-  get pageCount(): number {
-    return Math.ceil(this.totalRecordsCount / this.rows);
-  }
-
-  /**
-   * Current page number (0-indexed)
-   * @internal
-   */
-  get currentPage(): number {
-    return Math.floor(this.first / this.rows);
-  }
 
   /**
    * Gets a cell value from a row
@@ -693,7 +572,6 @@ export class ITable {
     this.filterTimer = setTimeout(() => {
       this.globalFilterValue.set(value);
       this.emitFilterEvent();
-      this.resetPagination();
     }, this.filterDelay);
   }
 
@@ -712,7 +590,6 @@ export class ITable {
         [field]: value,
       }));
       this.emitFilterEvent();
-      this.resetPagination();
     }, this.filterDelay);
   }
 
@@ -725,108 +602,6 @@ export class ITable {
       filters: this.columnFilters(),
       globalFilter: this.globalFilterValue(),
     });
-  }
-
-  // ===== PAGINATION METHODS =====
-
-  /**
-   * Navigates to a specific page
-   * @internal
-   */
-  goToPage(page: number): void {
-    if (page < 0 || page >= this.pageCount) return;
-
-    this.first = page * this.rows;
-    this.emitPageEvent();
-  }
-
-  /**
-   * Goes to first page
-   * @internal
-   */
-  goToFirstPage(): void {
-    this.goToPage(0);
-  }
-
-  /**
-   * Goes to last page
-   * @internal
-   */
-  goToLastPage(): void {
-    this.goToPage(this.pageCount - 1);
-  }
-
-  /**
-   * Goes to previous page
-   * @internal
-   */
-  goToPreviousPage(): void {
-    this.goToPage(this.currentPage - 1);
-  }
-
-  /**
-   * Goes to next page
-   * @internal
-   */
-  goToNextPage(): void {
-    this.goToPage(this.currentPage + 1);
-  }
-
-  /**
-   * Changes rows per page
-   * @internal
-   */
-  onRowsPerPageChange(rows: number): void {
-    this.rows = rows;
-    this.first = 0;
-    this.emitPageEvent();
-  }
-
-  /**
-   * Resets pagination to first page
-   * @internal
-   */
-  private resetPagination(): void {
-    if (this.first !== 0) {
-      this.first = 0;
-      this.emitPageEvent();
-    }
-  }
-
-  /**
-   * Emits page event
-   * @internal
-   */
-  private emitPageEvent(): void {
-    this.onPage.emit({
-      first: this.first,
-      rows: this.rows,
-      page: this.currentPage,
-      pageCount: this.pageCount,
-    });
-  }
-
-  /**
-   * Gets array of page numbers to display
-   * @internal
-   */
-  getPageNumbers(): number[] {
-    const pages: number[] = [];
-    const maxPages = 5;
-    const half = Math.floor(maxPages / 2);
-
-    let start = Math.max(0, this.currentPage - half);
-    let end = Math.min(this.pageCount, start + maxPages);
-
-    if (end - start < maxPages) {
-      start = Math.max(0, end - maxPages);
-    }
-
-    for (let i = start; i < end; i++) {
-      pages.push(i);
-    }
-
-    return pages;
   }
 
   // ===== SELECTION METHODS =====
@@ -885,18 +660,18 @@ export class ITable {
   toggleAllSelection(): void {
     if (this.selectionMode !== 'multiple') return;
 
-    const data = this.paginatedData();
+    const data = this.processedData();
     const allSelected = this.areAllRowsSelected();
 
     if (allSelected) {
       // Deselect all visible rows
       this.selection = this.selection.filter(
-        (s) => !data.some((d) => this.compareObjects(s, d))
+        (s: any) => !data.some((d: any) => this.compareObjects(s, d))
       );
     } else {
       // Select all visible rows
       const newSelections = data.filter(
-        (d) => !this.selection.some((s) => this.compareObjects(s, d))
+        (d: any) => !this.selection.some((s: any) => this.compareObjects(s, d))
       );
       this.selection = [...this.selection, ...newSelections];
     }
@@ -910,10 +685,10 @@ export class ITable {
    * @internal
    */
   areAllRowsSelected(): boolean {
-    const data = this.paginatedData();
+    const data = this.processedData();
     if (data.length === 0) return false;
-    return data.every((d) =>
-      this.selection?.some((s) => this.compareObjects(s, d))
+    return data.every((d: any) =>
+      this.selection?.some((s: any) => this.compareObjects(s, d))
     );
   }
 
@@ -922,9 +697,9 @@ export class ITable {
    * @internal
    */
   areSomeRowsSelected(): boolean {
-    const data = this.paginatedData();
-    const selectedCount = data.filter((d) =>
-      this.selection?.some((s) => this.compareObjects(s, d))
+    const data = this.processedData();
+    const selectedCount = data.filter((d: any) =>
+      this.selection?.some((s: any) => this.compareObjects(s, d))
     ).length;
     return selectedCount > 0 && selectedCount < data.length;
   }
@@ -1098,13 +873,5 @@ export class ITable {
    */
   trackByColumn(index: number, column: TableColumn): string {
     return column.field;
-  }
-
-  /**
-   * Helper to calculate minimum of two numbers for template use
-   * @internal
-   */
-  min(a: number, b: number): number {
-    return Math.min(a, b);
   }
 }

@@ -4,7 +4,7 @@
   <header class="demo-header">
     <h1>Table Component</h1>
     <p>
-      A comprehensive table component with sorting, filtering, pagination,
+      A comprehensive table component with sorting, filtering,
       selection, and row actions. All features are configurable via props.
     </p>
   </header>
@@ -70,22 +70,6 @@
       </i-table>
     </app-demo-card>
 
-    <!-- Pagination Table -->
-    <app-demo-card
-      [title]="'Pagination'"
-      [sourceCode]="codeExamples.pagination"
-    >
-      <i-table
-        [data]="products"
-        [columns]="basicColumns"
-        [paginator]="true"
-        [rows]="5"
-        [rowsPerPageOptions]="[5, 10, 25]"
-        (onPage)="onPage($event)"
-      >
-      </i-table>
-    </app-demo-card>
-
     <!-- Selection Table -->
     <app-demo-card
       [title]="'Row Selection (Multiple)'"
@@ -100,8 +84,6 @@
         selectionMode="multiple"
         [(selection)]="selectedProducts"
         (onSelectionChange)="onSelectionChange($event)"
-        [paginator]="true"
-        [rows]="5"
       >
       </i-table>
     </app-demo-card>
@@ -118,8 +100,6 @@
         [showActions]="true"
         [actions]="tableActions"
         (onAction)="handleAction($event)"
-        [paginator]="true"
-        [rows]="5"
       >
       </i-table>
     </app-demo-card>
@@ -167,9 +147,6 @@
         [sortable]="true"
         [filterable]="true"
         [globalFilter]="true"
-        [paginator]="true"
-        [rows]="5"
-        [rowsPerPageOptions]="[5, 10, 25]"
         selectionMode="multiple"
         [(selection)]="selectedProducts"
         [showActions]="true"
@@ -178,7 +155,6 @@
         [hoverable]="true"
         (onSort)="onSort($event)"
         (onFilter)="onFilter($event)"
-        (onPage)="onPage($event)"
         (onSelectionChange)="onSelectionChange($event)"
         (onAction)="handleAction($event)"
       >
