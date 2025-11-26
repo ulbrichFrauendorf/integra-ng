@@ -1,0 +1,8 @@
+@use "../../themes/_variables.scss" as vars;
+
+.i-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: vars.$borderRadius;
+}
