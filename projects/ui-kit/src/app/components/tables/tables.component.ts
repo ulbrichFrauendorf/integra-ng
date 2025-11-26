@@ -6,7 +6,7 @@ import {
   SortEvent,
   FilterEvent,
   PageEvent,
-} from '../../../../../integra-ng/src/lib/components/table/table.component';
+} from 'integra-ng';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,

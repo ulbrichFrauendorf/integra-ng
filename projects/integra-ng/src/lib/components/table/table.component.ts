@@ -263,6 +263,12 @@ export class ITable {
   @Input() selection: any[] = [];
 
   /**
+   * Property name to uniquely identify rows (improves selection performance)
+   * When provided, uses this property for row comparison instead of JSON.stringify
+   */
+  @Input() dataKey?: string;
+
+  /**
    * Event emitted when selection changes
    */
   @Output() selectionChange = new EventEmitter<any[]>();
@@ -871,10 +877,14 @@ export class ITable {
   }
 
   /**
-   * Compares two objects for equality
+   * Compares two objects for equality using dataKey if provided,
+   * otherwise falls back to JSON.stringify comparison
    * @internal
    */
   private compareObjects(obj1: any, obj2: any): boolean {
+    if (this.dataKey) {
+      return obj1?.[this.dataKey] === obj2?.[this.dataKey];
+    }
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
 
@@ -1036,8 +1046,10 @@ export class ITable {
   }
 
   /**
-   * Helper to get Math.min in template
+   * Helper to calculate minimum of two numbers for template use
    * @internal
    */
-  Math = Math;
+  min(a: number, b: number): number {
+    return Math.min(a, b);
+  }
 }
