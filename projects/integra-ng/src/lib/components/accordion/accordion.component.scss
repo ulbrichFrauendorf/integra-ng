@@ -1,0 +1,69 @@
+@use "./accordion.component.theme.scss" as theme;
+@use "../../themes/_variables.scss" as vars;
+
+@include theme.i-accordion-theme();
+
+.i-accordion {
+  border-radius: vars.$borderRadius;
+  overflow: hidden;
+
+  .i-accordion-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color vars.$transitionDuration ease;
+
+    .i-accordion-header-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .i-accordion-icon {
+        font-size: 1.125rem;
+      }
+
+      .i-accordion-title {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+    }
+
+    .i-accordion-toggle-icon {
+      font-size: 0.875rem;
+      transition: transform vars.$transitionDuration ease;
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+    }
+  }
+
+  .i-accordion-content-wrapper {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+    max-height: 1000px;
+    opacity: 1;
+
+    &.collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+
+  .i-accordion-content {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+
+    .i-accordion-header {
+      cursor: not-allowed;
+    }
+  }
+}

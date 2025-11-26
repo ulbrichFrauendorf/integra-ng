@@ -3,6 +3,8 @@
  */
 
 /* Components - organized by folder structure */
+export * from './lib/components/accordion/accordion.component';
+export * from './lib/components/accordion-list/accordion-list.component';
 export * from './lib/components/button/button.component';
 export * from './lib/components/card/card.component';
 export * from './lib/components/checkbox/checkbox.component';

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/components/layout/layout.component';
+import { AccordionsComponent } from './components/accordions/accordions.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { InputTextsComponent } from './components/input-texts/input-texts.component';
 import { CardsComponent } from './components/cards/cards.component';
@@ -37,6 +38,7 @@ export const routes: Routes = [
       {
         path: 'components',
         children: [
+          { path: 'accordions', component: AccordionsComponent },
           { path: 'buttons', component: ButtonsComponent },
           { path: 'checkboxes', component: CheckboxesComponent },
           { path: 'input-texts', component: InputTextsComponent },

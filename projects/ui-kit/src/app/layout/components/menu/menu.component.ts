@@ -35,6 +35,11 @@ export class MenuComponent implements OnInit {
         label: 'UI Components',
         items: [
           {
+            label: 'Accordions',
+            icon: 'pi pi-fw pi-list',
+            routerLink: ['/components/accordions'],
+          },
+          {
             label: 'Input Texts',
             icon: 'pi pi-fw pi-pencil',
             routerLink: ['/components/input-texts'],
