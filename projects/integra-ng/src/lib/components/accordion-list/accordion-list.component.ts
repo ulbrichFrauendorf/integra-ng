@@ -4,7 +4,9 @@ import {
   ContentChildren,
   QueryList,
   AfterContentInit,
+  OnDestroy,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IAccordion } from '../accordion/accordion.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
@@ -46,7 +48,7 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
   templateUrl: './accordion-list.component.html',
   styleUrl: './accordion-list.component.scss',
 })
-export class IAccordionList implements AfterContentInit {
+export class IAccordionList implements AfterContentInit, OnDestroy {
   /**
    * Whether multiple accordions can be expanded at the same time
    * @default false
@@ -65,13 +67,40 @@ export class IAccordionList implements AfterContentInit {
    */
   componentId = UniqueComponentId('i-accordion-list-');
 
+  /**
+   * Subscriptions for cleanup
+   * @internal
+   */
+  private subscriptions: Subscription[] = [];
+
+  /**
+   * Subscription for accordion list changes
+   * @internal
+   */
+  private accordionsChangesSub?: Subscription;
+
   ngAfterContentInit(): void {
     this.setupAccordionListeners();
 
     // Listen for changes to the accordion list
-    this.accordions.changes.subscribe(() => {
+    this.accordionsChangesSub = this.accordions.changes.subscribe(() => {
+      this.cleanupSubscriptions();
       this.setupAccordionListeners();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupSubscriptions();
+    this.accordionsChangesSub?.unsubscribe();
+  }
+
+  /**
+   * Cleans up all accordion toggle subscriptions
+   * @internal
+   */
+  private cleanupSubscriptions(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions = [];
   }
 
   /**
@@ -81,11 +110,12 @@ export class IAccordionList implements AfterContentInit {
   private setupAccordionListeners(): void {
     this.accordions.forEach((accordion) => {
       // Subscribe to toggle events
-      accordion.onToggle.subscribe((expanded: boolean) => {
+      const sub = accordion.onToggle.subscribe((expanded: boolean) => {
         if (expanded && !this.multiple) {
           this.collapseOthers(accordion);
         }
       });
+      this.subscriptions.push(sub);
     });
   }
 
