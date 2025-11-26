@@ -23,6 +23,8 @@ export * from './lib/components/input-text/input-text.component';
 export * from './lib/components/listbox/listbox.component';
 export * from './lib/components/multi-select/multi-select.component';
 export * from './lib/components/select/select.component';
+export * from './lib/components/tabs/tabs.component';
+export * from './lib/components/tabs/tab-panel.component';
 export * from './lib/components/tree-view/tree-view.component';
 export * from './lib/components/whisper/whisper.component';
 export * from './lib/components/whisper/services/whisper.service';

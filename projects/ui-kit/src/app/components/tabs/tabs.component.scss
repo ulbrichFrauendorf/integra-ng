@@ -1,0 +1,47 @@
+@use "../shared-demo-styles.scss" as *;
+
+.tabs-demo {
+  @extend .demo-component;
+}
+
+.tab-examples {
+  margin-bottom: 20px;
+}
+
+.tab-content {
+  h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--color-text-primary);
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: var(--surface-100);
+  border-radius: 6px;
+  border: 1px dashed var(--color-border);
+
+  i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
