@@ -47,7 +47,7 @@
         [ngClass]="{ 'i-tabs__panel--active': activeIndex === $index }"
         role="tabpanel"
         [attr.aria-labelledby]="componentId + '-tab-' + $index"
-        [attr.hidden]="activeIndex !== $index ? true : null"
+        [attr.hidden]="activeIndex !== $index || null"
       >
         @if (activeIndex === $index) {
           <ng-container [ngTemplateOutlet]="tab.contentTemplate"></ng-container>
