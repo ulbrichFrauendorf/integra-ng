@@ -1,0 +1,41 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-accordion-theme() {
+  .i-accordion {
+    background: colors.$color-surface-card;
+    color: colors.$color-text-primary;
+    border: 1px solid colors.$color-surface-border;
+
+    .i-accordion-header {
+      color: colors.$color-text-primary;
+
+      &:hover:not(.disabled &) {
+        background: colors.$color-surface-hover;
+      }
+
+      .i-accordion-icon {
+        color: colors.$color-primary;
+      }
+
+      .i-accordion-toggle-icon {
+        color: colors.$color-text-secondary;
+      }
+    }
+
+    .i-accordion-content {
+      color: colors.$color-text-primary;
+    }
+
+    &.disabled {
+      .i-accordion-header {
+        color: colors.$color-text-disabled;
+        cursor: not-allowed;
+
+        .i-accordion-icon,
+        .i-accordion-toggle-icon {
+          color: colors.$color-text-disabled;
+        }
+      }
+    }
+  }
+}
