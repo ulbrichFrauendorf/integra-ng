@@ -21,9 +21,10 @@ import {
   NgControl,
   AbstractControl,
 } from '@angular/forms';
-import { IInputText } from '../input-text/input-text.component';
 import { IChip } from '../chip/chip.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
+import { IInputText } from '../input-text/input-text.component';
+import { IButton } from '../button/button.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
 /**
@@ -44,7 +45,7 @@ export interface ListboxOption {
  * ```html
  * <!-- Single selection listbox -->
  * <i-listbox
- *   label="Choose One"
+ *   title="Choose One"
  *   [options]="items"
  *   optionLabel="name"
  *   optionValue="id"
@@ -52,24 +53,27 @@ export interface ListboxOption {
  *   formControlName="selectedItem">
  * </i-listbox>
  *
- * <!-- Multiple selection listbox -->
+ * <!-- Multiple selection listbox with action button -->
  * <i-listbox
- *   label="Choose Multiple"
+ *   title="Choose Multiple"
  *   [options]="items"
  *   optionLabel="name"
  *   optionValue="id"
  *   [multiple]="true"
+ *   actionIcon="pi pi-plus"
+ *   actionTooltip="Add new item"
+ *   (onAction)="addItem()"
  *   formControlName="selectedItems">
  * </i-listbox>
  *
- * <!-- Listbox with filtering -->
+ * <!-- Listbox with option icons -->
  * <i-listbox
- *   label="Search and Select"
+ *   title="Select Items"
  *   [options]="items"
  *   optionLabel="name"
  *   optionValue="id"
- *   [filter]="true"
- *   filterBy="name"
+ *   optionLeftIcon="icon"
+ *   optionRightIcon="statusIcon"
  *   formControlName="selection">
  * </i-listbox>
  * ```
@@ -82,7 +86,7 @@ export interface ListboxOption {
 @Component({
   selector: 'i-listbox',
   standalone: true,
-  imports: [CommonModule, FormsModule, IInputText, IChip, ICheckbox],
+  imports: [CommonModule, FormsModule, IChip, ICheckbox, IInputText, IButton],
   templateUrl: './listbox.component.html',
   styleUrls: ['./listbox.component.scss'],
   providers: [
@@ -95,10 +99,39 @@ export interface ListboxOption {
 })
 export class IListbox implements ControlValueAccessor {
   /**
-   * Label text displayed for the listbox
+   * Title text displayed in the listbox header
    * @default 'List Box'
    */
-  @Input() label = 'List Box';
+  @Input() title = 'List Box';
+
+  /**
+   * @deprecated Use 'title' instead
+   */
+  @Input() label = '';
+
+  /**
+   * Icon class for the action button (e.g., 'pi pi-plus')
+   * If provided, an action button will be shown in the header
+   */
+  @Input() actionIcon?: string;
+
+  /**
+   * Tooltip text for the action button
+   */
+  @Input() actionTooltip?: string;
+
+  /**
+   * Property name for left icon on each option
+   * The option object should have this property with an icon class string
+   */
+  @Input() optionLeftIcon?: string;
+
+  /**
+   * Property name for right icon on each option
+   * The option object should have this property with an icon class string
+   */
+  @Input() optionRightIcon?: string;
+
   // Convert options to signal input
   options: InputSignal<ListboxOption[] | null | undefined> = input<
     ListboxOption[] | null | undefined
@@ -121,7 +154,11 @@ export class IListbox implements ControlValueAccessor {
   @Output() onChange = new EventEmitter<any[] | any>();
   @Output() onClear = new EventEmitter<void>();
 
-  @ViewChild('inputText') inputTextRef!: IInputText;
+  /**
+   * Event emitted when the action button is clicked
+   */
+  @Output() onAction = new EventEmitter<void>();
+
   @ViewChild('dropdown', { static: false }) dropdownRef!: ElementRef;
   @ViewChild('searchInput', { static: false }) searchInputRef!: ElementRef;
 
@@ -160,10 +197,13 @@ export class IListbox implements ControlValueAccessor {
     } else {
       this._value = val;
     }
-    // Update the underlying input-text component through ngModel
-    if (this.inputTextRef) {
-      this.inputTextRef.value = this.getDisplayLabel() || null;
-    }
+  }
+
+  /**
+   * Gets the effective title (supports legacy 'label' property)
+   */
+  get effectiveTitle(): string {
+    return this.title || this.label || 'List Box';
   }
 
   /**
@@ -196,12 +236,29 @@ export class IListbox implements ControlValueAccessor {
     });
   }
 
-  // This will be bound to the underlying input-text component
-  get inputValue(): string {
-    return this.getDisplayLabel();
+  /**
+   * Handles action button click
+   */
+  onActionClick(event: Event): void {
+    event.stopPropagation();
+    this.onAction.emit();
   }
 
-  set inputValue(value: string) {}
+  /**
+   * Gets the left icon for an option
+   */
+  getOptionLeftIcon(option: ListboxOption): string | null {
+    if (!this.optionLeftIcon) return null;
+    return option[this.optionLeftIcon] || null;
+  }
+
+  /**
+   * Gets the right icon for an option
+   */
+  getOptionRightIcon(option: ListboxOption): string | null {
+    if (!this.optionRightIcon) return null;
+    return option[this.optionRightIcon] || null;
+  }
 
   toggleOption(option: ListboxOption) {
     const optionValue = this.getOptionValue(option);
@@ -354,14 +411,6 @@ export class IListbox implements ControlValueAccessor {
     }
   }
 
-  shouldHideText(): boolean {
-    if (this.multiple) {
-      return this.value.length <= this.maxSelectedLabels;
-    } else {
-      return true;
-    }
-  }
-
   shouldShowChips(): boolean {
     if (this.multiple) {
       return (
@@ -369,9 +418,8 @@ export class IListbox implements ControlValueAccessor {
         this.value.length > 0 &&
         this.value.length <= this.maxSelectedLabels
       );
-    } else {
-      return this.hasValue();
     }
+    return false;
   }
 
   getValueArray(): any[] {
@@ -408,9 +456,6 @@ export class IListbox implements ControlValueAccessor {
     } else {
       this._value = value;
     }
-    if (this.inputTextRef) {
-      this.inputTextRef.value = this.getDisplayLabel() || null;
-    }
   }
 
   registerOnChange(fn: (value: any[] | any) => void): void {
@@ -421,7 +466,9 @@ export class IListbox implements ControlValueAccessor {
     this.onTouchedCallback = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {}
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
 
   get control(): AbstractControl | null {
     return this.ngControl ? this.ngControl.control : null;
@@ -447,7 +494,7 @@ export class IListbox implements ControlValueAccessor {
     const err = c?.errors || {};
     switch (key) {
       case 'required':
-        return `${this.label} is required`;
+        return `${this.effectiveTitle} is required`;
       case 'minlength':
         return `Minimum ${err['minlength']?.requiredLength} items required`;
       case 'minArrayLength':

@@ -20,16 +20,17 @@
       ></i>
       <span class="i-panel-title">{{ header }}</span>
     </button>
-    }
-
-    @if (!toggleable) {
+    } @if (!toggleable) {
     <div class="i-panel-header">
       <i class="i-panel-toggle-icon" aria-hidden="true"></i>
       <span class="i-panel-title">{{ header }}</span>
     </div>
     }
   </div>
-  <div class="i-panel-content-wrapper" [class.i-panel-content-wrapper--collapsed]="collapsed">
+  <div
+    class="i-panel-content-wrapper"
+    [class.i-panel-content-wrapper--collapsed]="collapsed"
+  >
     <div class="i-panel-content">
       <ng-content></ng-content>
     </div>

@@ -125,7 +125,8 @@ export class ExampleComponent {
   features: Feature[] = [
     {
       title: 'Collapsible Content',
-      description: 'Smooth collapse/expand animations with customizable content',
+      description:
+        'Smooth collapse/expand animations with customizable content',
     },
     {
       title: 'Toggle Icons',
@@ -133,7 +134,8 @@ export class ExampleComponent {
     },
     {
       title: 'Non-toggleable Mode',
-      description: 'Option to keep panel always visible without toggle functionality',
+      description:
+        'Option to keep panel always visible without toggle functionality',
     },
     {
       title: 'Programmatic Control',
@@ -141,7 +143,8 @@ export class ExampleComponent {
     },
     {
       title: 'Content Projection',
-      description: 'Supports any content including forms, text, and other components',
+      description:
+        'Supports any content including forms, text, and other components',
     },
     {
       title: 'Accessibility',

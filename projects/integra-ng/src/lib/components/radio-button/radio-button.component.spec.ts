@@ -169,8 +169,10 @@ describe('IRadioButton', () => {
       hostFixture = TestBed.createComponent(GroupTestHost);
       hostFixture.detectChanges();
 
-      const debugEls = hostFixture.debugElement.queryAll(By.directive(IRadioButton));
-      radioButtons = debugEls.map(de => de.componentInstance as IRadioButton);
+      const debugEls = hostFixture.debugElement.queryAll(
+        By.directive(IRadioButton)
+      );
+      radioButtons = debugEls.map((de) => de.componentInstance as IRadioButton);
     });
 
     it('should only allow one selected at a time', () => {
@@ -193,8 +195,16 @@ describe('IRadioButton', () => {
       // Recreate host with two radios sharing the same control
       @Component({
         template: `
-          <i-radio-button name="group2" value="one" [formControl]="control"></i-radio-button>
-          <i-radio-button name="group2" value="two" [formControl]="control"></i-radio-button>
+          <i-radio-button
+            name="group2"
+            value="one"
+            [formControl]="control"
+          ></i-radio-button>
+          <i-radio-button
+            name="group2"
+            value="two"
+            [formControl]="control"
+          ></i-radio-button>
         `,
         standalone: true,
         imports: [IRadioButton, ReactiveFormsModule],
@@ -203,12 +213,17 @@ describe('IRadioButton', () => {
         control = sharedControl;
       }
 
-      TestBed.configureTestingModule({ declarations: [SharedControlHost], imports: [IRadioButton, ReactiveFormsModule] });
+      TestBed.configureTestingModule({
+        declarations: [SharedControlHost],
+        imports: [IRadioButton, ReactiveFormsModule],
+      });
       const sharedFixture = TestBed.createComponent(SharedControlHost);
       sharedFixture.detectChanges();
 
-      const debugEls = sharedFixture.debugElement.queryAll(By.directive(IRadioButton));
-      const radios = debugEls.map(de => de.componentInstance as IRadioButton);
+      const debugEls = sharedFixture.debugElement.queryAll(
+        By.directive(IRadioButton)
+      );
+      const radios = debugEls.map((de) => de.componentInstance as IRadioButton);
 
       // Initially should reflect control value
       expect(radios[0].checked).toBe(true);
@@ -225,8 +240,16 @@ describe('IRadioButton', () => {
       @Component({
         template: `
           <form [formGroup]="form">
-            <i-radio-button name="group3" value="first" formControlName="choice"></i-radio-button>
-            <i-radio-button name="group3" value="second" formControlName="choice"></i-radio-button>
+            <i-radio-button
+              name="group3"
+              value="first"
+              formControlName="choice"
+            ></i-radio-button>
+            <i-radio-button
+              name="group3"
+              value="second"
+              formControlName="choice"
+            ></i-radio-button>
           </form>
         `,
         standalone: true,
@@ -236,12 +259,17 @@ describe('IRadioButton', () => {
         form = new FormGroup({ choice: new FormControl('first') });
       }
 
-      TestBed.configureTestingModule({ declarations: [FormGroupHost], imports: [IRadioButton, ReactiveFormsModule] });
+      TestBed.configureTestingModule({
+        declarations: [FormGroupHost],
+        imports: [IRadioButton, ReactiveFormsModule],
+      });
       const fgFixture = TestBed.createComponent(FormGroupHost);
       fgFixture.detectChanges();
 
-      const debugEls = fgFixture.debugElement.queryAll(By.directive(IRadioButton));
-      const radios = debugEls.map(de => de.componentInstance as IRadioButton);
+      const debugEls = fgFixture.debugElement.queryAll(
+        By.directive(IRadioButton)
+      );
+      const radios = debugEls.map((de) => de.componentInstance as IRadioButton);
 
       expect(radios[0].checked).toBe(true);
       expect(radios[1].checked).toBe(false);

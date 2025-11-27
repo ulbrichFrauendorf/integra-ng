@@ -3,38 +3,41 @@
     <h1>Listbox Components</h1>
     <p>
       Always visible option lists with single and multiple selection modes.
-      Perfect for compact interfaces where dropdowns aren't ideal, featuring
-      chip display, built-in filtering, reactive forms integration, and dynamic
-      data support.
+      Features a modern header with title and action button, option icons, chip
+      display in multiselect mode, built-in filtering, and full reactive forms
+      support.
     </p>
   </header>
 
   <div class="cards-container">
-    <!-- Multiple Selection -->
+    <!-- Multiple Selection with Action Button -->
     <app-demo-card
-      [title]="'Multiple Selection Listbox'"
+      [title]="'Multiple Selection with Action Button'"
       [sourceCode]="codeExamples.multiple"
     >
       <i-listbox
-        label="Select Countries (Multiple)"
+        title="Countries"
         [options]="countries"
         optionLabel="name"
         optionValue="code"
         [multiple]="true"
         [showClear]="true"
+        actionIcon="pi pi-plus"
+        actionTooltip="Add Country"
+        (onAction)="onAddCountry()"
         [(ngModel)]="selectedCountriesMultiple"
         (onChange)="onMultipleSelectionChange($event)"
         (onClear)="onClear()"
       ></i-listbox>
     </app-demo-card>
 
-    <!-- Single Selection -->
+    <!-- Single Selection (No Checkboxes) -->
     <app-demo-card
-      [title]="'Single Selection Listbox'"
+      [title]="'Single Selection (No Checkboxes)'"
       [sourceCode]="codeExamples.single"
     >
       <i-listbox
-        label="Select Country (Single)"
+        title="Select Country"
         [options]="countries"
         optionLabel="name"
         optionValue="code"
@@ -46,14 +49,52 @@
       ></i-listbox>
     </app-demo-card>
 
-    <!-- Advanced Features -->
+    <!-- Options with Left Icons -->
     <app-demo-card
-      [title]="'Advanced Features (Filtering & Clear)'"
+      [title]="'Options with Left Icons'"
+      [sourceCode]="codeExamples.withIcons"
+    >
+      <i-listbox
+        title="Tasks"
+        [options]="tasks"
+        optionLabel="name"
+        optionValue="value"
+        [multiple]="true"
+        optionLeftIcon="icon"
+        actionIcon="pi pi-cog"
+        actionTooltip="Manage Tasks"
+        (onAction)="onManageTasks()"
+        [(ngModel)]="selectedTasks"
+      ></i-listbox>
+    </app-demo-card>
+
+    <!-- Options with Right Icons -->
+    <app-demo-card
+      [title]="'Options with Right Icons (Status Indicators)'"
+      [sourceCode]="codeExamples.rightIcons"
+    >
+      <i-listbox
+        title="Team Members"
+        [options]="users"
+        optionLabel="name"
+        optionValue="id"
+        [multiple]="false"
+        optionRightIcon="statusIcon"
+        actionIcon="pi pi-user-plus"
+        actionTooltip="Add User"
+        (onAction)="onAddUser()"
+        [(ngModel)]="selectedUser"
+      ></i-listbox>
+    </app-demo-card>
+
+    <!-- With Filtering -->
+    <app-demo-card
+      [title]="'With Filtering'"
       [sourceCode]="codeExamples.filter"
     >
       <div class="demo-form">
         <i-listbox
-          label="Searchable Countries"
+          title="Searchable Countries"
           [options]="countries"
           optionLabel="name"
           optionValue="code"
@@ -69,7 +110,7 @@
     <app-demo-card [title]="'Fluid Layout'" [sourceCode]="codeExamples.fluid">
       <div class="demo-form">
         <i-listbox
-          label="Full Width Listbox"
+          title="Full Width Listbox"
           [options]="countries"
           optionLabel="name"
           optionValue="code"
@@ -81,10 +122,13 @@
     </app-demo-card>
 
     <!-- Disabled State -->
-    <app-demo-card [title]="'Disabled State'" [sourceCode]="codeExamples.disabled">
+    <app-demo-card
+      [title]="'Disabled State'"
+      [sourceCode]="codeExamples.disabled"
+    >
       <div class="demo-form">
         <i-listbox
-          label="Disabled Listbox"
+          title="Disabled Listbox"
           [options]="countries"
           optionLabel="name"
           optionValue="code"
@@ -103,7 +147,7 @@
       <div class="demo-form">
         <form [formGroup]="departmentsForm">
           <i-listbox
-            label="Departments (Reactive Forms + Observable)"
+            title="Departments"
             [options]="departmentOptions$ | async"
             optionLabel="name"
             optionValue="id"
