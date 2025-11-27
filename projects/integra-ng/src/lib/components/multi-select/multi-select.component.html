@@ -5,48 +5,36 @@
 >
   <!-- Input container with click handler -->
   <div class="i-multi-select-input-container" (click)="toggleDropdown()">
-    <!-- Reuse the input-text component for consistent styling and form integration -->
-    <i-input-text
-      #inputText
-      [label]="label"
-      [id]="id"
-      [fluid]="fluid"
-      [errorMessages]="errorMessages"
-      [ngModel]="inputValue"
-      [type]="'text'"
+    <!-- Chips component with float label -->
+    <i-chips
+      [chips]="selectedChips()"
+      [boxed]="true"
+      [collapseOnOverflow]="true"
+      [removable]="!disabled"
       [disabled]="disabled"
-      [forceFloated]="value && value.length > 0"
-      [hideText]="value.length <= maxSelectedLabels"
-      [externalInvalid]="showErrors"
-      [externalErrorMessage]="showErrors ? getErrorMessage() || '' : ''"
-      [readonly]="readonly"
-    >
-      <!-- Selected chips overlay (positioned above the input) -->
-      @if (value && value.length > 0 && value.length <= maxSelectedLabels) {
-      <div class="i-multi-select-chips-overlay">
-        <i-chip
-          *ngFor="let selectedValue of value; trackBy: trackByValue"
-          [label]="getSelectedLabels()[value.indexOf(selectedValue)]"
-          [removable]="!disabled"
-          (onRemove)="removeSelectedItem(selectedValue, $event)"
-        ></i-chip>
-      </div>
-      }
+      [allowCloseAll]="showClear && value && value.length > 0"
+      [useFloatLabel]="true"
+      [label]="label"
+      [showError]="showErrors"
+      (removeChip)="onChipRemove($event)"
+      (closedAll)="onChipsCloseAll()"
+      class="i-multi-select-chips"
+    ></i-chips>
 
-      <!-- Icons overlay on the input -->
-      <div class="i-multi-select-icons-overlay">
-        @if (showClear && value && value.length > 0 && !disabled) {
-        <i
-          class="pi pi-times i-multi-select-clear"
-          (click)="clearSelection(); $event.stopPropagation()"
-        ></i>
-        }
-        <i
-          class="pi pi-chevron-down i-multi-select-arrow"
-          [class.flipped]="isOpen"
-        ></i>
-      </div>
-    </i-input-text>
+    <!-- Icons overlay -->
+    <div class="i-multi-select-icons-overlay">
+      <i
+        class="pi pi-chevron-down i-multi-select-arrow"
+        [class.flipped]="isOpen"
+      ></i>
+    </div>
+
+    <!-- Error message -->
+    @if (showErrors) {
+    <div class="i-multi-select-error">
+      {{ getErrorMessage() }}
+    </div>
+    }
   </div>
 
   @if (isOpen) {

@@ -17,6 +17,7 @@ import {
 
 import { IChip } from '../chip/chip.component';
 import { IButton } from '../button/button.component';
+import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
 export interface ChipItem {
   label: string;
@@ -48,6 +49,14 @@ export class IChipsComponent implements OnChanges, AfterViewInit, OnDestroy {
   /** Render chips inside a boxed input-like container */
   @Input() boxed = false;
   @Input() allowCloseAll = false;
+
+  /** Label text for float label */
+  @Input() label?: string;
+  /** Whether to use floating label style */
+  @Input() useFloatLabel = false;
+  /** Show error state styling */
+  @Input() showError = false;
+
   @Output() closedAll = new EventEmitter<void>();
 
   @Output() removeChip = new EventEmitter<ChipRemoveEvent>();
@@ -61,6 +70,9 @@ export class IChipsComponent implements OnChanges, AfterViewInit, OnDestroy {
   chipsOverflow = false;
   private resizeObserver?: ResizeObserver;
   private overflowRafId?: number;
+
+  /** Unique component identifier */
+  componentId = UniqueComponentId('i-chips-');
 
   constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {}
 

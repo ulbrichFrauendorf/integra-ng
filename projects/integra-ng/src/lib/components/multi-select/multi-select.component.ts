@@ -12,6 +12,7 @@ import {
   computed,
   InputSignal,
   input,
+  WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -21,9 +22,9 @@ import {
   NgControl,
   AbstractControl,
 } from '@angular/forms';
-import { IInputText } from '../input-text/input-text.component';
-import { IChip } from '../chip/chip.component';
+import { IChipsComponent, ChipItem } from '../chips/chips.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
+import { IInputText } from '../input-text/input-text.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
 /**
@@ -89,7 +90,7 @@ export interface MultiSelectOption {
 @Component({
   selector: 'i-multi-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, IInputText, IChip, ICheckbox],
+  imports: [CommonModule, FormsModule, IChipsComponent, ICheckbox, IInputText],
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss'],
   providers: [
@@ -200,12 +201,6 @@ export class IMultiSelect implements ControlValueAccessor {
   @Output() onClear = new EventEmitter<void>();
 
   /**
-   * Reference to the input text component
-   * @internal
-   */
-  @ViewChild('inputText') inputTextRef!: IInputText;
-
-  /**
    * Reference to the dropdown element
    * @internal
    */
@@ -253,17 +248,47 @@ export class IMultiSelect implements ControlValueAccessor {
   });
 
   /**
-   * Internal selected values storage
+   * Computed chip items from selected values
    * @internal
    */
-  private _value: any[] = [];
+  selectedChips = computed<ChipItem[]>(() => {
+    const currentOptions = this.options() || [];
+    const currentValue = this._value();
+    if (!Array.isArray(currentOptions)) {
+      return [];
+    }
+
+    return currentValue.map((val) => {
+      let label: string;
+      if (!this.optionValue) {
+        label = this.getOptionLabel(val);
+      } else {
+        const option = currentOptions.find(
+          (opt: MultiSelectOption) => this.getOptionValue(opt) === val
+        );
+        label = option ? this.getOptionLabel(option) : String(val);
+      }
+
+      return {
+        label,
+        value: val,
+        removable: !this.disabled,
+      };
+    });
+  });
+
+  /**
+   * Internal selected values storage as a signal
+   * @internal
+   */
+  private _value: WritableSignal<any[]> = signal([]);
 
   /**
    * Gets the current selected values array
    * @internal
    */
   get value(): any[] {
-    return this._value;
+    return this._value();
   }
 
   /**
@@ -271,10 +296,7 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   set value(val: any[]) {
-    this._value = val || [];
-    if (this.inputTextRef) {
-      this.inputTextRef.value = this.getDisplayLabel() || null;
-    }
+    this._value.set(val || []);
   }
 
   /**
@@ -305,18 +327,6 @@ export class IMultiSelect implements ControlValueAccessor {
     setTimeout(() => {
       this.ngControl = this.injector.get(NgControl, null);
     });
-  }
-
-  /**
-   * Display value for the input text component
-   * @internal
-   */
-  get inputValue(): string {
-    return this.getDisplayLabel();
-  }
-
-  set inputValue(value: string) {
-    // Setter required for binding, but value is managed internally
   }
 
   /**
@@ -398,20 +408,20 @@ export class IMultiSelect implements ControlValueAccessor {
   }
 
   /**
-   * Removes a specific selected item
+   * Removes a specific selected item from chips
    * @internal
    */
-  removeSelectedItem(value: any, event: Event) {
-    event.stopPropagation();
+  onChipRemove(event: { chip: ChipItem; originalEvent: Event }) {
+    event.originalEvent.stopPropagation();
     const currentValues = [...this.value];
 
     let index: number;
     if (!this.optionValue) {
       index = currentValues.findIndex(
-        (val) => JSON.stringify(val) === JSON.stringify(value)
+        (val) => JSON.stringify(val) === JSON.stringify(event.chip.value)
       );
     } else {
-      index = currentValues.findIndex((val) => val === value);
+      index = currentValues.findIndex((val) => val === event.chip.value);
     }
 
     if (index > -1) {
@@ -421,6 +431,14 @@ export class IMultiSelect implements ControlValueAccessor {
       this.onChangeCallback(currentValues);
       this.onTouchedCallback();
     }
+  }
+
+  /**
+   * Handles close all event from chips component
+   * @internal
+   */
+  onChipsCloseAll() {
+    this.clearSelection();
   }
 
   /**
@@ -524,10 +542,7 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   writeValue(value: any[]): void {
-    this._value = value || [];
-    if (this.inputTextRef) {
-      this.inputTextRef.value = this.getDisplayLabel() || null;
-    }
+    this._value.set(value || []);
   }
 
   /**

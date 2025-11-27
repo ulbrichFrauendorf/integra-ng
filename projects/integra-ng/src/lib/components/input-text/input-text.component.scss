@@ -35,6 +35,7 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
     box-sizing: border-box;
     width: 100%;
     border-radius: vars.$componentBorderRadius;
+    min-height: vars.$component-input-height;
     transition: $input-transition;
 
     &:focus {

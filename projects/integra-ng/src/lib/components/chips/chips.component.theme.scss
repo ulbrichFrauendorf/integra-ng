@@ -9,6 +9,20 @@
     color: colors.$color-text-secondary;
   }
 
+  /* Float label styling */
+  .i-chips-label {
+    color: colors.$color-text-secondary;
+    background: transparent;
+  }
+
+  .i-chips-label--floated {
+    background: transparent;
+  }
+
+  .i-chips-label--error {
+    color: colors.$color-danger;
+  }
+
   /* Boxed input-like appearance matching i-input styles */
   .i-chips-box {
     border: 1px solid colors.$color-surface-border;
@@ -30,5 +44,10 @@
       border-color: colors.$color-disabled-border;
       color: colors.$color-text-disabled;
     }
+  }
+
+  /* Error state for boxed container */
+  .i-chips-wrapper--error .i-chips-box {
+    border-color: colors.$color-danger;
   }
 }
