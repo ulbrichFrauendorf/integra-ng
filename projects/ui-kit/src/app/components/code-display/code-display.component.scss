@@ -132,6 +132,8 @@ $rider-event: #cc7832; // reuse keyword color for events
 
 @media (max-width: 768px) {
   .code-display-container {
+    padding: 20px 16px;
+
     .code-section {
       max-width: 100%;
     }
