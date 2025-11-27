@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2rem;
+}
+
+:host(.i-chips--nowrap) {
+  flex-wrap: nowrap;
+}
+
+:host(.i-chips--hidden) {
+  visibility: hidden;
+}

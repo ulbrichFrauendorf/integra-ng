@@ -1,0 +1,9 @@
+@for (chip of chips; track trackByValue($index, chip)) {
+<i-chip
+  [label]="chip.label"
+  [icon]="chip.icon"
+  [removable]="chip.removable ?? removable"
+  [disabled]="disabled || !!chip.disabled"
+  (onRemove)="onChipRemove(chip, $event)"
+></i-chip>
+}

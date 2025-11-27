@@ -33,6 +33,7 @@ $listbox-dropdown-viewport-margin: 150px;
 
   // Header
   .i-listbox-header {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -86,20 +87,30 @@ $listbox-dropdown-viewport-margin: 150px;
       }
     }
 
-    // Chips area
-    .i-listbox-chips-area {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      min-height: 28px;
+    .i-listbox-selection {
+      position: relative;
+      min-height: 32px;
+    }
+
+    .i-listbox-chips {
       padding: 4px 0;
+      min-height: 0;
+    }
+
+    .i-listbox-chips--hidden {
+      visibility: hidden;
     }
 
     // Summary text
     .i-listbox-summary {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
       font-size: 1em;
       color: colors.$color-text-secondary;
       padding: 4px 0;
+      background: colors.$color-surface-card;
     }
   }
 

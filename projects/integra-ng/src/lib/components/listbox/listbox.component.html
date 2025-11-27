@@ -23,22 +23,23 @@
     </div>
 
     <!-- Chips area for multiselect mode -->
-    @if (multiple && shouldShowChips()) {
-    <div class="i-listbox-chips-area">
-      @for (selectedValue of getValueArray(); track selectedValue) {
-      <i-chip
-        [label]="getSelectedLabels()[getValueArray().indexOf(selectedValue)]"
+    @if (multiple && hasValue()) {
+    <div class="i-listbox-selection">
+      <i-chips
+        #chipsViewport
+        class="i-listbox-chips"
+        [class.i-listbox-chips--hidden]="chipsOverflow()"
+        [chips]="getSelectedChipItems()"
         [removable]="!disabled"
-        (onRemove)="removeSelectedItem(selectedValue, $event)"
-      ></i-chip>
-      }
-    </div>
-    }
+        [disabled]="disabled"
+        (removeChip)="onChipRemove($event)"
+      ></i-chips>
 
-    <!-- Summary text for multiselect when too many items -->
-    @if (multiple && hasValue() && !shouldShowChips()) {
-    <div class="i-listbox-summary">
-      {{ getDisplayLabel() }}
+      @if (chipsOverflow()) {
+      <div class="i-listbox-summary">
+        {{ getDisplayLabel() }}
+      </div>
+      }
     </div>
     }
   </div>

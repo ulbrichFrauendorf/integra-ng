@@ -12,6 +12,8 @@ import {
   computed,
   InputSignal,
   input,
+  AfterViewChecked,
+  NgZone,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -21,7 +23,11 @@ import {
   NgControl,
   AbstractControl,
 } from '@angular/forms';
-import { IChip } from '../chip/chip.component';
+import {
+  IChipsComponent,
+  ChipItem,
+  ChipRemoveEvent,
+} from '../chips/chips.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
@@ -86,7 +92,14 @@ export interface ListboxOption {
 @Component({
   selector: 'i-listbox',
   standalone: true,
-  imports: [CommonModule, FormsModule, IChip, ICheckbox, IInputText, IButton],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IChipsComponent,
+    ICheckbox,
+    IInputText,
+    IButton,
+  ],
   templateUrl: './listbox.component.html',
   styleUrls: ['./listbox.component.scss'],
   providers: [
@@ -97,7 +110,7 @@ export interface ListboxOption {
     },
   ],
 })
-export class IListbox implements ControlValueAccessor {
+export class IListbox implements ControlValueAccessor, AfterViewChecked {
   /**
    * Title text displayed in the listbox header
    * @default 'List Box'
@@ -161,9 +174,13 @@ export class IListbox implements ControlValueAccessor {
 
   @ViewChild('dropdown', { static: false }) dropdownRef!: ElementRef;
   @ViewChild('searchInput', { static: false }) searchInputRef!: ElementRef;
+  @ViewChild('chipsViewport', { static: false }) chipsViewportRef!: ElementRef;
 
   // Convert filter value to signal
   filterValue = signal('');
+
+  // Track whether chips overflow their container
+  chipsOverflow = signal(false);
 
   // Create computed signal for filtered options
   filteredOptions = computed(() => {
@@ -230,10 +247,56 @@ export class IListbox implements ControlValueAccessor {
    */
   componentId = UniqueComponentId('i-listbox-');
 
-  constructor(private injector: Injector) {
+  /**
+   * Track previous value length to detect changes
+   * @internal
+   */
+  private previousValueLength = 0;
+
+  constructor(private injector: Injector, private ngZone: NgZone) {
     setTimeout(() => {
       this.ngControl = this.injector.get(NgControl, null);
     });
+  }
+
+  /**
+   * Check for chips overflow after view updates
+   */
+  ngAfterViewChecked(): void {
+    this.checkChipsOverflow();
+  }
+
+  /**
+   * Measures if chips overflow their container and updates the signal.
+   * Compares total width of all chips against wrapper width minus padding.
+   * @internal
+   */
+  private checkChipsOverflow(): void {
+    if (!this.chipsViewportRef?.nativeElement) return;
+
+    const viewport = this.chipsViewportRef.nativeElement as HTMLElement;
+
+    // Force layout before measuring to ensure scrollWidth is up to date
+    viewport.style.removeProperty('width');
+    const computedStyle = getComputedStyle(
+      this.dropdownRef?.nativeElement ?? viewport
+    );
+    const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+    const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+    const wrapperWidth = this.dropdownRef?.nativeElement
+      ? this.dropdownRef.nativeElement.getBoundingClientRect().width
+      : viewport.getBoundingClientRect().width;
+    const availableWidth = Math.max(
+      wrapperWidth - paddingLeft - paddingRight,
+      0
+    );
+    viewport.style.width = `${availableWidth}px`;
+
+    const isOverflowing = viewport.scrollWidth > viewport.clientWidth;
+
+    if (this.chipsOverflow() !== isOverflowing) {
+      this.ngZone.run(() => this.chipsOverflow.set(isOverflowing));
+    }
   }
 
   /**
@@ -367,6 +430,17 @@ export class IListbox implements ControlValueAccessor {
     });
   }
 
+  getSelectedChipItems(): ChipItem[] {
+    const labels = this.getSelectedLabels();
+    const values = this.getValueArray();
+
+    return values.map((value, index) => ({
+      label: labels[index] ?? String(value),
+      value,
+      removable: !this.disabled,
+    }));
+  }
+
   getDisplayLabel(): string {
     const currentOptions = this.options() || [];
     if (!Array.isArray(currentOptions)) {
@@ -411,15 +485,21 @@ export class IListbox implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Determines if chips should be shown or if summary text should display.
+   * Returns true if:
+   * - Multiple mode is enabled
+   * - There are selected values
+   * - Chips don't overflow their container (dynamically measured)
+   */
   shouldShowChips(): boolean {
-    if (this.multiple) {
-      return (
-        Array.isArray(this.value) &&
-        this.value.length > 0 &&
-        this.value.length <= this.maxSelectedLabels
-      );
-    }
-    return false;
+    if (!this.multiple) return false;
+
+    return (
+      Array.isArray(this.value) &&
+      this.value.length > 0 &&
+      !this.chipsOverflow()
+    );
   }
 
   getValueArray(): any[] {
@@ -437,6 +517,10 @@ export class IListbox implements ControlValueAccessor {
       this.placeholder ||
       (this.multiple ? 'Select options' : 'Select an option')
     );
+  }
+
+  onChipRemove(event: ChipRemoveEvent): void {
+    this.removeSelectedItem(event.chip.value, event.originalEvent);
   }
 
   @HostListener('document:click', ['$event'])
