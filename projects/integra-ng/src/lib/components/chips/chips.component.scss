@@ -1,4 +1,17 @@
+@use "./chips.component.theme.scss" as theme;
+@use "../../themes/variables" as vars;
+
+@include theme.i-chips-theme();
+
+$chips-transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
 :host {
+  display: block;
+  width: 100%;
+}
+
+.i-chips-container {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -6,10 +19,59 @@
   min-height: 2rem;
 }
 
-:host(.i-chips--nowrap) {
+.i-chips-container--collapse {
   flex-wrap: nowrap;
+  overflow: hidden;
 }
 
-:host(.i-chips--hidden) {
+.i-chips-list {
+  display: flex;
+  flex-wrap: inherit;
+  gap: inherit;
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.i-chips-container--collapse .i-chips-list {
+  white-space: nowrap;
+}
+
+.i-chips-container--overflow .i-chips-list {
   visibility: hidden;
+}
+
+.i-chips-summary {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 0.25rem;
+  background: inherit;
+}
+
+.i-chips-actions {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Boxed input-like appearance matching i-input styles */
+.i-chips-box {
+  box-sizing: border-box;
+  border-radius: vars.$componentBorderRadius;
+  padding: 8px 12px;
+  transition: $chips-transition;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.i-chips-box.i-chips-container--collapse {
+  padding-right: 2.5rem;
 }

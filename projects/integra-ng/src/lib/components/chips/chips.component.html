@@ -1,9 +1,37 @@
-@for (chip of chips; track trackByValue($index, chip)) {
-<i-chip
-  [label]="chip.label"
-  [icon]="chip.icon"
-  [removable]="chip.removable ?? removable"
-  [disabled]="disabled || !!chip.disabled"
-  (onRemove)="onChipRemove(chip, $event)"
-></i-chip>
-}
+<div
+  class="i-chips-container"
+  #chipsViewport
+  [class.i-chips-container--collapse]="collapseOnOverflow"
+  [class.i-chips-container--overflow]="collapseOnOverflow && chipsOverflow"
+  [class.i-chips-box]="boxed"
+  [class.i-chips--disabled]="disabled"
+  [attr.tabindex]="boxed && !disabled ? 0 : null"
+>
+  <div class="i-chips-list" #chipsList>
+    @for (chip of chips; track trackByValue($index, chip)) {
+    <i-chip
+      [label]="chip.label"
+      [icon]="chip.icon"
+      [removable]="chip.removable ?? removable"
+      [disabled]="disabled || !!chip.disabled"
+      (onRemove)="onChipRemove(chip, $event)"
+    ></i-chip>
+    }
+  </div>
+
+  @if (allowCloseAll) {
+  <div class="i-chips-actions">
+    <i-button
+      [text]="true"
+      [size]="'xtra-small'"
+      [severity]="'contrast'"
+      [icon]="'pi pi-times'"
+      (clicked)="onCloseAllClicked($event)"
+    ></i-button>
+  </div>
+  } @if (collapseOnOverflow && chipsOverflow) {
+  <div class="i-chips-summary">
+    {{ overflowText }}
+  </div>
+  }
+</div>

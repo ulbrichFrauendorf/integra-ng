@@ -188,13 +188,6 @@ describe('IListbox', () => {
       expect(component.hasValue()).toBe(true);
     });
 
-    it('should determine if should show chips', () => {
-      component.multiple = true;
-      component.maxSelectedLabels = 3;
-      component.value = [mockOptions[0]['id']];
-      expect(component.shouldShowChips()).toBe(true);
-    });
-
     it('should get correct placeholder', () => {
       component.multiple = true;
       expect(component.getPlaceholder()).toBe('Select options');
@@ -410,7 +403,10 @@ describe('IListbox', () => {
     it('should get value array in multiple mode', () => {
       component.multiple = true;
       component.value = [mockOptions[0]['id'], mockOptions[1]['id']];
-      expect(component.getValueArray()).toEqual([mockOptions[0]['id'], mockOptions[1]['id']]);
+      expect(component.getValueArray()).toEqual([
+        mockOptions[0]['id'],
+        mockOptions[1]['id'],
+      ]);
     });
 
     it('should get value array in single mode', () => {
@@ -442,7 +438,9 @@ describe('IListbox', () => {
 
     it('should fallback to label for search value', () => {
       component.filterBy = 'nonexistent';
-      expect(component.getOptionSearchValue(mockOptions[0])).toBe('First Option');
+      expect(component.getOptionSearchValue(mockOptions[0])).toBe(
+        'First Option'
+      );
     });
   });
 });

@@ -1,0 +1,34 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-chips-theme() {
+  .i-chips-container {
+    color: colors.$color-text-primary;
+  }
+
+  .i-chips-summary {
+    color: colors.$color-text-secondary;
+  }
+
+  /* Boxed input-like appearance matching i-input styles */
+  .i-chips-box {
+    border: 1px solid colors.$color-surface-border;
+    background: colors.$color-component-background;
+
+    &:focus {
+      outline: none;
+      border-color: colors.$color-primary;
+      box-shadow: colors.$color-box-shadow;
+    }
+
+    &:focus-within {
+      border-color: colors.$color-primary;
+      box-shadow: colors.$color-box-shadow;
+    }
+
+    &.i-chips--disabled {
+      background: colors.$color-disabled-background;
+      border-color: colors.$color-disabled-border;
+      color: colors.$color-text-disabled;
+    }
+  }
+}

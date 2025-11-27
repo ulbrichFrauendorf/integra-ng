@@ -3,13 +3,17 @@
     <h1>Chip Components</h1>
     <p>
       Chip components for displaying tags, selections, and other compact
-      information. Similar to PrimeNG's p-chip and p-chips components.
+      information. The i-chips component provides a flexible container with
+      overflow handling, boxed styling, and close-all functionality.
     </p>
   </header>
 
   <div class="cards-container">
-    <!-- Basic Chip Examples -->
-    <app-demo-card [title]="'Basic Chips'" [sourceCode]="codeExamples.basicChips">
+    <!-- Basic Single Chip Examples -->
+    <app-demo-card
+      [title]="'Basic Chips (i-chip)'"
+      [sourceCode]="codeExamples.basicChips"
+    >
       <div class="chip-examples">
         @for (chip of chipExamples; track chip.label) {
         <i-chip
@@ -19,6 +23,150 @@
           (onRemove)="onChipRemove($event)"
         />
         }
+      </div>
+    </app-demo-card>
+
+    <!-- Basic Chips Container -->
+    <app-demo-card
+      [title]="'Chips Container (i-chips)'"
+      [sourceCode]="codeExamples.chipsContainer"
+    >
+      <div class="chips-container-demo">
+        <i-chips
+          [chips]="basicChips"
+          [removable]="true"
+          (removeChip)="onRemoveBasic($event)"
+        ></i-chips>
+
+        @if (!basicChips.length) {
+        <p class="chips-container-empty">All chips removed.</p>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Boxed Container -->
+    <app-demo-card
+      [title]="'Boxed Container'"
+      [sourceCode]="codeExamples.boxed"
+    >
+      <div class="chips-container-demo">
+        <i-chips
+          [chips]="boxedChips"
+          [boxed]="true"
+          [removable]="true"
+          (removeChip)="onRemoveBoxed($event)"
+        ></i-chips>
+
+        <i-message [severity]="'info'"
+          >Boxed mode displays chips inside an input-styled container</i-message
+        >
+
+        @if (!boxedChips.length) {
+        <p class="chips-container-empty">All chips removed.</p>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Collapsible Overflow -->
+    <app-demo-card
+      [title]="'Collapsible Overflow'"
+      [sourceCode]="codeExamples.collapse"
+    >
+      <div class="chips-container-demo">
+        <i-chips
+          [chips]="collapsibleChips"
+          [removable]="true"
+          [collapseOnOverflow]="true"
+          [overflowLabel]="collapsibleSummary"
+          (removeChip)="onRemoveCollapsible($event)"
+        ></i-chips>
+
+        <i-message [severity]="'info'"
+          >Resize the window to see the chips collapse into a summary
+          label</i-message
+        >
+
+        @if (!collapsibleChips.length) {
+        <p class="chips-container-empty">All filters removed.</p>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Close All Button -->
+    <app-demo-card
+      [title]="'Close All Button'"
+      [sourceCode]="codeExamples.closeAll"
+    >
+      <div class="chips-container-demo">
+        <i-chips
+          [chips]="closeAllChips"
+          [removable]="true"
+          [allowCloseAll]="true"
+          (removeChip)="onRemoveCloseAll($event)"
+          (closedAll)="onClearCloseAll()"
+        ></i-chips>
+
+        <i-message [severity]="'info'"
+          >The close-all button allows clearing all chips at once</i-message
+        >
+
+        @if (!closeAllChips.length) {
+        <p class="chips-container-empty">All filters cleared.</p>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Disabled State -->
+    <app-demo-card
+      [title]="'Disabled State'"
+      [sourceCode]="codeExamples.disabled"
+    >
+      <div class="chips-container-demo">
+        <i-chips [chips]="disabledChips" [disabled]="true"></i-chips>
+
+        <i-message [severity]="'info'"
+          >Disabled chips are read-only and cannot be removed</i-message
+        >
+      </div>
+    </app-demo-card>
+
+    <!-- Combined Features -->
+    <app-demo-card
+      [title]="'Combined Features'"
+      [sourceCode]="codeExamples.combined"
+    >
+      <div class="chips-container-demo">
+        <i-chips
+          [chips]="combinedChips"
+          [boxed]="true"
+          [removable]="true"
+          [collapseOnOverflow]="true"
+          [allowCloseAll]="true"
+          [overflowLabel]="combinedSummary"
+          (removeChip)="onRemoveCombined($event)"
+          (closedAll)="onClearCombined()"
+        ></i-chips>
+
+        <i-message [severity]="'info'"
+          >Combines boxed styling, collapsible overflow, and close-all
+          button</i-message
+        >
+
+        @if (!combinedChips.length) {
+        <p class="chips-container-empty">All selections cleared.</p>
+        }
+      </div>
+    </app-demo-card>
+
+    <!-- Reset Button -->
+    <app-demo-card [title]="'Reset Demo'">
+      <div class="chips-container-demo">
+        <button class="reset-button" (click)="onResetAll()">
+          Reset All Demos
+        </button>
+        <i-message [severity]="'warning'"
+          >Click to restore all chip examples to their original state</i-message
+        >
       </div>
     </app-demo-card>
 

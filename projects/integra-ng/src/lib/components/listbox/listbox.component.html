@@ -24,23 +24,15 @@
 
     <!-- Chips area for multiselect mode -->
     @if (multiple && hasValue()) {
-    <div class="i-listbox-selection">
-      <i-chips
-        #chipsViewport
-        class="i-listbox-chips"
-        [class.i-listbox-chips--hidden]="chipsOverflow()"
-        [chips]="getSelectedChipItems()"
-        [removable]="!disabled"
-        [disabled]="disabled"
-        (removeChip)="onChipRemove($event)"
-      ></i-chips>
-
-      @if (chipsOverflow()) {
-      <div class="i-listbox-summary">
-        {{ getDisplayLabel() }}
-      </div>
-      }
-    </div>
+    <i-chips
+      class="i-listbox-chips"
+      [chips]="getSelectedChipItems()"
+      [removable]="!disabled"
+      [disabled]="disabled"
+      [collapseOnOverflow]="true"
+      [overflowLabel]="getDisplayLabel()"
+      (removeChip)="onChipRemove($event)"
+    ></i-chips>
     }
   </div>
 
