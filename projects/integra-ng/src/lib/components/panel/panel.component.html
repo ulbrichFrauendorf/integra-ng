@@ -1,0 +1,31 @@
+<div
+  class="i-panel"
+  [class.i-panel--collapsed]="collapsed"
+  [class.i-panel--toggleable]="toggleable"
+  [attr.id]="componentId"
+>
+  <div
+    class="i-panel-header"
+    (click)="toggle()"
+    [attr.aria-expanded]="!collapsed"
+    role="button"
+    [attr.tabindex]="toggleable ? 0 : null"
+    (keydown.enter)="toggle()"
+    (keydown.space)="toggle(); $event.preventDefault()"
+  >
+    @if (toggleable) {
+    <i
+      class="i-panel-toggle-icon"
+      [class.pi]="true"
+      [class.pi-minus]="!collapsed"
+      [class.pi-plus]="collapsed"
+    ></i>
+    }
+    <span class="i-panel-title">{{ header }}</span>
+  </div>
+  <div class="i-panel-content-wrapper" [class.i-panel-content-wrapper--collapsed]="collapsed">
+    <div class="i-panel-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

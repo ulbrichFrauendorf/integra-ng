@@ -1,0 +1,34 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-panel-theme() {
+  .i-panel {
+    background: colors.$color-surface-card;
+    color: colors.$color-text-primary;
+    border: 1px solid colors.$color-surface-border;
+
+    .i-panel-header {
+      color: colors.$color-text-secondary;
+      border-bottom: 1px solid colors.$color-surface-border;
+
+      .i-panel-toggle-icon {
+        color: colors.$color-primary;
+      }
+
+      .i-panel-title {
+        color: colors.$color-text-secondary;
+      }
+    }
+
+    &.i-panel--toggleable .i-panel-header:hover {
+      background: colors.$color-surface-hover;
+    }
+
+    &.i-panel--collapsed .i-panel-header {
+      border-bottom: none;
+    }
+
+    .i-panel-content {
+      color: colors.$color-text-primary;
+    }
+  }
+}

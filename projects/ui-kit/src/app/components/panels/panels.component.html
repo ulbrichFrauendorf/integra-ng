@@ -1,0 +1,120 @@
+<div class="panels-demo">
+  <header class="demo-header">
+    <h1>Panel Components</h1>
+    <p>
+      Collapsible panel containers with header and toggle functionality.
+      Perfect for organizing content into expandable sections.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Basic Panel -->
+    <app-demo-card
+      [title]="'Basic Panel'"
+      [sourceCode]="codeExamples.basic"
+      [tsCode]="tsExamples.basic"
+    >
+      <div class="panel-examples">
+        <i-panel header="Options">
+          <p>This is the content of the panel.</p>
+          <p>You can put any content here including text, forms, and more.</p>
+        </i-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Panel with Radio Buttons (like the image) -->
+    <app-demo-card
+      [title]="'Panel with Radio Buttons'"
+      [sourceCode]="codeExamples.withContent"
+      [tsCode]="tsExamples.withContent"
+    >
+      <div class="panel-examples">
+        <i-panel header="Split Options">
+          <div class="radio-row">
+            <i-radio-button
+              label="None"
+              value="none"
+              name="splitOption"
+              [(ngModel)]="splitOption"
+            />
+            <i-radio-button
+              label="Company"
+              value="company"
+              name="splitOption"
+              [(ngModel)]="splitOption"
+            />
+            <i-radio-button
+              label="Frequency"
+              value="frequency"
+              name="splitOption"
+              [(ngModel)]="splitOption"
+            />
+            <i-radio-button
+              label="PayRun"
+              value="payrun"
+              name="splitOption"
+              [(ngModel)]="splitOption"
+            />
+          </div>
+        </i-panel>
+        <div class="status">Selected: {{ splitOption }}</div>
+      </div>
+    </app-demo-card>
+
+    <!-- Initially Collapsed -->
+    <app-demo-card
+      [title]="'Initially Collapsed'"
+      [sourceCode]="codeExamples.collapsed"
+    >
+      <div class="panel-examples">
+        <i-panel header="Settings" [collapsed]="true">
+          <p>This panel starts collapsed.</p>
+          <p>Click the header to expand it.</p>
+        </i-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Non-toggleable Panel -->
+    <app-demo-card
+      [title]="'Non-toggleable Panel'"
+      [sourceCode]="codeExamples.nonToggleable"
+    >
+      <div class="panel-examples">
+        <i-panel header="Fixed Section" [toggleable]="false">
+          <p>This panel cannot be toggled.</p>
+          <p>It will always be visible.</p>
+        </i-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Programmatic Control -->
+    <app-demo-card
+      [title]="'Programmatic Control'"
+      [sourceCode]="codeExamples.programmatic"
+      [tsCode]="tsExamples.programmatic"
+    >
+      <div class="panel-examples">
+        <div class="control-buttons">
+          <button class="demo-button" (click)="toggleProgrammatic()">
+            {{ programmaticCollapsed ? 'Expand' : 'Collapse' }} Panel
+          </button>
+          <span class="status">Status: {{ programmaticCollapsed ? 'Collapsed' : 'Expanded' }}</span>
+        </div>
+        <i-panel
+          header="Programmatically Controlled"
+          [collapsed]="programmaticCollapsed"
+          (collapsedChange)="programmaticCollapsed = $event"
+          (onToggle)="onToggle($event)"
+        >
+          <p>This panel's state is controlled via the component's property.</p>
+          <p>Click the button above to toggle it programmatically.</p>
+        </i-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

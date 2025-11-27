@@ -4,10 +4,16 @@ import {
   Output,
   EventEmitter,
   forwardRef,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  Injector,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
+import { Subject, Subscription } from 'rxjs';
 
 /**
  * RadioButton Component
@@ -54,6 +60,10 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
  * @remarks
  * This component implements ControlValueAccessor for seamless integration with Angular Forms.
  * Radio buttons with the same `name` attribute work as a group, allowing only one selection.
+ *
+ * Note: For Reactive Forms (formControlName), the component will attempt to infer the `name`
+ * from the `formControlName` directive when `name` is not explicitly set, but it's still
+ * recommended to set the `name` Input for clarity and group scoping.
  */
 @Component({
   selector: 'i-radio-button',
@@ -69,7 +79,7 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
     },
   ],
 })
-export class IRadioButton implements ControlValueAccessor {
+export class IRadioButton implements ControlValueAccessor, OnInit, OnDestroy {
   /**
    * Label text displayed next to the radio button
    */
@@ -118,6 +128,11 @@ export class IRadioButton implements ControlValueAccessor {
    * @internal
    */
   private _modelValue: any;
+  // Grouping state shared across instances (name + form scope)
+  private static groupSubjects = new Map<string, Subject<any>>();
+  private static groupValues = new Map<string, any>();
+  private groupKey?: string;
+  private subscription?: Subscription;
 
   /**
    * Callback for ControlValueAccessor
@@ -130,6 +145,8 @@ export class IRadioButton implements ControlValueAccessor {
    * @internal
    */
   private onTouchedCallback: () => void = () => {};
+
+  constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef, private injector: Injector) {}
 
   /**
    * Gets the effective input ID
@@ -162,6 +179,15 @@ export class IRadioButton implements ControlValueAccessor {
       setTimeout(() => {
         this.onChange.emit(this.value);
       }, 0);
+
+      // Notify group subscribers (if name is provided)
+      if (this.groupKey) {
+        const subject = IRadioButton.groupSubjects.get(this.groupKey);
+        if (subject) {
+          IRadioButton.groupValues.set(this.groupKey, this.value);
+          subject.next(this.value);
+        }
+      }
     }
   }
 
@@ -171,6 +197,75 @@ export class IRadioButton implements ControlValueAccessor {
    */
   writeValue(value: any): void {
     this._modelValue = value;
+
+    // If the control receives a value, notify the group so all members update
+    if (this.groupKey) {
+      const current = IRadioButton.groupValues.get(this.groupKey);
+      if (current !== value) {
+        let subject = IRadioButton.groupSubjects.get(this.groupKey);
+        if (!subject) {
+          subject = new Subject<any>();
+          IRadioButton.groupSubjects.set(this.groupKey, subject);
+        }
+        IRadioButton.groupValues.set(this.groupKey, value);
+        subject.next(value);
+      }
+    }
+  }
+
+  ngOnInit(): void {
+    // If the consumer used reactive forms but didn't provide a 'name' input,
+    // try to use the NgControl name for grouping
+    const ngControl = this.injector.get(NgControl, null as any);
+    if (!this.name && ngControl?.name) {
+      try {
+        this.name = String(ngControl.name);
+      } catch {}
+    }
+
+    // Only group radios when a common name is provided
+    if (!this.name) return;
+
+    // compute a form-scoped key: name@formId or name@root
+    const form = this.elementRef.nativeElement.closest('form') as HTMLFormElement | null;
+    let formKey = 'root';
+    if (form) {
+      formKey = form.id || form.getAttribute('data-integrang-form-id') || UniqueComponentId('i-radio-form-');
+      if (!form.id && !form.getAttribute('data-integrang-form-id')) {
+        form.setAttribute('data-integrang-form-id', formKey);
+      }
+    }
+    this.groupKey = `${this.name}@${formKey}`;
+
+    // ensure subject exists
+    let subject = IRadioButton.groupSubjects.get(this.groupKey);
+    if (!subject) {
+      subject = new Subject<any>();
+      IRadioButton.groupSubjects.set(this.groupKey, subject);
+    }
+
+    // subscribe to group changes
+    this.subscription = subject.subscribe((value: any) => {
+      // update model and view
+      this._modelValue = value;
+      // run change detection to update CSS classes
+      this.cdr.markForCheck();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+
+    // Cleanup: if there are no more observers for this group, remove the subject and value
+    if (this.groupKey) {
+      const subject = IRadioButton.groupSubjects.get(this.groupKey);
+      if (subject && subject.observers && subject.observers.length === 0) {
+        IRadioButton.groupSubjects.delete(this.groupKey);
+        IRadioButton.groupValues.delete(this.groupKey);
+      }
+    }
   }
 
   /**

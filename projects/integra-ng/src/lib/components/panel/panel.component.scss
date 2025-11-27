@@ -1,0 +1,50 @@
+@use "./panel.component.theme.scss" as theme;
+@use "../../themes/_variables.scss" as vars;
+@use "../../themes/color-variables.scss" as colors;
+
+@include theme.i-panel-theme();
+
+.i-panel {
+  border-radius: vars.$borderRadius;
+  overflow: hidden;
+
+  .i-panel-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    user-select: none;
+    transition: background-color vars.$transitionDuration ease;
+
+    .i-panel-toggle-icon {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .i-panel-title {
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+  }
+
+  &.i-panel--toggleable .i-panel-header {
+    cursor: pointer;
+  }
+
+  .i-panel-content-wrapper {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+    max-height: 1000px;
+    opacity: 1;
+
+    &.i-panel-content-wrapper--collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+
+  .i-panel-content {
+    padding: 1rem;
+  }
+}
