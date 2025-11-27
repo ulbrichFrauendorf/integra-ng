@@ -1,12 +1,12 @@
 // Empty state table component styles
 .i-empty-state-table {
   &__container {
-    width: 13rem;
-    height: 13rem;
+    width: 208px;
+    height: 208px;
   }
 
   &__image {
-    width: 13rem;
+    width: 208px;
     height: auto;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
@@ -19,12 +19,12 @@
 
 // Legacy class names for backward compatibility
 .no-results-table-container {
-  width: 13rem;
-  height: 13rem;
+  width: 208px;
+  height: 208px;
 }
 
 .no-results-image-fixed {
-  width: 13rem;
+  width: 208px;
   height: auto;
   opacity: 0;
   transition: opacity 0.8s ease-in-out;

@@ -25,21 +25,28 @@ $multi-select-dropdown-viewport-margin: 150px;
     // Chips component
     .i-multi-select-chips {
       position: relative;
-      min-height: 3.5rem;
+      min-height: 56px;
       cursor: pointer;
     }
 
     // Icons overlay
     .i-multi-select-icons-overlay {
       position: absolute;
-      top: 50%;
-      right: 12px;
+      top: 18%;
+      right: 4px;
       z-index: 3;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transform: translateY(-50%);
+      gap: 0;
       pointer-events: none;
+
+      .i-multi-select-arrow-wrapper {
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
 
       .i-multi-select-arrow {
         font-size: 0.8em;
@@ -53,9 +60,9 @@ $multi-select-dropdown-viewport-margin: 150px;
 
     // Error message
     .i-multi-select-error {
-      margin-top: 0.25rem;
-      font-size: 0.875rem;
-      padding-left: 0.75rem;
+      margin-top: 4px;
+      font-size: 1em;
+      padding-left: 12px;
     }
   }
 

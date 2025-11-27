@@ -6,7 +6,7 @@ export type DialogContentStyle = Record<string, string | number>;
 @Directive()
 export abstract class AbstractDialog {
   @Input() header?: string;
-  @Input() width: string = '50rem';
+  @Input() width: string = '800px';
   @Input() height?: string;
   @Input() closable: boolean = true;
   @Input() modal: boolean = true;

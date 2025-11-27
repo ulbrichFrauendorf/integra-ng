@@ -39,7 +39,7 @@ $select-dropdown-viewport-margin: 150px;
       transform: translateY(-50%);
 
       .i-select-clear {
-        font-size: 0.8em;
+        font-size: 12px;
         opacity: 0.6;
         cursor: pointer;
         pointer-events: auto;
@@ -51,7 +51,7 @@ $select-dropdown-viewport-margin: 150px;
       }
 
       .i-select-arrow {
-        font-size: 0.7rem;
+        font-size: 12px;
         opacity: 0.6;
         transition: transform $select-transition;
 
