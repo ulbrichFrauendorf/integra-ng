@@ -6,30 +6,65 @@
 
 .i-panel {
   border-radius: vars.$borderRadius;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+  // keep the component's own border as the top line; pad so header can overlap it
+  padding-top: 0.9rem;
+  min-height: 3rem;
 
-  .i-panel-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    user-select: none;
-    transition: background-color vars.$transitionDuration ease;
+  .i-panel-header-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    z-index: 1;
 
-    .i-panel-toggle-icon {
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
+    // ensure the header can overlap the top border of the panel
+    .i-panel-header {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      // position the header so it sits centered on the top border
+      top: 0;
+      transform: translateY(-50%);
+      // slightly indent to the right as requested
+      padding: 0.25rem 0.75rem;
+      margin-left: 1.25rem;
+      background: colors.$color-surface-card;
+      user-select: none;
+      transition: background-color vars.$transitionDuration ease;
 
-    .i-panel-title {
-      font-weight: 500;
-      font-size: 0.875rem;
+      // reset native button styles when header is a button
+      &.i-panel-header:where(button) {
+        border: none;
+        background: colors.$color-surface-card;
+        cursor: pointer;
+        padding: 0.25rem 0.75rem;
+        font-family: inherit;
+        color: inherit;
+      }
+
+      .i-panel-toggle-icon {
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .i-panel-title {
+        font-weight: 500;
+        font-size: 0.875rem;
+        line-height: 1;
+        display: inline-block;
+        white-space: nowrap;
+      }
     }
   }
 
-  &.i-panel--toggleable .i-panel-header {
-    cursor: pointer;
+  &.i-panel--toggleable .i-panel-header:hover {
+    // Optional hover effect
   }
 
   .i-panel-content-wrapper {
@@ -48,3 +83,4 @@
     padding: 1rem;
   }
 }
+
