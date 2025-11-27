@@ -125,6 +125,11 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/tabs'],
           },
           {
+            label: 'Panels',
+            icon: 'pi pi-fw pi-window-maximize',
+            routerLink: ['/components/panels'],
+          },
+          {
             label: 'Whispers',
             icon: 'pi pi-fw pi-comment',
             routerLink: ['/components/whispers'],

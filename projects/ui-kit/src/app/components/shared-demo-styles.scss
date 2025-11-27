@@ -140,11 +140,12 @@
 // Responsive design utilities
 @media (max-width: 768px) {
   .demo-component {
-    padding: 16px;
+    padding: 16px 0;
   }
 
   .demo-header {
     margin-bottom: 24px;
+    padding: 0 16px;
 
     h1 {
       font-size: 1.75rem;

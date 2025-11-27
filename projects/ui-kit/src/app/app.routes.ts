@@ -21,6 +21,7 @@ import { TabsComponent } from './components/tabs/tabs.component';
 import { InstallationComponent } from './components/installation/installation.component';
 import { ThemingComponent } from './components/theming/theming.component';
 import { TablesComponent } from './components/tables/tables.component';
+import { PanelsComponent } from './components/panels/panels.component';
 
 export const routes: Routes = [
   {
@@ -61,6 +62,7 @@ export const routes: Routes = [
           { path: 'chips', component: ChipsComponent },
           { path: 'listboxes', component: ListboxesComponent },
           { path: 'messages', component: MessagesComponent },
+          { path: 'panels', component: PanelsComponent },
           { path: 'tree-views', component: TreeViewsComponent },
           { path: 'tabs', component: TabsComponent },
           { path: 'whispers', component: WhispersComponent },

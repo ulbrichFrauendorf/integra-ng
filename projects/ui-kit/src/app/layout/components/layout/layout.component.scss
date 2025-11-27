@@ -92,16 +92,18 @@
         .layout-sidebar-container {
           position: fixed;
           left: 0;
-          top: 5rem;
-          height: calc(100vh - 5rem);
+          top: 0;
+          height: 100vh;
           z-index: 999;
           transition: transform 0.2s ease;
           background: var(--surface-overlay);
+          overflow-y: auto;
         }
 
         .layout-main-container {
           margin-left: 0;
           width: 100%;
+          padding: 2rem 0;
         }
       }
     }

@@ -25,6 +25,7 @@ export * from './lib/components/listbox/listbox.component';
 export * from './lib/components/radio-button/radio-button.component';
 export * from './lib/components/message/message.component';
 export * from './lib/components/multi-select/multi-select.component';
+export * from './lib/components/panel/panel.component';
 export * from './lib/components/select/select.component';
 export * from './lib/components/tabs/tabs.component';
 export * from './lib/components/tabs/tab-panel.component';
