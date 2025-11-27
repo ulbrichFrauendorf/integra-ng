@@ -38,7 +38,7 @@ $table-transition: 0.15s ease;
     justify-content: center;
 
     .i-table-loading-icon {
-      font-size: 2rem;
+      font-size: 32px;
     }
   }
 
@@ -87,7 +87,7 @@ $table-transition: 0.15s ease;
           }
 
           .i-table-sort-icon {
-            font-size: 0.85rem;
+            font-size: 1em;
             opacity: 0.6;
             transition: opacity $table-transition, color $table-transition;
           }
@@ -115,7 +115,7 @@ $table-transition: 0.15s ease;
           .i-table-column-filter {
             width: 100%;
             padding: 6px 10px;
-            font-size: 0.875rem;
+            font-size: 1em;
             border-radius: vars.$componentBorderRadius;
             transition: border-color $table-transition,
               box-shadow $table-transition;
@@ -158,7 +158,7 @@ $table-transition: 0.15s ease;
             pre {
               margin: 0;
               font-family: monospace;
-              font-size: 0.85rem;
+              font-size: 1em;
               white-space: pre-wrap;
               word-wrap: break-word;
             }
@@ -221,12 +221,12 @@ $table-transition: 0.15s ease;
     table {
       thead th {
         padding: 8px 12px;
-        font-size: 0.8rem;
+        font-size: 13px;
       }
 
       tbody td {
         padding: 6px 12px;
-        font-size: 0.85rem;
+        font-size: 1em;
       }
 
       .i-table-filter-row th {
@@ -239,12 +239,12 @@ $table-transition: 0.15s ease;
     table {
       thead th {
         padding: 16px 20px;
-        font-size: 1rem;
+        font-size: 16px;
       }
 
       tbody td {
         padding: 16px 20px;
-        font-size: 1rem;
+        font-size: 16px;
       }
 
       .i-table-filter-row th {

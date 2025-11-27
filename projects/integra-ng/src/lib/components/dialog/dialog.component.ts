@@ -31,8 +31,8 @@ import { AbstractDialog } from './dialog-base';
  * <i-dialog
  *   [(visible)]="showDialog"
  *   header="Custom Size"
- *   width="30rem"
- *   height="20rem">
+ *   width="480px"
+ *   height="320px">
  *   <p>Content</p>
  * </i-dialog>
  *

@@ -10,6 +10,7 @@ export * from './lib/components/calendar/calendar.component';
 export * from './lib/components/card/card.component';
 export * from './lib/components/checkbox/checkbox.component';
 export * from './lib/components/chip/chip.component';
+export * from './lib/components/chips/chips.component';
 export * from './lib/components/confirmation-dialog/confirmation-dialog.component';
 export * from './lib/components/confirmation-dialog/services/confirmation-dialog.service';
 export * from './lib/components/dialog/dialog.component';

@@ -1,82 +1,84 @@
 @use "../../themes/color-variables.scss" as colors;
 
 @mixin i-listbox-theme() {
-  .i-listbox-trigger {
-    color: colors.$color-text-primary;
-    border: 1px solid colors.$color-surface-border;
-    background: colors.$color-surface-ground;
-
-    &:focus,
-    &.open {
-      outline: none;
-      border-color: colors.$color-primary;
-      box-shadow: colors.$color-box-shadow;
-    }
-
-    &.disabled {
-      background: colors.$color-disabled-background;
-      border-color: colors.$color-disabled-border;
-      color: colors.$color-text-disabled;
-    }
-  }
-
-  .i-label {
-    color: colors.$color-text-secondary;
-  }
-
-  .i-label.floated {
-    background: transparent;
-  }
-
-  .i-listbox-dropdown {
+  .i-listbox-wrapper {
     background: colors.$color-component-background;
-    border: 1px solid colors.$color-surface-border;
+    border-color: colors.$color-surface-border;
 
-    .i-listbox-filter {
-      .i-listbox-search {
-        border-color: colors.$color-surface-border;
-        background: colors.$color-surface-ground;
-        color: colors.$color-text-primary;
+    &.i-listbox--invalid {
+      border-color: colors.$color-danger;
 
-        &:focus {
-          border-color: colors.$color-primary;
-          box-shadow: colors.$color-box-shadow;
-        }
+      .i-listbox-header {
+        border-bottom-color: colors.$color-danger;
       }
     }
 
-    .i-listbox-options {
-      background: transparent;
+    .i-listbox-header {
+      background: colors.$color-surface-card;
+      border-bottom-color: colors.$color-surface-border;
 
-      .i-listbox-option {
+      .i-listbox-title {
         color: colors.$color-text-primary;
+      }
 
-        &:hover {
-          background-color: colors.$color-surface-hover;
-        }
+      .i-listbox-action-btn {
+        background: colors.$color-primary;
+        color: colors.$color-white;
 
-        &.selected {
-          background-color: colors.$color-surface-hover;
-        }
-
-        .i-listbox-checkbox {
-          accent-color: colors.$color-primary;
+        &:hover:not(:disabled) {
+          background: colors.$color-primary;
         }
       }
 
-      .i-listbox-no-options {
+      .i-listbox-summary {
         color: colors.$color-text-secondary;
       }
     }
-  }
 
-  .invalid {
-    .i-listbox-trigger {
-      border-color: colors.$color-danger;
+    .i-listbox-dropdown {
+      background: colors.$color-component-background;
+
+      .i-listbox-filter {
+        border-bottom-color: colors.$color-surface-border;
+      }
+
+      .i-listbox-options {
+        background: transparent;
+
+        .i-listbox-option {
+          color: colors.$color-text-primary;
+
+          &:hover {
+            background-color: colors.$color-surface-hover;
+          }
+
+          &.selected {
+            background-color: colors.$color-surface-hover;
+          }
+
+          .i-listbox-checkbox {
+            accent-color: colors.$color-primary;
+          }
+
+          .i-listbox-option-icon--left {
+            color: colors.$color-text-secondary;
+          }
+
+          .i-listbox-option-icon--right {
+            color: colors.$color-text-tertiary;
+          }
+        }
+
+        .i-listbox-no-options {
+          color: colors.$color-text-secondary;
+        }
+      }
     }
 
-    .i-label {
+    .i-listbox-error {
       color: colors.$color-danger;
+      background: rgba(239, 68, 68, 0.05);
+      border-top-color: colors.$color-danger;
     }
   }
 }

@@ -1,99 +1,105 @@
 @use "./listbox.component.theme.scss" as theme;
 @use "../../themes/scrollbar-mixins.scss" as scrollbar;
 @use "../../themes/variables" as vars;
+@use "../../themes/color-variables.scss" as colors;
 
 @include theme.i-listbox-theme();
 
 // SCSS variables
 $listbox-transition: 0.15s ease;
-$listbox-dropdown-max-height: 160px;
+$listbox-dropdown-max-height: 200px;
 $listbox-dropdown-viewport-margin: 150px;
 
 .i-listbox-wrapper {
   position: relative;
   width: 100%;
+  border-radius: vars.$componentBorderRadius;
+  border: 1px solid colors.$color-surface-border;
+  background: colors.$color-component-background;
+  overflow: hidden;
 
   &.i-listbox--fluid {
     width: 100%;
   }
 
-  // Input container
-  .i-listbox-input-container {
+  &.i-listbox--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &.i-listbox--invalid {
+    border-color: colors.$color-danger;
+  }
+
+  // Header
+  .i-listbox-header {
     position: relative;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid colors.$color-surface-border;
+    background: colors.$color-surface-card;
 
-    // Readonly input cursor override (needed for proper UX)
-    .i-input-text .i-input.readonly {
-      cursor: pointer;
-    }
-
-    // Chips overlay
-    .i-listbox-chips-overlay {
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      right: 60px;
-      z-index: 2;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 4px;
-      pointer-events: none;
-      transform: translateY(-50%);
-
-      i-chip {
-        pointer-events: all;
-      }
-
-      // Single chip alignment
-      &:has(i-chip:only-child) {
-        justify-content: flex-start;
-      }
-    }
-
-    // Icons overlay
-    .i-listbox-icons-overlay {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      z-index: 2;
+    .i-listbox-header-content {
       display: flex;
       align-items: center;
-      gap: 8px;
-      transform: translateY(-50%);
+      justify-content: space-between;
+      min-height: 24px;
 
-      .i-listbox-clear {
-        font-size: 0.8em;
-        opacity: 0.6;
+      .i-listbox-title {
+        font-weight: 600;
+        font-size: 1.15em;
+        color: colors.$color-text-primary;
+      }
+
+      .i-listbox-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: none;
+        border-radius: vars.$componentBorderRadius;
+        background: colors.$color-primary;
+        color: colors.$color-white;
         cursor: pointer;
-        transition: opacity $listbox-transition;
+        transition: all $listbox-transition;
 
-        &:hover {
-          opacity: 1;
+        &:hover:not(:disabled) {
+          opacity: 0.85;
+          transform: scale(1.05);
+        }
+
+        &:active:not(:disabled) {
+          transform: scale(0.95);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        i {
+          font-size: 1em;
         }
       }
+    }
+
+    .i-listbox-chips {
+      padding: 4px 0;
     }
   }
 
   // Dropdown
   .i-listbox-dropdown {
-    margin-top: 4px;
-    margin-bottom: 8px;
-    border-radius: vars.$componentBorderRadius;
     overflow: visible;
 
     // Filter section
     .i-listbox-filter {
       padding: 8px;
-
-      .i-listbox-search {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid;
-        border-radius: vars.$componentBorderRadius;
-        font-size: 1em;
-        outline: none;
-      }
+      border-bottom: 1px solid colors.$color-surface-border;
     }
 
     // Options list
@@ -104,7 +110,6 @@ $listbox-dropdown-viewport-margin: 150px;
       );
       overflow-x: hidden;
       overflow-y: auto;
-      border-radius: 0 0 vars.$componentBorderRadius vars.$componentBorderRadius;
       @include scrollbar.dropdown-scrollbar();
 
       // Individual option
@@ -112,39 +117,63 @@ $listbox-dropdown-viewport-margin: 150px;
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 10px 12px;
         font-size: 1em;
         cursor: pointer;
         transition: background-color $listbox-transition;
 
         &:hover {
-          background-color: rgba(0, 0, 0, 0.05);
+          background-color: colors.$color-surface-hover;
         }
 
         &.selected {
+          background-color: colors.$color-surface-hover;
           font-weight: 500;
-        }
-
-        &:not(:has(.i-listbox-checkbox)) {
-          padding-left: 16px;
         }
 
         .i-listbox-checkbox {
           pointer-events: none;
+          flex-shrink: 0;
+        }
+
+        .i-listbox-option-icon {
+          font-size: 16px;
+          flex-shrink: 0;
+
+          &.i-listbox-option-icon--left {
+            color: colors.$color-text-secondary;
+          }
+
+          &.i-listbox-option-icon--right {
+            color: colors.$color-text-tertiary;
+            margin-left: auto;
+          }
         }
 
         .i-listbox-option-label {
           flex: 1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
 
       // No options message
       .i-listbox-no-options {
-        padding: 12px;
+        padding: 16px;
         font-style: italic;
         text-align: center;
-        opacity: 0.6;
+        color: colors.$color-text-secondary;
       }
     }
+  }
+
+  // Error message
+  .i-listbox-error {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    color: colors.$color-danger;
+    background: rgba(239, 68, 68, 0.05);
+    border-top: 1px solid colors.$color-danger;
   }
 }

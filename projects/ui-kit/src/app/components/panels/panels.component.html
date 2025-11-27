@@ -2,8 +2,8 @@
   <header class="demo-header">
     <h1>Panel Components</h1>
     <p>
-      Collapsible panel containers with header and toggle functionality.
-      Perfect for organizing content into expandable sections.
+      Collapsible panel containers with header and toggle functionality. Perfect
+      for organizing content into expandable sections.
     </p>
   </header>
 
@@ -96,9 +96,12 @@
       <div class="panel-examples">
         <div class="control-buttons">
           <button class="demo-button" (click)="toggleProgrammatic()">
-            {{ programmaticCollapsed ? 'Expand' : 'Collapse' }} Panel
+            {{ programmaticCollapsed ? "Expand" : "Collapse" }} Panel
           </button>
-          <span class="status">Status: {{ programmaticCollapsed ? 'Collapsed' : 'Expanded' }}</span>
+          <span class="status"
+            >Status:
+            {{ programmaticCollapsed ? "Collapsed" : "Expanded" }}</span
+          >
         </div>
         <i-panel
           header="Programmatically Controlled"

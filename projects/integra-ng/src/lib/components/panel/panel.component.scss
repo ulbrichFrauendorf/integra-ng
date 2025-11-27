@@ -9,8 +9,8 @@
   overflow: visible;
   position: relative;
   // keep the component's own border as the top line; pad so header can overlap it
-  padding-top: 0.9rem;
-  min-height: 3rem;
+  padding-top: 14px;
+  min-height: 48px;
 
   .i-panel-header-wrap {
     position: absolute;
@@ -25,14 +25,14 @@
       display: inline-flex;
       flex-direction: row;
       align-items: center;
-      gap: 0.5rem;
+      gap: 8px;
       position: relative;
       // position the header so it sits centered on the top border
       top: 0;
       transform: translateY(-50%);
       // slightly indent to the right as requested
-      padding: 0.25rem 0.75rem;
-      margin-left: 1.25rem;
+      padding: 4px 12px;
+      margin-left: 20px;
       background: colors.$color-surface-card;
       user-select: none;
       transition: background-color vars.$transitionDuration ease;
@@ -42,20 +42,20 @@
         border: none;
         background: colors.$color-surface-card;
         cursor: pointer;
-        padding: 0.25rem 0.75rem;
+        padding: 4px 12px;
         font-family: inherit;
         color: inherit;
       }
 
       .i-panel-toggle-icon {
-        font-size: 0.75rem;
+        font-size: 12px;
         font-weight: 600;
         display: inline-block;
       }
 
       .i-panel-title {
         font-weight: 500;
-        font-size: 0.875rem;
+        font-size: 1em;
         line-height: 1;
         display: inline-block;
         white-space: nowrap;
@@ -80,7 +80,6 @@
   }
 
   .i-panel-content {
-    padding: 1rem;
+    padding: 16px;
   }
 }
-

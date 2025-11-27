@@ -1,0 +1,116 @@
+@use "sass:math";
+@use "./chips.component.theme.scss" as theme;
+@use "../../themes/variables" as vars;
+
+@include theme.i-chips-theme();
+
+$chips-transition: border-color 0.15s ease, box-shadow 0.15s ease;
+$chip-row-height: 24px; // Approximate single-line chip height (padding + text)
+$chip-vertical-padding: math.max(
+  0px,
+  (vars.$component-input-height - $chip-row-height) / 2
+);
+$chips-action-space: 40px;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Wrapper for float label support */
+.i-chips-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.i-chips-wrapper--float {
+  margin-top: 20px;
+}
+
+.i-chips-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-height: 32px;
+}
+
+.i-chips-container--collapse {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.i-chips-list {
+  display: flex;
+  flex-wrap: inherit;
+  gap: inherit;
+  width: 100%;
+  padding-right: $chips-action-space;
+}
+
+.i-chips-container--collapse .i-chips-list {
+  white-space: nowrap;
+}
+
+.i-chips-container--overflow .i-chips-list {
+  visibility: hidden;
+}
+
+.i-chips-summary {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: $chips-action-space;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: inherit;
+}
+
+.i-chips-actions {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Boxed input-like appearance matching i-input styles */
+.i-chips-box {
+  box-sizing: border-box;
+  border-radius: vars.$componentBorderRadius;
+  padding: $chip-vertical-padding 12px;
+  min-height: vars.$component-input-height;
+  align-items: center;
+  transition: $chips-transition;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.i-chips-box.i-chips-container--collapse {
+  padding-right: $chips-action-space;
+}
+
+/* Float label styling aligned with i-input */
+.i-chips-wrapper--float .i-chips-label {
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  padding: 0 4px;
+  pointer-events: none;
+  transition: all 0.15s ease;
+}
+
+.i-chips-wrapper--float .i-chips-label--floated,
+.i-chips-wrapper--float .i-chips-container:focus-within + .i-chips-label {
+  top: -20px;
+  font-size: 0.85em;
+}

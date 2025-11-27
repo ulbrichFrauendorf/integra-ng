@@ -22,50 +22,30 @@ $multi-select-dropdown-viewport-margin: 150px;
     position: relative;
     cursor: pointer;
 
-    // Readonly input cursor override (needed for proper UX)
-    .i-input-text .i-input.readonly {
+    // Chips component
+    .i-multi-select-chips {
+      position: relative;
+      min-height: 56px;
       cursor: pointer;
-    }
-
-    // Chips overlay
-    .i-multi-select-chips-overlay {
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      right: 60px;
-      z-index: 2;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 4px;
-      pointer-events: none;
-      transform: translateY(-50%);
-
-      i-chip {
-        pointer-events: all;
-      }
     }
 
     // Icons overlay
     .i-multi-select-icons-overlay {
       position: absolute;
-      top: 50%;
-      right: 12px;
-      z-index: 2;
+      top: 18%;
+      right: 4px;
+      z-index: 3;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transform: translateY(-50%);
+      gap: 0;
+      pointer-events: none;
 
-      .i-multi-select-clear {
-        font-size: 0.8em;
-        opacity: 0.6;
-        cursor: pointer;
-        transition: opacity $multi-select-transition;
-
-        &:hover {
-          opacity: 1;
-        }
+      .i-multi-select-arrow-wrapper {
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .i-multi-select-arrow {
@@ -76,6 +56,13 @@ $multi-select-dropdown-viewport-margin: 150px;
           transform: rotate(180deg);
         }
       }
+    }
+
+    // Error message
+    .i-multi-select-error {
+      margin-top: 4px;
+      font-size: 1em;
+      padding-left: 12px;
     }
   }
 

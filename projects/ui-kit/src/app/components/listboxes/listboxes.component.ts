@@ -62,11 +62,60 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     { name: 'Australia', code: 'AU' },
   ];
 
+  // Tasks data with icons
+  tasks = [
+    { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
+    { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
+    { name: 'Schedule Meeting', value: 'meeting', icon: 'pi pi-calendar' },
+    { name: 'Update Database', value: 'database', icon: 'pi pi-database' },
+    { name: 'Create Report', value: 'report', icon: 'pi pi-chart-bar' },
+  ];
+
+  // Users data with status icons
+  users = [
+    {
+      name: 'John Doe',
+      id: 1,
+      status: 'online',
+      statusIcon: 'pi pi-circle-fill',
+    },
+    {
+      name: 'Jane Smith',
+      id: 2,
+      status: 'offline',
+      statusIcon: 'pi pi-circle',
+    },
+    {
+      name: 'Bob Johnson',
+      id: 3,
+      status: 'online',
+      statusIcon: 'pi pi-circle-fill',
+    },
+    {
+      name: 'Alice Brown',
+      id: 4,
+      status: 'away',
+      statusIcon: 'pi pi-circle-fill',
+    },
+    {
+      name: 'Charlie Wilson',
+      id: 5,
+      status: 'online',
+      statusIcon: 'pi pi-circle-fill',
+    },
+  ];
+
   // Multiple selection listbox values
   selectedCountriesMultiple: string[] = ['US', 'CA'];
 
   // Single selection listbox value
   selectedCountrySingle: string | null = 'UK';
+
+  // Tasks selection
+  selectedTasks: string[] = ['review'];
+
+  // Users selection
+  selectedUser: number | null = null;
 
   constructor(private fb: FormBuilder) {
     // Initialize reactive form
@@ -143,22 +192,47 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     console.log('Selection cleared');
   }
 
+  onAddCountry() {
+    console.log('Add country action clicked');
+    alert('Add Country action triggered!');
+  }
+
+  onManageTasks() {
+    console.log('Manage tasks action clicked');
+    alert('Manage Tasks action triggered!');
+  }
+
+  onAddUser() {
+    console.log('Add user action clicked');
+    alert('Add User action triggered!');
+  }
+
   // Features list for the component
   features: Feature[] = [
     {
-      title: 'Always Visible Options',
+      title: 'Modern Header',
       description:
-        'Unlike dropdowns, all options are always visible on the screen.',
+        'Fixed header with title property and optional action button for quick actions.',
     },
     {
       title: 'Single & Multiple Selection',
       description:
-        'Configure with [multiple] property to control selection behavior.',
+        'Configure with [multiple] property. Checkboxes are hidden in single-select mode.',
     },
     {
       title: 'Chip Display',
       description:
-        'Selected items are displayed as removable chips for both single and multiple selection modes.',
+        'Selected items in multiselect mode display as removable chips in the header area.',
+    },
+    {
+      title: 'Option Icons',
+      description:
+        'Add icons to left or right edge of each option using optionLeftIcon and optionRightIcon.',
+    },
+    {
+      title: 'Action Button',
+      description:
+        'Add an action button in the header using actionIcon, actionTooltip, and (onAction) output.',
     },
     {
       title: 'Built-in Filtering',
@@ -175,16 +249,6 @@ export class ListboxesComponent implements OnInit, OnDestroy {
       description:
         'Real-time data updates through RxJS observables with automatic change detection.',
     },
-    {
-      title: 'Dynamic Content',
-      description:
-        'Options can be updated dynamically at runtime with proper visual feedback.',
-    },
-    {
-      title: 'Accessibility',
-      description:
-        'ARIA support and keyboard navigation for better user experience.',
-    },
   ];
 
   // Code examples for demo cards
@@ -198,37 +262,73 @@ countries = [
 
 selectedCountriesMultiple: string[] = ['US', 'CA'];
 
-// Template usage
+// Template usage - Multiple select with chips in header
 <i-listbox
-  label="Select Countries (Multiple)"
+  title="Countries"
   [options]="countries"
   optionLabel="name"
   optionValue="code"
   [multiple]="true"
   [showClear]="true"
-  [(ngModel)]="selectedCountriesMultiple"
-  (onChange)="onMultipleSelectionChange($event)"
-  (onClear)="onClear()">
+  actionIcon="pi pi-plus"
+  actionTooltip="Add Country"
+  (onAction)="onAddCountry()"
+  [(ngModel)]="selectedCountriesMultiple">
 </i-listbox>`,
 
-    single: `// Component setup
+    single: `// Single select - no checkboxes shown
 selectedCountrySingle: string | null = 'UK';
 
-// Template usage - Single select with chip display
 <i-listbox
-  label="Select Country (Single)"
+  title="Select Country"
   [options]="countries"
   optionLabel="name"
   optionValue="code"
   [multiple]="false"
   [showClear]="true"
-  [(ngModel)]="selectedCountrySingle"
-  (onChange)="onSingleSelectionChange($event)"
-  (onClear)="onClear()">
+  [(ngModel)]="selectedCountrySingle">
+</i-listbox>`,
+
+    withIcons: `// Options with left icons - use property name
+tasks = [
+  { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
+  { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
+  { name: 'Schedule Meeting', value: 'meeting', icon: 'pi pi-calendar' }
+];
+
+<i-listbox
+  title="Tasks"
+  [options]="tasks"
+  optionLabel="name"
+  optionValue="value"
+  [multiple]="true"
+  optionLeftIcon="icon"
+  actionIcon="pi pi-cog"
+  actionTooltip="Manage Tasks"
+  (onAction)="onManageTasks()">
+</i-listbox>`,
+
+    rightIcons: `// Options with right status icons
+users = [
+  { name: 'John Doe', id: 1, statusIcon: 'pi pi-circle-fill' },
+  { name: 'Jane Smith', id: 2, statusIcon: 'pi pi-circle' },
+  { name: 'Bob Johnson', id: 3, statusIcon: 'pi pi-circle-fill' }
+];
+
+<i-listbox
+  title="Team Members"
+  [options]="users"
+  optionLabel="name"
+  optionValue="id"
+  [multiple]="false"
+  optionRightIcon="statusIcon"
+  actionIcon="pi pi-user-plus"
+  actionTooltip="Add User"
+  (onAction)="onAddUser()">
 </i-listbox>`,
 
     filter: `<i-listbox
-  label="Searchable Countries"
+  title="Searchable Countries"
   [options]="countries"
   optionLabel="name"
   optionValue="code"
@@ -239,7 +339,7 @@ selectedCountrySingle: string | null = 'UK';
 </i-listbox>`,
 
     fluid: `<i-listbox
-  label="Full Width Listbox"
+  title="Full Width Listbox"
   [options]="countries"
   optionLabel="name"
   optionValue="code"
@@ -249,7 +349,7 @@ selectedCountrySingle: string | null = 'UK';
 </i-listbox>`,
 
     disabled: `<i-listbox
-  label="Disabled Listbox"
+  title="Disabled Listbox"
   [options]="countries"
   optionLabel="name"
   optionValue="code"
@@ -265,26 +365,10 @@ departmentsForm = this.fb.group({
 
 departmentOptions$ = this.departmentSubject.asObservable();
 
-private initialDepartments = [
-  { id: 1, name: 'Engineering', code: 'ENG', employees: 25 },
-  { id: 2, name: 'Marketing', code: 'MKT', employees: 12 },
-  { id: 3, name: 'Sales', code: 'SAL', employees: 18 }
-];
-
-// Simulate dynamic data updates every 5 seconds
-simulateDynamicData() {
-  interval(5000).pipe(
-    takeWhile(() => this.isComponentActive)
-  ).subscribe(() => {
-    // Add new departments over time
-    this.departmentSubject.next([...this.departmentSubject.value, newDept]);
-  });
-}
-
 // Template usage with reactive forms
 <form [formGroup]="departmentsForm">
   <i-listbox
-    label="Departments (Reactive Forms + Observable)"
+    title="Departments"
     [options]="departmentOptions$ | async"
     optionLabel="name"
     optionValue="id"

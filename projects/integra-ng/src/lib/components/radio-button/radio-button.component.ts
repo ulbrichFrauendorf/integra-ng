@@ -11,7 +11,11 @@ import {
   Injector,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+} from '@angular/forms';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { Subject, Subscription } from 'rxjs';
 
@@ -146,7 +150,11 @@ export class IRadioButton implements ControlValueAccessor, OnInit, OnDestroy {
    */
   private onTouchedCallback: () => void = () => {};
 
-  constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef, private injector: Injector) {}
+  constructor(
+    private elementRef: ElementRef,
+    private cdr: ChangeDetectorRef,
+    private injector: Injector
+  ) {}
 
   /**
    * Gets the effective input ID
@@ -227,10 +235,15 @@ export class IRadioButton implements ControlValueAccessor, OnInit, OnDestroy {
     if (!this.name) return;
 
     // compute a form-scoped key: name@formId or name@root
-    const form = this.elementRef.nativeElement.closest('form') as HTMLFormElement | null;
+    const form = this.elementRef.nativeElement.closest(
+      'form'
+    ) as HTMLFormElement | null;
     let formKey = 'root';
     if (form) {
-      formKey = form.id || form.getAttribute('data-integrang-form-id') || UniqueComponentId('i-radio-form-');
+      formKey =
+        form.id ||
+        form.getAttribute('data-integrang-form-id') ||
+        UniqueComponentId('i-radio-form-');
       if (!form.id && !form.getAttribute('data-integrang-form-id')) {
         form.setAttribute('data-integrang-form-id', formKey);
       }
