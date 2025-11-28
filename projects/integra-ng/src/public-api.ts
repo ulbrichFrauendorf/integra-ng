@@ -42,6 +42,8 @@ export * from './lib/directives/tooltip/tooltip.directive';
 
 /* Services */
 export * from './lib/services/data-update-event/data-update-event.service';
+export * from './lib/services/seo/seo.service';
+export * from './lib/services/seo/structured-data.service';
 
 /* Utils */
 export * from './lib/utils/uniquecomponentid';
