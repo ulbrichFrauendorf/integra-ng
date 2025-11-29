@@ -1,16 +1,109 @@
 .example-dialog-content {
-  padding: 1rem 0;
+  padding: 0.5rem 0;
+
+  .dialog-header-section {
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    .header-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark, #1e40af) 100%);
+      border-radius: 50%;
+
+      i {
+        font-size: 1.75rem;
+        color: white;
+      }
+    }
+
+    .header-description {
+      color: var(--text-color-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
 
   .form-fields {
     margin: 1.5rem 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    .listbox-section {
+      margin-top: 0.5rem;
+    }
   }
 
-  ul {
+  .form-summary {
+    background: var(--surface-100, #f8f9fa);
+    border-radius: 8px;
+    padding: 1rem;
     margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: var(--text-color-secondary, #666);
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--surface-300, #e5e7eb);
+      }
+
+      .summary-label {
+        font-size: 0.85rem;
+        color: var(--text-color-secondary);
+        font-weight: 500;
+      }
+
+      .summary-value {
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &.valid {
+          color: var(--color-success, #22c55e);
+        }
+
+        &.invalid {
+          color: var(--color-warning, #f59e0b);
+        }
+
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 640px) {
+  .example-dialog-content {
+    .dialog-header-section {
+      .header-icon {
+        width: 56px;
+        height: 56px;
+
+        i {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .form-summary .summary-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
   }
 }

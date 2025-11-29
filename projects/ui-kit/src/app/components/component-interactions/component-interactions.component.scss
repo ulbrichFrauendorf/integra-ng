@@ -1,0 +1,55 @@
+.component-demo {
+  .lead {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .info-text {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: var(--surface-100);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .form-values {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--surface-50);
+    border-radius: 4px;
+
+    strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    pre {
+      margin: 0;
+      padding: 0.5rem;
+      background-color: var(--surface-0);
+      border-radius: 4px;
+      font-size: 0.875rem;
+      overflow-x: auto;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--surface-border);
+  }
+}

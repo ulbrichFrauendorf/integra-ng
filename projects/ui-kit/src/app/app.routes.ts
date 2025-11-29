@@ -23,12 +23,13 @@ import { ThemingComponent } from './components/theming/theming.component';
 import { TablesComponent } from './components/tables/tables.component';
 import { PanelsComponent } from './components/panels/panels.component';
 import { ChartsComponent } from './components/charts/charts.component';
+import { ComponentInteractionsComponent } from './components/component-interactions/component-interactions.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'components/input-texts',
+    redirectTo: 'getting-started/installation',
   },
   {
     path: '',
@@ -69,10 +70,14 @@ export const routes: Routes = [
           { path: 'whispers', component: WhispersComponent },
           { path: 'tables', component: TablesComponent },
           { path: 'charts', component: ChartsComponent },
-          { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
+          {
+            path: 'component-interactions',
+            component: ComponentInteractionsComponent,
+          },
+          { path: '', redirectTo: 'installation', pathMatch: 'full' },
         ],
       },
     ],
   },
-  { path: '**', redirectTo: 'components/input-texts' },
+  { path: '**', redirectTo: 'getting-started/installation' },
 ];

@@ -8,90 +8,135 @@
   </header>
 
   <div class="cards-container">
-    <!-- Contrast Buttons -->
+    <!-- Severity Variants -->
     <app-demo-card
-      [title]="'Contrast Text Buttons'"
-      [sourceCode]="codeExamples.contrast"
+      [title]="'Severity Variants'"
+      [sourceCode]="codeExamples.severities"
     >
+      <p class="section-description">
+        Buttons come in 7 severity levels for different use cases.
+      </p>
       <div class="button-examples">
-        @for (button of buttonExamples.contrast; track $index) {
-        <i-button
-          [severity]="button.severity"
-          [text]="button.text"
-          [icon]="button.icon"
-          [size]="button.size"
-        />
+        @for (severity of severities; track severity) {
+        <i-button [severity]="severity">{{ severity | titlecase }}</i-button>
         }
       </div>
     </app-demo-card>
 
-    <!-- Success Buttons -->
+    <!-- Size Variants -->
     <app-demo-card
-      [title]="'Success Raised Buttons'"
-      [sourceCode]="codeExamples.success"
+      [title]="'Size Variants'"
+      [sourceCode]="codeExamples.sizes"
     >
-      <div class="button-examples">
-        @for (button of buttonExamples.success; track $index) {
-        <i-button
-          [severity]="button.severity"
-          [raised]="button.raised"
-          [size]="button.size"
-          >{{ button.label }}</i-button
-        >
-        }
+      <p class="section-description">
+        Available in small, medium (default), and large sizes.
+      </p>
+      <div class="button-examples align-end">
+        <i-button size="small">Small</i-button>
+        <i-button size="medium">Medium</i-button>
+        <i-button size="large">Large</i-button>
       </div>
     </app-demo-card>
 
-    <!-- Warning Buttons -->
+    <!-- Button Styles -->
     <app-demo-card
-      [title]="'Warning Outlined Buttons'"
-      [sourceCode]="codeExamples.warning"
+      [title]="'Button Styles'"
+      [sourceCode]="codeExamples.styles"
     >
-      <div class="button-examples">
-        @for (button of buttonExamples.warning; track $index) {
-        <i-button
-          [severity]="button.severity"
-          [outlined]="button.outlined"
-          [size]="button.size"
-          >{{ button.label }}</i-button
-        >
-        }
-      </div>
-    </app-demo-card>
-
-    <!-- Info Buttons -->
-    <app-demo-card
-      [title]="'Info Buttons with Icons'"
-      [sourceCode]="codeExamples.info"
-    >
-      <div class="button-examples">
-        @for (button of buttonExamples.info; track $index) {
-        <i-button
-          [severity]="button.severity"
-          [text]="!!button.text"
-          [outlined]="!!button.outlined"
-          [icon]="button.icon"
-          >{{ button.label }}</i-button
-        >
-        }
-      </div>
-    </app-demo-card>
-
-    <!-- Fluid Buttons -->
-    <app-demo-card [title]="'Fluid Buttons'" [sourceCode]="codeExamples.fluid">
-      <div class="button-examples fluid">
-        @for (button of buttonExamples.fluid; track $index) {
-        <i-button
-          [severity]="button.severity"
-          [fluid]="!!button.fluid"
-          [outlined]="!!button.outlined"
-          [raised]="!!button.raised"
-          >{{ button.label }}</i-button
-        >
-        }
-        <div class="field">
-          <i-button [severity]="'info'" [fluid]="true">tets</i-button>
+      <p class="section-description">
+        Choose from filled (default), outlined, text, and raised styles.
+      </p>
+      <div class="button-grid">
+        <div class="style-group">
+          <span class="style-label">Filled (Default)</span>
+          <div class="button-examples">
+            <i-button severity="primary">Primary</i-button>
+            <i-button severity="success">Success</i-button>
+            <i-button severity="danger">Danger</i-button>
+          </div>
         </div>
+        <div class="style-group">
+          <span class="style-label">Outlined</span>
+          <div class="button-examples">
+            <i-button severity="primary" [outlined]="true">Primary</i-button>
+            <i-button severity="success" [outlined]="true">Success</i-button>
+            <i-button severity="danger" [outlined]="true">Danger</i-button>
+          </div>
+        </div>
+        <div class="style-group">
+          <span class="style-label">Text</span>
+          <div class="button-examples">
+            <i-button severity="primary" [text]="true">Primary</i-button>
+            <i-button severity="success" [text]="true">Success</i-button>
+            <i-button severity="danger" [text]="true">Danger</i-button>
+          </div>
+        </div>
+        <div class="style-group">
+          <span class="style-label">Raised</span>
+          <div class="button-examples">
+            <i-button severity="primary" [raised]="true">Primary</i-button>
+            <i-button severity="success" [raised]="true">Success</i-button>
+            <i-button severity="danger" [raised]="true">Danger</i-button>
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Buttons with Icons -->
+    <app-demo-card
+      [title]="'Buttons with Icons'"
+      [sourceCode]="codeExamples.icons"
+    >
+      <p class="section-description">
+        Add icons to buttons using PrimeIcons. Icon-only buttons are automatically styled.
+      </p>
+      <div class="button-grid">
+        <div class="style-group">
+          <span class="style-label">With Text</span>
+          <div class="button-examples">
+            <i-button severity="primary" icon="pi pi-check">Save</i-button>
+            <i-button severity="danger" icon="pi pi-trash" [outlined]="true">Delete</i-button>
+            <i-button severity="info" icon="pi pi-search" [text]="true">Search</i-button>
+          </div>
+        </div>
+        <div class="style-group">
+          <span class="style-label">Icon Only</span>
+          <div class="button-examples">
+            <i-button severity="primary" icon="pi pi-check" />
+            <i-button severity="danger" icon="pi pi-trash" [outlined]="true" />
+            <i-button severity="info" icon="pi pi-search" [text]="true" />
+            <i-button severity="contrast" icon="pi pi-cog" [text]="true" />
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Fluid Layout -->
+    <app-demo-card
+      [title]="'Fluid Layout'"
+      [sourceCode]="codeExamples.fluid"
+    >
+      <p class="section-description">
+        Fluid buttons expand to fill the full width of their container.
+      </p>
+      <div class="fluid-container">
+        <i-button severity="primary" [fluid]="true">Submit Form</i-button>
+        <i-button severity="secondary" [fluid]="true" [outlined]="true">Cancel</i-button>
+        <i-button severity="success" [fluid]="true" [raised]="true" icon="pi pi-download">Download Report</i-button>
+      </div>
+    </app-demo-card>
+
+    <!-- Disabled State -->
+    <app-demo-card [title]="'Disabled State'">
+      <p class="section-description">
+        Disabled buttons prevent user interaction and display a muted appearance.
+      </p>
+      <div class="button-examples">
+        <i-button severity="primary" [disabled]="true">Primary</i-button>
+        <i-button severity="success" [outlined]="true" [disabled]="true">Outlined</i-button>
+        <i-button severity="info" [text]="true" [disabled]="true">Text</i-button>
+        <i-button severity="warning" [raised]="true" [disabled]="true">Raised</i-button>
+        <i-button severity="danger" icon="pi pi-trash" [disabled]="true" />
       </div>
     </app-demo-card>
 

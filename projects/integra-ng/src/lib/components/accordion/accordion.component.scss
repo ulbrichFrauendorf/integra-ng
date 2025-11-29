@@ -6,7 +6,7 @@
 
 .i-accordion {
   border-radius: vars.$borderRadius;
-  overflow: hidden;
+  overflow: visible;
 
   .i-accordion-header {
     display: flex;
@@ -17,6 +17,7 @@
     cursor: pointer;
     user-select: none;
     transition: background-color vars.$transitionDuration ease;
+    border-radius: vars.$borderRadius vars.$borderRadius 0 0;
 
     .i-accordion-header-content {
       display: flex;
@@ -40,14 +41,15 @@
   }
 
   .i-accordion-content-wrapper {
-    overflow: hidden;
     transition: max-height 0.3s ease, opacity 0.2s ease;
     max-height: 1000px;
     opacity: 1;
+    border-radius: 0 0 vars.$borderRadius vars.$borderRadius;
 
     &.collapsed {
       max-height: 0;
       opacity: 0;
+      overflow: hidden;
     }
   }
 
@@ -55,6 +57,9 @@
     padding: 0 16px 16px 16px;
   }
 
+  &:not(.expanded) .i-accordion-header {
+    border-radius: vars.$borderRadius;
+  }
   &.disabled {
     opacity: 0.6;
 

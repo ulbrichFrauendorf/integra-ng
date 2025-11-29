@@ -139,6 +139,11 @@ export class MenuComponent implements OnInit {
             icon: 'pi pi-fw pi-comment',
             routerLink: ['/components/whispers'],
           },
+          {
+            label: 'Charts',
+            icon: 'pi pi-fw pi-chart-bar',
+            routerLink: ['/components/charts'],
+          },
         ],
         separator: false,
       },
