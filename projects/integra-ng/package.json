@@ -4,6 +4,7 @@
   "peerDependencies": {
     "@angular/common": "^20.3.3",
     "@angular/core": "^20.3.3",
+    "chart.js": "^3.9.1 || ^4.0.0",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0"
   },

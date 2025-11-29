@@ -35,6 +35,8 @@ export * from './lib/components/whisper/whisper.component';
 export * from './lib/components/whisper/services/whisper.service';
 export * from './lib/components/whisper/services/whisper.interfaces';
 export * from './lib/components/table/table.component';
+export * from './lib/components/chart/chart.component';
+export * from './lib/components/chart/chart.interfaces';
 
 /* Directives */
 export * from './lib/directives/tooltip/tooltip.component';
