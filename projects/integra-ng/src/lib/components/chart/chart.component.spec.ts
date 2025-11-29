@@ -210,6 +210,83 @@ describe('IChart', () => {
         expect(dataset.datasets[0].borderColor[0]).toBe('#ff0000');
       }, 100);
     });
+
+    it('should resolve built-in palette colors like --blue-500', () => {
+      const chart: IChartData = {
+        chartType: 'bar',
+        labels: ['A'],
+        dataSets: [
+          { label: 'Test', data: [1], backgroundColors: ['--blue-500'] },
+        ],
+      };
+      component.charts = [chart];
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        const dataset = component.chartDisplays[0].data as {
+          datasets: { borderColor: string[] }[];
+        };
+        expect(dataset.datasets[0].borderColor[0]).toBe('#3b82f6');
+      }, 100);
+    });
+
+    it('should resolve built-in palette colors like --green-400', () => {
+      const chart: IChartData = {
+        chartType: 'bar',
+        labels: ['A'],
+        dataSets: [
+          { label: 'Test', data: [1], backgroundColors: ['--green-400'] },
+        ],
+      };
+      component.charts = [chart];
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        const dataset = component.chartDisplays[0].data as {
+          datasets: { borderColor: string[] }[];
+        };
+        expect(dataset.datasets[0].borderColor[0]).toBe('#4cd07d');
+      }, 100);
+    });
+
+    it('should resolve rgb colors as-is', () => {
+      const chart: IChartData = {
+        chartType: 'bar',
+        labels: ['A'],
+        dataSets: [
+          { label: 'Test', data: [1], backgroundColors: ['rgb(255, 0, 0)'] },
+        ],
+      };
+      component.charts = [chart];
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        const dataset = component.chartDisplays[0].data as {
+          datasets: { borderColor: string[] }[];
+        };
+        expect(dataset.datasets[0].borderColor[0]).toBe('rgb(255, 0, 0)');
+      }, 100);
+    });
+
+    it('should fall back to gray for unknown CSS variables', () => {
+      const chart: IChartData = {
+        chartType: 'bar',
+        labels: ['A'],
+        dataSets: [
+          { label: 'Test', data: [1], backgroundColors: ['--unknown-color'] },
+        ],
+      };
+      component.charts = [chart];
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        const dataset = component.chartDisplays[0].data as {
+          datasets: { borderColor: string[] }[];
+        };
+        // Falls back to gray-500 for unknown colors
+        expect(dataset.datasets[0].borderColor[0]).toBe('#64748b');
+      }, 100);
+    });
   });
 
   describe('getChartHeightStyle', () => {
