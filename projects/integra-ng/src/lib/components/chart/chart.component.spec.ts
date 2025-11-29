@@ -268,6 +268,25 @@ describe('IChart', () => {
       }, 100);
     });
 
+    it('should resolve rgba colors as-is', () => {
+      const chart: IChartData = {
+        chartType: 'bar',
+        labels: ['A'],
+        dataSets: [
+          { label: 'Test', data: [1], backgroundColors: ['rgba(255, 0, 0, 0.5)'] },
+        ],
+      };
+      component.charts = [chart];
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        const dataset = component.chartDisplays[0].data as {
+          datasets: { borderColor: string[] }[];
+        };
+        expect(dataset.datasets[0].borderColor[0]).toBe('rgba(255, 0, 0, 0.5)');
+      }, 100);
+    });
+
     it('should fall back to gray for unknown CSS variables', () => {
       const chart: IChartData = {
         chartType: 'bar',

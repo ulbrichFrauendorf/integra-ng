@@ -632,14 +632,14 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
   /**
    * Resolve color to hex value. Supports:
    * - Direct hex colors (e.g., '#ff0000')
-   * - RGB/RGBA colors (e.g., 'rgb(255, 0, 0)')
+   * - RGB/RGBA colors (e.g., 'rgb(255, 0, 0)', 'rgba(255, 0, 0, 0.5)')
    * - Built-in palette shorthand (e.g., '--blue-500', '--green-400')
    * - CSS custom properties (e.g., '--my-custom-color')
    * @internal
    */
   private resolveColor(color: string, documentStyle: CSSStyleDeclaration): string {
     // If it's already a hex color or rgb/rgba, return as-is
-    if (color.startsWith('#') || color.startsWith('rgb')) {
+    if (color.startsWith('#') || color.startsWith('rgb(') || color.startsWith('rgba(')) {
       return color;
     }
 
@@ -682,13 +682,13 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
 
     const colorGroup = CHART_COLOR_PALETTE[name];
     if (colorGroup) {
-      // Try as number first (e.g., 500), then as string (e.g., 'base')
+      // Try as string key first, then as number for numeric shades like 500
+      if (colorGroup[shade]) {
+        return colorGroup[shade];
+      }
       const numericShade = parseInt(shade, 10);
       if (!isNaN(numericShade) && colorGroup[numericShade]) {
         return colorGroup[numericShade];
-      }
-      if (colorGroup[shade]) {
-        return colorGroup[shade];
       }
     }
 
@@ -696,7 +696,7 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   /**
-   * Add transparency to a hex color
+   * Add transparency to a color. Supports hex and rgb/rgba formats.
    * @internal
    */
   private addTransparency(color: string): string {
@@ -704,6 +704,15 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
     if (color.startsWith('#')) {
       return color + 'bf'; // ~75% opacity
     }
+    // If it's an rgb color, convert to rgba with transparency
+    if (color.startsWith('rgb(')) {
+      // Extract the rgb values and convert to rgba
+      const rgbMatch = color.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+      if (rgbMatch) {
+        return `rgba(${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}, 0.75)`;
+      }
+    }
+    // If it's already rgba, leave as-is (user specified their own alpha)
     return color;
   }
 
