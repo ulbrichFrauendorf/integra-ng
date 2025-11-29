@@ -1,0 +1,22 @@
+.i-charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 4rem;
+}
+
+.i-chart-item {
+  flex: 1 1 45%;
+  min-width: 300px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .i-charts-container {
+    flex-direction: column;
+  }
+
+  .i-chart-item {
+    width: 100%;
+  }
+}
