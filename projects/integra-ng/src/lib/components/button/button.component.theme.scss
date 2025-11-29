@@ -32,32 +32,29 @@
   }
   // Secondary
   .i-button--secondary {
-    background: colors.$color-contrast;
+    background: colors.$color-secondary;
     color: colors.$color-contrast-inverse;
     &:hover:not(:disabled) {
-      background: color-mix(in srgb, colors.$color-contrast 80%, transparent);
+      background: color-mix(in srgb, colors.$color-secondary 80%, transparent);
     }
     &.i-button--outlined {
       background: transparent;
-      color: colors.$color-text-secondary;
+      color: colors.$color-secondary;
       border-color: color-mix(
         in srgb,
-        colors.$color-contrast 40%,
+        colors.$color-secondary 40%,
         transparent
       ) !important;
       &:hover:not(:disabled) {
-        color: colors.$color-text-primary;
-        background: colors.$color-surface-hover;
-        border-color: colors.$color-text-primary;
+        background: color-mix(in srgb, colors.$color-secondary 7%, transparent);
       }
     }
     &.i-button--text {
       background: transparent;
-      color: colors.$color-text-secondary;
+      color: colors.$color-secondary;
       border-color: transparent;
       &:hover:not(:disabled) {
-        color: colors.$color-text-primary;
-        background: colors.$color-surface-hover;
+        background: color-mix(in srgb, colors.$color-secondary 7%, transparent);
         border-color: transparent;
       }
     }

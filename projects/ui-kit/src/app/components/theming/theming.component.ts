@@ -11,6 +11,7 @@ import { IMessage } from '../../../../../integra-ng/src/lib/components/message/m
 export class ThemingComponent {
   themeFileCode = `.light {
   --color-primary: #f97316;
+  --color-secondary: #374151;
   --color-success: #22c55e;
   --color-info: #0ea5e9;
   --color-warning: #eab308;
@@ -40,6 +41,7 @@ export class ThemingComponent {
 
 .dark {
   --color-primary: #eab308;
+  --color-secondary: #d1d5db;
   --color-success: #4ade80;
   --color-info: #38bdf8;
   --color-warning: #facc15;
