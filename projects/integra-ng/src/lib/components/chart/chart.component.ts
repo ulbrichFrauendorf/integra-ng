@@ -22,6 +22,160 @@ import {
 Chart.register(...registerables);
 
 /**
+ * Built-in color palette for chart colors.
+ * Users can reference these colors using shorthand like '--blue-500' or direct hex values.
+ * @internal
+ */
+const CHART_COLOR_PALETTE: Record<string, Record<string | number, string>> = {
+  blue: {
+    50: '#f5f9ff',
+    100: '#d0e1fd',
+    200: '#abc9fb',
+    300: '#85b2f9',
+    400: '#609af8',
+    500: '#3b82f6',
+    600: '#326fd1',
+    700: '#295bac',
+    800: '#204887',
+    900: '#183462',
+  },
+  green: {
+    50: '#f4fcf7',
+    100: '#caf1d8',
+    200: '#a0e6ba',
+    300: '#76db9b',
+    400: '#4cd07d',
+    500: '#22c55e',
+    600: '#1da750',
+    700: '#188a42',
+    800: '#136c34',
+    900: '#0e4f26',
+  },
+  yellow: {
+    50: '#fefbf3',
+    100: '#faedc4',
+    200: '#f6de95',
+    300: '#f2d066',
+    400: '#eec137',
+    500: '#eab308',
+    600: '#c79807',
+    700: '#a47d06',
+    800: '#816204',
+    900: '#5e4803',
+  },
+  cyan: {
+    50: '#f3fbfd',
+    100: '#c3edf5',
+    200: '#94e0ed',
+    300: '#65d2e4',
+    400: '#35c4dc',
+    500: '#06b6d4',
+    600: '#059bb4',
+    700: '#047f94',
+    800: '#036475',
+    900: '#024955',
+  },
+  pink: {
+    50: '#fef6fa',
+    100: '#fad3e7',
+    200: '#f7b0d3',
+    300: '#f38ec0',
+    400: '#f06bac',
+    500: '#ec4899',
+    600: '#c93d82',
+    700: '#a5326b',
+    800: '#822854',
+    900: '#5e1d3d',
+  },
+  indigo: {
+    50: '#f7f7fe',
+    100: '#dadafc',
+    200: '#bcbdf9',
+    300: '#9ea0f6',
+    400: '#8183f4',
+    500: '#6366f1',
+    600: '#5457cd',
+    700: '#4547a9',
+    800: '#363885',
+    900: '#282960',
+  },
+  teal: {
+    50: '#f3fbfb',
+    100: '#c7eeea',
+    200: '#9ae0d9',
+    300: '#6dd3c8',
+    400: '#41c5b7',
+    500: '#14b8a6',
+    600: '#119c8d',
+    700: '#0e8174',
+    800: '#0b655b',
+    900: '#084a42',
+  },
+  orange: {
+    50: '#fff7ed',
+    100: '#ffedd5',
+    200: '#fed7aa',
+    300: '#fdba74',
+    400: '#fb923c',
+    500: '#f59e0b',
+    600: '#d97706',
+    700: '#b45309',
+    800: '#92400e',
+    900: '#78350f',
+  },
+  bluegray: {
+    50: '#f7f8f9',
+    100: '#dadee3',
+    200: '#bcc3cd',
+    300: '#9fa9b7',
+    400: '#818ea1',
+    500: '#64748b',
+    600: '#556376',
+    700: '#465161',
+    800: '#37404c',
+    900: '#282e38',
+  },
+  purple: {
+    50: '#fbf7ff',
+    100: '#ead6fd',
+    200: '#dab6fc',
+    300: '#c996fa',
+    400: '#b975f9',
+    500: '#a855f7',
+    600: '#8f48d2',
+    700: '#763cad',
+    800: '#5c2f88',
+    900: '#432263',
+  },
+  red: {
+    50: '#fff5f5',
+    100: '#ffd0ce',
+    200: '#ffaca7',
+    300: '#ff8780',
+    400: '#ff6259',
+    500: '#ff3d32',
+    600: '#d9342b',
+    700: '#b32b23',
+    800: '#8c221c',
+    900: '#661814',
+  },
+  gray: {
+    0: '#ffffff',
+    50: '#f8fafc',
+    100: '#f1f5f9',
+    200: '#e2e8f0',
+    300: '#cbd5e1',
+    400: '#94a3b8',
+    500: '#64748b',
+    600: '#475569',
+    700: '#334155',
+    800: '#1e293b',
+    900: '#111827',
+    950: '#020617',
+  },
+};
+
+/**
  * Chart Component
  *
  * A Chart.js-based chart component for displaying various chart types.
@@ -198,11 +352,19 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    */
   private transformToChartDisplay(chart: IChartData): IChartDisplay {
     const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color') || '#333';
+    // Use proper theme CSS variable names with fallbacks
+    const textColor =
+      documentStyle.getPropertyValue('--color-text-primary').trim() ||
+      documentStyle.getPropertyValue('--text-color').trim() ||
+      '#333333';
     const textColorSecondary =
-      documentStyle.getPropertyValue('--text-color-secondary') || '#666';
+      documentStyle.getPropertyValue('--color-text-secondary').trim() ||
+      documentStyle.getPropertyValue('--text-color-secondary').trim() ||
+      '#666666';
     const surfaceBorder =
-      documentStyle.getPropertyValue('--surface-border') || '#ddd';
+      documentStyle.getPropertyValue('--surface-border').trim() ||
+      documentStyle.getPropertyValue('--color-border').trim() ||
+      '#e2e8f0';
 
     const chartType = this.mapChartType(chart.chartType);
     const height = this.getChartHeight(chart.chartType);
@@ -468,19 +630,73 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   /**
-   * Resolve CSS variable to hex color or return as-is
+   * Resolve color to hex value. Supports:
+   * - Direct hex colors (e.g., '#ff0000')
+   * - RGB/RGBA colors (e.g., 'rgb(255, 0, 0)', 'rgba(255, 0, 0, 0.5)')
+   * - Built-in palette shorthand (e.g., '--blue-500', '--green-400')
+   * - CSS custom properties (e.g., '--my-custom-color')
    * @internal
    */
   private resolveColor(color: string, documentStyle: CSSStyleDeclaration): string {
-    if (color.startsWith('--')) {
-      const resolvedColor = documentStyle.getPropertyValue(color).trim();
-      return resolvedColor || color;
+    // If it's already a hex color or rgb/rgba, return as-is
+    if (color.startsWith('#') || color.startsWith('rgb(') || color.startsWith('rgba(')) {
+      return color;
     }
+
+    // Handle CSS variable format (--color-name or --color-shade)
+    if (color.startsWith('--')) {
+      // Try to resolve from built-in palette first (e.g., --blue-500)
+      const paletteColor = this.resolveFromPalette(color);
+      if (paletteColor) {
+        return paletteColor;
+      }
+
+      // Fall back to CSS custom property lookup
+      const cssValue = documentStyle.getPropertyValue(color).trim();
+      if (cssValue) {
+        return cssValue;
+      }
+
+      // If CSS variable is not found, return a fallback color
+      return '#64748b'; // Default gray-500
+    }
+
     return color;
   }
 
   /**
-   * Add transparency to a hex color
+   * Resolve color from built-in palette using shorthand format (e.g., '--blue-500')
+   * @internal
+   */
+  private resolveFromPalette(colorVar: string): string | null {
+    // Remove leading '--' and split by '-'
+    const colorName = colorVar.substring(2); // Remove '--'
+    const lastDashIndex = colorName.lastIndexOf('-');
+
+    if (lastDashIndex === -1) {
+      return null;
+    }
+
+    const name = colorName.substring(0, lastDashIndex);
+    const shade = colorName.substring(lastDashIndex + 1);
+
+    const colorGroup = CHART_COLOR_PALETTE[name];
+    if (colorGroup) {
+      // Try as string key first, then as number for numeric shades like 500
+      if (colorGroup[shade]) {
+        return colorGroup[shade];
+      }
+      const numericShade = parseInt(shade, 10);
+      if (!isNaN(numericShade) && colorGroup[numericShade]) {
+        return colorGroup[numericShade];
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Add transparency to a color. Supports hex and rgb/rgba formats.
    * @internal
    */
   private addTransparency(color: string): string {
@@ -488,6 +704,15 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
     if (color.startsWith('#')) {
       return color + 'bf'; // ~75% opacity
     }
+    // If it's an rgb color, convert to rgba with transparency
+    if (color.startsWith('rgb(')) {
+      // Extract the rgb values and convert to rgba
+      const rgbMatch = color.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+      if (rgbMatch) {
+        return `rgba(${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}, 0.75)`;
+      }
+    }
+    // If it's already rgba, leave as-is (user specified their own alpha)
     return color;
   }
 
