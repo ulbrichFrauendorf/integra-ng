@@ -15,6 +15,7 @@ import {
   IChartDataSet,
   IChartDisplay,
   IChartType,
+  IChartTypeExtended,
 } from './chart.interfaces';
 
 // Register all Chart.js components
@@ -100,6 +101,12 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    */
   private initialized = false;
 
+  /**
+   * Reference to pending animation frame for cleanup
+   * @internal
+   */
+  private pendingAnimationFrame: number | null = null;
+
   ngAfterViewInit(): void {
     this.initialized = true;
     this.initializeCharts();
@@ -113,7 +120,19 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
+    this.cancelPendingInitialization();
     this.destroyCharts();
+  }
+
+  /**
+   * Cancel any pending chart initialization
+   * @internal
+   */
+  private cancelPendingInitialization(): void {
+    if (this.pendingAnimationFrame !== null) {
+      cancelAnimationFrame(this.pendingAnimationFrame);
+      this.pendingAnimationFrame = null;
+    }
   }
 
   /**
@@ -125,8 +144,12 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
       this.transformToChartDisplay(chart)
     );
 
-    // Wait for view to update with new displays
-    setTimeout(() => {
+    // Cancel any pending initialization
+    this.cancelPendingInitialization();
+
+    // Use requestAnimationFrame for proper timing after view update
+    this.pendingAnimationFrame = requestAnimationFrame(() => {
+      this.pendingAnimationFrame = null;
       this.canvasElements.forEach((canvasRef, index) => {
         const chartDisplay = this.chartDisplays[index];
         if (chartDisplay && canvasRef) {
@@ -209,8 +232,8 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * Map custom chart type strings to Chart.js types
    * @internal
    */
-  private mapChartType(chartType: string): IChartType {
-    const typeMap: Record<string, IChartType> = {
+  private mapChartType(chartType: IChartTypeExtended): IChartType {
+    const typeMap: Record<IChartTypeExtended, IChartType> = {
       bar: 'bar',
       'bar-stack': 'bar',
       'bar-large': 'bar',
@@ -231,7 +254,7 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * Get chart height based on chart type
    * @internal
    */
-  private getChartHeight(chartType: string): string {
+  private getChartHeight(chartType: IChartTypeExtended): string {
     if (chartType === 'bar-large') {
       return '40rem';
     }
@@ -243,7 +266,7 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * @internal
    */
   private getChartOptions(
-    chartType: string,
+    chartType: IChartTypeExtended,
     textColor: string,
     textColorSecondary: string,
     surfaceBorder: string
@@ -475,5 +498,13 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    */
   getChartHeightStyle(display: IChartDisplay): string {
     return display.height || this.height;
+  }
+
+  /**
+   * Get the number of active chart instances (for testing)
+   * @returns The count of active chart instances
+   */
+  getChartInstanceCount(): number {
+    return this.chartInstances.length;
   }
 }

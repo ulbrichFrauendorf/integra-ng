@@ -12,6 +12,15 @@ export type IChartType =
   | 'radar';
 
 /**
+ * Extended chart types including custom variants
+ */
+export type IChartTypeExtended =
+  | IChartType
+  | 'bar-stack'
+  | 'bar-large'
+  | 'bar-horizontal';
+
+/**
  * Dataset configuration for a chart
  */
 export interface IChartDataSet {
@@ -30,7 +39,7 @@ export interface IChartData {
   /** Optional unique identifier for the chart */
   chartId?: string;
   /**
-   * Chart type string. Supports:
+   * Chart type. Supports:
    * - 'bar' - standard bar chart
    * - 'bar-stack' - stacked bar chart
    * - 'bar-large' - bar chart with larger height (40rem)
@@ -43,7 +52,7 @@ export interface IChartData {
    * - 'polarArea' - polar area chart
    * - 'radar' - radar chart
    */
-  chartType: string;
+  chartType: IChartTypeExtended;
   /** Labels for the x-axis or data points */
   labels: string[];
   /** Array of datasets to display */
