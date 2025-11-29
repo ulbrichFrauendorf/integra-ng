@@ -566,7 +566,7 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   setDisabledState?(isDisabled: boolean): void {
-    // Not implemented - can be added if needed
+    this.disabled = isDisabled;
   }
 
   /**
