@@ -1,0 +1,124 @@
+<div class="component-demo">
+  <h1>Component Interactions</h1>
+  <p class="lead">
+    This page demonstrates how different UI components interact with each
+    other. These examples help ensure components work correctly when combined
+    in real-world scenarios.
+  </p>
+
+  <app-features-list [features]="componentFeatures"></app-features-list>
+
+  <!-- Dropdown in Accordion Demo -->
+  <app-demo-card
+    title="Dropdown in Accordion"
+    [sourceCode]="codeExamples.dropdownInAccordion"
+    [tsCode]="tsExamples.setup">
+    <form [formGroup]="interactionForm">
+      <i-accordion-list [multiple]="true">
+        <i-accordion header="User Settings" icon="pi pi-user" [expanded]="true">
+          <div class="form-group">
+            <i-select
+              label="Country"
+              [options]="countries"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="country"
+              placeholder="Select your country"
+              [filter]="true"
+              [showClear]="true" />
+          </div>
+          <p class="info-text">
+            Select a country from the dropdown above. Notice how the dropdown
+            overlay appears correctly above the accordion content.
+          </p>
+        </i-accordion>
+
+        <i-accordion
+          header="Product Settings"
+          icon="pi pi-shopping-cart"
+          [expanded]="true">
+          <div class="form-group">
+            <i-select
+              label="Category"
+              [options]="categories"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="category"
+              placeholder="Select a category"
+              [showClear]="true" />
+          </div>
+
+          <div class="form-group">
+            <i-select
+              label="Priority"
+              [options]="priorities"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="priority"
+              placeholder="Select priority level"
+              [showClear]="true" />
+          </div>
+
+          <p class="info-text">
+            When multiple accordions are expanded, dropdowns in each panel
+            should still function independently without z-index conflicts.
+          </p>
+        </i-accordion>
+
+        <i-accordion header="Advanced Settings" icon="pi pi-cog">
+          <div class="form-group">
+            <i-multi-select
+              label="Enable Features"
+              [options]="features"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="selectedFeatures"
+              placeholder="Select features to enable"
+              [filter]="true" />
+          </div>
+
+          <div class="form-group">
+            <i-multi-select
+              label="Tags"
+              [options]="tags"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="selectedTags"
+              placeholder="Select tags" />
+          </div>
+
+          <p class="info-text">
+            Multi-select dropdowns also expand properly beyond accordion
+            boundaries. Try selecting multiple items to see the chips display
+            and the dropdown overlay behavior.
+          </p>
+        </i-accordion>
+
+        <i-accordion header="Summary" icon="pi pi-info-circle">
+          <p>
+            This accordion panel can be expanded while the others remain open
+            (multiple expansion mode). Form state is preserved across all
+            panels.
+          </p>
+          <div class="form-values">
+            <strong>Current Form Values:</strong>
+            <pre>{{ interactionForm.value | json }}</pre>
+          </div>
+        </i-accordion>
+      </i-accordion-list>
+
+      <div class="actions">
+        <i-button
+          label="Submit Form"
+          icon="pi pi-check"
+          (onClick)="onSubmit()"
+          [disabled]="!interactionForm.valid"></i-button>
+        <i-button
+          label="Reset Form"
+          icon="pi pi-refresh"
+          severity="secondary"
+          (onClick)="resetForm()"></i-button>
+      </div>
+    </form>
+  </app-demo-card>
+</div>

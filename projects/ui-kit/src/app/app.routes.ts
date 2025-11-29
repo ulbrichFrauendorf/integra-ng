@@ -23,6 +23,7 @@ import { ThemingComponent } from './components/theming/theming.component';
 import { TablesComponent } from './components/tables/tables.component';
 import { PanelsComponent } from './components/panels/panels.component';
 import { ChartsComponent } from './components/charts/charts.component';
+import { ComponentInteractionsComponent } from './components/component-interactions/component-interactions.component';
 
 export const routes: Routes = [
   {
@@ -69,6 +70,10 @@ export const routes: Routes = [
           { path: 'whispers', component: WhispersComponent },
           { path: 'tables', component: TablesComponent },
           { path: 'charts', component: ChartsComponent },
+          {
+            path: 'component-interactions',
+            component: ComponentInteractionsComponent,
+          },
           { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
         ],
       },
