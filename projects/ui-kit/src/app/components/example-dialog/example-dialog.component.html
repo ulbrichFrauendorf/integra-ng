@@ -1,78 +1,69 @@
 <div class="example-dialog-content">
-  <h4>Example Dialog Form</h4>
-  <p>
-    Edit the form data below and click Submit to see the results in the console.
-    The departments listbox showcases dynamic data that updates every 5 seconds
-    with new options.
-  </p>
+  <div class="dialog-header-section">
+    <div class="header-icon">
+      <i class="pi pi-send"></i>
+    </div>
+    <p class="header-description">
+      Complete the form below to submit your request. All fields marked with validation are required.
+    </p>
+  </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-fields">
       <i-input-text
-        label="Message"
+        label="Your Message"
         formControlName="message"
-        placeholder="Enter your message"
+        placeholder="Enter your message here..."
         [fluid]="true"
       >
       </i-input-text>
 
       <i-input-text
-        label="User"
+        label="Your Name"
         formControlName="user"
-        placeholder="Enter user name"
+        placeholder="Enter your full name"
         type="text"
         [fluid]="true"
       >
       </i-input-text>
 
-      <i-listbox
-        label="Departments (Reactive Forms + Observable)"
-        [options]="departmentOptions$ | async"
-        optionLabel="name"
-        optionValue="id"
-        formControlName="selectedDepartments"
-        [multiple]="true"
-        [filter]="true"
-        [showClear]="true"
-        [maxSelectedLabels]="2"
-        selectedItemsLabel="{0} departments selected"
-      >
-      </i-listbox>
+      <div class="listbox-section">
+        <i-listbox
+          label="Assign to Departments"
+          [options]="departmentOptions$ | async"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="selectedDepartments"
+          [multiple]="true"
+          [filter]="true"
+          [showClear]="true"
+          [maxSelectedLabels]="2"
+          selectedItemsLabel="{0} departments selected"
+        >
+        </i-listbox>
+      </div>
     </div>
   </form>
 
-  <div
-    class="demo-info"
-    style="
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #f5f5f5;
-      border-radius: 4px;
-      font-size: 0.9rem;
-    "
-  >
-    <strong>Dynamic Data Demo:</strong> New departments are added every 5
-    seconds to showcase observable data updates. <br /><strong
-      >Form Value:</strong
-    >
-    {{ form.get("selectedDepartments")?.value | json }} <br /><strong
-      >Form Valid:</strong
-    >
-    {{ form.valid }} <br /><strong>Available Options:</strong>
-    {{ (departmentOptions$ | async)?.length || 0 }}
+  <div class="form-summary">
+    <div class="summary-row">
+      <span class="summary-label">Form Status:</span>
+      <span class="summary-value" [class.valid]="form.valid" [class.invalid]="!form.valid">
+        <i [class]="form.valid ? 'pi pi-check-circle' : 'pi pi-exclamation-circle'"></i>
+        {{ form.valid ? 'Ready to submit' : 'Please complete all fields' }}
+      </span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Departments:</span>
+      <span class="summary-value">{{ (departmentOptions$ | async)?.length || 0 }} available</span>
+    </div>
   </div>
-
-  <p>You can close this dialog by:</p>
-  <ul>
-    <li>Clicking the X button</li>
-    <li>Pressing Escape</li>
-    <li>Clicking outside the dialog</li>
-    <li>Clicking Cancel or Submit</li>
-  </ul>
 </div>
 <div slot="footer">
   <i-dialog-actions
     (cancelEvent)="onHide()"
     (submitEvent)="onSubmit()"
+    submitLabel="Submit Request"
+    cancelLabel="Discard"
   ></i-dialog-actions>
 </div>
