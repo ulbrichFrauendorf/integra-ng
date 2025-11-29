@@ -48,24 +48,41 @@
       <i-dialog
         [(visible)]="showBasicDialog"
         [closable]="true"
-        header="Basic Dialog Example"
-        width="20rem"
+        header="Welcome to Integra"
+        width="24rem"
+        [breakpoints]="{
+          '640px': '90vw'
+        }"
       >
-        <div class="dialog-content">
-          <h4>Basic Dialog</h4>
-          <p>This is a basic dialog component used directly in the template.</p>
-          <p>It demonstrates the dialog component's core functionality:</p>
-          <ul>
-            <li>Modal overlay</li>
-            <li>Header with title</li>
-            <li>Closable with X button</li>
-            <li>Keyboard (ESC) support</li>
-            <li>Click outside to close</li>
-          </ul>
+        <div class="dialog-content basic-dialog">
+          <div class="dialog-icon">
+            <i class="pi pi-check-circle"></i>
+          </div>
+          <h4>Getting Started</h4>
+          <p class="dialog-description">
+            Welcome to the Integra component library! This dialog demonstrates 
+            a clean, user-friendly design with proper spacing and hierarchy.
+          </p>
+          <div class="feature-highlights">
+            <div class="highlight-item">
+              <i class="pi pi-bolt"></i>
+              <span>Fast & Responsive</span>
+            </div>
+            <div class="highlight-item">
+              <i class="pi pi-shield"></i>
+              <span>Accessible (WCAG 2.1)</span>
+            </div>
+            <div class="highlight-item">
+              <i class="pi pi-palette"></i>
+              <span>Themeable</span>
+            </div>
+          </div>
         </div>
         <i-dialog-actions
           (cancelEvent)="onBasicDialogHide()"
           (submitEvent)="onBasicDialogHide()"
+          submitLabel="Get Started"
+          cancelLabel="Maybe Later"
         ></i-dialog-actions>
       </i-dialog>
     </app-demo-card>
@@ -88,23 +105,60 @@
         (onHide)="onResponsiveDialogHide()"
         (submitEvent)="onResponsiveDialogHide()"
         (cancelEvent)="onResponsiveDialogHide()"
-        header="Responsive Dialog"
+        header="Screen Size Adaptation"
         width="50vw"
         [breakpoints]="{
           '960px': '75vw',
           '640px': '90vw'
         }"
       >
-        <div class="dialog-content">
-          <h4>Responsive Design</h4>
-          <p>This dialog adapts to different screen sizes:</p>
-          <ul>
-            <li><strong>Desktop:</strong> 50% viewport width</li>
-            <li><strong>Tablet (≤960px):</strong> 75% viewport width</li>
-            <li><strong>Mobile (≤640px):</strong> 90% viewport width</li>
-          </ul>
-          <p>
-            Resize your browser window to see the responsive behavior in action.
+        <div class="dialog-content responsive-dialog">
+          <div class="responsive-info-card">
+            <div class="info-header">
+              <i class="pi pi-desktop"></i>
+              <h5>Current Breakpoint</h5>
+            </div>
+            <p class="breakpoint-indicator">
+              Resize your browser to see the dialog adapt automatically.
+            </p>
+          </div>
+          
+          <div class="breakpoints-grid">
+            <div class="breakpoint-card">
+              <div class="breakpoint-icon">
+                <i class="pi pi-desktop"></i>
+              </div>
+              <div class="breakpoint-details">
+                <strong>Desktop</strong>
+                <span class="breakpoint-value">50vw</span>
+                <small>> 960px</small>
+              </div>
+            </div>
+            <div class="breakpoint-card">
+              <div class="breakpoint-icon">
+                <i class="pi pi-tablet"></i>
+              </div>
+              <div class="breakpoint-details">
+                <strong>Tablet</strong>
+                <span class="breakpoint-value">75vw</span>
+                <small>≤ 960px</small>
+              </div>
+            </div>
+            <div class="breakpoint-card">
+              <div class="breakpoint-icon">
+                <i class="pi pi-mobile"></i>
+              </div>
+              <div class="breakpoint-details">
+                <strong>Mobile</strong>
+                <span class="breakpoint-value">90vw</span>
+                <small>≤ 640px</small>
+              </div>
+            </div>
+          </div>
+          
+          <p class="responsive-tip">
+            <i class="pi pi-info-circle"></i>
+            All dialogs are constrained to a maximum height of 80vh for optimal mobile experience.
           </p>
         </div>
       </i-dialog>
@@ -125,23 +179,28 @@
         (onHide)="onFullscreenDialogHide()"
         (submitEvent)="onFullscreenDialogHide()"
         (cancelEvent)="onFullscreenDialogHide()"
-        header="Large Dialog"
+        header="Team Assignment"
         [modal]="true"
-        width="80vw"
+        width="600px"
+        [breakpoints]="{
+          '960px': '80vw',
+          '640px': '95vw'
+        }"
       >
-        <div class="dialog-content">
-          <h4>Large Dialog with Listbox</h4>
-          <p>
-            This dialog demonstrates larger viewport dimensions with a reactive
-            listbox component.
-          </p>
+        <div class="dialog-content large-dialog">
+          <div class="dialog-intro">
+            <i class="pi pi-users"></i>
+            <div>
+              <h4>Select Team Departments</h4>
+              <p>Choose the departments you want to assign to this project.</p>
+            </div>
+          </div>
 
           <form [formGroup]="largeDialogForm" class="listbox-demo-form">
             <div class="form-field">
-              <label for="selectedDepartments">Select Departments:</label>
               <i-listbox
                 id="selectedDepartments"
-                label="Departments (Reactive Forms + Observable)"
+                label="Available Departments"
                 [options]="departmentOptions$ | async"
                 optionLabel="label"
                 optionValue="value"
@@ -157,26 +216,32 @@
               @if (largeDialogForm.get('selectedDepartments')?.invalid &&
               largeDialogForm.get('selectedDepartments')?.touched) {
               <small class="error-message">
+                <i class="pi pi-exclamation-circle"></i>
                 Please select at least one department
               </small>
               }
             </div>
           </form>
 
-          <div class="demo-info">
-            <h5>Dynamic Data Features:</h5>
-            <ul>
-              <li>Options update automatically every 10 seconds</li>
-              <li>Random departments may become disabled</li>
-              <li>New temporary departments may appear</li>
-              <li>Form validation ensures at least one selection</li>
-            </ul>
-
-            <h5>Current Form State:</h5>
-            <pre>{{ largeDialogForm.value | json }}</pre>
-
-            <h5>Form Valid:</h5>
-            <p>{{ largeDialogForm.valid ? "Yes" : "No" }}</p>
+          <div class="selection-summary">
+            <div class="summary-header">
+              <i class="pi pi-chart-bar"></i>
+              <span>Selection Summary</span>
+            </div>
+            <div class="summary-stats">
+              <div class="stat-item">
+                <span class="stat-value">{{ (largeDialogForm.get('selectedDepartments')?.value || []).length }}</span>
+                <span class="stat-label">Selected</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">{{ (departmentOptions$ | async)?.length || 0 }}</span>
+                <span class="stat-label">Available</span>
+              </div>
+              <div class="stat-item status" [class.valid]="largeDialogForm.valid">
+                <i [class]="largeDialogForm.valid ? 'pi pi-check-circle' : 'pi pi-times-circle'"></i>
+                <span class="stat-label">{{ largeDialogForm.valid ? 'Ready' : 'Incomplete' }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </i-dialog>

@@ -20,8 +20,10 @@
 }
 
 .i-dialog-container {
+  display: flex;
+  flex-direction: column;
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 80vh;
   animation: slideInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform, opacity;
   transform: translateZ(0); // Force GPU acceleration
@@ -32,7 +34,26 @@
 
   @media (max-width: 640px) {
     max-width: 90vw;
+    max-height: 80vh;
   }
+
+  // Ensure dialog card fills container and handles overflow
+  .i-card {
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    overflow: hidden;
+
+    .i-card-body {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+    }
+  }
+}
+
+.i-dialog-content {
+  overflow-y: auto;
 }
 
 // Animations - optimized for performance

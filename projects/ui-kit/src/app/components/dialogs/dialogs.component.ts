@@ -17,7 +17,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Observable, BehaviorSubject, interval } from 'rxjs';
 import {
   IListbox,
@@ -30,7 +30,6 @@ import {
     CommonModule,
     ReactiveFormsModule,
     AsyncPipe,
-    JsonPipe,
     IDialog,
     IButton,
     DemoCardComponent,

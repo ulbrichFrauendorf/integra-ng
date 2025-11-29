@@ -21,51 +21,115 @@ import {
 export class TooltipsComponent {
   // HTML Code examples organized by category
   codeExamples = {
-    basic: `<i-button iTooltip="This is a tooltip above" tooltipPosition="above">Hover Above</i-button>
-<i-button iTooltip="This is a tooltip below" tooltipPosition="below">Hover Below</i-button>
-<i-button iTooltip="This is a tooltip to the left" tooltipPosition="left">Hover Left</i-button>
-<i-button iTooltip="This is a tooltip to the right" tooltipPosition="right">Hover Right</i-button>`,
+    basic: `<!-- Tooltip Positions -->
+<i-button iTooltip="Tooltip appears above" tooltipPosition="above">
+  <i class="pi pi-arrow-up"></i> Above
+</i-button>
 
-    styled: `<i-button severity="primary" iTooltip="Primary action button" tooltipPosition="above">
-  Primary Button
+<i-button iTooltip="Tooltip appears below" tooltipPosition="below">
+  <i class="pi pi-arrow-down"></i> Below
 </i-button>
-<i-button severity="secondary" [outlined]="true" iTooltip="Secondary action button" tooltipPosition="below">
-  Secondary Button
+
+<i-button iTooltip="Tooltip appears to the left" tooltipPosition="left">
+  <i class="pi pi-arrow-left"></i> Left
 </i-button>
-<i-button severity="success" [raised]="true" iTooltip="Success action completed" tooltipPosition="left">
-  Success Button
-</i-button>
-<i-button severity="warning" [text]="true" iTooltip="Warning: This action requires confirmation" tooltipPosition="right">
-  Warning Button
+
+<i-button iTooltip="Tooltip appears to the right" tooltipPosition="right">
+  Right <i class="pi pi-arrow-right"></i>
 </i-button>`,
 
-    elements: `<span iTooltip="This is a span with tooltip" tooltipPosition="above" class="tooltip-span">
-  Hover over this text
-</span>
+    icons: `<!-- Icon Toolbar with Tooltips -->
+<div class="icon-toolbar">
+  <button class="icon-btn" iTooltip="Create new document" tooltipPosition="below">
+    <i class="pi pi-file"></i>
+  </button>
+  <button class="icon-btn" iTooltip="Save changes" tooltipPosition="below">
+    <i class="pi pi-save"></i>
+  </button>
+  <button class="icon-btn" iTooltip="Edit content" tooltipPosition="below">
+    <i class="pi pi-pencil"></i>
+  </button>
+  <button class="icon-btn" iTooltip="Delete selected" tooltipPosition="below">
+    <i class="pi pi-trash"></i>
+  </button>
+</div>`,
 
-<div iTooltip="This is a div container" tooltipPosition="below" class="tooltip-div">
-  Hover over this box
+    formHelp: `<!-- Form Field with Help Tooltip -->
+<div class="form-field">
+  <label class="field-label">
+    Email Address
+    <span
+      class="help-icon"
+      iTooltip="Enter your primary email address for account recovery."
+      tooltipPosition="right">
+      <i class="pi pi-question-circle"></i>
+    </span>
+  </label>
+  <input type="email" placeholder="user@example.com" />
 </div>
 
-<p iTooltip="Paragraph with helpful information" tooltipPosition="right" class="tooltip-paragraph">
-  This paragraph has a tooltip. Hover to see more information about this content.
-</p>`,
+<!-- Warning Help Icon -->
+<span
+  class="help-icon warning"
+  iTooltip="Keep this key secure! Never share it publicly."
+  tooltipPosition="right">
+  <i class="pi pi-exclamation-triangle"></i>
+</span>`,
 
-    timing: `<i-button iTooltip="Fast tooltip (100ms)" tooltipPosition="above" [tooltipDelay]="100">
-  Fast Tooltip
+    timing: `<!-- Custom Tooltip Delays -->
+<i-button
+  iTooltip="Instant feedback for quick actions"
+  tooltipPosition="above"
+  [tooltipDelay]="100">
+  Fast (100ms)
 </i-button>
-<i-button iTooltip="Normal tooltip (500ms)" tooltipPosition="above" [tooltipDelay]="500">
-  Normal Tooltip  
+
+<i-button
+  iTooltip="Standard delay prevents accidental triggers"
+  tooltipPosition="above"
+  [tooltipDelay]="500">
+  Normal (500ms)
 </i-button>
-<i-button iTooltip="Slow tooltip (1000ms)" tooltipPosition="above" [tooltipDelay]="1000">
-  Slow Tooltip
+
+<i-button
+  iTooltip="Slower delay for less important hints"
+  tooltipPosition="above"
+  [tooltipDelay]="1000">
+  Slow (1000ms)
 </i-button>`,
 
-    longText: `<i-button iTooltip="This is a very long tooltip text that will wrap to multiple lines when the content exceeds the maximum width of the tooltip container" tooltipPosition="above">
-  Long Tooltip
-</i-button>
-<span iTooltip="Multi-line tooltip with detailed information about this specific feature and how to use it effectively" tooltipPosition="right" class="tooltip-span">
-  Detailed Info
+    truncated: `<!-- Truncated Text with Full Content Tooltip -->
+<div
+  class="truncated-item"
+  iTooltip="project-requirements-document-v2-final-reviewed.pdf"
+  tooltipPosition="above">
+  <i class="pi pi-file-pdf file-icon"></i>
+  <span class="truncated-text">project-requirements-document-v2-final-reviewed.pdf</span>
+</div>`,
+
+    status: `<!-- Status Badges with Tooltip Details -->
+<span
+  class="status-badge success"
+  iTooltip="All systems operational. Last checked 2 minutes ago."
+  tooltipPosition="above">
+  <i class="pi pi-check-circle"></i>
+  Online
+</span>
+
+<span
+  class="status-badge warning"
+  iTooltip="High CPU usage detected. Consider scaling up resources."
+  tooltipPosition="above">
+  <i class="pi pi-exclamation-triangle"></i>
+  Warning
+</span>
+
+<span
+  class="status-badge danger"
+  iTooltip="Service unavailable. Our team is investigating."
+  tooltipPosition="above">
+  <i class="pi pi-times-circle"></i>
+  Offline
 </span>`,
   };
 
@@ -80,36 +144,11 @@ import { IButton } from 'integra-ng';
   templateUrl: './example.component.html'
 })
 export class ExampleComponent {
-  // Component ready to use tooltips
-}`,
-
-    advanced: `// Custom tooltip configuration
-@Component({
-  template: \`
-    <i-button 
-      iTooltip="Custom tooltip" 
-      tooltipPosition="above"
-      [tooltipDelay]="500">
-      Custom Tooltip
-    </i-button>
-  \`
-})
-export class ExampleComponent {
-  // Tooltip with custom delay
+  // Tooltip directive can be applied to any element
+  // Available positions: 'above' | 'below' | 'left' | 'right'
+  // Custom delay in milliseconds (default: 500)
 }`,
   };
-
-  // Component setup
-  initializationCode = `import { TooltipDirective } from 'integra-ng';
-
-@Component({
-  selector: 'app-example',
-  imports: [TooltipDirective],
-  templateUrl: './example.component.html'
-})
-export class ExampleComponent {
-  // Component ready to use
-}`;
 
   features: Feature[] = [
     {
@@ -118,31 +157,31 @@ export class ExampleComponent {
     },
     {
       title: 'Any Element Support',
-      description: 'Works with buttons, spans, divs, paragraphs, and more',
+      description: 'Works with buttons, spans, divs, icons, and any HTML element',
     },
     {
       title: 'Custom Delays',
-      description: 'Configurable show/hide timing for different use cases',
+      description: 'Configurable show timing from instant to delayed',
     },
     {
       title: 'Auto Text Wrapping',
-      description: 'Automatic line breaks for long tooltip content',
+      description: 'Long content automatically wraps to multiple lines',
     },
     {
-      title: 'Responsive Design',
-      description: 'Adapts to screen boundaries and viewport constraints',
+      title: 'Viewport Awareness',
+      description: 'Automatically adjusts position to stay within viewport',
     },
     {
       title: 'Hover & Focus',
-      description: 'Triggered by both mouse hover and keyboard focus',
+      description: 'Triggered by mouse hover and keyboard focus for accessibility',
     },
     {
-      title: 'Accessibility',
-      description: 'ARIA compliant with screen reader support',
+      title: 'ARIA Compliant',
+      description: 'Built-in accessibility support for screen readers',
     },
     {
       title: 'Lightweight',
-      description: 'Minimal performance impact with efficient rendering',
+      description: 'Minimal performance impact with efficient DOM management',
     },
   ];
 }

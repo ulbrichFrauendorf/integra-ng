@@ -8,6 +8,7 @@ import {
   ElementRef,
   ViewChild,
   ChangeDetectorRef,
+  HostBinding,
 } from '@angular/core';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
@@ -58,6 +59,9 @@ export type IButtonSize = 'xtra-small' | 'small' | 'medium' | 'large';
   styleUrl: './button.component.scss',
 })
 export class IButton implements AfterViewInit {
+  @HostBinding('class.i-button-fluid') get fluidClass() {
+    return this.fluid;
+  }
   /**
    * Visual severity/style of the button
    * @default 'primary'

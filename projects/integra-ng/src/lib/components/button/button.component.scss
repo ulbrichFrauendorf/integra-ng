@@ -4,6 +4,15 @@
 // Apply the button color mixin which uses CSS custom properties
 @include theme.i-button-theme();
 
+:host {
+  display: inline-block;
+
+  &.i-button-fluid {
+    display: block;
+    width: 100%;
+  }
+}
+
 .i-button-wrapper {
   .i-button {
     display: flex;

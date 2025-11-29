@@ -3,3 +3,35 @@
 .buttons-demo {
   @extend .demo-component;
 }
+
+.section-description {
+  color: var(--text-color-secondary);
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.button-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.style-group {
+  .style-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+.button-examples.align-end {
+  align-items: flex-end;
+}
+
+.fluid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
