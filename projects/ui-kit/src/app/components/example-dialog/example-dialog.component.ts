@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule, AsyncPipe, JsonPipe } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -20,7 +20,6 @@ import {
   imports: [
     CommonModule,
     AsyncPipe,
-    JsonPipe,
     ReactiveFormsModule,
     IDialogActions,
     IInputText,
