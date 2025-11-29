@@ -22,6 +22,7 @@ import { InstallationComponent } from './components/installation/installation.co
 import { ThemingComponent } from './components/theming/theming.component';
 import { TablesComponent } from './components/tables/tables.component';
 import { PanelsComponent } from './components/panels/panels.component';
+import { ChartsComponent } from './components/charts/charts.component';
 
 export const routes: Routes = [
   {
@@ -67,6 +68,7 @@ export const routes: Routes = [
           { path: 'tabs', component: TabsComponent },
           { path: 'whispers', component: WhispersComponent },
           { path: 'tables', component: TablesComponent },
+          { path: 'charts', component: ChartsComponent },
           { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
         ],
       },
