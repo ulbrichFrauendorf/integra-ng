@@ -29,7 +29,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'components/input-texts',
+    redirectTo: 'getting-started/installation',
   },
   {
     path: '',
@@ -74,10 +74,10 @@ export const routes: Routes = [
             path: 'component-interactions',
             component: ComponentInteractionsComponent,
           },
-          { path: '', redirectTo: 'input-texts', pathMatch: 'full' },
+          { path: '', redirectTo: 'installation', pathMatch: 'full' },
         ],
       },
     ],
   },
-  { path: '**', redirectTo: 'components/input-texts' },
+  { path: '**', redirectTo: 'getting-started/installation' },
 ];
