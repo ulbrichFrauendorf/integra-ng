@@ -474,14 +474,19 @@ export class ITable {
   columnWidths = signal<{ [field: string]: number }>({});
 
   constructor(private el: ElementRef) {
-    // Initialize expanded groups based on grouped data
-    const initialExpandedGroups = new Set<string>();
-    this.groupedData().forEach((group, index) => {
-      if (group.expanded !== false) {
-        initialExpandedGroups.add(group.label || index.toString());
+    // Initialize expanded groups reactively when groupedData changes
+    effect(() => {
+      const groups = this.groupedData();
+      if (groups.length > 0) {
+        const initialExpandedGroups = new Set<string>();
+        groups.forEach((group, index) => {
+          if (group.expanded !== false) {
+            initialExpandedGroups.add(group.label || index.toString());
+          }
+        });
+        this.expandedGroups.set(initialExpandedGroups);
       }
-    });
-    this.expandedGroups.set(initialExpandedGroups);
+    }, { allowSignalWrites: true });
   }
 
   /**
