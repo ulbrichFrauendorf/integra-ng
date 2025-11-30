@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './layout/components/layout/layout.component';
+import { AppLayoutComponent } from './layout/app-layout.component';
 import { AccordionsComponent } from './components/accordions/accordions.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { InputTextsComponent } from './components/input-texts/input-texts.component';
@@ -35,7 +35,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: LayoutComponent,
+    component: AppLayoutComponent,
     children: [
       {
         path: 'getting-started',
