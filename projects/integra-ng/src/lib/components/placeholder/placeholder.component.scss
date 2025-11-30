@@ -8,30 +8,20 @@
   align-items: center;
   justify-content: center;
   max-width: 100%;
-}
+  transition: none;
+  animation: none;
 
-.i-placeholder-content {
-  text-align: center;
-  max-width: 400px;
-  padding: 2rem;
+  .i-placeholder-content {
+    text-align: center;
+    max-width: 400px;
+    padding: 2rem;
+    transition: none;
+    animation: none;
 
-  i {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    display: block;
+    i {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
   }
-}
-/* Ensure placeholder appears instantly with no fade/animation */
-.i-placeholder,
-.i-placeholder-content {
-  transition: none !important;
-  -webkit-transition: none !important;
-  animation: none !important;
-  -webkit-animation: none !important;
-}
-
-/* remove any accidental keyframes usage by keeping them inert (kept for reference) */
-@keyframes placeholderFadeIn {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 1; transform: scale(1); }
 }

@@ -23,14 +23,12 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
     height: auto;
   }
 
-  // Input container
   .i-input-container {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  // Common input styles (shared between float and normal)
   .i-input {
     box-sizing: border-box;
     width: 100%;
@@ -59,14 +57,12 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
   }
 
-  // Common icon wrapper styles
   .i-input-icon-wrapper {
     position: relative;
     width: 100%;
     display: flex;
   }
 
-  // Common icon styles
   .i-input-icon {
     position: absolute;
     top: 50%;
@@ -81,7 +77,6 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
     transform: translateY(-50%);
   }
 
-  // Float label variant
   .float-label {
     position: relative;
     display: flex;
@@ -108,20 +103,17 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
       transition: all 0.15s ease;
     }
 
-    // Float label when input has value or is focused
     .i-input:focus + .i-label,
     .i-input:not(:placeholder-shown) + .i-label,
     .i-label.floated {
       top: -20px;
     }
 
-    // Adjust label position when icon is present
     &.has-icon .i-label:not(.floated) {
       left: 34px;
     }
   }
 
-  // Normal input variant (no floating label)
   .normal-input {
     position: relative;
 

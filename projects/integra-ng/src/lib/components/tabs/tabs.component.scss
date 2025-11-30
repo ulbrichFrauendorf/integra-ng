@@ -8,7 +8,7 @@
   flex-direction: column;
   width: 100%;
 
-  &__header {
+  .i-tabs__header {
     display: flex;
     overflow-x: auto;
     scrollbar-width: thin;
@@ -22,7 +22,7 @@
     }
   }
 
-  &__tab {
+  .i-tabs__tab {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -35,24 +35,19 @@
     position: relative;
     white-space: nowrap;
 
-    // Active state
-    &--active {
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-      }
+    &--active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
     }
 
-    // Disabled state
     &--disabled {
       cursor: not-allowed;
     }
 
-    // Icon only state
     &--icon-only {
       padding: 12px 16px;
 
@@ -60,46 +55,46 @@
         margin: 0;
       }
     }
-  }
 
-  &__tab-icon {
-    font-size: 16px;
-    display: inline-flex;
-    align-items: center;
-  }
+    .i-tabs__tab-icon {
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+    }
 
-  &__tab-label {
-    display: inline-block;
-  }
+    .i-tabs__tab-label {
+      display: inline-block;
+    }
 
-  &__tab-close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    margin-left: 4px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    cursor: pointer;
+    .i-tabs__tab-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      margin-left: 4px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
 
-    i {
-      font-size: 12px;
+      i {
+        font-size: 12px;
+      }
     }
   }
 
-  &__panels {
+  .i-tabs__panels {
     flex: 1;
-  }
 
-  &__panel {
-    display: none;
-    padding: 16px;
+    .i-tabs__panel {
+      display: none;
+      padding: 16px;
 
-    &--active {
-      display: block;
+      &--active {
+        display: block;
+      }
     }
   }
 }

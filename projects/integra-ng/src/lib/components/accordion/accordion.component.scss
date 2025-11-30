@@ -1,12 +1,27 @@
 @use "./accordion.component.theme.scss" as theme;
 @use "../../themes/_variables.scss" as vars;
-@use "../../themes/color-variables.scss" as colors;
 
 @include theme.i-accordion-theme();
 
 .i-accordion {
   border-radius: vars.$borderRadius;
   overflow: visible;
+
+  &.expanded .i-accordion-header {
+    border-radius: vars.$borderRadius vars.$borderRadius 0 0;
+  }
+
+  &:not(.expanded) .i-accordion-header {
+    border-radius: vars.$borderRadius;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+
+    .i-accordion-header {
+      cursor: not-allowed;
+    }
+  }
 
   .i-accordion-header {
     display: flex;
@@ -17,7 +32,6 @@
     cursor: pointer;
     user-select: none;
     transition: background-color vars.$transitionDuration ease;
-    border-radius: vars.$borderRadius vars.$borderRadius 0 0;
 
     .i-accordion-header-content {
       display: flex;
@@ -51,20 +65,9 @@
       opacity: 0;
       overflow: hidden;
     }
-  }
 
-  .i-accordion-content {
-    padding: 0 16px 16px 16px;
-  }
-
-  &:not(.expanded) .i-accordion-header {
-    border-radius: vars.$borderRadius;
-  }
-  &.disabled {
-    opacity: 0.6;
-
-    .i-accordion-header {
-      cursor: not-allowed;
+    .i-accordion-content {
+      padding: 0 16px 16px 16px;
     }
   }
 }

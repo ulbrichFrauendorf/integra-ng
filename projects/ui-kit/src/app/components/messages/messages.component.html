@@ -1,61 +1,50 @@
 <div class="messages-demo">
   <header class="demo-header">
-    <h1>Message Components</h1>
+    <h1>Message</h1>
     <p>
-      Static message components for displaying inline notifications, alerts, and
-      informational content. Similar to PrimeNG's p-message component.
+      Inline message component for displaying alerts, notifications, and
+      contextual feedback.
     </p>
   </header>
 
   <div class="cards-container">
-    <!-- All Severity Types -->
+    <!-- Severities -->
     <app-demo-card
-      [title]="'Message Severities'"
-      [sourceCode]="codeExamples.allSeverities"
+      [title]="'Severities'"
+      [sourceCode]="codeExamples.severities"
     >
       <div class="message-examples">
         <i-message severity="success">
-          <strong>Success!</strong> Operation completed successfully.
+          <strong>Success!</strong> Your changes have been saved.
         </i-message>
-
         <i-message severity="info">
-          <strong>Information:</strong> Here is some helpful information for you.
+          <strong>Tip:</strong> You can customize your dashboard in settings.
         </i-message>
-
         <i-message severity="warning">
-          <strong>Warning!</strong> Please review your input before proceeding.
+          <strong>Warning:</strong> Your session will expire in 5 minutes.
         </i-message>
-
         <i-message severity="danger">
-          <strong>Error!</strong> Something went wrong. Please try again.
-        </i-message>
-
-        <i-message severity="primary">
-          <strong>Important:</strong> This is a primary message with important information.
+          <strong>Error:</strong> Failed to connect. Please check your network.
         </i-message>
       </div>
     </app-demo-card>
 
-    <!-- Basic Usage -->
-    <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
+    <!-- Sizes -->
+    <app-demo-card [title]="'Sizes'" [sourceCode]="codeExamples.sizes">
       <div class="message-examples">
-        <i-message severity="info">
-          All components automatically use these CSS variables, so changing the
-          theme is as simple as switching the body class!
+        <i-message severity="info" size="small">
+          <strong>Small:</strong> Compact message for inline hints.
         </i-message>
-
-        <i-message severity="warning">
-          <strong>Important:</strong> Use the exact variable names shown above.
-          The components depend on these specific names.
+        <i-message severity="info" size="medium">
+          <strong>Medium:</strong> Default size for standard alerts.
         </i-message>
-
-        <i-message severity="success">
-          That's it! Your app now supports light and dark themes.
+        <i-message severity="info" size="large">
+          <strong>Large:</strong> Prominent message for important announcements.
         </i-message>
       </div>
     </app-demo-card>
 
-    <!-- Closable Messages -->
+    <!-- Closable -->
     <app-demo-card
       [title]="'Closable Messages'"
       [sourceCode]="codeExamples.closable"
@@ -66,24 +55,26 @@
           [closable]="true"
           [(visible)]="showClosableInfo"
         >
-          This info message can be closed by clicking the X button.
+          Click the X to dismiss this info message.
         </i-message>
-
         <i-message
           severity="warning"
           [closable]="true"
           [(visible)]="showClosableWarning"
         >
-          This warning message is also closable.
+          This warning can also be dismissed.
         </i-message>
-
-        @if (!showClosableInfo || !showClosableWarning) {
-          <button
-            class="reset-button"
-            (click)="resetClosableMessages()"
-          >
-            Reset Closed Messages
-          </button>
+        <i-message
+          severity="danger"
+          [closable]="true"
+          [(visible)]="showClosableDanger"
+        >
+          Critical alerts can be closable too.
+        </i-message>
+        @if (!showClosableInfo || !showClosableWarning || !showClosableDanger) {
+        <button class="reset-button" (click)="resetClosableMessages()">
+          Reset Messages
+        </button>
         }
       </div>
     </app-demo-card>
@@ -95,16 +86,31 @@
     >
       <div class="message-examples">
         <i-message severity="primary" icon="pi pi-star">
-          <strong>Pro Tip:</strong> You can customize these colors to match your
-          brand. Just make sure to keep the variable names the same!
+          <strong>Featured:</strong> Check out our new premium features.
         </i-message>
-
         <i-message severity="info" icon="pi pi-bolt">
-          Custom icon example with a lightning bolt icon.
+          <strong>Quick Tip:</strong> Use keyboard shortcuts for faster
+          navigation.
         </i-message>
-
         <i-message severity="success" icon="pi pi-thumbs-up">
-          Great job! You've customized the icon.
+          <strong>Great job!</strong> You've completed all tasks.
+        </i-message>
+      </div>
+    </app-demo-card>
+
+    <!-- Rich Content -->
+    <app-demo-card
+      [title]="'Rich Content'"
+      [sourceCode]="codeExamples.richContent"
+    >
+      <div class="message-examples">
+        <i-message severity="warning">
+          <strong>Action Required:</strong> Please update your payment method
+          before <em>December 1st</em> to avoid service interruption.
+        </i-message>
+        <i-message severity="info">
+          Need help? Visit our <strong>documentation</strong> or contact
+          <em>support&#64;example.com</em> for assistance.
         </i-message>
       </div>
     </app-demo-card>

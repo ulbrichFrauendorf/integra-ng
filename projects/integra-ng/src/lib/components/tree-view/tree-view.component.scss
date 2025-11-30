@@ -5,7 +5,7 @@
 @include theme.i-tree-view-theme();
 
 .i-tree-view-wrapper {
-  padding: 8px 0 0px 8px;
+  padding: 8px 0 0 8px;
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
@@ -80,6 +80,10 @@
     outline: none;
   }
 
+  &.i-tree-view-node--temporary-highlight .i-tree-view-node-content {
+    animation: highlight-fade 700ms ease-out;
+  }
+
   .i-tree-view-node-content {
     display: flex;
     align-items: center;
@@ -88,12 +92,6 @@
     border-radius: vars.$componentBorderRadius;
     transition: all 0.15s ease;
     min-height: 32px;
-  }
-
-  &.i-tree-view-node--temporary-highlight {
-    .i-tree-view-node-content {
-      animation: highlight-fade 700ms ease-out;
-    }
   }
 
   .i-tree-view-toggler {

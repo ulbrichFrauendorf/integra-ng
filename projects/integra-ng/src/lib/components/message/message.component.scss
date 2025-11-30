@@ -13,49 +13,97 @@
     margin-bottom: 0;
   }
 
-  .i-message-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 16px;
-    width: 100%;
-  }
+  &--small .i-message-content {
+    gap: 8px;
+    padding: 8px 12px;
 
-  .i-message-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
+    .i-message-icon i {
+      font-size: 14px;
+    }
 
-    i {
-      font-size: 18px;
+    .i-message-text {
+      font-size: 0.95em;
+    }
+
+    .i-message-close {
+      padding: 2px;
+
+      i {
+        font-size: 10px;
+      }
     }
   }
 
-  .i-message-text {
-    flex: 1;
-    font-size: 1em;
-    line-height: 1.5;
-    min-width: 0;
-    word-wrap: break-word;
+  &--medium .i-message-content {
+    gap: 12px;
+    padding: 16px;
+
+    .i-message-icon i {
+      font-size: 18px;
+    }
+
+    .i-message-text {
+      font-size: 1em;
+    }
+
+    .i-message-close i {
+      font-size: 12px;
+    }
   }
 
-  .i-message-close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: vars.$borderRadius;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
-    transition: background-color 0.2s, color 0.2s;
+  &--large .i-message-content {
+    gap: 16px;
+    padding: 20px 24px;
 
-    i {
-      font-size: 12px;
+    .i-message-icon i {
+      font-size: 24px;
+    }
+
+    .i-message-text {
+      font-size: 1.1em;
+    }
+
+    .i-message-close {
+      padding: 6px;
+
+      i {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .i-message-content {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+
+    .i-message-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .i-message-text {
+      flex: 1;
+      line-height: 1.5;
+      min-width: 0;
+      word-wrap: break-word;
+    }
+
+    .i-message-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: vars.$borderRadius;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: background-color 0.2s, color 0.2s;
     }
   }
 }

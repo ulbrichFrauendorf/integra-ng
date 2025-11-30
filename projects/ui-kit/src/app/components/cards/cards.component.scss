@@ -4,8 +4,25 @@
   @extend .demo-component;
 }
 
+.demo-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
 .card-example {
   margin-bottom: 20px;
+}
+
+.full-height-container {
+  height: 250px;
+  border: 2px dashed var(--surface-400, #9ca3af);
+  border-radius: 8px;
+  padding: 8px;
 }
 
 .closed-message {

@@ -4,7 +4,6 @@
 
 @include theme.i-multi-select-theme();
 
-// SCSS variables
 $multi-select-transition: 0.15s ease;
 $multi-select-dropdown-max-height: 160px;
 $multi-select-dropdown-viewport-margin: 150px;
@@ -17,19 +16,16 @@ $multi-select-dropdown-viewport-margin: 150px;
     width: 100%;
   }
 
-  // Input container
   .i-multi-select-input-container {
     position: relative;
     cursor: pointer;
 
-    // Chips component
     .i-multi-select-chips {
       position: relative;
       min-height: 56px;
       cursor: pointer;
     }
 
-    // Icons overlay
     .i-multi-select-icons-overlay {
       position: absolute;
       top: 18%;
@@ -58,7 +54,6 @@ $multi-select-dropdown-viewport-margin: 150px;
       }
     }
 
-    // Error message
     .i-multi-select-error {
       margin-top: 4px;
       font-size: 1em;
@@ -66,7 +61,6 @@ $multi-select-dropdown-viewport-margin: 150px;
     }
   }
 
-  // Dropdown
   .i-multi-select-dropdown {
     position: absolute;
     top: 100%;
@@ -79,7 +73,6 @@ $multi-select-dropdown-viewport-margin: 150px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: visible;
 
-    // Filter section
     .i-multi-select-filter {
       padding: 8px;
 
@@ -93,7 +86,6 @@ $multi-select-dropdown-viewport-margin: 150px;
       }
     }
 
-    // Options list
     .i-multi-select-options {
       max-height: min(
         $multi-select-dropdown-max-height,
@@ -105,7 +97,6 @@ $multi-select-dropdown-viewport-margin: 150px;
       border-radius: 0 0 vars.$componentBorderRadius vars.$componentBorderRadius;
       @include scrollbar.dropdown-scrollbar();
 
-      // Individual option
       .i-multi-select-option {
         display: flex;
         align-items: center;
@@ -128,7 +119,6 @@ $multi-select-dropdown-viewport-margin: 150px;
         }
       }
 
-      // No options message
       .i-multi-select-no-options {
         padding: 12px;
         font-style: italic;
