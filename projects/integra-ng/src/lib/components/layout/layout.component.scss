@@ -18,6 +18,7 @@
         overflow-y: auto;
         transition: transform 0.3s ease, opacity 0.3s ease;
         opacity: 1;
+        @include scrollbar.themed-scrollbar();
 
         &.sidebar-open {
           transform: translateX(0);

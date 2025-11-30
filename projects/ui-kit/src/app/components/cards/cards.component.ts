@@ -15,7 +15,7 @@ import {
 })
 export class CardsComponent {
   private cdr = inject(ChangeDetectorRef);
-  
+
   onSubmit() {
     throw new Error('Method not implemented.');
   }
@@ -111,7 +111,7 @@ export class CardsComponent {
     this.showClosableCard = false;
     this.cdr.detectChanges();
     console.log('Card closed, will reappear in 3 seconds');
-    
+
     // Reset after 3 seconds for demo purposes
     setTimeout(() => {
       this.showClosableCard = true;

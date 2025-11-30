@@ -11,6 +11,8 @@ import {
   SortEvent,
   TableAction,
   TableColumn,
+  TableGroup,
+  TableDownloadEvent,
 } from '@shared/components/table/table.component';
 import { IWhisper } from '../../../../../integra-ng/src/lib/components/whisper/whisper.component';
 import { WhisperService } from '../../../../../integra-ng/src/lib/components/whisper/services/whisper.service';
@@ -220,9 +222,86 @@ export class TablesComponent {
     },
   ];
 
+  // View action only (for grouped data)
+  viewActions: TableAction[] = [
+    { id: 'view', icon: 'pi pi-eye', severity: 'info' },
+  ];
+
   // Selection state
   selectedProducts: Product[] = [];
   singleSelectedProduct: Product[] = [];
+
+  // Grouped data for grouped table demo
+  groupedProducts: TableGroup[] = [
+    {
+      label: 'Electronics',
+      data: this.products.filter((p) => p.category === 'Electronics'),
+      expanded: true,
+    },
+    {
+      label: 'Accessories',
+      data: this.products.filter((p) => p.category === 'Accessories'),
+      expanded: true,
+    },
+    {
+      label: 'Audio',
+      data: this.products.filter((p) => p.category === 'Audio'),
+      expanded: false,
+    },
+    {
+      label: 'Storage',
+      data: this.products.filter((p) => p.category === 'Storage'),
+      expanded: false,
+    },
+    {
+      label: 'Office',
+      data: this.products.filter((p) => p.category === 'Office'),
+      expanded: false,
+    },
+  ];
+
+  // Grouped data with custom columns per group
+  groupedProductsCustomColumns: TableGroup[] = [
+    {
+      label: 'High Value Items (>$100)',
+      columns: [
+        { field: 'name', header: 'Product', sortable: true },
+        { field: 'price', header: 'Price', type: 'currency', align: 'right' },
+        { field: 'status', header: 'Availability' },
+      ],
+      data: this.products.filter((p) => p.price > 100),
+      expanded: true,
+    },
+    {
+      label: 'Budget Items (<$100)',
+      columns: [
+        { field: 'name', header: 'Product', sortable: true },
+        { field: 'price', header: 'Price', type: 'currency', align: 'right' },
+        { field: 'quantity', header: 'Stock', type: 'number' },
+      ],
+      data: this.products.filter((p) => p.price <= 100),
+      expanded: true,
+    },
+  ];
+
+  // Grouped data with actions for full featured example
+  groupedProductsWithActions: TableGroup[] = [
+    {
+      label: 'Electronics',
+      data: this.products.filter((p) => p.category === 'Electronics'),
+      expanded: true,
+    },
+    {
+      label: 'Accessories',
+      data: this.products.filter((p) => p.category === 'Accessories'),
+      expanded: true,
+    },
+    {
+      label: 'Audio',
+      data: this.products.filter((p) => p.category === 'Audio'),
+      expanded: true,
+    },
+  ];
 
   // Code examples
   codeExamples = {
@@ -295,12 +374,125 @@ tableActions: TableAction[] = [
   [(selection)]="selectedProducts"
   [showActions]="true"
   [actions]="tableActions"
+  [downloadable]="true"
+  downloadMode="direct"
+  downloadFormat="csv"
+  downloadFilename="products-full"
   [striped]="true"
   [hoverable]="true"
   (onSort)="onSort($event)"
   (onFilter)="onFilter($event)"
-  (onAction)="handleAction($event)">
+  (onSelectionChange)="onSelectionChange($event)"
+  (onAction)="handleAction($event)"
+>
+  <div header>
+    <i class="pi pi-box" style="font-size: 1.25rem; color: var(--color-primary);"></i>
+    <h3 style="margin: 0 0 0 8px">Product Inventory - Full</h3>
+  </div>
 </i-table>`,
+
+    grouped: `<i-table
+  [groupedData]="groupedProducts"
+  [columns]="basicColumns"
+  [sortable]="true"
+  [striped]="true">
+</i-table>
+
+// TypeScript
+groupedProducts: TableGroup[] = [
+  {
+    label: 'Electronics',
+    data: this.products.filter(p => p.category === 'Electronics'),
+    expanded: true
+  },
+  {
+    label: 'Accessories',
+    data: this.products.filter(p => p.category === 'Accessories'),
+    expanded: false
+  }
+];`,
+
+    groupedCustomColumns: `<i-table
+  [groupedData]="groupedProductsCustomColumns"
+  [striped]="true">
+</i-table>
+
+// TypeScript - Each group can have its own columns
+groupedProductsCustomColumns: TableGroup[] = [
+  {
+    label: 'High Value Items (>$100)',
+    columns: [
+      { field: 'name', header: 'Product' },
+      { field: 'price', header: 'Price', type: 'currency' }
+    ],
+    data: this.products.filter(p => p.price > 100),
+    expanded: true
+  }
+];`,
+
+    groupedWithActions: `<i-table
+  [groupedData]="groupedProductsWithActions"
+  [columns]="basicColumns"
+  [sortable]="true"
+  [showActions]="true"
+  [actions]="viewActions"
+  [striped]="true"
+  (onAction)="handleAction($event)">
+</i-table>
+
+// TypeScript
+groupedProductsWithActions: TableGroup[] = [
+  {
+    label: 'Electronics',
+    data: this.products.filter(p => p.category === 'Electronics'),
+    expanded: true,
+  },
+  {
+    label: 'Accessories',
+    data: this.products.filter(p => p.category === 'Accessories'),
+    expanded: true,
+  },
+];
+
+viewActions: TableAction[] = [
+  { id: 'view', icon: 'pi pi-eye', severity: 'info' },
+];`,
+
+    customHeader: `<i-table
+  [data]="products"
+  [columns]="basicColumns"
+  [globalFilter]="true"
+  [downloadable]="true">
+  <div header>
+    <h3>Product Inventory</h3>
+  </div>
+</i-table>`,
+
+    download: `<i-table
+  [data]="products"
+  [columns]="fullColumns"
+  [downloadable]="true"
+  downloadMode="direct"
+  downloadFormat="csv"
+  downloadFilename="products">
+</i-table>`,
+
+    downloadApi: `<i-table
+  [data]="products"
+  [columns]="fullColumns"
+  [downloadable]="true"
+  downloadMode="api"
+  (onDownload)="handleDownload($event)">
+</i-table>
+
+// TypeScript
+handleDownload(event: TableDownloadEvent): void {
+  // Call your API to generate the file
+  this.api.downloadReport(event.data, event.format)
+    .subscribe(blob => {
+      // Handle the downloaded file
+    });
+}`,
   };
 
   // TypeScript initialization example
@@ -347,6 +539,21 @@ export class ExampleComponent {
       title: 'Row Actions',
       description:
         'Configurable action buttons per row with conditional disable support',
+    },
+    {
+      title: 'Grouped Data',
+      description:
+        'Support for nested/grouped data with expandable groups and custom columns per group',
+    },
+    {
+      title: 'Custom Header Content',
+      description:
+        'Add custom content to the table header using ng-content, with search and download on the right',
+    },
+    {
+      title: 'Download Functionality',
+      description:
+        'Export table data to CSV, JSON, or Excel formats with direct download or API integration',
     },
     {
       title: 'Visual Customization',
@@ -406,5 +613,20 @@ export class ExampleComponent {
         });
         break;
     }
+  }
+
+  handleDownload(event: TableDownloadEvent): void {
+    console.log('Download requested', event);
+    this.whisperService.add({
+      severity: 'info',
+      summary: 'Download Started',
+      detail: `Downloading ${
+        event.data.length
+      } records as ${event.format.toUpperCase()}`,
+      key: 'global',
+      life: 3000,
+    });
+    // In a real app, you would call your API here
+    // this.api.downloadReport(event.data, event.format).subscribe(...)
   }
 }

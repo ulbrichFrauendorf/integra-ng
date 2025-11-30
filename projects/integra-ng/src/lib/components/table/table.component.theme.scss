@@ -111,6 +111,50 @@
             background: colors.$color-surface-ground;
           }
         }
+
+        // Grouped data styles
+        .i-table-group-header {
+          background: colors.$color-surface-section;
+          border-bottom: 2px solid colors.$color-surface-border;
+
+          td {
+            color: colors.$color-text-primary;
+          }
+
+          &:hover {
+            background: colors.$color-surface-hover;
+          }
+
+          .i-table-group-toggle-icon {
+            color: colors.$color-text-secondary;
+          }
+
+          .i-table-group-count {
+            color: colors.$color-text-secondary;
+          }
+        }
+
+        .i-table-group-columns-header {
+          background: colors.$color-surface-ground;
+          border-bottom: 1px solid colors.$color-surface-border;
+
+          th {
+            color: colors.$color-text-primary;
+            border-bottom: 1px solid colors.$color-surface-border;
+          }
+        }
+
+        .i-table-group-row {
+          background: colors.$color-component-background;
+
+          &.i-table-row-odd {
+            background: colors.$color-surface-ground;
+          }
+
+          &.i-table-row-selected {
+            background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.1);
+          }
+        }
       }
     }
 
@@ -128,7 +172,7 @@
 
     // Hoverable variant
     &.i-table--hoverable {
-      table tbody tr:not(.i-table-empty-row):not(.i-table-expanded-row) {
+      table tbody tr:not(.i-table-empty-row):not(.i-table-expanded-row):not(.i-table-group-header):not(.i-table-group-columns-header) {
         &:hover {
           background: colors.$color-surface-hover;
         }

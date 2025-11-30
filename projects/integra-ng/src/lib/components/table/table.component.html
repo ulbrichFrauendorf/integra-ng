@@ -1,16 +1,34 @@
 <div class="i-table-wrapper" [ngClass]="getTableClasses()">
-  <!-- Global Filter -->
-  @if (globalFilter) {
+  <!-- Table Header with ng-content, search, and download -->
+  @if (globalFilter || downloadable) {
   <div class="i-table-header">
-    <div class="i-table-global-filter">
-      <i-input-text
-        [useFloatLabel]="false"
-        placeholder="Search..."
-        [ngModel]="globalFilterValue()"
-        (ngModelChange)="onGlobalFilterInput($event)"
-        [fluid]="false"
-        [icon]="'pi pi-search'"
-      ></i-input-text>
+    <div class="i-table-header-start">
+      <ng-content select="[header]"></ng-content>
+    </div>
+    <div class="i-table-header-end">
+      @if (globalFilter) {
+      <div class="i-table-global-filter">
+        <i-input-text
+          [useFloatLabel]="false"
+          placeholder="Search..."
+          [ngModel]="globalFilterValue()"
+          (ngModelChange)="onGlobalFilterInput($event)"
+          [fluid]="false"
+          [icon]="'pi pi-search'"
+        ></i-input-text>
+      </div>
+      } @if (downloadable) {
+      <div class="i-table-download">
+        <i-button
+          severity="secondary"
+          [text]="true"
+          size="small"
+          icon="pi pi-download"
+          label="Download"
+          (clicked)="handleDownload()"
+        ></i-button>
+      </div>
+      }
     </div>
   </div>
   }
@@ -62,9 +80,9 @@
           @if (selectionMode === 'multiple') {
           <th class="i-table-selection-header">
             <i-checkbox
-              [ngModel]="areAllRowsSelected()"
+              [checked]="areAllRowsSelected()"
               [indeterminate]="areSomeRowsSelected()"
-              (ngModelChange)="toggleAllSelection()"
+              (onChange)="toggleAllSelection()"
             ></i-checkbox>
           </th>
           } @if (rowExpandable) {
@@ -96,7 +114,149 @@
         </tr>
       </thead>
 
-      <!-- Table Body -->
+      <!-- Table Body - Grouped Mode -->
+      @if (isGroupedMode()) {
+      <tbody>
+        @for (group of groupedData(); track $index) {
+        <!-- Group Header Row -->
+        <tr class="i-table-group-header" [ngClass]="group.styleClass">
+          <td
+            [attr.colspan]="
+              (getGroupColumns(group).length || columns().length) +
+              (selectionMode === 'multiple' ? 1 : 0) +
+              (rowExpandable ? 1 : 0) +
+              (showActions && actions.length > 0 ? 1 : 0)
+            "
+            (click)="toggleGroupExpansion(group.label)"
+          >
+            <div class="i-table-group-header-content">
+              <i
+                [class]="
+                  isGroupExpanded(group.label)
+                    ? 'pi pi-chevron-down'
+                    : 'pi pi-chevron-right'
+                "
+                class="i-table-group-toggle-icon"
+              ></i>
+              <span class="i-table-group-label">{{ group.label }}</span>
+              <span class="i-table-group-count">({{ group.data.length }})</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Group Column Headers (when expanded) -->
+        @if (isGroupExpanded(group.label) && group.columns) {
+        <tr class="i-table-group-columns-header">
+          @if (selectionMode === 'multiple') {
+          <th class="i-table-selection-header"></th>
+          } @if (rowExpandable) {
+          <th class="i-table-expand-header"></th>
+          } @for (column of getGroupColumns(group); track trackByColumn($index,
+          column)) {
+          <th
+            [style.width]="getColumnWidth(column)"
+            [style.text-align]="column.align || 'left'"
+          >
+            {{ column.header }}
+          </th>
+          } @if (showActions && actions.length > 0) {
+          <th class="i-table-actions-header">Actions</th>
+          }
+        </tr>
+        }
+
+        <!-- Group Data Rows (when expanded) -->
+        @if (isGroupExpanded(group.label)) { @if (group.data.length === 0) {
+        <tr class="i-table-empty-row">
+          <td
+            [attr.colspan]="
+              (getGroupColumns(group).length || columns().length) +
+              (selectionMode === 'multiple' ? 1 : 0) +
+              (rowExpandable ? 1 : 0) +
+              (showActions && actions.length > 0 ? 1 : 0)
+            "
+          >
+            <i-empty-state-table></i-empty-state-table>
+          </td>
+        </tr>
+        } @else { @for (row of group.data; track trackByRow($index, row)) {
+        <tr
+          class="i-table-group-row"
+          [class.i-table-row-odd]="$odd"
+          [class.i-table-row-selected]="isRowSelected(row)"
+          (click)="toggleRowSelection(row)"
+        >
+          @if (selectionMode === 'multiple') {
+          <td class="i-table-selection-cell">
+            <i-checkbox
+              [checked]="isRowSelected(row)"
+              (onChange)="toggleRowSelection(row)"
+              (click)="$event.stopPropagation()"
+            ></i-checkbox>
+          </td>
+          } @if (rowExpandable) {
+          <td class="i-table-expand-cell">
+            <i-button
+              severity="secondary"
+              [text]="true"
+              size="small"
+              [icon]="
+                isRowExpanded(row)
+                  ? 'pi pi-chevron-down'
+                  : 'pi pi-chevron-right'
+              "
+              (clicked)="toggleRowExpansion(row, $event)"
+            ></i-button>
+          </td>
+          } @for (column of getGroupColumns(group); track trackByColumn($index,
+          column)) {
+          <td
+            [style.text-align]="column.align || 'left'"
+            [style.width]="getColumnWidth(column)"
+          >
+            {{ formatCellValue(getCellValue(row, column.field), column) }}
+          </td>
+          } @if (showActions && actions.length > 0) {
+          <td class="i-table-actions-cell">
+            <div class="i-table-actions">
+              @for (action of actions; track action.id) {
+              <i-button
+                [severity]="action.severity || 'secondary'"
+                [text]="true"
+                size="small"
+                [icon]="action.icon || ''"
+                [disabled]="isActionDisabled(action, row)"
+                (clicked)="onActionClick(action, row, $event)"
+              >
+                @if (action.label) {
+                {{ action.label }}
+                }
+              </i-button>
+              }
+            </div>
+          </td>
+          }
+        </tr>
+        <!-- Expanded Row Content -->
+        @if (rowExpandable && isRowExpanded(row)) {
+        <tr class="i-table-expanded-row">
+          <td
+            [attr.colspan]="
+              (getGroupColumns(group).length || columns().length) +
+              (selectionMode === 'multiple' ? 1 : 0) +
+              1 +
+              (showActions && actions.length > 0 ? 1 : 0)
+            "
+          >
+            <div class="i-table-expanded-content">
+              <pre>{{ row | json }}</pre>
+            </div>
+          </td>
+        </tr>
+        } } } } }
+      </tbody>
+      } @else {
+      <!-- Table Body - Regular Mode -->
       <tbody>
         @if (processedData().length === 0) {
         <tr class="i-table-empty-row">
@@ -121,8 +281,9 @@
           @if (selectionMode === 'multiple') {
           <td class="i-table-selection-cell">
             <i-checkbox
-              [ngModel]="isRowSelected(row)"
-              (ngModelChange)="toggleRowSelection(row, $event)"
+              [checked]="isRowSelected(row)"
+              (onChange)="toggleRowSelection(row)"
+              (click)="$event.stopPropagation()"
             ></i-checkbox>
           </td>
           } @if (rowExpandable) {
@@ -185,6 +346,7 @@
         </tr>
         } } }
       </tbody>
+      }
     </table>
   </div>
 </div>

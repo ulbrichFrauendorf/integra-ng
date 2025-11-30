@@ -1,8 +1,5 @@
-@use "../../../themes/scrollbar-mixins.scss" as scrollbar;
-
 .sidebar {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   user-select: none;
@@ -11,7 +8,6 @@
   padding: 24px 12px 40px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.02), 0 0 2px rgba(0, 0, 0, 0.05),
     0 1px 4px rgba(0, 0, 0, 0.08);
-  @include scrollbar.themed-scrollbar();
 
   .sidebar-mobile-header {
     display: none;
@@ -28,6 +24,7 @@
   }
 
   @media (max-width: 991px) {
+    height: 100%;
     padding: 0;
 
     .sidebar-mobile-header {
