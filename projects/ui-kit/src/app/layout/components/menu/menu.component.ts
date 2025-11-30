@@ -35,6 +35,11 @@ export class MenuComponent implements OnInit {
         label: 'UI Components',
         items: [
           {
+            label: 'Layouts',
+            icon: 'pi pi-fw pi-objects-column',
+            routerLink: ['/components/layouts'],
+          },
+          {
             label: 'Accordions',
             icon: 'pi pi-fw pi-list',
             routerLink: ['/components/accordions'],

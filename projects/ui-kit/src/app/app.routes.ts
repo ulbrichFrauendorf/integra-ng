@@ -25,6 +25,7 @@ import { PanelsComponent } from './components/panels/panels.component';
 import { PlaceholdersComponent } from './components/placeholders/placeholders.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { ComponentInteractionsComponent } from './components/component-interactions/component-interactions.component';
+import { LayoutsComponent } from './components/layouts/layouts.component';
 
 export const routes: Routes = [
   {
@@ -76,6 +77,7 @@ export const routes: Routes = [
             path: 'component-interactions',
             component: ComponentInteractionsComponent,
           },
+          { path: 'layouts', component: LayoutsComponent },
           { path: '', redirectTo: 'installation', pathMatch: 'full' },
         ],
       },
