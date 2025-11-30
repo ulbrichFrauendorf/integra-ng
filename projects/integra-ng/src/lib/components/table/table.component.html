@@ -192,6 +192,7 @@
                 <i-checkbox
                   [ngModel]="isRowSelected(row)"
                   (ngModelChange)="toggleRowSelection(row, $event)"
+                  (click)="$event.stopPropagation()"
                 ></i-checkbox>
               </td>
               } @if (rowExpandable) {
@@ -286,6 +287,7 @@
             <i-checkbox
               [ngModel]="isRowSelected(row)"
               (ngModelChange)="toggleRowSelection(row, $event)"
+              (click)="$event.stopPropagation()"
             ></i-checkbox>
           </td>
           } @if (rowExpandable) {
