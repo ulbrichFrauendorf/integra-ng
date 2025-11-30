@@ -80,9 +80,9 @@
           @if (selectionMode === 'multiple') {
           <th class="i-table-selection-header">
             <i-checkbox
-              [ngModel]="areAllRowsSelected()"
+              [checked]="areAllRowsSelected()"
               [indeterminate]="areSomeRowsSelected()"
-              (ngModelChange)="toggleAllSelection()"
+              (onChange)="toggleAllSelection()"
             ></i-checkbox>
           </th>
           } @if (rowExpandable) {
@@ -189,8 +189,8 @@
           @if (selectionMode === 'multiple') {
           <td class="i-table-selection-cell">
             <i-checkbox
-              [ngModel]="isRowSelected(row)"
-              (ngModelChange)="toggleRowSelection(row, $event)"
+              [checked]="isRowSelected(row)"
+              (onChange)="toggleRowSelection(row)"
               (click)="$event.stopPropagation()"
             ></i-checkbox>
           </td>
@@ -281,8 +281,8 @@
           @if (selectionMode === 'multiple') {
           <td class="i-table-selection-cell">
             <i-checkbox
-              [ngModel]="isRowSelected(row)"
-              (ngModelChange)="toggleRowSelection(row, $event)"
+              [checked]="isRowSelected(row)"
+              (onChange)="toggleRowSelection(row)"
               (click)="$event.stopPropagation()"
             ></i-checkbox>
           </td>
