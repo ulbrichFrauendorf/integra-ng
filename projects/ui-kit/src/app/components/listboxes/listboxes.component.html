@@ -182,6 +182,26 @@
       </div>
     </app-demo-card>
 
+    <!-- Constrained Height -->
+    <app-demo-card
+      class="constrained-demo-card"
+      [title]="'Constrained Height Container (500px)'"
+      [sourceCode]="codeExamples.constrained"
+    >
+      <div class="wrapper">
+        <i-listbox
+          title="Items (50 total)"
+          [options]="largeDataset"
+          optionLabel="name"
+          optionValue="id"
+          [multiple]="false"
+          [filter]="true"
+          [showClear]="true"
+          [(ngModel)]="selectedLargeItems"
+        ></i-listbox>
+      </div>
+    </app-demo-card>
+
     <!-- Features -->
     <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>

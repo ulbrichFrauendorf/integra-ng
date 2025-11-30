@@ -3,3 +3,10 @@
 .listboxes-demo {
   @extend .demo-component;
 }
+
+.wrapper {
+  height: 500px;
+  overflow: auto;
+  /* ensure the inner listbox fills the wrapper and scrolls */
+  display: block;
+}
