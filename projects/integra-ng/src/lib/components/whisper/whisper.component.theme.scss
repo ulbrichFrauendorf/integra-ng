@@ -50,5 +50,41 @@
         color: colors.$color-danger;
       }
     }
+
+    // Primary messages
+    &.i-whisper-message-primary {
+      border-left-color: colors.$color-primary;
+
+      .i-whisper-message-icon {
+        color: colors.$color-primary;
+      }
+    }
+
+    // Secondary messages
+    &.i-whisper-message-secondary {
+      border-left-color: colors.$color-secondary;
+
+      .i-whisper-message-icon {
+        color: colors.$color-secondary;
+      }
+    }
+
+    // Tertiary messages
+    &.i-whisper-message-tertiary {
+      border-left-color: colors.$color-text-tertiary;
+
+      .i-whisper-message-icon {
+        color: colors.$color-text-tertiary;
+      }
+    }
+
+    // Contrast messages
+    &.i-whisper-message-contrast {
+      border-left-color: colors.$color-contrast;
+
+      .i-whisper-message-icon {
+        color: colors.$color-contrast;
+      }
+    }
   }
 }

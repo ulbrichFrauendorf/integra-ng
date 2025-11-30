@@ -6,6 +6,7 @@
   @if $mode == light {
     .light {
       --color-primary: #{color.get-color("orange", 500)};
+      --color-secondary: #{color.get-color("gray", 700)};
       --color-success: #{color.get-color("green", 500)};
       --color-info: #{color.get-color("sky", "dark")};
       --color-warning: #{color.get-color("yellow", 500)};
@@ -39,6 +40,7 @@
   } @else if $mode == dark {
     .dark {
       --color-primary: #{color.get-color("yellow", 500)};
+      --color-secondary: #{color.get-color("gray", 300)};
       --color-success: #{color.get-color("green", 400)};
       --color-info: #{color.get-color("sky", "base")};
       --color-warning: #{color.get-color("yellow", 400)};

@@ -135,6 +135,11 @@ export class MenuComponent implements OnInit {
             routerLink: ['/components/panels'],
           },
           {
+            label: 'Placeholders',
+            icon: 'pi pi-fw pi-stop',
+            routerLink: ['/components/placeholders'],
+          },
+          {
             label: 'Whispers',
             icon: 'pi pi-fw pi-comment',
             routerLink: ['/components/whispers'],

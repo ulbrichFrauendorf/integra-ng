@@ -22,6 +22,7 @@ import { InstallationComponent } from './components/installation/installation.co
 import { ThemingComponent } from './components/theming/theming.component';
 import { TablesComponent } from './components/tables/tables.component';
 import { PanelsComponent } from './components/panels/panels.component';
+import { PlaceholdersComponent } from './components/placeholders/placeholders.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { ComponentInteractionsComponent } from './components/component-interactions/component-interactions.component';
 
@@ -65,6 +66,7 @@ export const routes: Routes = [
           { path: 'listboxes', component: ListboxesComponent },
           { path: 'messages', component: MessagesComponent },
           { path: 'panels', component: PanelsComponent },
+          { path: 'placeholders', component: PlaceholdersComponent },
           { path: 'tree-views', component: TreeViewsComponent },
           { path: 'tabs', component: TabsComponent },
           { path: 'whispers', component: WhispersComponent },

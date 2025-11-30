@@ -62,6 +62,15 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     { name: 'Australia', code: 'AU' },
   ];
 
+  // Large dataset for constrained height demo (50 items)
+  largeDataset = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Item ${i + 1}`,
+  }));
+
+  // Selected model for constrained large dataset demo
+  selectedLargeItems: number | null = null;
+
   // Tasks data with icons
   tasks = [
     { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
@@ -357,6 +366,22 @@ users = [
   [disabled]="true"
   [ngModel]="['US', 'CA']">
 </i-listbox>`,
+
+    constrained: `// Constrained container example (500px height)
+// Provide a wrapper with a fixed height and allow the listbox to scroll.
+
+<div class="wrapper">
+  <i-listbox
+    title="Items (50 total)"
+    [options]="largeDataset"
+    optionLabel="name"
+    optionValue="id"
+    [multiple]="false"
+    [filter]="true"
+    [showClear]="true"
+    [(ngModel)]="selectedLargeItems"
+  ></i-listbox>
+</div>`,
 
     reactive: `// Component setup with reactive forms and observable data
 departmentsForm = this.fb.group({
