@@ -953,7 +953,12 @@ export class ITable {
    */
   private downloadCSV(data: any[], columns: TableColumn[], filename: string, extension: string = 'csv'): void {
     // Create CSV header
-    const headers = columns.map(col => col.header).join(',');
+    const headers = columns.map(col => {
+      const escaped = String(col.header).replace(/"/g, '""');
+      return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')
+        ? `"${escaped}"`
+        : escaped;
+    }).join(',');
 
     // Create CSV rows
     const rows = data.map(row => {
