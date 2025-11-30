@@ -1,0 +1,100 @@
+.layout-topbar {
+  position: relative;
+  height: 5rem;
+  z-index: 997;
+  width: 100%;
+  padding: 0 2rem;
+  background-color: var(--surface-card);
+  transition: left 0.2s;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05),
+    0px 1px 4px rgba(0, 0, 0, 0.08);
+
+  .layout-topbar-logo {
+    display: flex;
+    align-items: center;
+    color: var(--surface-900);
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 50px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+
+    img {
+      height: 2.5rem;
+      margin-right: 0.5rem;
+    }
+
+    &:focus {
+      outline: 0 none;
+      outline-offset: 0;
+      transition: box-shadow 0.2s;
+      box-shadow: inset var(--focus-ring);
+    }
+  }
+
+  .layout-menu-button {
+    margin-left: 2rem;
+  }
+
+  .layout-topbar-menu-button {
+    display: none;
+
+    i {
+      font-size: 1.25rem;
+    }
+  }
+
+  .layout-topbar-menu {
+    gap: 0.5rem;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
+    display: flex;
+  }
+}
+
+@media (max-width: 991px) {
+  .layout-topbar {
+    justify-content: space-between;
+
+    .layout-topbar-logo {
+      width: auto;
+      order: 2;
+    }
+
+    .layout-menu-button {
+      margin-left: 0;
+      order: 1;
+    }
+
+    .layout-topbar-menu-button {
+      display: inline-flex;
+      margin-left: 0;
+      order: 3;
+    }
+
+    .layout-topbar-menu {
+      margin-left: 0;
+      position: absolute;
+      flex-direction: column;
+      background-color: var(--surface-overlay);
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02),
+        0px 0px 2px rgba(0, 0, 0, 0.05), 0px 1px 4px rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      right: 2rem;
+      top: 5rem;
+      display: none;
+      -webkit-animation: scalein 0.15s linear;
+      animation: scalein 0.15s linear;
+      z-index: 1000;
+
+      &.layout-topbar-menu-mobile-active {
+        display: block;
+      }
+    }
+  }
+}
