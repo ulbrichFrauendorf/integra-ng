@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 import { IButton } from '../button/button.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
@@ -50,6 +50,20 @@ export class ICard {
    * @default false
    */
   @Input() closable: boolean = false;
+
+  /**
+   * Whether the card should fill the height of its container
+   * @default false
+   */
+  @Input() fullHeight: boolean = false;
+
+  /**
+   * Host binding for full-height class
+   * @internal
+   */
+  @HostBinding('class.i-card--full-height') get isFullHeight() {
+    return this.fullHeight;
+  }
 
   /**
    * Event emitted when the close button is clicked

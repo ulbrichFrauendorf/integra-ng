@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { ICard } from '../../../../../integra-ng/src/lib/components/card/card.component';
-import { DemoCardComponent } from '../demo-card/demo-card.component';
 import { IDialogActions } from '@shared/components/dialog/inner/dialog-actions/dialog-actions.component';
+import { CodeDisplayComponent } from '../code-display/code-display.component';
 import {
   FeaturesListComponent,
   Feature,
@@ -9,7 +9,7 @@ import {
 
 @Component({
   selector: 'i-cards',
-  imports: [ICard, DemoCardComponent, IDialogActions, FeaturesListComponent],
+  imports: [ICard, IDialogActions, CodeDisplayComponent, FeaturesListComponent],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss',
 })
@@ -56,6 +56,14 @@ export class CardsComponent {
 >
   <p>This card can be closed using the X button.</p>
 </i-card>`,
+
+    fullHeight: `<!-- Container with fixed height -->
+<div style="height: 300px;">
+  <i-card [title]="'Full Height Card'" [fullHeight]="true">
+    <p>This card fills the height of its container.</p>
+    <p>The body area becomes scrollable if content overflows.</p>
+  </i-card>
+</div>`,
   };
 
   features: Feature[] = [
@@ -63,6 +71,11 @@ export class CardsComponent {
       title: 'Flexible Content',
       description:
         'Support for title, subtitle, body, header, and footer slots',
+    },
+    {
+      title: 'Full Height Mode',
+      description:
+        'Set fullHeight to fill parent container height with scrollable body',
     },
     {
       title: 'Closable Cards',

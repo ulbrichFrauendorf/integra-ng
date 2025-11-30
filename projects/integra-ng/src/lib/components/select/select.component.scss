@@ -4,7 +4,6 @@
 
 @include theme.i-select-theme();
 
-// SCSS variables
 $select-transition: 0.15s ease;
 $select-dropdown-max-height: 160px;
 $select-dropdown-viewport-margin: 150px;
@@ -17,17 +16,14 @@ $select-dropdown-viewport-margin: 150px;
     width: 100%;
   }
 
-  // Input container
   .i-select-input-container {
     position: relative;
     cursor: pointer;
 
-    // Readonly input cursor override (needed for proper UX)
     .i-input-text .i-input.readonly {
       cursor: pointer;
     }
 
-    // Icons container
     .i-select-icons {
       position: absolute;
       top: 50%;
@@ -62,7 +58,6 @@ $select-dropdown-viewport-margin: 150px;
     }
   }
 
-  // Dropdown
   .i-select-dropdown {
     position: absolute;
     top: 100%;
@@ -75,7 +70,6 @@ $select-dropdown-viewport-margin: 150px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: visible;
 
-    // Filter section
     .i-select-filter {
       padding: 8px;
 
@@ -89,7 +83,6 @@ $select-dropdown-viewport-margin: 150px;
       }
     }
 
-    // Options list
     .i-select-options {
       max-height: min(
         $select-dropdown-max-height,
@@ -101,7 +94,6 @@ $select-dropdown-viewport-margin: 150px;
       border-radius: 0 0 vars.$componentBorderRadius vars.$componentBorderRadius;
       @include scrollbar.dropdown-scrollbar();
 
-      // Individual option
       .i-select-option {
         padding: 12px;
         font-size: 1em;
@@ -113,7 +105,6 @@ $select-dropdown-viewport-margin: 150px;
         }
       }
 
-      // No options message
       .i-select-no-options {
         padding: 12px;
         font-style: italic;

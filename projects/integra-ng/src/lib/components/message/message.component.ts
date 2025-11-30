@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 
+export type MessageSize = 'small' | 'medium' | 'large';
+
 @Component({
   selector: 'i-message',
   imports: [CommonModule],
@@ -14,6 +16,12 @@ export class IMessage {
    * @default 'info'
    */
   @Input() severity: ISeverity = 'info';
+
+  /**
+   * Size of the message
+   * @default 'medium'
+   */
+  @Input() size: MessageSize = 'medium';
 
   /**
    * Icon to display (Material Icons)

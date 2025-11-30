@@ -15,83 +15,65 @@ import {
   styleUrls: ['./messages.component.scss'],
 })
 export class MessagesComponent {
-  // Message visibility state for closable demo
   showClosableInfo = true;
   showClosableWarning = true;
+  showClosableDanger = true;
 
-  // Code examples
   codeExamples = {
-    basic: `<i-message severity="info">
-  All components automatically use these CSS variables,
-  so changing the theme is as simple as switching the body class!
-</i-message>
+    severities: `<i-message severity="success">Operation completed successfully!</i-message>
+<i-message severity="info">Here's some helpful information.</i-message>
+<i-message severity="warning">Please review before proceeding.</i-message>
+<i-message severity="danger">An error occurred. Please try again.</i-message>`,
 
-<i-message severity="warning">
-  Important: Use the exact variable names shown above.
-</i-message>
+    sizes: `<i-message severity="info" size="small">Small message</i-message>
+<i-message severity="info" size="medium">Medium message (default)</i-message>
+<i-message severity="info" size="large">Large message</i-message>`,
 
-<i-message severity="success">
-  That's it! Your app now supports light and dark themes.
+    closable: `<i-message severity="info" [closable]="true" [(visible)]="showMessage">
+  This message can be dismissed.
 </i-message>`,
 
-    customIcon: `<i-message severity="primary" icon="pi pi-star">
-  Pro Tip: You can customize these colors to match your brand.
-</i-message>`,
+    customIcon: `<i-message severity="primary" icon="pi pi-star">Featured content</i-message>
+<i-message severity="info" icon="pi pi-bolt">Quick tip</i-message>`,
 
-    closable: `<i-message severity="info" [closable]="true">
-  This message can be closed by clicking the X button.
-</i-message>`,
-
-    allSeverities: `<i-message severity="success">
-  Success message - Operation completed successfully
-</i-message>
-
-<i-message severity="info">
-  Info message - Here is some helpful information
-</i-message>
-
-<i-message severity="warning">
-  Warning message - Please review before proceeding
-</i-message>
-
-<i-message severity="danger">
-  Error message - Something went wrong
-</i-message>
-
-<i-message severity="primary">
-  Primary message - Important information
+    richContent: `<i-message severity="warning">
+  <strong>Action Required:</strong> Please update your payment method
+  before <em>December 1st</em> to avoid service interruption.
 </i-message>`,
   };
 
   features: Feature[] = [
     {
       title: 'Multiple Severities',
-      description: 'Success, info, warning, danger, primary, secondary, and contrast message types',
+      description:
+        'Success, info, warning, danger, and primary message types with semantic colors',
     },
     {
-      title: 'Custom Icons',
-      description: 'Override default icons with PrimeIcons',
+      title: 'Three Sizes',
+      description:
+        'Small, medium (default), and large sizes for different contexts',
     },
     {
       title: 'Closable Messages',
-      description: 'Optional close button for dismissible messages',
+      description: 'Optional close button with two-way binding support',
     },
     {
-      title: 'Flexible Content',
-      description: 'Use ng-content for any HTML content inside messages',
+      title: 'Custom Icons',
+      description: 'Override default severity icons with any PrimeIcon',
     },
     {
-      title: 'Themed',
-      description: 'Automatically adapts to light and dark themes',
+      title: 'Rich Content',
+      description: 'Supports HTML content including bold, italic, and links',
     },
     {
       title: 'Accessible',
-      description: 'Includes proper ARIA role for screen readers',
+      description: 'ARIA role="alert" for screen reader announcements',
     },
   ];
 
   resetClosableMessages(): void {
     this.showClosableInfo = true;
     this.showClosableWarning = true;
+    this.showClosableDanger = true;
   }
 }

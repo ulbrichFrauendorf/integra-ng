@@ -16,47 +16,45 @@
   padding: 16px;
   animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity;
-  transform: translateZ(0); // Force GPU acceleration
-}
+  transform: translateZ(0);
 
-.i-dialog-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 90vw;
-  max-height: 80vh;
-  animation: slideInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity;
-  transform: translateZ(0); // Force GPU acceleration
-
-  @media (max-width: 960px) {
-    max-width: 75vw;
-  }
-
-  @media (max-width: 640px) {
-    max-width: 90vw;
-    max-height: 80vh;
-  }
-
-  // Ensure dialog card fills container and handles overflow
-  .i-card {
+  .i-dialog-container {
     display: flex;
     flex-direction: column;
+    max-width: 90vw;
     max-height: 80vh;
-    overflow: hidden;
+    animation: slideInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+    transform: translateZ(0);
 
-    .i-card-body {
-      flex: 1;
+    @media (max-width: 960px) {
+      max-width: 75vw;
+    }
+
+    @media (max-width: 640px) {
+      max-width: 90vw;
+      max-height: 80vh;
+    }
+
+    .i-card {
+      display: flex;
+      flex-direction: column;
+      max-height: 80vh;
+      overflow: hidden;
+
+      .i-card-body {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+      }
+    }
+
+    .i-dialog-content {
       overflow-y: auto;
-      min-height: 0;
     }
   }
 }
 
-.i-dialog-content {
-  overflow-y: auto;
-}
-
-// Animations - optimized for performance
 @keyframes fadeIn {
   from {
     opacity: 0;

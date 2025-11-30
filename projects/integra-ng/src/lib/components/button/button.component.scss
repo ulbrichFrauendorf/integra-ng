@@ -1,7 +1,6 @@
 @use "./button.component.theme.scss" as theme;
 @use "../../themes/variables" as vars;
 
-// Apply the button color mixin which uses CSS custom properties
 @include theme.i-button-theme();
 
 :host {
@@ -27,7 +26,6 @@
     cursor: pointer;
     transition: background 0.2s, box-shadow 0.2s, color 0.2s, border-color 0.2s;
 
-    // Icon-only variant
     &.icon-only {
       padding: 8px;
       border-radius: 20px;
@@ -37,7 +35,6 @@
       }
     }
 
-    // Button content container
     .button-content {
       display: flex;
       align-items: center;
@@ -49,13 +46,11 @@
       }
     }
 
-    // Button icon
     .i-button__icon {
       display: inline-flex;
       align-items: center;
     }
 
-    // Size variants
     &--xtra-small {
       height: 20px;
       padding: 0 10px;
@@ -90,14 +85,12 @@
       }
     }
 
-    // Disabled state
     &:disabled,
     &--outlined:disabled {
       opacity: 0.38;
       pointer-events: none;
     }
 
-    // Style variants
     &--raised {
       box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -116,7 +109,6 @@
       width: 100%;
     }
 
-    // Ripple effect
     &::after {
       content: "";
       position: absolute;
