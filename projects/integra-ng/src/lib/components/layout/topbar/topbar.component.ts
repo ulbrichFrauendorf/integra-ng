@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   LayoutService,
   LocalStorageColorSchemeKey,
   LocalStorageThemeKey,
-} from '../../service/app.layout.service';
+} from '../services/layout.service';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { IButton } from '@shared/components/button/button.component';
+import { IButton } from '../../button/button.component';
+import { LayoutConfig } from '../models/layout-config.model';
 
 @Component({
-  selector: 'app-topbar',
-  templateUrl: './app.topbar.component.html',
-  styleUrls: ['./app.topbar.component.scss'],
+  selector: 'i-topbar',
+  templateUrl: './topbar.component.html',
+  styleUrls: ['./topbar.component.scss'],
   imports: [RouterLink, NgClass, IButton],
 })
-export class AppTopBarComponent implements OnInit {
+export class TopbarComponent implements OnInit {
+  @Input() config!: LayoutConfig;
   isDark: boolean = false;
 
   constructor(public layoutService: LayoutService) {}
+
   ngOnInit(): void {
     this.isDark = this.colorScheme === 'dark';
   }
@@ -28,6 +31,7 @@ export class AppTopBarComponent implements OnInit {
       colorScheme: val,
     }));
   }
+
   get colorScheme(): string {
     return this.layoutService.config().colorScheme;
   }
@@ -38,6 +42,7 @@ export class AppTopBarComponent implements OnInit {
       theme: val,
     }));
   }
+
   get theme(): string {
     return this.layoutService.config().theme;
   }
@@ -58,5 +63,14 @@ export class AppTopBarComponent implements OnInit {
 
     localStorage.setItem(LocalStorageThemeKey, this.theme);
     localStorage.setItem(LocalStorageColorSchemeKey, this.colorScheme);
+  }
+
+  get logo(): string {
+    if (this.colorScheme === 'light' && this.config.logoLight) {
+      return this.config.logoLight;
+    } else if (this.colorScheme === 'dark' && this.config.logoDark) {
+      return this.config.logoDark;
+    }
+    return this.config.logoLight || this.config.logoDark || '';
   }
 }

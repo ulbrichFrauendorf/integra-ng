@@ -5,28 +5,33 @@ import {
   OnInit,
   computed,
   effect,
-  inject,
+  Input,
 } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
-import { AppTopBarComponent } from '../top-bar/app.topbar.component';
-import { SideBarStickyComponent } from '../side-bar-sticky/side-bar-sticky.component';
-import { LayoutService } from '../../service/app.layout.service';
-import { COLOR_SCHEME } from '../../service/color-scheme-injection';
+import { TopbarComponent } from './topbar/topbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { LayoutService } from './services/layout.service';
+import { LayoutConfig } from './models/layout-config.model';
+import { MenuModel } from './models/menu.model';
 
 @Component({
-  selector: 'app-layout',
+  selector: 'i-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [NgClass, AppTopBarComponent, SideBarStickyComponent, RouterOutlet],
+  imports: [NgClass, TopbarComponent, SidebarComponent, RouterOutlet],
 })
 export class LayoutComponent implements OnInit, OnDestroy {
+  @Input() config!: LayoutConfig;
+  @Input() menuModel: MenuModel[] = [];
+
   private routerSubscription: Subscription;
 
-  theme = inject(COLOR_SCHEME);
-
-  constructor(public layoutService: LayoutService, public router: Router) {
+  constructor(
+    public layoutService: LayoutService,
+    public router: Router
+  ) {
     effect(() => {
       if (typeof document === 'undefined') {
         return;

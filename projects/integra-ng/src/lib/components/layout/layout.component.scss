@@ -1,5 +1,4 @@
-@use "../../../../../../integra-ng/src/lib/themes/scrollbar-mixins.scss" as
-  scrollbar;
+@use "../../themes/scrollbar-mixins.scss" as scrollbar;
 
 .layout {
   .layout-wrapper {
@@ -11,7 +10,7 @@
     .layout-body {
       display: flex;
       flex: 1 1 auto;
-      min-height: 0; // Important for flex children with overflow
+      min-height: 0;
 
       .layout-sidebar-container {
         flex-shrink: 0;
@@ -35,7 +34,7 @@
 
       .layout-main-container {
         flex: 1 1 auto;
-        min-width: 0; // Prevent flex item from overflowing
+        min-width: 0;
         overflow-y: auto;
         padding: 2rem;
         transition: margin-left 0.3s ease;
@@ -84,7 +83,6 @@
   }
 }
 
-// Responsive behavior
 @media (max-width: 991px) {
   .layout {
     .layout-wrapper {

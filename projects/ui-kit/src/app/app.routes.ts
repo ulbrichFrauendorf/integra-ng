@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './layout/components/layout/layout.component';
+import { AppLayoutComponent } from './layout/app-layout.component';
 import { AccordionsComponent } from './components/accordions/accordions.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { InputTextsComponent } from './components/input-texts/input-texts.component';
@@ -25,6 +25,7 @@ import { PanelsComponent } from './components/panels/panels.component';
 import { PlaceholdersComponent } from './components/placeholders/placeholders.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { ComponentInteractionsComponent } from './components/component-interactions/component-interactions.component';
+import { LayoutsComponent } from './components/layouts/layouts.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +35,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: LayoutComponent,
+    component: AppLayoutComponent,
     children: [
       {
         path: 'getting-started',
@@ -76,6 +77,7 @@ export const routes: Routes = [
             path: 'component-interactions',
             component: ComponentInteractionsComponent,
           },
+          { path: 'layouts', component: LayoutsComponent },
           { path: '', redirectTo: 'installation', pathMatch: 'full' },
         ],
       },

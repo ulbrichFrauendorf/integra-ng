@@ -1,14 +1,9 @@
 <div class="layout-topbar">
   <a class="layout-topbar-logo" routerLink="">
-    <img
-      src="assets/layout/images/{{
-        layoutService.config().colorScheme === 'light'
-          ? 'invensys-icon-light'
-          : 'invensys-icon-dark'
-      }}.png"
-      alt="invensys-logo"
-    />
-    <span>Integra-NG</span>
+    @if (logo) {
+    <img [src]="logo" [alt]="config.websiteName + ' logo'" />
+    }
+    <span>{{ config.websiteName }}</span>
   </a>
   <i-button
     [severity]="'contrast'"
@@ -33,12 +28,15 @@
         layoutService.state().profileSidebarVisible
     }"
   >
+    <ng-content />
+    @if (config.showThemeToggle !== false) {
     <i-button
       [severity]="'contrast'"
       size="medium"
       [text]="true"
-      [icon]="'pi pi-sun'"
+      [icon]="isDark ? 'pi pi-moon' : 'pi pi-sun'"
       (clicked)="changeTheme()"
     />
+    }
   </div>
 </div>
