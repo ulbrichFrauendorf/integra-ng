@@ -9,6 +9,7 @@ import {
   input,
   HostListener,
   ElementRef,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -474,7 +475,6 @@ export class ITable {
   columnWidths = signal<{ [field: string]: number }>({});
 
   constructor(private el: ElementRef) {
-    // Initialize expanded groups reactively when groupedData changes
     effect(() => {
       const groups = this.groupedData();
       if (groups.length > 0) {
@@ -486,7 +486,7 @@ export class ITable {
         });
         this.expandedGroups.set(initialExpandedGroups);
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   /**
@@ -862,14 +862,15 @@ export class ITable {
   toggleGroupExpansion(groupLabel: string): void {
     const expanded = this.expandedGroups();
     const isExpanded = expanded.has(groupLabel);
+    const newExpanded = new Set(expanded);
 
     if (isExpanded) {
-      expanded.delete(groupLabel);
+      newExpanded.delete(groupLabel);
     } else {
-      expanded.add(groupLabel);
+      newExpanded.add(groupLabel);
     }
 
-    this.expandedGroups.set(new Set(expanded));
+    this.expandedGroups.set(newExpanded);
   }
 
   /**
@@ -907,7 +908,9 @@ export class ITable {
       // Emit event for API-based download
       this.onDownload.emit({
         format: this.downloadFormat,
-        data: this.isGroupedMode() ? this.getFlattenedGroupedData() : this.processedData(),
+        data: this.isGroupedMode()
+          ? this.getFlattenedGroupedData()
+          : this.processedData(),
         columns: this.columns(),
       });
     } else {
@@ -922,7 +925,7 @@ export class ITable {
    */
   private getFlattenedGroupedData(): any[] {
     const flattened: any[] = [];
-    this.groupedData().forEach(group => {
+    this.groupedData().forEach((group) => {
       flattened.push(...(group.data || []));
     });
     return flattened;
@@ -933,7 +936,9 @@ export class ITable {
    * @internal
    */
   private downloadData(): void {
-    const data = this.isGroupedMode() ? this.getFlattenedGroupedData() : this.processedData();
+    const data = this.isGroupedMode()
+      ? this.getFlattenedGroupedData()
+      : this.processedData();
     const columns = this.columns();
     const filename = this.downloadFilename || 'table-data';
 
@@ -956,26 +961,39 @@ export class ITable {
    * Downloads data as CSV
    * @internal
    */
-  private downloadCSV(data: any[], columns: TableColumn[], filename: string, extension: string = 'csv'): void {
+  private downloadCSV(
+    data: any[],
+    columns: TableColumn[],
+    filename: string,
+    extension: string = 'csv'
+  ): void {
     // Create CSV header
-    const headers = columns.map(col => {
-      const escaped = String(col.header).replace(/"/g, '""');
-      return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')
-        ? `"${escaped}"`
-        : escaped;
-    }).join(',');
-
-    // Create CSV rows
-    const rows = data.map(row => {
-      return columns.map(col => {
-        const value = this.getCellValue(row, col.field);
-        const formatted = this.formatCellValue(value, col);
-        // Escape quotes and wrap in quotes if contains comma or quote
-        const escaped = String(formatted).replace(/"/g, '""');
-        return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')
+    const headers = columns
+      .map((col) => {
+        const escaped = String(col.header).replace(/"/g, '""');
+        return escaped.includes(',') ||
+          escaped.includes('"') ||
+          escaped.includes('\n')
           ? `"${escaped}"`
           : escaped;
-      }).join(',');
+      })
+      .join(',');
+
+    // Create CSV rows
+    const rows = data.map((row) => {
+      return columns
+        .map((col) => {
+          const value = this.getCellValue(row, col.field);
+          const formatted = this.formatCellValue(value, col);
+          // Escape quotes and wrap in quotes if contains comma or quote
+          const escaped = String(formatted).replace(/"/g, '""');
+          return escaped.includes(',') ||
+            escaped.includes('"') ||
+            escaped.includes('\n')
+            ? `"${escaped}"`
+            : escaped;
+        })
+        .join(',');
     });
 
     // Combine header and rows
@@ -998,7 +1016,11 @@ export class ITable {
    * Creates and triggers file download
    * @internal
    */
-  private downloadFile(content: string, filename: string, mimeType: string): void {
+  private downloadFile(
+    content: string,
+    filename: string,
+    mimeType: string
+  ): void {
     const blob = new Blob([content], { type: mimeType });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');

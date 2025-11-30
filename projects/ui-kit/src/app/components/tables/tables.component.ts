@@ -222,6 +222,11 @@ export class TablesComponent {
     },
   ];
 
+  // View action only (for grouped data)
+  viewActions: TableAction[] = [
+    { id: 'view', icon: 'pi pi-eye', severity: 'info' },
+  ];
+
   // Selection state
   selectedProducts: Product[] = [];
   singleSelectedProduct: Product[] = [];
@@ -230,27 +235,27 @@ export class TablesComponent {
   groupedProducts: TableGroup[] = [
     {
       label: 'Electronics',
-      data: this.products.filter(p => p.category === 'Electronics'),
+      data: this.products.filter((p) => p.category === 'Electronics'),
       expanded: true,
     },
     {
       label: 'Accessories',
-      data: this.products.filter(p => p.category === 'Accessories'),
+      data: this.products.filter((p) => p.category === 'Accessories'),
       expanded: true,
     },
     {
       label: 'Audio',
-      data: this.products.filter(p => p.category === 'Audio'),
+      data: this.products.filter((p) => p.category === 'Audio'),
       expanded: false,
     },
     {
       label: 'Storage',
-      data: this.products.filter(p => p.category === 'Storage'),
+      data: this.products.filter((p) => p.category === 'Storage'),
       expanded: false,
     },
     {
       label: 'Office',
-      data: this.products.filter(p => p.category === 'Office'),
+      data: this.products.filter((p) => p.category === 'Office'),
       expanded: false,
     },
   ];
@@ -264,7 +269,7 @@ export class TablesComponent {
         { field: 'price', header: 'Price', type: 'currency', align: 'right' },
         { field: 'status', header: 'Availability' },
       ],
-      data: this.products.filter(p => p.price > 100),
+      data: this.products.filter((p) => p.price > 100),
       expanded: true,
     },
     {
@@ -274,7 +279,26 @@ export class TablesComponent {
         { field: 'price', header: 'Price', type: 'currency', align: 'right' },
         { field: 'quantity', header: 'Stock', type: 'number' },
       ],
-      data: this.products.filter(p => p.price <= 100),
+      data: this.products.filter((p) => p.price <= 100),
+      expanded: true,
+    },
+  ];
+
+  // Grouped data with actions for full featured example
+  groupedProductsWithActions: TableGroup[] = [
+    {
+      label: 'Electronics',
+      data: this.products.filter((p) => p.category === 'Electronics'),
+      expanded: true,
+    },
+    {
+      label: 'Accessories',
+      data: this.products.filter((p) => p.category === 'Accessories'),
+      expanded: true,
+    },
+    {
+      label: 'Audio',
+      data: this.products.filter((p) => p.category === 'Audio'),
       expanded: true,
     },
   ];
@@ -350,11 +374,21 @@ tableActions: TableAction[] = [
   [(selection)]="selectedProducts"
   [showActions]="true"
   [actions]="tableActions"
+  [downloadable]="true"
+  downloadMode="direct"
+  downloadFormat="csv"
+  downloadFilename="products-full"
   [striped]="true"
   [hoverable]="true"
   (onSort)="onSort($event)"
   (onFilter)="onFilter($event)"
-  (onAction)="handleAction($event)">
+  (onSelectionChange)="onSelectionChange($event)"
+  (onAction)="handleAction($event)"
+>
+  <div header>
+    <i class="pi pi-box" style="font-size: 1.25rem; color: var(--color-primary);"></i>
+    <h3 style="margin: 0 0 0 8px">Product Inventory - Full</h3>
+  </div>
 </i-table>`,
 
     grouped: `<i-table
@@ -394,6 +428,34 @@ groupedProductsCustomColumns: TableGroup[] = [
     data: this.products.filter(p => p.price > 100),
     expanded: true
   }
+];`,
+
+    groupedWithActions: `<i-table
+  [groupedData]="groupedProductsWithActions"
+  [columns]="basicColumns"
+  [sortable]="true"
+  [showActions]="true"
+  [actions]="viewActions"
+  [striped]="true"
+  (onAction)="handleAction($event)">
+</i-table>
+
+// TypeScript
+groupedProductsWithActions: TableGroup[] = [
+  {
+    label: 'Electronics',
+    data: this.products.filter(p => p.category === 'Electronics'),
+    expanded: true,
+  },
+  {
+    label: 'Accessories',
+    data: this.products.filter(p => p.category === 'Accessories'),
+    expanded: true,
+  },
+];
+
+viewActions: TableAction[] = [
+  { id: 'view', icon: 'pi pi-eye', severity: 'info' },
 ];`,
 
     customHeader: `<i-table
@@ -558,7 +620,9 @@ export class ExampleComponent {
     this.whisperService.add({
       severity: 'info',
       summary: 'Download Started',
-      detail: `Downloading ${event.data.length} records as ${event.format.toUpperCase()}`,
+      detail: `Downloading ${
+        event.data.length
+      } records as ${event.format.toUpperCase()}`,
       key: 'global',
       life: 3000,
     });

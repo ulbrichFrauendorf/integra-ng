@@ -17,8 +17,7 @@
           [icon]="'pi pi-search'"
         ></i-input-text>
       </div>
-      }
-      @if (downloadable) {
+      } @if (downloadable) {
       <div class="i-table-download">
         <i-button
           severity="secondary"
@@ -128,8 +127,9 @@
               (rowExpandable ? 1 : 0) +
               (showActions && actions.length > 0 ? 1 : 0)
             "
+            (click)="toggleGroupExpansion(group.label)"
           >
-            <div class="i-table-group-header-content" (click)="toggleGroupExpansion(group.label)">
+            <div class="i-table-group-header-content">
               <i
                 [class]="
                   isGroupExpanded(group.label)
@@ -151,7 +151,8 @@
           <th class="i-table-selection-header"></th>
           } @if (rowExpandable) {
           <th class="i-table-expand-header"></th>
-          } @for (column of getGroupColumns(group); track trackByColumn($index, column)) {
+          } @for (column of getGroupColumns(group); track trackByColumn($index,
+          column)) {
           <th
             [style.width]="getColumnWidth(column)"
             [style.text-align]="column.align || 'left'"
@@ -165,99 +166,94 @@
         }
 
         <!-- Group Data Rows (when expanded) -->
-        @if (isGroupExpanded(group.label)) {
-          @if (group.data.length === 0) {
-          <tr class="i-table-empty-row">
-            <td
-              [attr.colspan]="
-                (getGroupColumns(group).length || columns().length) +
-                (selectionMode === 'multiple' ? 1 : 0) +
-                (rowExpandable ? 1 : 0) +
-                (showActions && actions.length > 0 ? 1 : 0)
+        @if (isGroupExpanded(group.label)) { @if (group.data.length === 0) {
+        <tr class="i-table-empty-row">
+          <td
+            [attr.colspan]="
+              (getGroupColumns(group).length || columns().length) +
+              (selectionMode === 'multiple' ? 1 : 0) +
+              (rowExpandable ? 1 : 0) +
+              (showActions && actions.length > 0 ? 1 : 0)
+            "
+          >
+            <i-empty-state-table></i-empty-state-table>
+          </td>
+        </tr>
+        } @else { @for (row of group.data; track trackByRow($index, row)) {
+        <tr
+          class="i-table-group-row"
+          [class.i-table-row-odd]="$odd"
+          [class.i-table-row-selected]="isRowSelected(row)"
+          (click)="toggleRowSelection(row)"
+        >
+          @if (selectionMode === 'multiple') {
+          <td class="i-table-selection-cell">
+            <i-checkbox
+              [ngModel]="isRowSelected(row)"
+              (ngModelChange)="toggleRowSelection(row, $event)"
+              (click)="$event.stopPropagation()"
+            ></i-checkbox>
+          </td>
+          } @if (rowExpandable) {
+          <td class="i-table-expand-cell">
+            <i-button
+              severity="secondary"
+              [text]="true"
+              size="small"
+              [icon]="
+                isRowExpanded(row)
+                  ? 'pi pi-chevron-down'
+                  : 'pi pi-chevron-right'
               "
-            >
-              <i-empty-state-table></i-empty-state-table>
-            </td>
-          </tr>
-          } @else {
-            @for (row of group.data; track trackByRow($index, row)) {
-            <tr
-              class="i-table-group-row"
-              [class.i-table-row-odd]="$odd"
-              [class.i-table-row-selected]="isRowSelected(row)"
-              (click)="toggleRowSelection(row)"
-            >
-              @if (selectionMode === 'multiple') {
-              <td class="i-table-selection-cell">
-                <i-checkbox
-                  [ngModel]="isRowSelected(row)"
-                  (ngModelChange)="toggleRowSelection(row, $event)"
-                  (click)="$event.stopPropagation()"
-                ></i-checkbox>
-              </td>
-              } @if (rowExpandable) {
-              <td class="i-table-expand-cell">
-                <i-button
-                  severity="secondary"
-                  [text]="true"
-                  size="small"
-                  [icon]="
-                    isRowExpanded(row)
-                      ? 'pi pi-chevron-down'
-                      : 'pi pi-chevron-right'
-                  "
-                  (clicked)="toggleRowExpansion(row, $event)"
-                ></i-button>
-              </td>
-              } @for (column of getGroupColumns(group); track trackByColumn($index, column)) {
-              <td
-                [style.text-align]="column.align || 'left'"
-                [style.width]="getColumnWidth(column)"
+              (clicked)="toggleRowExpansion(row, $event)"
+            ></i-button>
+          </td>
+          } @for (column of getGroupColumns(group); track trackByColumn($index,
+          column)) {
+          <td
+            [style.text-align]="column.align || 'left'"
+            [style.width]="getColumnWidth(column)"
+          >
+            {{ formatCellValue(getCellValue(row, column.field), column) }}
+          </td>
+          } @if (showActions && actions.length > 0) {
+          <td class="i-table-actions-cell">
+            <div class="i-table-actions">
+              @for (action of actions; track action.id) {
+              <i-button
+                [severity]="action.severity || 'secondary'"
+                [text]="true"
+                size="small"
+                [icon]="action.icon || ''"
+                [disabled]="isActionDisabled(action, row)"
+                (clicked)="onActionClick(action, row, $event)"
               >
-                {{ formatCellValue(getCellValue(row, column.field), column) }}
-              </td>
-              } @if (showActions && actions.length > 0) {
-              <td class="i-table-actions-cell">
-                <div class="i-table-actions">
-                  @for (action of actions; track action.id) {
-                  <i-button
-                    [severity]="action.severity || 'secondary'"
-                    [text]="true"
-                    size="small"
-                    [icon]="action.icon || ''"
-                    [disabled]="isActionDisabled(action, row)"
-                    (clicked)="onActionClick(action, row, $event)"
-                  >
-                    @if (action.label) {
-                    {{ action.label }}
-                    }
-                  </i-button>
-                  }
-                </div>
-              </td>
+                @if (action.label) {
+                {{ action.label }}
+                }
+              </i-button>
               }
-            </tr>
-            <!-- Expanded Row Content -->
-            @if (rowExpandable && isRowExpanded(row)) {
-            <tr class="i-table-expanded-row">
-              <td
-                [attr.colspan]="
-                  (getGroupColumns(group).length || columns().length) +
-                  (selectionMode === 'multiple' ? 1 : 0) +
-                  1 +
-                  (showActions && actions.length > 0 ? 1 : 0)
-                "
-              >
-                <div class="i-table-expanded-content">
-                  <pre>{{ row | json }}</pre>
-                </div>
-              </td>
-            </tr>
-            }
-            }
+            </div>
+          </td>
           }
-        }
-        }
+        </tr>
+        <!-- Expanded Row Content -->
+        @if (rowExpandable && isRowExpanded(row)) {
+        <tr class="i-table-expanded-row">
+          <td
+            [attr.colspan]="
+              (getGroupColumns(group).length || columns().length) +
+              (selectionMode === 'multiple' ? 1 : 0) +
+              1 +
+              (showActions && actions.length > 0 ? 1 : 0)
+            "
+          >
+            <div class="i-table-expanded-content">
+              <pre>{{ row | json }}</pre>
+            </div>
+          </td>
+        </tr>
+        } } } } }
       </tbody>
       } @else {
       <!-- Table Body - Regular Mode -->

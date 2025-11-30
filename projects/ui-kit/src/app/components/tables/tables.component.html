@@ -10,54 +10,14 @@
   </header>
 
   <div class="cards-container">
-    <!-- Basic Table -->
-    <app-demo-card [title]="'Basic Table'" [sourceCode]="codeExamples.basic">
-      <i-table [data]="products" [columns]="basicColumns"> </i-table>
-    </app-demo-card>
-
-    <!-- Sortable Table -->
+    <!-- Basic Table with Sorting & Filtering -->
     <app-demo-card
-      [title]="'Sortable Table'"
-      [sourceCode]="codeExamples.sortable"
-    >
-      <p class="demo-description">
-        Click on column headers to sort. Sortable columns show a sort icon.
-      </p>
-      <i-table
-        [data]="products"
-        [columns]="sortableColumns"
-        [sortable]="true"
-        (onSort)="onSort($event)"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Height + Sorting Example -->
-    <app-demo-card
-      [title]="'Fixed Height + Sorting'"
-      [sourceCode]="codeExamples.height"
-    >
-      <p class="demo-description">
-        Table with a fixed height and vertical scroll. Sorting still works while
-        scrolling.
-      </p>
-      <i-table
-        [data]="products"
-        [columns]="sortableColumns"
-        [sortable]="true"
-        [height]="'300px'"
-        (onSort)="onSort($event)"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Filtering Table -->
-    <app-demo-card
-      [title]="'Filtering (Global & Column)'"
+      [title]="'Basic Table with Sorting & Filtering'"
       [sourceCode]="codeExamples.filtering"
     >
       <p class="demo-description">
-        Use the global search or column filters to narrow down results.
+        Click column headers to sort. Use global search or column filters to
+        narrow results.
       </p>
       <i-table
         [data]="products"
@@ -65,55 +25,69 @@
         [sortable]="true"
         [filterable]="true"
         [globalFilter]="true"
+        [height]="'350px'"
+        (onSort)="onSort($event)"
         (onFilter)="onFilter($event)"
       >
       </i-table>
     </app-demo-card>
 
-    <!-- Selection Table -->
+    <!-- Selection & Actions -->
     <app-demo-card
-      [title]="'Row Selection (Multiple)'"
-      [sourceCode]="codeExamples.selection"
+      [title]="'Selection & Row Actions'"
+      [sourceCode]="codeExamples.actions"
     >
       <p class="demo-description">
-        Selected: {{ selectedProducts.length }} products
+        Select rows with checkboxes. Action buttons support conditional disable
+        (delete disabled for out of stock).
+        <strong>Selected: {{ selectedProducts.length }} products</strong>
       </p>
       <i-table
         [data]="products"
         [columns]="basicColumns"
         selectionMode="multiple"
         [(selection)]="selectedProducts"
-        (onSelectionChange)="onSelectionChange($event)"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Actions Table -->
-    <app-demo-card [title]="'Row Actions'" [sourceCode]="codeExamples.actions">
-      <p class="demo-description">
-        Action buttons with conditional disable (delete disabled for out of
-        stock items).
-      </p>
-      <i-table
-        [data]="products"
-        [columns]="basicColumns"
         [showActions]="true"
         [actions]="tableActions"
+        [striped]="true"
+        [height]="'300px'"
+        (onSelectionChange)="onSelectionChange($event)"
         (onAction)="handleAction($event)"
       >
       </i-table>
     </app-demo-card>
 
-    <!-- Visual Variants -->
+    <!-- Grouped Data with Actions -->
     <app-demo-card
-      [title]="'Visual Variants'"
+      [title]="'Grouped Data'"
+      [sourceCode]="codeExamples.groupedWithActions"
+    >
+      <p class="demo-description">
+        Organize data into expandable groups. Click group headers to
+        expand/collapse. Each row can have actions.
+      </p>
+      <i-table
+        [groupedData]="groupedProductsWithActions"
+        [columns]="basicColumns"
+        [sortable]="true"
+        [showActions]="true"
+        [actions]="viewActions"
+        [striped]="true"
+        (onAction)="handleAction($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Visual Variants & Sizes -->
+    <app-demo-card
+      [title]="'Visual Variants & Sizes'"
       [sourceCode]="codeExamples.visual"
     >
       <div class="visual-examples">
         <div class="visual-example">
-          <h4>Striped & Bordered (Small)</h4>
+          <h4>Small - Striped & Bordered</h4>
           <i-table
-            [data]="products.slice(0, 5)"
+            [data]="products.slice(0, 4)"
             [columns]="basicColumns"
             [striped]="true"
             [bordered]="true"
@@ -133,68 +107,43 @@
       </div>
     </app-demo-card>
 
-    <!-- Grouped Data Table -->
+    <!-- Custom Header & Download -->
     <app-demo-card
-      [title]="'Grouped Data'"
-      [sourceCode]="codeExamples.grouped"
+      [title]="'Custom Header & Export'"
+      [sourceCode]="codeExamples.download"
     >
       <p class="demo-description">
-        Organize data into expandable groups. Click group headers to expand/collapse.
-      </p>
-      <i-table
-        [groupedData]="groupedProducts"
-        [columns]="basicColumns"
-        [sortable]="true"
-        [striped]="true"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Grouped Data with Custom Columns -->
-    <app-demo-card
-      [title]="'Grouped Data with Custom Columns'"
-      [sourceCode]="codeExamples.groupedCustomColumns"
-    >
-      <p class="demo-description">
-        Each group can have its own set of columns for different data structures.
-      </p>
-      <i-table
-        [groupedData]="groupedProductsCustomColumns"
-        [striped]="true"
-        [hoverable]="true"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Custom Header Content -->
-    <app-demo-card
-      [title]="'Custom Header Content'"
-      [sourceCode]="codeExamples.customHeader"
-    >
-      <p class="demo-description">
-        Add custom content to the table header using ng-content. Search and download appear on the right.
+        Add custom header content with ng-content. Export data to CSV, JSON, or
+        Excel.
       </p>
       <i-table
         [data]="products"
-        [columns]="basicColumns"
+        [columns]="fullColumns"
         [globalFilter]="true"
         [downloadable]="true"
+        downloadMode="direct"
+        downloadFormat="csv"
         downloadFilename="products-inventory"
+        [striped]="true"
       >
-        <div header style="display: flex; align-items: center; gap: 8px;">
-          <i class="pi pi-box" style="font-size: 1.5rem; color: var(--color-primary);"></i>
-          <h3 style="margin: 0; font-size: 1.1rem;">Product Inventory</h3>
+        <div header style="display: flex; align-items: center; gap: 8px">
+          <i
+            class="pi pi-box"
+            style="font-size: 1.5rem; color: var(--color-primary)"
+          ></i>
+          <h3 style="margin: 0; font-size: 1.1rem">Product Inventory</h3>
         </div>
       </i-table>
     </app-demo-card>
 
-    <!-- Download Table (Direct) -->
+    <!-- Full Featured Table -->
     <app-demo-card
-      [title]="'Download (Direct)'"
-      [sourceCode]="codeExamples.download"
+      [title]="'Full Featured Example'"
+      [sourceCode]="codeExamples.full"
     >
       <p class="demo-description">
-        Export table data directly to CSV, JSON, or Excel formats (client-side).
+        All features combined: sorting, filtering, selection, actions, and
+        visual customization.
       </p>
       <i-table
         [data]="products"
@@ -202,42 +151,7 @@
         [downloadable]="true"
         downloadMode="direct"
         downloadFormat="csv"
-        downloadFilename="products"
-        [striped]="true"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Download Table (API Mode) -->
-    <app-demo-card
-      [title]="'Download (API Mode)'"
-      [sourceCode]="codeExamples.downloadApi"
-    >
-      <p class="demo-description">
-        Trigger an API call for server-side download generation.
-      </p>
-      <i-table
-        [data]="products.slice(0, 5)"
-        [columns]="fullColumns"
-        [downloadable]="true"
-        downloadMode="api"
-        (onDownload)="handleDownload($event)"
-        [striped]="true"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Full Featured Table -->
-    <app-demo-card
-      [title]="'Full Featured Table'"
-      [sourceCode]="codeExamples.full"
-    >
-      <p class="demo-description">
-        Combining sorting, filtering, pagination, selection, and actions.
-      </p>
-      <i-table
-        [data]="products"
-        [columns]="fullColumns"
+        downloadFilename="products-full"
         [sortable]="true"
         [filterable]="true"
         [globalFilter]="true"
@@ -252,6 +166,10 @@
         (onSelectionChange)="onSelectionChange($event)"
         (onAction)="handleAction($event)"
       >
+        <div header style="display: flex; align-items: center; gap: 8px">
+          <i class="pi pi-box" style="font-size: 1.25rem; color: var(--color-primary)"></i>
+          <h3 style="margin: 0; font-size: 1.1rem">Product Inventory — Full</h3>
+        </div>
       </i-table>
     </app-demo-card>
 
