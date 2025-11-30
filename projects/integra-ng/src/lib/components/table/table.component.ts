@@ -78,6 +78,34 @@ export interface FilterEvent {
 }
 
 /**
+ * Grouped table data structure
+ */
+export interface TableGroup {
+  /** Group name/label */
+  label: string;
+  /** Columns specific to this group (optional, uses table columns if not provided) */
+  columns?: TableColumn[];
+  /** Data rows for this group */
+  data: any[];
+  /** Whether this group is initially expanded */
+  expanded?: boolean;
+  /** Custom CSS class for the group */
+  styleClass?: string;
+}
+
+/**
+ * Download event configuration
+ */
+export interface TableDownloadEvent {
+  /** Download format */
+  format: 'csv' | 'excel' | 'json';
+  /** Filtered data to download */
+  data: any[];
+  /** Columns to include in download */
+  columns: TableColumn[];
+}
+
+/**
  * Table Component
  *
  * A comprehensive table component with sorting, filtering, pagination, selection,
@@ -144,6 +172,11 @@ export class ITable {
    * Column definitions with field, header, sortable, filterable, width properties
    */
   columns: InputSignal<TableColumn[]> = input<TableColumn[]>([]);
+
+  /**
+   * Grouped data mode - when provided, table will render in grouped mode
+   */
+  groupedData: InputSignal<TableGroup[]> = input<TableGroup[]>([]);
 
   /**
    * Message displayed when table has no data
@@ -348,6 +381,36 @@ export class ITable {
    */
   @Output() onRowCollapse = new EventEmitter<any>();
 
+  // ===== DOWNLOAD FEATURES =====
+
+  /**
+   * Enable download functionality
+   * @default false
+   */
+  @Input() downloadable = false;
+
+  /**
+   * Download mode - 'direct' for client-side download, 'api' for server-side
+   * @default 'direct'
+   */
+  @Input() downloadMode: 'direct' | 'api' = 'direct';
+
+  /**
+   * Default download format
+   * @default 'csv'
+   */
+  @Input() downloadFormat: 'csv' | 'excel' | 'json' = 'csv';
+
+  /**
+   * Custom download filename (without extension)
+   */
+  @Input() downloadFilename?: string;
+
+  /**
+   * Event emitted when download is triggered in 'api' mode
+   */
+  @Output() onDownload = new EventEmitter<TableDownloadEvent>();
+
   // ===== INTERNAL STATE =====
 
   /**
@@ -373,6 +436,12 @@ export class ITable {
    * @internal
    */
   expandedRows = signal<Set<any>>(new Set());
+
+  /**
+   * Expanded groups (for grouped data mode)
+   * @internal
+   */
+  expandedGroups = signal<Set<string>>(new Set());
 
   /**
    * Filter debounce timer
@@ -404,7 +473,21 @@ export class ITable {
    */
   columnWidths = signal<{ [field: string]: number }>({});
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef) {
+    // Initialize expanded groups reactively when groupedData changes
+    effect(() => {
+      const groups = this.groupedData();
+      if (groups.length > 0) {
+        const initialExpandedGroups = new Set<string>();
+        groups.forEach((group, index) => {
+          if (group.expanded !== false) {
+            initialExpandedGroups.add(group.label || index.toString());
+          }
+        });
+        this.expandedGroups.set(initialExpandedGroups);
+      }
+    }, { allowSignalWrites: true });
+  }
 
   /**
    * Computed filtered and sorted data
@@ -768,6 +851,161 @@ export class ITable {
    */
   isRowExpanded(row: any): boolean {
     return this.expandedRows().has(row);
+  }
+
+  // ===== GROUP EXPANSION METHODS =====
+
+  /**
+   * Toggles group expansion
+   * @internal
+   */
+  toggleGroupExpansion(groupLabel: string): void {
+    const expanded = this.expandedGroups();
+    const isExpanded = expanded.has(groupLabel);
+
+    if (isExpanded) {
+      expanded.delete(groupLabel);
+    } else {
+      expanded.add(groupLabel);
+    }
+
+    this.expandedGroups.set(new Set(expanded));
+  }
+
+  /**
+   * Checks if a group is expanded
+   * @internal
+   */
+  isGroupExpanded(groupLabel: string): boolean {
+    return this.expandedGroups().has(groupLabel);
+  }
+
+  /**
+   * Gets columns for a specific group
+   * @internal
+   */
+  getGroupColumns(group: TableGroup): TableColumn[] {
+    return group.columns || this.columns();
+  }
+
+  /**
+   * Checks if table is in grouped mode
+   * @internal
+   */
+  isGroupedMode(): boolean {
+    return this.groupedData().length > 0;
+  }
+
+  // ===== DOWNLOAD METHODS =====
+
+  /**
+   * Handles download button click
+   * @internal
+   */
+  handleDownload(): void {
+    if (this.downloadMode === 'api') {
+      // Emit event for API-based download
+      this.onDownload.emit({
+        format: this.downloadFormat,
+        data: this.isGroupedMode() ? this.getFlattenedGroupedData() : this.processedData(),
+        columns: this.columns(),
+      });
+    } else {
+      // Direct download
+      this.downloadData();
+    }
+  }
+
+  /**
+   * Gets flattened data from grouped data
+   * @internal
+   */
+  private getFlattenedGroupedData(): any[] {
+    const flattened: any[] = [];
+    this.groupedData().forEach(group => {
+      flattened.push(...(group.data || []));
+    });
+    return flattened;
+  }
+
+  /**
+   * Downloads table data directly (client-side)
+   * @internal
+   */
+  private downloadData(): void {
+    const data = this.isGroupedMode() ? this.getFlattenedGroupedData() : this.processedData();
+    const columns = this.columns();
+    const filename = this.downloadFilename || 'table-data';
+
+    switch (this.downloadFormat) {
+      case 'csv':
+        this.downloadCSV(data, columns, filename);
+        break;
+      case 'json':
+        this.downloadJSON(data, filename);
+        break;
+      case 'excel':
+        // For Excel, we'll fall back to CSV with .xls extension
+        // A full Excel implementation would require a library like xlsx
+        this.downloadCSV(data, columns, filename, 'xls');
+        break;
+    }
+  }
+
+  /**
+   * Downloads data as CSV
+   * @internal
+   */
+  private downloadCSV(data: any[], columns: TableColumn[], filename: string, extension: string = 'csv'): void {
+    // Create CSV header
+    const headers = columns.map(col => {
+      const escaped = String(col.header).replace(/"/g, '""');
+      return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')
+        ? `"${escaped}"`
+        : escaped;
+    }).join(',');
+
+    // Create CSV rows
+    const rows = data.map(row => {
+      return columns.map(col => {
+        const value = this.getCellValue(row, col.field);
+        const formatted = this.formatCellValue(value, col);
+        // Escape quotes and wrap in quotes if contains comma or quote
+        const escaped = String(formatted).replace(/"/g, '""');
+        return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')
+          ? `"${escaped}"`
+          : escaped;
+      }).join(',');
+    });
+
+    // Combine header and rows
+    const csv = [headers, ...rows].join('\n');
+
+    // Create and download file
+    this.downloadFile(csv, `${filename}.${extension}`, 'text/csv');
+  }
+
+  /**
+   * Downloads data as JSON
+   * @internal
+   */
+  private downloadJSON(data: any[], filename: string): void {
+    const json = JSON.stringify(data, null, 2);
+    this.downloadFile(json, `${filename}.json`, 'application/json');
+  }
+
+  /**
+   * Creates and triggers file download
+   * @internal
+   */
+  private downloadFile(content: string, filename: string, mimeType: string): void {
+    const blob = new Blob([content], { type: mimeType });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 
   // ===== COLUMN RESIZE METHODS =====
