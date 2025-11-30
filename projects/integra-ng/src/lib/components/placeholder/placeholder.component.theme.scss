@@ -1,0 +1,30 @@
+@use "../../themes/color-variables.scss" as colors;
+@use "../../themes/_variables.scss" as vars;
+
+@mixin i-placeholder-theme() {
+  .i-placeholder {
+    background: colors.$color-surface-card;
+    border-radius: vars.$borderRadius;
+    border: 2px dashed colors.$color-surface-border;
+    animation: placeholderFadeIn 0.3s ease;
+    min-height: 200px;
+
+    &.has-pattern {
+      background-image: radial-gradient(
+        circle,
+        colors.$color-surface-border 1px,
+        transparent 1px
+      );
+      background-size: 20px 20px;
+    }
+  }
+
+  .i-placeholder-content {
+    color: colors.$color-text-secondary;
+
+    i {
+      color: colors.$color-primary;
+      opacity: 0.3;
+    }
+  }
+}

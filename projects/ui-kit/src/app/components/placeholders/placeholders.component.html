@@ -1,0 +1,143 @@
+<div class="placeholders-demo">
+  <header class="demo-header">
+    <h1>Placeholder Component</h1>
+    <p>
+      A flexible placeholder component for empty states, selection prompts, and
+      drop zones. Features directional arrows, custom icons, and support for
+      rich content.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Basic Usage -->
+    <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
+      <div class="demo-placeholder-container">
+        <i-placeholder arrowDirection="left">
+          Select an item from the list
+        </i-placeholder>
+      </div>
+    </app-demo-card>
+
+    <!-- Arrow Directions -->
+    <app-demo-card
+      [title]="'Arrow Directions'"
+      [sourceCode]="codeExamples.directions"
+    >
+      <div class="demo-grid">
+        <div class="demo-placeholder-small">
+          <i-placeholder arrowDirection="left">Point left</i-placeholder>
+        </div>
+        <div class="demo-placeholder-small">
+          <i-placeholder arrowDirection="right">Point right</i-placeholder>
+        </div>
+        <div class="demo-placeholder-small">
+          <i-placeholder arrowDirection="up">Point up</i-placeholder>
+        </div>
+        <div class="demo-placeholder-small">
+          <i-placeholder arrowDirection="down">Point down</i-placeholder>
+        </div>
+        <div class="demo-placeholder-small">
+          <i-placeholder arrowDirection="none">No icon</i-placeholder>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Custom Icons -->
+    <app-demo-card
+      [title]="'Custom Icons'"
+      [sourceCode]="codeExamples.customIcon"
+    >
+      <div class="demo-grid two-columns">
+        <div class="demo-placeholder-medium">
+          <i-placeholder [customIcon]="'pi pi-inbox'">
+            Your inbox is empty
+          </i-placeholder>
+        </div>
+        <div class="demo-placeholder-medium">
+          <i-placeholder [customIcon]="'pi pi-search'">
+            No search results found
+          </i-placeholder>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Rich Content -->
+    <app-demo-card
+      [title]="'Rich Content'"
+      [sourceCode]="codeExamples.richContent"
+    >
+      <div class="demo-placeholder-container">
+        <i-placeholder arrowDirection="left">
+          <h3>Select a Conversation</h3>
+          <p>Choose a conversation from the list to view messages</p>
+        </i-placeholder>
+      </div>
+    </app-demo-card>
+
+    <!-- With Action Button -->
+    <app-demo-card
+      [title]="'With Action Button'"
+      [sourceCode]="codeExamples.withButton"
+    >
+      <div class="demo-placeholder-container">
+        <i-placeholder [customIcon]="'pi pi-folder-open'">
+          <h3>No Projects Yet</h3>
+          <p>Create your first project to get started</p>
+          <i-button
+            label="Create Project"
+            icon="pi pi-plus"
+            (onClick)="onCreateProject()"
+          ></i-button>
+        </i-placeholder>
+      </div>
+    </app-demo-card>
+
+    <!-- Pattern Background -->
+    <app-demo-card
+      [title]="'Pattern Background'"
+      [sourceCode]="codeExamples.pattern"
+    >
+      <div class="demo-placeholder-container">
+        <i-placeholder arrowDirection="none" [showPattern]="true">
+          <i
+            class="pi pi-cloud-upload"
+            style="
+              font-size: 3rem;
+              opacity: 0.5;
+              margin-bottom: 1rem;
+              display: block;
+              color: var(--color-primary);
+            "
+          ></i>
+          Drop files here to upload
+        </i-placeholder>
+      </div>
+    </app-demo-card>
+
+    <!-- Split View Example -->
+    <app-demo-card
+      [title]="'Split View Pattern'"
+      [sourceCode]="codeExamples.splitView"
+    >
+      <div class="split-layout-demo">
+        <div class="list-panel-demo">
+          <div class="list-item-demo">Item 1</div>
+          <div class="list-item-demo">Item 2</div>
+          <div class="list-item-demo">Item 3</div>
+          <div class="list-item-demo">Item 4</div>
+        </div>
+        <div class="detail-panel-demo">
+          <i-placeholder arrowDirection="left">
+            <h3>Select an Item</h3>
+            <p>Choose an item from the list to view details</p>
+          </i-placeholder>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

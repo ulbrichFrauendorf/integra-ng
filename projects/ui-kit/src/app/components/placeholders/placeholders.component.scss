@@ -1,0 +1,91 @@
+@use "../shared-demo-styles.scss" as *;
+
+.placeholders-demo {
+  @extend .demo-component;
+}
+
+.demo-placeholder-container {
+  height: 300px;
+}
+
+.demo-placeholder-small {
+  height: 180px;
+}
+
+.demo-placeholder-medium {
+  height: 250px;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+
+  &.two-columns {
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Split view demo styles
+.split-layout-demo {
+  display: flex;
+  height: 350px;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.list-panel-demo {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--surface-border);
+  background: var(--surface-ground);
+}
+
+.list-item-demo {
+  padding: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: var(--surface-hover);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detail-panel-demo {
+  flex: 1;
+  padding: 1rem;
+}
+
+// Placeholder content styling (caller's responsibility)
+i-placeholder {
+  h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    line-height: 1.6;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  i-button {
+    margin-top: 1rem;
+  }
+}

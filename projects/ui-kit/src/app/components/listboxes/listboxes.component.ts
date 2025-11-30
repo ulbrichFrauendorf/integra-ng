@@ -63,7 +63,10 @@ export class ListboxesComponent implements OnInit, OnDestroy {
   ];
 
   // Large dataset for constrained height demo (50 items)
-  largeDataset = Array.from({ length: 50 }, (_, i) => ({ id: i + 1, name: `Item ${i + 1}` }));
+  largeDataset = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Item ${i + 1}`,
+  }));
 
   // Selected model for constrained large dataset demo
   selectedLargeItems: number | null = null;
