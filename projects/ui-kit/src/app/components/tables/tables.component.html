@@ -133,6 +133,100 @@
       </div>
     </app-demo-card>
 
+    <!-- Grouped Data Table -->
+    <app-demo-card
+      [title]="'Grouped Data'"
+      [sourceCode]="codeExamples.grouped"
+    >
+      <p class="demo-description">
+        Organize data into expandable groups. Click group headers to expand/collapse.
+      </p>
+      <i-table
+        [groupedData]="groupedProducts"
+        [columns]="basicColumns"
+        [sortable]="true"
+        [striped]="true"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Grouped Data with Custom Columns -->
+    <app-demo-card
+      [title]="'Grouped Data with Custom Columns'"
+      [sourceCode]="codeExamples.groupedCustomColumns"
+    >
+      <p class="demo-description">
+        Each group can have its own set of columns for different data structures.
+      </p>
+      <i-table
+        [groupedData]="groupedProductsCustomColumns"
+        [striped]="true"
+        [hoverable]="true"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Custom Header Content -->
+    <app-demo-card
+      [title]="'Custom Header Content'"
+      [sourceCode]="codeExamples.customHeader"
+    >
+      <p class="demo-description">
+        Add custom content to the table header using ng-content. Search and download appear on the right.
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="basicColumns"
+        [globalFilter]="true"
+        [downloadable]="true"
+        downloadFilename="products-inventory"
+      >
+        <div header style="display: flex; align-items: center; gap: 8px;">
+          <i class="pi pi-box" style="font-size: 1.5rem; color: var(--color-primary);"></i>
+          <h3 style="margin: 0; font-size: 1.1rem;">Product Inventory</h3>
+        </div>
+      </i-table>
+    </app-demo-card>
+
+    <!-- Download Table (Direct) -->
+    <app-demo-card
+      [title]="'Download (Direct)'"
+      [sourceCode]="codeExamples.download"
+    >
+      <p class="demo-description">
+        Export table data directly to CSV, JSON, or Excel formats (client-side).
+      </p>
+      <i-table
+        [data]="products"
+        [columns]="fullColumns"
+        [downloadable]="true"
+        downloadMode="direct"
+        downloadFormat="csv"
+        downloadFilename="products"
+        [striped]="true"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Download Table (API Mode) -->
+    <app-demo-card
+      [title]="'Download (API Mode)'"
+      [sourceCode]="codeExamples.downloadApi"
+    >
+      <p class="demo-description">
+        Trigger an API call for server-side download generation.
+      </p>
+      <i-table
+        [data]="products.slice(0, 5)"
+        [columns]="fullColumns"
+        [downloadable]="true"
+        downloadMode="api"
+        (onDownload)="handleDownload($event)"
+        [striped]="true"
+      >
+      </i-table>
+    </app-demo-card>
+
     <!-- Full Featured Table -->
     <app-demo-card
       [title]="'Full Featured Table'"
