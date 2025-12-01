@@ -15,6 +15,7 @@
       .layout-sidebar-container {
         flex-shrink: 0;
         width: 300px;
+        height: 100%;
         overflow-y: auto;
         transition: transform 0.3s ease, opacity 0.3s ease;
         opacity: 1;
