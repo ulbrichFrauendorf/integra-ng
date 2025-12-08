@@ -60,6 +60,8 @@ $chips-action-space: 40px;
 
     .i-chips-list {
       white-space: nowrap;
+      max-width: 100%;
+      min-width: 0;
     }
   }
 

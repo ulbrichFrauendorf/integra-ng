@@ -37,7 +37,7 @@ $listbox-transition: 0.15s ease;
     flex-direction: column;
     flex-shrink: 0;
     gap: 8px;
-    padding: 12px 16px;
+    padding: 20px 14px;
     border-bottom: 1px solid colors.$color-surface-border;
     background: colors.$color-surface-card;
 
@@ -120,6 +120,10 @@ $listbox-transition: 0.15s ease;
         font-size: 1em;
         cursor: pointer;
         transition: background-color $listbox-transition;
+
+        &.has-icon {
+          padding: 16px 12px;
+        }
 
         &:hover {
           background-color: colors.$color-surface-hover;

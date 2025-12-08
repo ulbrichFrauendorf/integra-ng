@@ -58,6 +58,9 @@
       <div
         class="i-listbox-option"
         [class.selected]="isOptionSelected(option)"
+        [class.has-icon]="
+          !multiple && (getOptionLeftIcon(option) || getOptionRightIcon(option))
+        "
         (click)="toggleOption(option)"
       >
         <!-- Checkbox only in multiple mode -->
