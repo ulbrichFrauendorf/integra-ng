@@ -52,7 +52,6 @@ export interface ListboxOption {
  *   title="Choose One"
  *   [options]="items"
  *   optionLabel="name"
- *   optionValue="id"
  *   [multiple]="false"
  *   formControlName="selectedItem">
  * </i-listbox>
@@ -62,7 +61,6 @@ export interface ListboxOption {
  *   title="Choose Multiple"
  *   [options]="items"
  *   optionLabel="name"
- *   optionValue="id"
  *   [multiple]="true"
  *   actionIcon="pi pi-plus"
  *   actionTooltip="Add new item"
@@ -75,7 +73,6 @@ export interface ListboxOption {
  *   title="Select Items"
  *   [options]="items"
  *   optionLabel="name"
- *   optionValue="id"
  *   optionLeftIcon="icon"
  *   optionRightIcon="statusIcon"
  *   formControlName="selection">
@@ -148,7 +145,6 @@ export class IListbox implements ControlValueAccessor {
     ListboxOption[] | null | undefined
   >([]);
   @Input({ required: true }) optionLabel!: string;
-  @Input({ required: true }) optionValue!: string;
   @Input() placeholder?: string;
   @Input() id?: string;
   @Input() fluid = false;
@@ -276,7 +272,9 @@ export class IListbox implements ControlValueAccessor {
 
     if (this.multiple) {
       const currentValues = Array.isArray(this.value) ? [...this.value] : [];
-      const index = currentValues.findIndex((val) => val === optionValue);
+      const index = currentValues.findIndex(
+        (val) => JSON.stringify(val) === JSON.stringify(optionValue)
+      );
 
       if (index > -1) {
         currentValues.splice(index, 1);
@@ -289,7 +287,10 @@ export class IListbox implements ControlValueAccessor {
       this.onChangeCallback(currentValues);
       this.onTouchedCallback();
     } else {
-      const newValue = this.value === optionValue ? null : optionValue;
+      const newValue =
+        JSON.stringify(this.value) === JSON.stringify(optionValue)
+          ? null
+          : optionValue;
       this.value = newValue;
       this.onChange.emit(newValue);
       this.onChangeCallback(newValue);
@@ -301,9 +302,14 @@ export class IListbox implements ControlValueAccessor {
     const optionValue = this.getOptionValue(option);
 
     if (this.multiple) {
-      return Array.isArray(this.value) && this.value.includes(optionValue);
+      return (
+        Array.isArray(this.value) &&
+        this.value.some(
+          (val) => JSON.stringify(val) === JSON.stringify(optionValue)
+        )
+      );
     } else {
-      return this.value === optionValue;
+      return JSON.stringify(this.value) === JSON.stringify(optionValue);
     }
   }
 
@@ -320,7 +326,9 @@ export class IListbox implements ControlValueAccessor {
 
     if (this.multiple) {
       const currentValues = Array.isArray(this.value) ? [...this.value] : [];
-      const index = currentValues.findIndex((val) => val === value);
+      const index = currentValues.findIndex(
+        (val) => JSON.stringify(val) === JSON.stringify(value)
+      );
       if (index > -1) {
         currentValues.splice(index, 1);
         this.value = currentValues;
@@ -329,7 +337,7 @@ export class IListbox implements ControlValueAccessor {
         this.onTouchedCallback();
       }
     } else {
-      if (this.value === value) {
+      if (JSON.stringify(this.value) === JSON.stringify(value)) {
         this.value = null;
         this.onChange.emit(null);
         this.onChangeCallback(null);
@@ -343,7 +351,7 @@ export class IListbox implements ControlValueAccessor {
   }
 
   getOptionValue(option: ListboxOption): any {
-    return option[this.optionValue] || option['value'] || option;
+    return option;
   }
 
   getOptionSearchValue(option: ListboxOption): string {
@@ -364,7 +372,8 @@ export class IListbox implements ControlValueAccessor {
         return [];
       }
       const option = currentOptions.find(
-        (opt: ListboxOption) => this.getOptionValue(opt) === this.value
+        (opt: ListboxOption) =>
+          JSON.stringify(this.getOptionValue(opt)) === JSON.stringify(this.value)
       );
       return option ? [this.getOptionLabel(option)] : [String(this.value)];
     }
@@ -372,7 +381,8 @@ export class IListbox implements ControlValueAccessor {
     const values = Array.isArray(this.value) ? this.value : [];
     return values.map((val: any) => {
       const option = currentOptions.find(
-        (opt: ListboxOption) => this.getOptionValue(opt) === val
+        (opt: ListboxOption) =>
+          JSON.stringify(this.getOptionValue(opt)) === JSON.stringify(val)
       );
       return option ? this.getOptionLabel(option) : String(val);
     });
@@ -400,7 +410,8 @@ export class IListbox implements ControlValueAccessor {
         return '';
       }
       const option = currentOptions.find(
-        (opt: ListboxOption) => this.getOptionValue(opt) === this.value
+        (opt: ListboxOption) =>
+          JSON.stringify(this.getOptionValue(opt)) === JSON.stringify(this.value)
       );
       return option ? this.getOptionLabel(option) : String(this.value);
     }
