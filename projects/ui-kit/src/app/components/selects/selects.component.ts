@@ -39,10 +39,14 @@ export class SelectsComponent implements OnInit {
   advancedForm: FormGroup;
   fluidForm: FormGroup;
 
-  // NgModel examples
-  countryValue: string = '';
-  statusValue: string = '';
-  preselectedValue: string = 'us';
+  // NgModel examples - now store full objects
+  countryValue: SelectOption | null = null;
+  statusValue: SelectOption | null = null;
+  preselectedValue: SelectOption | null = {
+    value: 'us',
+    label: 'United States',
+    code: 'US',
+  };
 
   // Sample data organized by category
   selectData = {
@@ -81,67 +85,63 @@ export class SelectsComponent implements OnInit {
 
   // HTML Code examples organized by category
   codeExamples = {
-    ngModel: `<i-select 
-  label="Country" 
-  [options]="countries" 
-  optionLabel="label" 
-  optionValue="value"
+    ngModel: `// ngModel now stores the full object
+<i-select
+  label="Country"
+  [options]="countries"
+  optionLabel="label"
   [(ngModel)]="countryValue"
   placeholder="Select country" />
 
-<i-select 
-  label="Status" 
-  [options]="statuses" 
-  optionLabel="label" 
-  optionValue="value"
+<i-select
+  label="Status"
+  [options]="statuses"
+  optionLabel="label"
   [(ngModel)]="statusValue"
   placeholder="Select status" />`,
 
-    reactiveForm: `<form [formGroup]="basicForm">
-  <i-select 
-    label="Country" 
-    [options]="countries" 
-    optionLabel="label" 
-    optionValue="value"
+    reactiveForm: `// Form controls now store full objects
+<form [formGroup]="basicForm">
+  <i-select
+    label="Country"
+    [options]="countries"
+    optionLabel="label"
     formControlName="country"
     placeholder="Select country" />
 
-  <i-select 
-    label="Status" 
-    [options]="statuses" 
-    optionLabel="label" 
-    optionValue="value"
+  <i-select
+    label="Status"
+    [options]="statuses"
+    optionLabel="label"
     formControlName="status"
     placeholder="Select status" />
 </form>`,
 
     validation: `<form [formGroup]="validationForm">
-  <i-select 
-    label="Status (Required)" 
-    [options]="statuses" 
-    optionLabel="label" 
-    optionValue="value"
-    placeholder="Select status" 
+  <i-select
+    label="Status (Required)"
+    [options]="statuses"
+    optionLabel="label"
+    placeholder="Select status"
     formControlName="status" />
 </form>`,
 
-    advanced: `<i-select 
-  [options]="reports" 
-  [filter]="true" 
-  [showClear]="true" 
-  filterBy="name" 
-  optionLabel="name" 
-  optionValue="value" 
-  placeholder="Select Report" 
+    advanced: `// Advanced select with filtering - stores full object
+<i-select
+  [options]="reports"
+  [filter]="true"
+  [showClear]="true"
+  filterBy="name"
+  optionLabel="name"
+  placeholder="Select Report"
   formControlName="selectedReport" />`,
 
-    fluid: `<i-select 
-  label="Fluid Select" 
-  [options]="countries" 
-  optionLabel="label" 
-  optionValue="value"
-  [fluid]="true" 
-  placeholder="Select option" 
+    fluid: `<i-select
+  label="Fluid Select"
+  [options]="countries"
+  optionLabel="label"
+  [fluid]="true"
+  placeholder="Select option"
   formControlName="fluidSelect" />`,
   };
 
@@ -156,9 +156,10 @@ import { ISelect } from 'integra-ng';
   templateUrl: './example.component.html'
 })
 export class ExampleComponent {
-  countryValue: string = '';
-  statusValue: string = '';
-  
+  // ngModel stores full objects now
+  countryValue: SelectOption | null = null;
+  statusValue: SelectOption | null = null;
+
   countries = [
     { value: 'us', label: 'United States' },
     { value: 'uk', label: 'United Kingdom' },
@@ -175,10 +176,11 @@ import { ISelect } from 'integra-ng';
   templateUrl: './example.component.html'
 })
 export class ExampleComponent {
+  // Form values now store full objects
   basicForm = this.fb.group({
-    country: [''],
-    status: [''],
-    preselected: ['us']
+    country: [null],
+    status: [null],
+    preselected: [{ value: 'us', label: 'United States' }]
   });
 
   constructor(private fb: FormBuilder) {}
@@ -187,7 +189,7 @@ export class ExampleComponent {
     validation: `import { FormBuilder, Validators } from '@angular/forms';
 
 validationForm = this.fb.group({
-  status: ['', [Validators.required]]
+  status: [null, [Validators.required]]
 });`,
   };
 
@@ -244,24 +246,24 @@ export class ExampleComponent {
 
   constructor(private fb: FormBuilder) {
     this.basicForm = this.fb.group({
-      country: [''],
-      status: [''],
-      preselected: ['us'],
-      disabled: [{ value: 'uk', disabled: true }],
-      // New: Store full object instead of just value
+      country: [null],
+      status: [null],
+      preselected: [{ value: 'us', label: 'United States', code: 'US' }],
+      disabled: [{ value: { value: 'uk', label: 'United Kingdom', code: 'GB' }, disabled: true }],
+      // Now all selects store full objects by default
       fullObjectSelect: [null],
     });
 
     this.validationForm = this.fb.group({
-      status: ['', [Validators.required]],
+      status: [null, [Validators.required]],
     });
 
     this.advancedForm = this.fb.group({
-      selectedReport: [''],
+      selectedReport: [null],
     });
 
     this.fluidForm = this.fb.group({
-      fluidSelect: [''],
+      fluidSelect: [null],
     });
   }
 
@@ -292,13 +294,14 @@ export class ExampleComponent {
   }
 
   onCountryValueChange(value: any) {
-    console.log('Country Value Changed (optionValue="value"):', value);
+    console.log('Country Value Changed (full object):', value);
     console.log('Form control value:', this.basicForm.get('country')?.value);
     console.log('Type:', typeof value);
+    console.log('Object properties:', value ? Object.keys(value) : 'null');
   }
 
   onCountryObjectChange(value: any) {
-    console.log('Country Object Changed (no optionValue):', value);
+    console.log('Country Object Changed (full object):', value);
     console.log(
       'Form control value:',
       this.basicForm.get('fullObjectSelect')?.value
