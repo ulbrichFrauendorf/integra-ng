@@ -39,10 +39,13 @@ export class MultiSelectsComponent implements OnInit {
   advancedForm: FormGroup;
   fluidForm: FormGroup;
 
-  // NgModel examples
-  skillsValue: string[] = [];
-  departmentsValue: number[] = [];
-  preselectedValue: string[] = ['javascript', 'angular'];
+  // NgModel examples - now store full objects
+  skillsValue: MultiSelectOption[] = [];
+  departmentsValue: MultiSelectOption[] = [];
+  preselectedValue: MultiSelectOption[] = [
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'angular', label: 'Angular' },
+  ];
 
   // Sample data organized by category
   selectData = {
@@ -104,11 +107,11 @@ export class MultiSelectsComponent implements OnInit {
 
   // HTML Code examples organized by category
   codeExamples = {
-    ngModel: `<i-multi-select
+    ngModel: `// ngModel now stores full objects
+<i-multi-select
   label="Skills"
   [options]="skills"
   optionLabel="label"
-  optionValue="value"
   [(ngModel)]="skillsValue"
   placeholder="Select your skills" />
 
@@ -116,16 +119,15 @@ export class MultiSelectsComponent implements OnInit {
   label="Departments"
   [options]="departments"
   optionLabel="label"
-  optionValue="value"
   [(ngModel)]="departmentsValue"
   placeholder="Select departments" />`,
 
-    reactiveForm: `<form [formGroup]="basicForm">
+    reactiveForm: `// Form controls now store full objects
+<form [formGroup]="basicForm">
   <i-multi-select
     label="Skills"
     [options]="skills"
     optionLabel="label"
-    optionValue="value"
     formControlName="skills"
     placeholder="Select your skills" />
 
@@ -133,7 +135,6 @@ export class MultiSelectsComponent implements OnInit {
     label="Departments"
     [options]="departments"
     optionLabel="label"
-    optionValue="value"
     formControlName="departments"
     placeholder="Select departments" />
 </form>`,
@@ -143,7 +144,6 @@ export class MultiSelectsComponent implements OnInit {
     label="Required Skills (At least 1)"
     [options]="skills"
     optionLabel="label"
-    optionValue="value"
     placeholder="Select at least 1 skill"
     formControlName="requiredSkills" />
 
@@ -151,18 +151,17 @@ export class MultiSelectsComponent implements OnInit {
     label="Minimum Skills (At least 2)"
     [options]="skills"
     optionLabel="label"
-    optionValue="value"
     placeholder="Select at least 2 skills"
     formControlName="minimumSkills" />
 </form>`,
 
-    advanced: `<i-multi-select
+    advanced: `// Advanced multi-select - stores full objects
+<i-multi-select
   [options]="categories"
   [filter]="true"
   [showClear]="true"
   filterBy="name"
   optionLabel="name"
-  optionValue="value"
   placeholder="Select Categories"
   [maxSelectedLabels]="3"
   formControlName="selectedCategories" />`,
@@ -171,7 +170,6 @@ export class MultiSelectsComponent implements OnInit {
   label="Fluid Multi-Select"
   [options]="skills"
   optionLabel="label"
-  optionValue="value"
   [fluid]="true"
   placeholder="Select options"
   formControlName="fluidSelect" />`,
@@ -188,9 +186,10 @@ import { IMultiSelect } from 'integra-ng';
   templateUrl: './example.component.html'
 })
 export class ExampleComponent {
-  skillsValue: string[] = [];
-  departmentsValue: number[] = [];
-  
+  // ngModel now stores full objects
+  skillsValue: MultiSelectOption[] = [];
+  departmentsValue: MultiSelectOption[] = [];
+
   skills = [
     { value: 'javascript', label: 'JavaScript' },
     { value: 'typescript', label: 'TypeScript' },
@@ -207,10 +206,14 @@ import { IMultiSelect } from 'integra-ng';
   templateUrl: './example.component.html'
 })
 export class ExampleComponent {
+  // Form values now store full objects
   basicForm = this.fb.group({
     skills: [[]],
     departments: [[]],
-    preselected: [['javascript', 'angular']]
+    preselected: [[
+      { value: 'javascript', label: 'JavaScript' },
+      { value: 'angular', label: 'Angular' }
+    ]]
   });
 
   constructor(private fb: FormBuilder) {}
@@ -294,9 +297,15 @@ export class ExampleComponent {
     this.basicForm = this.fb.group({
       skills: [[]],
       departments: [[]],
-      preselected: [['javascript', 'angular']],
-      disabled: [{ value: [1, 2], disabled: true }],
-      // New: Store full objects instead of just values
+      preselected: [[
+        { value: 'javascript', label: 'JavaScript' },
+        { value: 'angular', label: 'Angular' }
+      ]],
+      disabled: [{ value: [
+        { value: 1, label: 'Sales' },
+        { value: 2, label: 'Marketing' }
+      ], disabled: true }],
+      // Now all multi-selects store full objects by default
       fullObjectSkills: [[]],
     });
 
@@ -331,17 +340,21 @@ export class ExampleComponent {
   }
 
   onSkillsValueChange(values: any[]) {
-    console.log('Skills Values Changed (optionValue="value"):', values);
+    console.log('Skills Values Changed (full objects):', values);
     console.log('Form control value:', this.basicForm.get('skills')?.value);
     console.log('Array length:', values.length);
     console.log(
       'Types:',
       values.map((v) => typeof v)
     );
+    console.log(
+      'Object properties:',
+      values.map((v) => (v ? Object.keys(v) : 'null'))
+    );
   }
 
   onSkillsObjectChange(values: any[]) {
-    console.log('Skills Objects Changed (no optionValue):', values);
+    console.log('Skills Objects Changed (full objects):', values);
     console.log(
       'Form control value:',
       this.basicForm.get('fullObjectSkills')?.value

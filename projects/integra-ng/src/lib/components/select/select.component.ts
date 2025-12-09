@@ -44,7 +44,6 @@ export interface SelectOption {
  *   label="Country"
  *   [options]="countries"
  *   optionLabel="name"
- *   optionValue="code"
  *   formControlName="country">
  * </i-select>
  *
@@ -63,7 +62,6 @@ export interface SelectOption {
  *   label="Category"
  *   [options]="categories"
  *   optionLabel="label"
- *   optionValue="value"
  *   [showClear]="true"
  *   (onClear)="handleClear()"
  *   formControlName="category">
@@ -115,11 +113,6 @@ export class ISelect implements ControlValueAccessor {
    * Property name to use as the display label for options
    */
   @Input({ required: true }) optionLabel!: string;
-
-  /**
-   * Property name to use as the value for options (if not set, entire object is used)
-   */
-  @Input() optionValue?: string;
 
   /**
    * Placeholder text when no option is selected
@@ -362,10 +355,7 @@ export class ISelect implements ControlValueAccessor {
    * @internal
    */
   getOptionValue(option: SelectOption): any {
-    if (!this.optionValue) {
-      return option;
-    }
-    return option[this.optionValue] || option['value'] || String(option);
+    return option;
   }
 
   /**
@@ -377,11 +367,7 @@ export class ISelect implements ControlValueAccessor {
       return false;
     }
 
-    if (!this.optionValue) {
-      return JSON.stringify(option) === JSON.stringify(this.value);
-    } else {
-      return this.getOptionValue(option) === this.value;
-    }
+    return JSON.stringify(option) === JSON.stringify(this.value);
   }
 
   /**

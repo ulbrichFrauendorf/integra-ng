@@ -25,7 +25,6 @@
             label="Skills"
             [options]="selectData.skills"
             optionLabel="label"
-            optionValue="value"
             placeholder="Select skills"
             formControlName="skills"
           >
@@ -35,7 +34,6 @@
             label="Departments"
             [options]="selectData.departments"
             optionLabel="label"
-            optionValue="value"
             placeholder="Select departments"
             formControlName="departments"
           >
@@ -45,7 +43,6 @@
             label="Preselected Skills"
             [options]="selectData.skills"
             optionLabel="label"
-            optionValue="value"
             placeholder="Preselected values"
             formControlName="preselected"
           >
@@ -55,7 +52,6 @@
             label="Disabled Multi-Select"
             [options]="selectData.departments"
             optionLabel="label"
-            optionValue="value"
             placeholder="This is disabled"
             formControlName="disabled"
           >
@@ -66,7 +62,6 @@
             label="Skills (Values Only)"
             [options]="selectData.skills"
             optionLabel="label"
-            optionValue="value"
             placeholder="Stores only the values"
             formControlName="skills"
             (onChange)="onSkillsValueChange($event)"
@@ -105,7 +100,6 @@
             label="Required Skills (At least 1)"
             [options]="selectData.skills"
             optionLabel="label"
-            optionValue="value"
             placeholder="Select at least 1 skill"
             formControlName="requiredSkills"
           >
@@ -115,7 +109,6 @@
             label="Minimum Skills (At least 2)"
             [options]="selectData.skills"
             optionLabel="label"
-            optionValue="value"
             placeholder="Select at least 2 skills"
             formControlName="minimumSkills"
           >
@@ -145,7 +138,6 @@
           [showClear]="true"
           filterBy="name"
           optionLabel="name"
-          optionValue="value"
           placeholder="Select Categories"
           [maxSelectedLabels]="3"
           formControlName="selectedCategories"
@@ -169,7 +161,6 @@
           label="Fluid Multi-Select"
           [options]="selectData.skills"
           optionLabel="label"
-          optionValue="value"
           [fluid]="true"
           placeholder="Select options"
           formControlName="fluidSelect"
