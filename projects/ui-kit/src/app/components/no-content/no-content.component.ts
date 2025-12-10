@@ -104,13 +104,11 @@ export class ExampleComponent {
     },
     {
       title: 'Lightweight',
-      description:
-        'Simple, focused component with minimal overhead',
+      description: 'Simple, focused component with minimal overhead',
     },
     {
       title: 'Responsive',
-      description:
-        'Adapts to different container sizes and layouts',
+      description: 'Adapts to different container sizes and layouts',
     },
   ];
 }
