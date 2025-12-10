@@ -8,47 +8,24 @@
     box-shadow: colors.$color-box-shadow;
   }
 
-  .overlay-panel-arrow {
-    &::before {
-      border-color: colors.$color-surface-border;
-    }
-
-    &::after {
-      border-color: colors.$color-component-background-secondary;
-    }
-  }
-
-  // Arrow colors for bottom arrow (panel above target)
-  .overlay-panel-bottom .overlay-panel-arrow {
-    &::before {
-      border-top-color: colors.$color-surface-border;
-    }
-
-    &::after {
-      border-top-color: colors.$color-component-background-secondary;
-    }
-  }
-
-  // Arrow colors for top arrow (panel below target)
+  // Arrow colors for top position (arrow points down)
   .overlay-panel-top .overlay-panel-arrow {
-    &::before {
-      border-bottom-color: colors.$color-surface-border;
-    }
-
-    &::after {
-      border-bottom-color: colors.$color-component-background-secondary;
-    }
+    border-top-color: colors.$color-component-background-secondary;
   }
 
-  // Arrow colors for right arrow (panel left of target)
-  .overlay-panel-right .overlay-panel-arrow {
-    &::before {
-      border-left-color: colors.$color-surface-border;
-    }
+  // Arrow colors for bottom position (arrow points up)
+  .overlay-panel-bottom .overlay-panel-arrow {
+    border-bottom-color: colors.$color-component-background-secondary;
+  }
 
-    &::after {
-      border-left-color: colors.$color-component-background-secondary;
-    }
+  // Arrow colors for left position (arrow points right)
+  .overlay-panel-left .overlay-panel-arrow {
+    border-left-color: colors.$color-component-background-secondary;
+  }
+
+  // Arrow colors for right position (arrow points left)
+  .overlay-panel-right .overlay-panel-arrow {
+    border-right-color: colors.$color-component-background-secondary;
   }
 
   // Arrow colors for left arrow (panel right of target)

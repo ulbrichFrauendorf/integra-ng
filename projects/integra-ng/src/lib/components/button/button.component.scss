@@ -14,6 +14,7 @@
 
 .i-button-wrapper {
   .i-button {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,12 +45,20 @@
       &.icon-only {
         gap: 0;
       }
+
+      &--hidden {
+        visibility: hidden;
+      }
     }
 
     .button-loading-spinner {
+      position: absolute;
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 2;
+      opacity: 1;
+      contain: layout style paint;
     }
 
     .i-button__icon {
@@ -93,8 +102,21 @@
 
     &:disabled,
     &--outlined:disabled {
-      opacity: 0.38;
       pointer-events: none;
+    }
+
+    /* Dim only the visual content (text/icon) when disabled so the spinner
+       can remain fully opaque on top. But NOT when loading. */
+    &:disabled:not(.i-button--loading) .button-content,
+    &--outlined:disabled:not(.i-button--loading) .button-content,
+    &:disabled:not(.i-button--loading) .i-button__icon,
+    &--outlined:disabled:not(.i-button--loading) .i-button__icon {
+      opacity: 0.38;
+    }
+
+    /* Spinner is always fully opaque regardless of disabled state */
+    &--loading .button-loading-spinner {
+      opacity: 1 !important;
     }
 
     &--raised {

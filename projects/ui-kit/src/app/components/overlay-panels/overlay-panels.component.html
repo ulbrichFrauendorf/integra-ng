@@ -2,10 +2,9 @@
   <header class="demo-header">
     <h1>Overlay Panel Component</h1>
     <p>
-      A floating panel that positions itself relative to a trigger element.
-      Features automatic collision detection, custom positioning, and
-      dismissable behavior. Perfect for contextual menus, user dropdowns, and
-      additional information displays.
+      A floating panel that positions itself relative to a trigger element with
+      intelligent auto-positioning and collision detection. Perfect for user
+      menus, notifications, actions, filters, and contextual information.
     </p>
   </header>
 
@@ -13,111 +12,40 @@
     <!-- Basic Usage -->
     <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
       <div class="demo-content centered">
-        <i-button (clicked)="basicPanel.toggle($event)">Toggle Panel</i-button>
+        <i-button (clicked)="basicPanel.toggle($event)">Show Info</i-button>
         <i-overlay-panel #basicPanel>
-          <p>This is the content of the overlay panel.</p>
-          <p>It positions itself automatically relative to the button.</p>
+          <div class="info-content">
+            <h4>Quick Information</h4>
+            <p>
+              This panel automatically positions itself relative to the trigger
+              button.
+            </p>
+            <p>Try scrolling the page - the panel follows the button!</p>
+          </div>
         </i-overlay-panel>
       </div>
     </app-demo-card>
 
-    <!-- Position Variants -->
+    <!-- User Menu -->
     <app-demo-card
-      [title]="'Position Variants'"
-      [sourceCode]="codeExamples.positions"
-    >
-      <div class="demo-content">
-        <div class="position-grid">
-          <div class="position-item">
-            <i-button (clicked)="bottomPanel.toggle($event)">Bottom</i-button>
-            <i-overlay-panel #bottomPanel position="bottom">
-              <p>Panel appears below the button</p>
-            </i-overlay-panel>
-          </div>
-
-          <div class="position-item">
-            <i-button (clicked)="topPanel.toggle($event)">Top</i-button>
-            <i-overlay-panel #topPanel position="top">
-              <p>Panel appears above the button</p>
-            </i-overlay-panel>
-          </div>
-
-          <div class="position-item">
-            <i-button (clicked)="leftPanel.toggle($event)">Left</i-button>
-            <i-overlay-panel #leftPanel position="left">
-              <p>Panel appears to the left</p>
-            </i-overlay-panel>
-          </div>
-
-          <div class="position-item">
-            <i-button (clicked)="rightPanel.toggle($event)">Right</i-button>
-            <i-overlay-panel #rightPanel position="right">
-              <p>Panel appears to the right</p>
-            </i-overlay-panel>
-          </div>
-
-          <div class="position-item">
-            <i-button (clicked)="autoPanel.toggle($event)">Auto</i-button>
-            <i-overlay-panel #autoPanel position="auto">
-              <p>Panel automatically chooses the best position</p>
-            </i-overlay-panel>
-          </div>
-        </div>
-      </div>
-    </app-demo-card>
-
-    <!-- With Close Button -->
-    <app-demo-card
-      [title]="'With Close Button'"
-      [sourceCode]="codeExamples.closeButton"
+      [title]="'User Account Menu'"
+      [sourceCode]="codeExamples.userMenu"
     >
       <div class="demo-content centered">
-        <i-button (clicked)="panelWithClose.toggle($event)"
-          >Open Panel</i-button
+        <i-button
+          (clicked)="userPanel.toggle($event)"
+          icon="pi pi-user"
+          [text]="true"
         >
-        <i-overlay-panel #panelWithClose [showCloseButton]="true">
-          <h3 style="margin-top: 0">Panel with Close Button</h3>
-          <p>Click the X button to close this panel.</p>
-        </i-overlay-panel>
-      </div>
-    </app-demo-card>
-
-    <!-- Non-Dismissable -->
-    <app-demo-card
-      [title]="'Non-Dismissable Panel'"
-      [sourceCode]="codeExamples.dismissable"
-    >
-      <div class="demo-content centered">
-        <i-button (clicked)="persistentPanel.toggle($event)"
-          >Persistent Panel</i-button
-        >
-        <i-overlay-panel
-          #persistentPanel
-          [dismissable]="false"
-          [showCloseButton]="true"
-        >
-          <p>This panel won't close when clicking outside.</p>
-          <p>Use the close button or toggle button to close it.</p>
-        </i-overlay-panel>
-      </div>
-    </app-demo-card>
-
-    <!-- Rich Content Example -->
-    <app-demo-card
-      [title]="'Rich Content'"
-      [sourceCode]="codeExamples.richContent"
-    >
-      <div class="demo-content centered">
-        <i-button (clicked)="richPanel.toggle($event)" icon="pi pi-user"
-          >User Menu</i-button
-        >
-        <i-overlay-panel #richPanel [showCloseButton]="true">
+          John Doe
+        </i-button>
+        <i-overlay-panel #userPanel>
           <div class="user-menu">
             <div class="user-header">
-              <i class="pi pi-user"></i>
+              <i class="pi pi-user-circle"></i>
               <div>
                 <strong>John Doe</strong>
-                <div class="user-email">john.doe@example.com</div>
+                <div class="user-email">john.doe&#64;example.com</div>
               </div>
             </div>
             <div class="menu-items">
@@ -135,6 +63,108 @@
                 >Logout</i-button
               >
             </div>
+          </div>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Notifications -->
+    <app-demo-card
+      [title]="'Notifications Panel'"
+      [sourceCode]="codeExamples.notifications"
+    >
+      <div class="demo-content centered">
+        <i-button
+          (clicked)="notifPanel.toggle($event)"
+          icon="pi pi-bell"
+          [text]="true"
+          severity="secondary"
+        >
+          @if (notificationCount > 0) {
+          <span class="badge">{{ notificationCount }}</span>
+          }
+        </i-button>
+        <i-overlay-panel #notifPanel>
+          <div class="notifications-panel">
+            <h4>Notifications</h4>
+            <div class="notification-item">
+              <i class="pi pi-info-circle"></i>
+              <div>
+                <strong>System Update</strong>
+                <p>New version available</p>
+                <small>2 hours ago</small>
+              </div>
+            </div>
+            <div class="notification-item">
+              <i class="pi pi-check-circle"></i>
+              <div>
+                <strong>Task Completed</strong>
+                <p>Your report has been generated</p>
+                <small>1 day ago</small>
+              </div>
+            </div>
+            <div class="notification-item">
+              <i class="pi pi-envelope"></i>
+              <div>
+                <strong>New Message</strong>
+                <p>You have a new message from support</p>
+                <small>3 days ago</small>
+              </div>
+            </div>
+          </div>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Action Menu -->
+    <app-demo-card [title]="'Action Menu'" [sourceCode]="codeExamples.actions">
+      <div class="demo-content centered">
+        <i-button
+          (clicked)="actionsPanel.toggle($event)"
+          icon="pi pi-ellipsis-v"
+          [text]="true"
+        />
+        <i-overlay-panel #actionsPanel>
+          <div class="actions-menu">
+            <i-button [text]="true" [fluid]="true" icon="pi pi-pencil"
+              >Edit</i-button
+            >
+            <i-button [text]="true" [fluid]="true" icon="pi pi-copy"
+              >Duplicate</i-button
+            >
+            <i-button [text]="true" [fluid]="true" icon="pi pi-download"
+              >Export</i-button
+            >
+            <i-button
+              [text]="true"
+              [fluid]="true"
+              icon="pi pi-trash"
+              severity="danger"
+              >Delete</i-button
+            >
+          </div>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Persistent Panel -->
+    <app-demo-card
+      [title]="'Persistent Panel'"
+      [sourceCode]="codeExamples.persistent"
+    >
+      <div class="demo-content centered">
+        <i-button (clicked)="persistentPanel.toggle($event)"
+          >Important Info</i-button
+        >
+        <i-overlay-panel #persistentPanel [dismissable]="false">
+          <div class="important-info">
+            <i class="pi pi-exclamation-triangle"></i>
+            <h4>Important Notice</h4>
+            <p>This panel won't close when clicking outside.</p>
+            <p>You must explicitly close it using the button below.</p>
+            <i-button (clicked)="persistentPanel.hide()" [fluid]="true">
+              I Understand
+            </i-button>
           </div>
         </i-overlay-panel>
       </div>

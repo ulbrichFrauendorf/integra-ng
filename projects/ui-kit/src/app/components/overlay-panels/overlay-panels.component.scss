@@ -24,7 +24,24 @@
   min-height: 100px;
 }
 
-// User menu styling (for rich content example)
+// Info content
+.info-content {
+  max-width: 300px;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--color-text-primary);
+  }
+
+  p {
+    margin: 8px 0;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+}
+
+// User menu styling
 .user-menu {
   min-width: 250px;
 
@@ -58,4 +75,102 @@
     flex-direction: column;
     gap: 4px;
   }
+}
+
+// Notifications panel
+.notifications-panel {
+  min-width: 320px;
+  max-width: 400px;
+
+  h4 {
+    margin: 0 0 12px 0;
+    color: var(--color-text-primary);
+  }
+
+  .notification-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--surface-hover);
+    }
+
+    i {
+      font-size: 1.5rem;
+      color: var(--color-primary);
+      margin-top: 2px;
+    }
+
+    strong {
+      display: block;
+      color: var(--color-text-primary);
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0 0 4px 0;
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+    }
+
+    small {
+      color: var(--color-text-tertiary);
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// Actions menu
+.actions-menu {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// Important info panel
+.important-info {
+  max-width: 300px;
+  text-align: center;
+
+  i {
+    font-size: 3rem;
+    color: var(--color-warning);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  h4 {
+    margin: 0 0 12px 0;
+    color: var(--color-text-primary);
+  }
+
+  p {
+    margin: 8px 0;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  i-button {
+    margin-top: 16px;
+  }
+}
+
+// Badge for notifications
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background-color: var(--color-danger);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 8px;
 }

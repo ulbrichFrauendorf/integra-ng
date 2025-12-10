@@ -1,25 +1,26 @@
-@if (visible) {
+@if (render) {
 <div
-    #panel
-    class="overlay-panel"
-    [ngClass]="'overlay-panel-' + arrowPosition"
-    [ngStyle]="positionStyle"
-    role="dialog"
-    [attr.aria-hidden]="!visible"
+  #container
+  class="overlay-panel"
+  [class.overlay-panel-visible]="overlayVisible"
+  (click)="onContainerClick()"
+  (keydown.escape)="onEscapeKey()"
+  [@animation]="visible ? 'open' : 'closed'"
+  (@animation.start)="onAnimationStart($event)"
+  (@animation.done)="onAnimationEnd($event)"
+  role="dialog"
+  [attr.aria-hidden]="!visible"
 >
-    <div class="overlay-panel-content">
-        <ng-content></ng-content>
-    </div>
-    @if (showCloseButton) {
-    <i-button
-        class="overlay-panel-close"
-        size="small"
-        [icon]="'pi pi-times'"
-        [text]="true"
-        [severity]="'contrast'"
-        (clicked)="hide()"
-    ></i-button>
-    }
-    <div class="overlay-panel-arrow" [ngStyle]="arrowStyle"></div>
+  <i-button
+    class="overlay-panel-close"
+    size="xtra-small"
+    [icon]="'pi pi-times'"
+    [text]="true"
+    [severity]="'contrast'"
+    (clicked)="hide()"
+  ></i-button>
+  <div class="overlay-panel-content">
+    <ng-content></ng-content>
+  </div>
 </div>
 }

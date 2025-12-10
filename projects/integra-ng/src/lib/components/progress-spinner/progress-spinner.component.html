@@ -5,22 +5,9 @@
   [attr.aria-label]="ariaLabel"
   role="status"
 >
-  <svg class="spinner-svg" viewBox="0 0 50 50">
-    <circle
-      class="spinner-track"
-      cx="25"
-      cy="25"
-      r="20"
-      fill="none"
-      [attr.stroke-width]="strokeWidth"
-    ></circle>
-    <circle
-      class="spinner-circle"
-      cx="25"
-      cy="25"
-      r="20"
-      fill="none"
-      [attr.stroke-width]="strokeWidth"
-    ></circle>
-  </svg>
+  <div class="spinner-rings">
+    <div class="spinner-ring spinner-ring-1"></div>
+    <div class="spinner-ring spinner-ring-2"></div>
+    <div class="spinner-ring spinner-ring-3"></div>
+  </div>
 </div>
