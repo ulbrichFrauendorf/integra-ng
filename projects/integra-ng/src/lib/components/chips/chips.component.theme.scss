@@ -16,7 +16,11 @@
   }
 
   .i-chips-label--floated {
-    background: transparent;
+    background: colors.$color-component-background-secondary;
+  }
+
+  .i-chips-container:focus-within + .i-chips-label {
+    background: colors.$color-component-background-secondary;
   }
 
   .i-chips-label--error {

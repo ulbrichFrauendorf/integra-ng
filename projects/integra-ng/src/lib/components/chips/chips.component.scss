@@ -33,13 +33,13 @@ $chips-action-space: 40px;
       transition: all 0.15s ease;
 
       &--floated {
-        top: -20px;
+        top: -8px;
         font-size: 0.85em;
       }
     }
 
     .i-chips-container:focus-within + .i-chips-label {
-      top: -20px;
+      top: -8px;
       font-size: 0.85em;
     }
   }

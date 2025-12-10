@@ -1,21 +1,41 @@
 <div class="i-button-wrapper">
-    <button #buttonElement primary [attr.id]="componentId" class="i-button" [ngClass]="[
-        'i-button--' + severity,
-        'i-button--' + size,
-        outlined && !text ? 'i-button--outlined' : '',
-        text ? 'i-button--text' : '',
-        fluid ? 'i-button--fluid' : '',
-        raised && !text ? 'i-button--raised' : '',
-        iconOnly ? 'icon-only' : '',
-        iconOnly && !text ? 'icon-only-text' : ''
-      ]" [disabled]="disabled" [attr.type]="type" (click)="clicked.emit($event)">
-      <div [ngClass]="['button-content', iconOnly ? 'icon-only' : '']">
-        @if (icon) {
-        <i [ngClass]="[icon, 'i-button__icon', iconOnly ? 'icon-only' : '']"></i>
-        }
-        <span class="projected-content" #projected>
-          <ng-content></ng-content>
-        </span>
-      </div>
-    </button>
+  <button
+    #buttonElement
+    primary
+    [attr.id]="componentId"
+    class="i-button"
+    [ngClass]="[
+      'i-button--' + severity,
+      'i-button--' + size,
+      outlined && !text ? 'i-button--outlined' : '',
+      text ? 'i-button--text' : '',
+      fluid ? 'i-button--fluid' : '',
+      raised && !text ? 'i-button--raised' : '',
+      iconOnly ? 'icon-only' : '',
+      iconOnly && !text ? 'icon-only-text' : '',
+      loading ? 'i-button--loading' : ''
+    ]"
+    [disabled]="disabled || loading"
+    [attr.type]="type"
+    (click)="clicked.emit($event)"
+  >
+    @if (loading) {
+    <div class="button-loading-spinner">
+      <i-progress-spinner
+        size="small"
+        [severity]="severity"
+        [colorMode]="outlined || text ? 'text' : 'accent'"
+      ></i-progress-spinner>
+    </div>
+    } @else {
+    <div [ngClass]="['button-content', iconOnly ? 'icon-only' : '']">
+      @if (icon) {
+      <i [ngClass]="[icon, 'i-button__icon', iconOnly ? 'icon-only' : '']"></i>
+      }
+      <span class="projected-content" #projected>
+        <ng-content></ng-content>
+      </span>
+    </div>
+    }
+  </button>
 </div>

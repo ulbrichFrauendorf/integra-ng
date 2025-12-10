@@ -37,6 +37,9 @@ interface Product {
 export class TablesComponent {
   constructor(private whisperService: WhisperService) {}
 
+  // Empty data for empty state demo
+  emptyProducts: Product[] = [];
+
   // Sample product data
   products: Product[] = [
     {
@@ -493,6 +496,19 @@ handleDownload(event: TableDownloadEvent): void {
       // Handle the downloaded file
     });
 }`,
+
+    emptyState: `<!-- Empty table automatically shows no-content component -->
+<i-table
+  [data]="emptyProducts"
+  [columns]="basicColumns"
+  [striped]="true">
+</i-table>
+
+// TypeScript
+emptyProducts: Product[] = [];
+
+// The table component automatically displays
+// the i-no-content component when data is empty`,
   };
 
   // TypeScript initialization example

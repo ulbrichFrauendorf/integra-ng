@@ -46,6 +46,12 @@
       }
     }
 
+    .button-loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .i-button__icon {
       display: inline-flex;
       align-items: center;

@@ -107,6 +107,18 @@
       </div>
     </app-demo-card>
 
+    <!-- Empty State -->
+    <app-demo-card
+      [title]="'Empty State'"
+      [sourceCode]="codeExamples.emptyState"
+    >
+      <p class="demo-description">
+        When a table has no data, the table component automatically displays an empty state with a friendly icon and message.
+      </p>
+      <i-table [data]="emptyProducts" [columns]="basicColumns" [striped]="true">
+      </i-table>
+    </app-demo-card>
+
     <!-- Custom Header & Download -->
     <app-demo-card
       [title]="'Custom Header & Export'"

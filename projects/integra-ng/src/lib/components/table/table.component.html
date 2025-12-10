@@ -176,7 +176,7 @@
               (showActions && actions.length > 0 ? 1 : 0)
             "
           >
-            <i-empty-state-table></i-empty-state-table>
+            <i-no-content />
           </td>
         </tr>
         } @else { @for (row of group.data; track trackByRow($index, row)) {
@@ -268,7 +268,7 @@
               (showActions && actions.length > 0 ? 1 : 0)
             "
           >
-            <i-empty-state-table></i-empty-state-table>
+            <i-no-content />
           </td>
         </tr>
         } @else { @for (row of processedData(); track trackByRow($index, row);

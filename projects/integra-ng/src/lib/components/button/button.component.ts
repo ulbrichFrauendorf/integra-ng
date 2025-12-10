@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
+import { IProgressSpinner } from '../progress-spinner/progress-spinner.component';
 
 /**
  * Supported button sizes
@@ -54,7 +55,7 @@ export type IButtonSize = 'xtra-small' | 'small' | 'medium' | 'large';
 @Component({
   selector: 'i-button',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, IProgressSpinner],
   templateUrl: './button.component.html',
   styleUrl: './button.component.scss',
 })
@@ -114,6 +115,13 @@ export class IButton implements AfterViewInit {
    * @default false
    */
   @Input() fluid = false;
+
+  /**
+   * Whether the button is in a loading state
+   * Shows a spinner and hides button content
+   * @default false
+   */
+  @Input() loading = false;
 
   /**
    * Event emitted when the button is clicked

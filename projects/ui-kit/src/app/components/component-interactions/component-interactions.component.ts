@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { IAccordion } from '../../../../../integra-ng/src/lib/components/accordion/accordion.component';
 import { IAccordionList } from '../../../../../integra-ng/src/lib/components/accordion-list/accordion-list.component';
+import { IPanel } from '../../../../../integra-ng/src/lib/components/panel/panel.component';
 import { ISelect } from '@shared/components/select/select.component';
 import { IMultiSelect } from '@shared/components/multi-select/multi-select.component';
 import { IButton } from '@shared/components/button/button.component';
@@ -23,6 +24,7 @@ import {
     JsonPipe,
     IAccordion,
     IAccordionList,
+    IPanel,
     ISelect,
     IMultiSelect,
     IButton,
@@ -83,6 +85,17 @@ export class ComponentInteractionsComponent implements OnInit {
     { value: 'archived', label: 'Archived' },
   ];
 
+  languages = [
+    { value: 'en', label: 'English' },
+    { value: 'es', label: 'Spanish' },
+    { value: 'fr', label: 'French' },
+    { value: 'de', label: 'German' },
+    { value: 'it', label: 'Italian' },
+    { value: 'pt', label: 'Portuguese' },
+    { value: 'ja', label: 'Japanese' },
+    { value: 'zh', label: 'Chinese' },
+  ];
+
   // Code examples
   codeExamples = {
     dropdownInAccordion: `<i-accordion-list [multiple]="true">
@@ -139,6 +152,28 @@ export class ComponentInteractionsComponent implements OnInit {
       placeholder="Select tags" />
   </div>
 </i-accordion>`,
+    selectInPanel: `<i-panel header="User Preferences" [toggleable]="true">
+  <div class="form-group">
+    <i-select
+      label="Country"
+      [options]="countries"
+      optionLabel="label"
+      optionValue="value"
+      formControlName="country"
+      placeholder="Select your country"
+      [filter]="true"
+      [showClear]="true" />
+
+    <i-multi-select
+      label="Languages"
+      [options]="languages"
+      optionLabel="label"
+      optionValue="value"
+      formControlName="selectedLanguages"
+      placeholder="Select languages"
+      [filter]="true" />
+  </div>
+</i-panel>`,
   };
 
   tsExamples = {
@@ -175,6 +210,11 @@ export class ExampleComponent {
         'Shows multi-select dropdowns expanding correctly beyond accordion boundaries',
     },
     {
+      title: 'Dropdown in Panel',
+      description:
+        'Ensures select and multi-select components work correctly inside panel containers with proper overlay visibility',
+    },
+    {
       title: 'Form Integration',
       description:
         'Shows reactive forms working seamlessly across accordion panels',
@@ -198,6 +238,7 @@ export class ExampleComponent {
       priority: [''],
       selectedFeatures: [[]],
       selectedTags: [[]],
+      selectedLanguages: [[]],
     });
   }
 

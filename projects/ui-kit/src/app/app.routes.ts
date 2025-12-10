@@ -26,6 +26,9 @@ import { PlaceholdersComponent } from './components/placeholders/placeholders.co
 import { ChartsComponent } from './components/charts/charts.component';
 import { ComponentInteractionsComponent } from './components/component-interactions/component-interactions.component';
 import { LayoutsComponent } from './components/layouts/layouts.component';
+import { OverlayPanelsComponent } from './components/overlay-panels/overlay-panels.component';
+import { ProgressSpinnersComponent } from './components/progress-spinners/progress-spinners.component';
+import { NoContentComponent } from './components/no-content/no-content.component';
 
 export const routes: Routes = [
   {
@@ -51,33 +54,36 @@ export const routes: Routes = [
           { path: 'accordions', component: AccordionsComponent },
           { path: 'buttons', component: ButtonsComponent },
           { path: 'calendars', component: CalendarsComponent },
-          { path: 'checkboxes', component: CheckboxesComponent },
-          { path: 'radio-buttons', component: RadioButtonsComponent },
-          { path: 'input-texts', component: InputTextsComponent },
           { path: 'cards', component: CardsComponent },
-          { path: 'dialogs', component: DialogsComponent },
+          { path: 'charts', component: ChartsComponent },
+          { path: 'checkboxes', component: CheckboxesComponent },
+          { path: 'chips', component: ChipsComponent },
           {
             path: 'confirmation-dialogs',
             component: ConfirmationDialogsComponent,
           },
-          { path: 'tooltips', component: TooltipsComponent },
-          { path: 'selects', component: SelectsComponent },
-          { path: 'multi-selects', component: MultiSelectsComponent },
-          { path: 'chips', component: ChipsComponent },
+          { path: 'dialogs', component: DialogsComponent },
+          { path: 'input-texts', component: InputTextsComponent },
+          { path: 'layouts', component: LayoutsComponent },
           { path: 'listboxes', component: ListboxesComponent },
           { path: 'messages', component: MessagesComponent },
+          { path: 'multi-selects', component: MultiSelectsComponent },
+          { path: 'no-content', component: NoContentComponent },
+          { path: 'overlay-panels', component: OverlayPanelsComponent },
           { path: 'panels', component: PanelsComponent },
           { path: 'placeholders', component: PlaceholdersComponent },
-          { path: 'tree-views', component: TreeViewsComponent },
-          { path: 'tabs', component: TabsComponent },
-          { path: 'whispers', component: WhispersComponent },
+          { path: 'progress-spinners', component: ProgressSpinnersComponent },
+          { path: 'radio-buttons', component: RadioButtonsComponent },
+          { path: 'selects', component: SelectsComponent },
           { path: 'tables', component: TablesComponent },
-          { path: 'charts', component: ChartsComponent },
+          { path: 'tabs', component: TabsComponent },
+          { path: 'tooltips', component: TooltipsComponent },
+          { path: 'tree-views', component: TreeViewsComponent },
+          { path: 'whispers', component: WhispersComponent },
           {
             path: 'component-interactions',
             component: ComponentInteractionsComponent,
           },
-          { path: 'layouts', component: LayoutsComponent },
           { path: '', redirectTo: 'installation', pathMatch: 'full' },
         ],
       },
