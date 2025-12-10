@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { IButton } from 'integra-ng';
+import { IButton } from '../button/button.component';
 
 /**
  * Overlay Panel Component
