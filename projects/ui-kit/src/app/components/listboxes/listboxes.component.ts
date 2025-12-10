@@ -68,8 +68,8 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     name: `Item ${i + 1}`,
   }));
 
-  // Selected model for constrained large dataset demo
-  selectedLargeItems: number | null = null;
+  // Selected model for constrained large dataset demo (now full object)
+  selectedLargeItems: ListboxOption | null = null;
 
   // Tasks data with icons
   tasks = [
@@ -114,23 +114,34 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     },
   ];
 
-  // Multiple selection listbox values
-  selectedCountriesMultiple: string[] = ['US', 'CA'];
+  // Multiple selection listbox values (now full objects)
+  selectedCountriesMultiple: ListboxOption[] = [
+    { name: 'United States', code: 'US' },
+    { name: 'Canada', code: 'CA' },
+  ];
 
-  // Single selection listbox value
-  selectedCountrySingle: string | null = 'UK';
+  // Single selection listbox value (now full object)
+  selectedCountrySingle: ListboxOption | null = {
+    name: 'United Kingdom',
+    code: 'UK',
+  };
 
-  // Tasks selection
-  selectedTasks: string[] = ['review'];
+  // Tasks selection (now full objects)
+  selectedTasks: ListboxOption[] = [
+    { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
+  ];
 
-  // Users selection
-  selectedUser: number | null = null;
+  // Users selection (now full object)
+  selectedUser: ListboxOption | null = null;
 
   constructor(private fb: FormBuilder) {
-    // Initialize reactive form
+    // Initialize reactive form - now stores full department objects
     this.departmentsForm = this.fb.group({
       selectedDepartments: [
-        [1, 2],
+        [
+          { id: 1, name: 'Engineering', code: 'ENG', employees: 25 },
+          { id: 2, name: 'Marketing', code: 'MKT', employees: 12 },
+        ],
         [Validators.required, Validators.minLength(1)],
       ],
     });
@@ -187,13 +198,13 @@ export class ListboxesComponent implements OnInit, OnDestroy {
       });
   }
 
-  onMultipleSelectionChange(value: string[]) {
-    console.log('Multiple selection changed:', value);
+  onMultipleSelectionChange(value: ListboxOption[]) {
+    console.log('Multiple selection changed (full objects):', value);
     this.selectedCountriesMultiple = value;
   }
 
-  onSingleSelectionChange(value: string | null) {
-    console.log('Single selection changed:', value);
+  onSingleSelectionChange(value: ListboxOption | null) {
+    console.log('Single selection changed (full object):', value);
     this.selectedCountrySingle = value;
   }
 
@@ -262,21 +273,23 @@ export class ListboxesComponent implements OnInit, OnDestroy {
 
   // Code examples for demo cards
   codeExamples = {
-    multiple: `// Component setup
+    multiple: `// Component setup - ngModel now stores full objects
 countries = [
   { name: 'United States', code: 'US' },
   { name: 'Canada', code: 'CA' },
   { name: 'United Kingdom', code: 'UK' }
 ];
 
-selectedCountriesMultiple: string[] = ['US', 'CA'];
+selectedCountriesMultiple: ListboxOption[] = [
+  { name: 'United States', code: 'US' },
+  { name: 'Canada', code: 'CA' }
+];
 
 // Template usage - Multiple select with chips in header
 <i-listbox
   title="Countries"
   [options]="countries"
   optionLabel="name"
-  optionValue="code"
   [multiple]="true"
   [showClear]="true"
   actionIcon="pi pi-plus"
@@ -285,20 +298,19 @@ selectedCountriesMultiple: string[] = ['US', 'CA'];
   [(ngModel)]="selectedCountriesMultiple">
 </i-listbox>`,
 
-    single: `// Single select - no checkboxes shown
-selectedCountrySingle: string | null = 'UK';
+    single: `// Single select - ngModel stores full object
+selectedCountrySingle: ListboxOption | null = { name: 'United Kingdom', code: 'UK' };
 
 <i-listbox
   title="Select Country"
   [options]="countries"
   optionLabel="name"
-  optionValue="code"
   [multiple]="false"
   [showClear]="true"
   [(ngModel)]="selectedCountrySingle">
 </i-listbox>`,
 
-    withIcons: `// Options with left icons - use property name
+    withIcons: `// Options with left icons
 tasks = [
   { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
   { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
@@ -309,7 +321,6 @@ tasks = [
   title="Tasks"
   [options]="tasks"
   optionLabel="name"
-  optionValue="value"
   [multiple]="true"
   optionLeftIcon="icon"
   actionIcon="pi pi-cog"
@@ -317,7 +328,7 @@ tasks = [
   (onAction)="onManageTasks()">
 </i-listbox>`,
 
-    rightIcons: `// Options with right status icons
+    rightIcons: `// Options with right status icons - ngModel stores full object
 users = [
   { name: 'John Doe', id: 1, statusIcon: 'pi pi-circle-fill' },
   { name: 'Jane Smith', id: 2, statusIcon: 'pi pi-circle' },
@@ -328,7 +339,6 @@ users = [
   title="Team Members"
   [options]="users"
   optionLabel="name"
-  optionValue="id"
   [multiple]="false"
   optionRightIcon="statusIcon"
   actionIcon="pi pi-user-plus"
@@ -340,7 +350,6 @@ users = [
   title="Searchable Countries"
   [options]="countries"
   optionLabel="name"
-  optionValue="code"
   [multiple]="true"
   [filter]="true"
   filterBy="name"
@@ -351,31 +360,32 @@ users = [
   title="Full Width Listbox"
   [options]="countries"
   optionLabel="name"
-  optionValue="code"
   [multiple]="true"
   [fluid]="true"
   [showClear]="true">
 </i-listbox>`,
 
-    disabled: `<i-listbox
+    disabled: `// Disabled listbox with preselected objects
+<i-listbox
   title="Disabled Listbox"
   [options]="countries"
   optionLabel="name"
-  optionValue="code"
   [multiple]="true"
   [disabled]="true"
-  [ngModel]="['US', 'CA']">
+  [ngModel]="[
+    { name: 'United States', code: 'US' },
+    { name: 'Canada', code: 'CA' }
+  ]">
 </i-listbox>`,
 
     constrained: `// Constrained container example (500px height)
-// Provide a wrapper with a fixed height and allow the listbox to scroll.
+// ngModel stores full object from largeDataset
 
 <div class="wrapper">
   <i-listbox
     title="Items (50 total)"
     [options]="largeDataset"
     optionLabel="name"
-    optionValue="id"
     [multiple]="false"
     [filter]="true"
     [showClear]="true"
@@ -383,9 +393,12 @@ users = [
   ></i-listbox>
 </div>`,
 
-    reactive: `// Component setup with reactive forms and observable data
+    reactive: `// Component setup with reactive forms - stores full objects
 departmentsForm = this.fb.group({
-  selectedDepartments: [[1, 2], [Validators.required, Validators.minLength(1)]]
+  selectedDepartments: [[
+    { id: 1, name: 'Engineering', code: 'ENG', employees: 25 },
+    { id: 2, name: 'Marketing', code: 'MKT', employees: 12 }
+  ], [Validators.required, Validators.minLength(1)]]
 });
 
 departmentOptions$ = this.departmentSubject.asObservable();
@@ -396,7 +409,6 @@ departmentOptions$ = this.departmentSubject.asObservable();
     title="Departments"
     [options]="departmentOptions$ | async"
     optionLabel="name"
-    optionValue="id"
     formControlName="selectedDepartments"
     [multiple]="true"
     [filter]="true"

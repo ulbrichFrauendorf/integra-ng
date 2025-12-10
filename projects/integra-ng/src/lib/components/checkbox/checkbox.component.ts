@@ -5,7 +5,7 @@ import {
   EventEmitter,
   forwardRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 
@@ -62,7 +62,7 @@ export type ICheckboxSize = 'small' | 'medium' | 'large';
 @Component({
   selector: 'i-checkbox',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss'],
   providers: [

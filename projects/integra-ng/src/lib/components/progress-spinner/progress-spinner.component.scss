@@ -1,0 +1,57 @@
+@use "./progress-spinner.component.theme.scss" as theme;
+@include theme.i-progress-spinner-theme();
+
+.spinner-container {
+  display: inline-block;
+  position: relative;
+
+  &.spinner-small {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  &.spinner-medium {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  &.spinner-large {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+.spinner-svg {
+  width: 100%;
+  height: 100%;
+  animation: spinner-rotate 2s linear infinite;
+  transform-origin: center center;
+}
+
+.spinner-circle {
+  stroke-dasharray: 89, 200;
+  stroke-dashoffset: 0;
+  animation: spinner-dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@keyframes spinner-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}

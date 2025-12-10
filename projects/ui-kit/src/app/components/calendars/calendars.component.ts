@@ -13,7 +13,7 @@ import {
   FeaturesListComponent,
   Feature,
 } from '../features-list/features-list.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-calendars',
@@ -23,9 +23,8 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     FormsModule,
     DemoCardComponent,
-    FeaturesListComponent,
-    CommonModule,
-  ],
+    FeaturesListComponent
+],
   templateUrl: './calendars.component.html',
   styleUrl: './calendars.component.scss',
 })

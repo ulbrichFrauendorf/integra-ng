@@ -1,39 +1,45 @@
-<div
-  [ngClass]="getContainerClass()"
-  [ngStyle]="style"
-  [attr.id]="componentId"
-  *ngIf="messages && messages.length > 0"
->
+@if (messages && messages.length > 0) {
   <div
-    *ngFor="let message of messages; trackBy: trackByMessage"
-    [ngClass]="getMessageClass(message)"
-    [attr.data-whisper-key]="message.key"
-    [attr.aria-live]="'polite'"
-    [attr.aria-atomic]="'true'"
-    role="alert"
-  >
-    <div class="i-whisper-message-content">
-      <div class="i-whisper-message-icon">
-        <i [ngClass]="['pi', getMessageIcon(message.severity)]"> </i>
-      </div>
-      <div class="i-whisper-message-text">
-        <div class="i-whisper-message-summary" *ngIf="message.summary">
-          {{ message.summary }}
+    [ngClass]="getContainerClass()"
+    [ngStyle]="style"
+    [attr.id]="componentId"
+    >
+    @for (message of messages; track trackByMessage($index, message)) {
+      <div
+        [ngClass]="getMessageClass(message)"
+        [attr.data-whisper-key]="message.key"
+        [attr.aria-live]="'polite'"
+        [attr.aria-atomic]="'true'"
+        role="alert"
+        >
+        <div class="i-whisper-message-content">
+          <div class="i-whisper-message-icon">
+            <i [ngClass]="['pi', getMessageIcon(message.severity)]"> </i>
+          </div>
+          <div class="i-whisper-message-text">
+            @if (message.summary) {
+              <div class="i-whisper-message-summary">
+                {{ message.summary }}
+              </div>
+            }
+            @if (message.detail) {
+              <div class="i-whisper-message-detail">
+                {{ message.detail }}
+              </div>
+            }
+          </div>
+          @if (message.closable === true) {
+            <i-button
+              [severity]="message.severity"
+              size="small"
+              [text]="true"
+              icon="pi pi-times"
+              (click)="onClose(message)"
+              [attr.aria-label]="'Close'"
+              />
+            }
+          </div>
         </div>
-        <div class="i-whisper-message-detail" *ngIf="message.detail">
-          {{ message.detail }}
-        </div>
-      </div>
-      @if (message.closable === true) {
-      <i-button
-        [severity]="message.severity"
-        size="small"
-        [text]="true"
-        icon="pi pi-times"
-        (click)="onClose(message)"
-        [attr.aria-label]="'Close'"
-      />
       }
     </div>
-  </div>
-</div>
+  }

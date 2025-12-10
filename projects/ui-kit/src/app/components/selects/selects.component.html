@@ -19,7 +19,6 @@
             label="Country"
             [options]="selectData.countries"
             optionLabel="label"
-            optionValue="value"
             placeholder="Select a country"
             formControlName="country"
           />
@@ -28,7 +27,6 @@
             label="Status"
             [options]="selectData.statuses"
             optionLabel="label"
-            optionValue="value"
             placeholder="Select status"
             formControlName="status"
           />
@@ -37,7 +35,6 @@
             label="Preselected Country"
             [options]="selectData.countries"
             optionLabel="label"
-            optionValue="value"
             placeholder="Preselected value"
             formControlName="preselected"
           />
@@ -46,29 +43,27 @@
             label="Disabled Select"
             [options]="selectData.countries"
             optionLabel="label"
-            optionValue="value"
             placeholder="This is disabled"
             formControlName="disabled"
             [readonly]="true"
           />
 
-          <!-- Value Extraction Example -->
-          <i-select
-            label="Country (Value Only)"
-            [options]="selectData.countries"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Stores only the value"
-            formControlName="country"
-            (onChange)="onCountryValueChange($event)"
-          />
-
-          <!-- Full Object Example -->
+          <!-- Object Storage Example 1 -->
           <i-select
             label="Country (Full Object)"
             [options]="selectData.countries"
             optionLabel="label"
-            placeholder="Stores the entire object"
+            placeholder="Stores entire object"
+            formControlName="country"
+            (onChange)="onCountryValueChange($event)"
+          />
+
+          <!-- Object Storage Example 2 -->
+          <i-select
+            label="Country (Full Object)"
+            [options]="selectData.countries"
+            optionLabel="label"
+            placeholder="Stores entire object"
             formControlName="fullObjectSelect"
             (onChange)="onCountryObjectChange($event)"
           />
@@ -90,7 +85,6 @@
           label="Status (Required)"
           [options]="selectData.statuses"
           optionLabel="label"
-          optionValue="value"
           placeholder="Select status"
           formControlName="status"
         />
@@ -116,7 +110,6 @@
           [showClear]="true"
           filterBy="name"
           optionLabel="name"
-          optionValue="value"
           placeholder="Select Report"
           formControlName="selectedReport"
           (onClear)="onReportClear()"
@@ -139,7 +132,6 @@
           label="Fluid Select"
           [options]="selectData.countries"
           optionLabel="label"
-          optionValue="value"
           [fluid]="true"
           placeholder="Select option"
           formControlName="fluidSelect"

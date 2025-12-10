@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -35,7 +35,7 @@ export interface ChipRemoveEvent {
 @Component({
   selector: 'i-chips',
   standalone: true,
-  imports: [CommonModule, IChip, IButton],
+  imports: [IChip, IButton],
   templateUrl: './chips.component.html',
   styleUrls: ['./chips.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

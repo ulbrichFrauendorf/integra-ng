@@ -40,32 +40,12 @@ export class AppLayoutComponent {
       ],
     },
     {
-      label: 'UI Components',
+      label: 'Form Controls',
       items: [
-        {
-          label: 'Layouts',
-          icon: 'pi pi-fw pi-objects-column',
-          routerLink: ['/components/layouts'],
-        },
-        {
-          label: 'Accordions',
-          icon: 'pi pi-fw pi-list',
-          routerLink: ['/components/accordions'],
-        },
         {
           label: 'Input Texts',
           icon: 'pi pi-fw pi-pencil',
           routerLink: ['/components/input-texts'],
-        },
-        {
-          label: 'Calendars',
-          icon: 'pi pi-fw pi-calendar',
-          routerLink: ['/components/calendars'],
-        },
-        {
-          label: 'Buttons',
-          icon: 'pi pi-fw pi-external-link',
-          routerLink: ['/components/buttons'],
         },
         {
           label: 'Checkboxes',
@@ -78,10 +58,95 @@ export class AppLayoutComponent {
           routerLink: ['/components/radio-buttons'],
         },
         {
+          label: 'Selects',
+          icon: 'pi pi-fw pi-list',
+          routerLink: ['/components/selects'],
+        },
+        {
+          label: 'Multi Selects',
+          icon: 'pi pi-fw pi-th-large',
+          routerLink: ['/components/multi-selects'],
+        },
+        {
+          label: 'Listboxes',
+          icon: 'pi pi-fw pi-list',
+          routerLink: ['/components/listboxes'],
+        },
+        {
+          label: 'Calendars',
+          icon: 'pi pi-fw pi-calendar',
+          routerLink: ['/components/calendars'],
+        },
+      ],
+    },
+    {
+      label: 'Buttons & Actions',
+      items: [
+        {
+          label: 'Buttons',
+          icon: 'pi pi-fw pi-external-link',
+          routerLink: ['/components/buttons'],
+        },
+        {
+          label: 'Chips',
+          icon: 'pi pi-fw pi-tag',
+          routerLink: ['/components/chips'],
+        },
+      ],
+    },
+    {
+      label: 'Layout & Containers',
+      items: [
+        {
+          label: 'Layouts',
+          icon: 'pi pi-fw pi-objects-column',
+          routerLink: ['/components/layouts'],
+        },
+        {
           label: 'Cards',
           icon: 'pi pi-fw pi-id-card',
           routerLink: ['/components/cards'],
         },
+        {
+          label: 'Panels',
+          icon: 'pi pi-fw pi-window-maximize',
+          routerLink: ['/components/panels'],
+        },
+        {
+          label: 'Tabs',
+          icon: 'pi pi-fw pi-folder',
+          routerLink: ['/components/tabs'],
+        },
+        {
+          label: 'Accordions',
+          icon: 'pi pi-fw pi-list',
+          routerLink: ['/components/accordions'],
+        },
+      ],
+    },
+    {
+      label: 'Data Display',
+      items: [
+        {
+          label: 'Tables',
+          icon: 'pi pi-fw pi-table',
+          routerLink: ['/components/tables'],
+        },
+        {
+          label: 'Tree Views',
+          icon: 'pi pi-fw pi-sitemap',
+          routerLink: ['/components/tree-views'],
+        },
+        {
+          label: 'Charts',
+          icon: 'pi pi-fw pi-chart-bar',
+          routerLink: ['/components/charts'],
+        },
+      ],
+    },
+    {
+      label: 'Overlays',
+      items: [
         {
           label: 'Dialogs',
           icon: 'pi pi-fw pi-window-maximize',
@@ -93,72 +158,56 @@ export class AppLayoutComponent {
           routerLink: ['/components/confirmation-dialogs'],
         },
         {
+          label: 'Overlay Panels',
+          icon: 'pi pi-fw pi-window-maximize',
+          routerLink: ['/components/overlay-panels'],
+        },
+        {
           label: 'Tooltips',
           icon: 'pi pi-fw pi-info-circle',
           routerLink: ['/components/tooltips'],
         },
         {
-          label: 'Selects',
-          icon: 'pi pi-fw pi-list',
-          routerLink: ['/components/selects'],
+          label: 'No Content',
+          icon: 'pi pi-fw pi-inbox',
+          routerLink: ['/components/no-content'],
         },
-        {
-          label: 'Multi Selects',
-          icon: 'pi pi-fw pi-th-large',
-          routerLink: ['/components/multi-selects'],
-        },
-        {
-          label: 'Chips',
-          icon: 'pi pi-fw pi-tag',
-          routerLink: ['/components/chips'],
-        },
-        {
-          label: 'Listboxes',
-          icon: 'pi pi-fw pi-list',
-          routerLink: ['/components/listboxes'],
-        },
+      ],
+    },
+    {
+      label: 'Feedback & Messages',
+      items: [
         {
           label: 'Messages',
           icon: 'pi pi-fw pi-info-circle',
           routerLink: ['/components/messages'],
         },
         {
-          label: 'Tree Views',
-          icon: 'pi pi-fw pi-sitemap',
-          routerLink: ['/components/tree-views'],
+          label: 'Whispers',
+          icon: 'pi pi-fw pi-comment',
+          routerLink: ['/components/whispers'],
         },
         {
-          label: 'Tables',
-          icon: 'pi pi-fw pi-table',
-          routerLink: ['/components/tables'],
-        },
-        {
-          label: 'Charts',
-          icon: 'pi pi-fw pi-chart-bar',
-          routerLink: ['/components/charts'],
-        },
-        {
-          label: 'Tabs',
-          icon: 'pi pi-fw pi-folder',
-          routerLink: ['/components/tabs'],
-        },
-        {
-          label: 'Panels',
-          icon: 'pi pi-fw pi-window-maximize',
-          routerLink: ['/components/panels'],
+          label: 'Progress Spinners',
+          icon: 'pi pi-fw pi-spin pi-spinner',
+          routerLink: ['/components/progress-spinners'],
         },
         {
           label: 'Placeholders',
           icon: 'pi pi-fw pi-stop',
           routerLink: ['/components/placeholders'],
         },
+      ],
+    },
+    {
+      label: 'Examples',
+      items: [
         {
-          label: 'Whispers',
-          icon: 'pi pi-fw pi-comment',
-          routerLink: ['/components/whispers'],
+          label: 'Component Interactions',
+          icon: 'pi pi-fw pi-sitemap',
+          routerLink: ['/components/component-interactions'],
         },
       ],
-      separator: false,
     },
   ];
 }

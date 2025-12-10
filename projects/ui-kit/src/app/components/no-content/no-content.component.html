@@ -1,0 +1,162 @@
+<div class="no-content-demo">
+  <header class="demo-header">
+    <h1>No Content Component</h1>
+    <p>
+      A versatile empty state component for displaying friendly messages when
+      there's no data to show. Perfect for tables, lists, search results, and
+      more.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Basic Usage -->
+    <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
+      <p class="demo-description">
+        The component with default settings shows an inbox icon and "No content
+        available" message.
+      </p>
+      <div class="example-container">
+        <i-no-content></i-no-content>
+      </div>
+    </app-demo-card>
+
+    <!-- Custom Message -->
+    <app-demo-card
+      [title]="'Custom Message'"
+      [sourceCode]="codeExamples.customMessage"
+    >
+      <p class="demo-description">
+        Customize the message to provide context-specific feedback.
+      </p>
+      <div class="example-container">
+        <i-no-content [message]="'No products found'"></i-no-content>
+      </div>
+    </app-demo-card>
+
+    <!-- Custom Icon and Message -->
+    <app-demo-card
+      [title]="'Custom Icon & Message'"
+      [sourceCode]="codeExamples.customIcon"
+    >
+      <p class="demo-description">
+        Customize both the icon and message for different scenarios.
+      </p>
+      <div class="example-container">
+        <i-no-content
+          [icon]="'pi pi-search'"
+          [message]="'No search results'"
+        ></i-no-content>
+      </div>
+    </app-demo-card>
+
+    <!-- Different Use Cases -->
+    <app-demo-card [title]="'Common Use Cases'">
+      <p class="demo-description">
+        Examples of different scenarios where the no-content component provides
+        value.
+      </p>
+      <div class="use-cases-grid">
+        <div class="use-case">
+          <h4>Empty List</h4>
+          <div class="use-case-example">
+            <i-no-content
+              [icon]="'pi pi-inbox'"
+              [message]="'No items to display'"
+            ></i-no-content>
+          </div>
+        </div>
+
+        <div class="use-case">
+          <h4>Search Results</h4>
+          <div class="use-case-example">
+            <i-no-content
+              [icon]="'pi pi-search'"
+              [message]="'No results found'"
+            ></i-no-content>
+          </div>
+        </div>
+
+        <div class="use-case">
+          <h4>Notifications</h4>
+          <div class="use-case-example">
+            <i-no-content
+              [icon]="'pi pi-bell'"
+              [message]="'No new notifications'"
+            ></i-no-content>
+          </div>
+        </div>
+
+        <div class="use-case">
+          <h4>Shopping Cart</h4>
+          <div class="use-case-example">
+            <i-no-content
+              [icon]="'pi pi-shopping-cart'"
+              [message]="'Your cart is empty'"
+            ></i-no-content>
+          </div>
+        </div>
+
+        <div class="use-case">
+          <h4>Messages</h4>
+          <div class="use-case-example">
+            <i-no-content
+              [icon]="'pi pi-envelope'"
+              [message]="'No messages'"
+            ></i-no-content>
+          </div>
+        </div>
+
+        <div class="use-case">
+          <h4>Files</h4>
+          <div class="use-case-example">
+            <i-no-content
+              [icon]="'pi pi-file'"
+              [message]="'No files uploaded'"
+            ></i-no-content>
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- In Tables -->
+    <app-demo-card
+      [title]="'Automatic in Tables'"
+      [sourceCode]="codeExamples.inTable"
+    >
+      <p class="demo-description">
+        The <code>i-table</code> component automatically displays the no-content
+        component when data is empty. No additional code needed!
+      </p>
+    </app-demo-card>
+
+    <!-- Code Examples -->
+    <app-demo-card [title]="'Code Examples'">
+      <div class="code-examples">
+        <div class="code-example">
+          <h4>In a List</h4>
+          <pre><code>{{ codeExamples.inList }}</code></pre>
+        </div>
+
+        <div class="code-example">
+          <h4>Search Results</h4>
+          <pre><code>{{ codeExamples.searchResults }}</code></pre>
+        </div>
+
+        <div class="code-example">
+          <h4>Notifications Panel</h4>
+          <pre><code>{{ codeExamples.notifications }}</code></pre>
+        </div>
+
+        <div class="code-example">
+          <h4>Shopping Cart</h4>
+          <pre><code>{{ codeExamples.cart }}</code></pre>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

@@ -2,7 +2,7 @@
   class="i-multi-select-wrapper"
   [class.i-multi-select--fluid]="fluid"
   #dropdown
->
+  >
   <!-- Input container with click handler -->
   <div class="i-multi-select-input-container" (click)="toggleDropdown()">
     <!-- Chips component with float label -->
@@ -33,51 +33,52 @@
 
     <!-- Error message -->
     @if (showErrors) {
-    <div class="i-multi-select-error">
-      {{ getErrorMessage() }}
-    </div>
+      <div class="i-multi-select-error">
+        {{ getErrorMessage() }}
+      </div>
     }
   </div>
 
   @if (isOpen) {
-  <div class="i-multi-select-dropdown" [class.open]="isOpen">
-    @if (filter) {
-    <div class="i-multi-select-filter">
-      <i-input-text
-        #searchInput
-        [useFloatLabel]="false"
-        placeholder="Search..."
-        [ngModel]="filterValue()"
-        (ngModelChange)="filterValue.set($event)"
-        [fluid]="true"
-        [icon]="'pi pi-search'"
-      >
-      </i-input-text>
-    </div>
-    }
-
-    <div class="i-multi-select-options">
-      <div
-        *ngFor="let option of filteredOptions()"
-        class="i-multi-select-option"
-        [class.selected]="isOptionSelected(option)"
-        (click)="toggleOption(option)"
-      >
-        <i-checkbox
-          [checked]="isOptionSelected(option)"
-          [readonly]="true"
-          size="small"
-          class="i-multi-select-checkbox"
-        ></i-checkbox>
-        <span class="i-multi-select-option-label">
-          {{ getOptionLabel(option) }}
-        </span>
-      </div>
-
-      @if (filteredOptions().length === 0) {
-      <div class="i-multi-select-no-options">No options found</div>
+    <div class="i-multi-select-dropdown" [class.open]="isOpen">
+      @if (filter) {
+        <div class="i-multi-select-filter">
+          <i-input-text
+            #searchInput
+            [useFloatLabel]="false"
+            placeholder="Search..."
+            [ngModel]="filterValue()"
+            (ngModelChange)="filterValue.set($event)"
+            [fluid]="true"
+            [icon]="'pi pi-search'"
+            >
+          </i-input-text>
+        </div>
       }
+
+      <div class="i-multi-select-options">
+        @for (option of filteredOptions(); track option) {
+          <div
+            class="i-multi-select-option"
+            [class.selected]="isOptionSelected(option)"
+            (click)="toggleOption(option)"
+            >
+            <i-checkbox
+              [checked]="isOptionSelected(option)"
+              [readonly]="true"
+              size="small"
+              class="i-multi-select-checkbox"
+            ></i-checkbox>
+            <span class="i-multi-select-option-label">
+              {{ getOptionLabel(option) }}
+            </span>
+          </div>
+        }
+
+        @if (filteredOptions().length === 0) {
+          <div class="i-multi-select-no-options">No options found</div>
+        }
+      </div>
     </div>
-  </div>
   }
 </div>

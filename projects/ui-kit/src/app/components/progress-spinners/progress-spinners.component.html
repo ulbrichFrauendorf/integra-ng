@@ -1,0 +1,132 @@
+<div class="progress-spinners-demo">
+  <header class="demo-header">
+    <h1>Progress Spinner Component</h1>
+    <p>
+      A loading indicator component with customizable sizes and stroke widths.
+      Perfect for showing loading states in buttons, overlays, and content
+      areas. Features smooth CSS animations and full theme integration.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Basic Usage -->
+    <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
+      <div class="demo-content centered">
+        <i-progress-spinner></i-progress-spinner>
+      </div>
+    </app-demo-card>
+
+    <!-- Size Variants -->
+    <app-demo-card [title]="'Size Variants'" [sourceCode]="codeExamples.sizes">
+      <div class="demo-content">
+        <div class="size-grid">
+          <div class="size-item">
+            <i-progress-spinner size="small"></i-progress-spinner>
+            <span>Small</span>
+          </div>
+          <div class="size-item">
+            <i-progress-spinner size="medium"></i-progress-spinner>
+            <span>Medium</span>
+          </div>
+          <div class="size-item">
+            <i-progress-spinner size="large"></i-progress-spinner>
+            <span>Large</span>
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Stroke Width -->
+    <app-demo-card
+      [title]="'Custom Stroke Width'"
+      [sourceCode]="codeExamples.strokeWidth"
+    >
+      <div class="demo-content">
+        <div class="size-grid">
+          <div class="size-item">
+            <i-progress-spinner [strokeWidth]="2"></i-progress-spinner>
+            <span>Thin (2px)</span>
+          </div>
+          <div class="size-item">
+            <i-progress-spinner [strokeWidth]="4"></i-progress-spinner>
+            <span>Default (4px)</span>
+          </div>
+          <div class="size-item">
+            <i-progress-spinner [strokeWidth]="6"></i-progress-spinner>
+            <span>Thick (6px)</span>
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- In Button -->
+    <app-demo-card
+      [title]="'Loading Button'"
+      [sourceCode]="codeExamples.withButton"
+      [tsCode]="tsExamples.withButton"
+    >
+      <div class="demo-content centered">
+        <i-button [loading]="isLoading" (clicked)="simulateLoading()">
+          {{ isLoading ? "Loading..." : "Click Me" }}
+        </i-button>
+      </div>
+    </app-demo-card>
+
+    <!-- Loading Button Severities -->
+    <app-demo-card
+      [title]="'Loading States with Button Severities'"
+      [sourceCode]="codeExamples.severities"
+    >
+      <div class="demo-content">
+        <div class="button-grid">
+          <i-button severity="primary" [loading]="true">Primary</i-button>
+          <i-button severity="secondary" [loading]="true">Secondary</i-button>
+          <i-button severity="success" [loading]="true">Success</i-button>
+          <i-button severity="info" [loading]="true">Info</i-button>
+          <i-button severity="warning" [loading]="true">Warning</i-button>
+          <i-button severity="danger" [loading]="true">Danger</i-button>
+        </div>
+        <div class="button-grid">
+          <i-button severity="primary" [outlined]="true" [loading]="true"
+            >Primary</i-button
+          >
+          <i-button severity="secondary" [outlined]="true" [loading]="true"
+            >Secondary</i-button
+          >
+          <i-button severity="success" [outlined]="true" [loading]="true"
+            >Success</i-button
+          >
+          <i-button severity="info" [outlined]="true" [loading]="true"
+            >Info</i-button
+          >
+          <i-button severity="warning" [outlined]="true" [loading]="true"
+            >Warning</i-button
+          >
+          <i-button severity="danger" [outlined]="true" [loading]="true"
+            >Danger</i-button
+          >
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- In Card/Overlay -->
+    <app-demo-card
+      [title]="'Loading Overlay'"
+      [sourceCode]="codeExamples.inCard"
+    >
+      <div class="demo-content">
+        <div class="loading-card-demo">
+          <div class="loading-overlay-demo">
+            <i-progress-spinner></i-progress-spinner>
+            <p>Loading content...</p>
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

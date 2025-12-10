@@ -11,12 +11,12 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 4px;
   font-size: 1em;
 
   &.i-input--fluid {
     width: 100%;
-  }
+  }Ch
 
   &.i-input--no-float {
     margin-top: 0;
@@ -106,7 +106,7 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
     .i-input:focus + .i-label,
     .i-input:not(:placeholder-shown) + .i-label,
     .i-label.floated {
-      top: -20px;
+      top: -8px;
     }
 
     &.has-icon .i-label:not(.floated) {

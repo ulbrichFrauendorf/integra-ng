@@ -1,0 +1,25 @@
+@if (visible) {
+<div
+    #panel
+    class="overlay-panel"
+    [ngClass]="'overlay-panel-' + arrowPosition"
+    [ngStyle]="positionStyle"
+    role="dialog"
+    [attr.aria-hidden]="!visible"
+>
+    <div class="overlay-panel-content">
+        <ng-content></ng-content>
+    </div>
+    @if (showCloseButton) {
+    <i-button
+        class="overlay-panel-close"
+        size="small"
+        [icon]="'pi pi-times'"
+        [text]="true"
+        [severity]="'contrast'"
+        (clicked)="hide()"
+    ></i-button>
+    }
+    <div class="overlay-panel-arrow" [ngStyle]="arrowStyle"></div>
+</div>
+}

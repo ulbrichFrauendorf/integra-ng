@@ -14,7 +14,7 @@ import {
   input,
   WritableSignal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormsModule,
   ControlValueAccessor,
@@ -47,7 +47,6 @@ export interface MultiSelectOption {
  *   label="Skills"
  *   [options]="skills"
  *   optionLabel="name"
- *   optionValue="id"
  *   formControlName="selectedSkills">
  * </i-multi-select>
  *
@@ -90,7 +89,7 @@ export interface MultiSelectOption {
 @Component({
   selector: 'i-multi-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, IChipsComponent, ICheckbox, IInputText],
+  imports: [FormsModule, IChipsComponent, ICheckbox, IInputText],
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss'],
   providers: [
@@ -119,11 +118,6 @@ export class IMultiSelect implements ControlValueAccessor {
    * Property name to use as the display label for options
    */
   @Input({ required: true }) optionLabel!: string;
-
-  /**
-   * Property name to use as the value for options (if not set, entire object is used)
-   */
-  @Input() optionValue?: string;
 
   /**
    * Placeholder text when no options are selected
@@ -252,22 +246,10 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   selectedChips = computed<ChipItem[]>(() => {
-    const currentOptions = this.options() || [];
     const currentValue = this._value();
-    if (!Array.isArray(currentOptions)) {
-      return [];
-    }
 
     return currentValue.map((val) => {
-      let label: string;
-      if (!this.optionValue) {
-        label = this.getOptionLabel(val);
-      } else {
-        const option = currentOptions.find(
-          (opt: MultiSelectOption) => this.getOptionValue(opt) === val
-        );
-        label = option ? this.getOptionLabel(option) : String(val);
-      }
+      const label = this.getOptionLabel(val);
 
       return {
         label,
@@ -355,24 +337,16 @@ export class IMultiSelect implements ControlValueAccessor {
    */
   toggleOption(option: MultiSelectOption) {
     const currentValues = [...this.value];
+    const optionValue = this.getOptionValue(option);
 
-    if (!this.optionValue) {
-      const index = currentValues.findIndex(
-        (val) => JSON.stringify(val) === JSON.stringify(option)
-      );
-      if (index > -1) {
-        currentValues.splice(index, 1);
-      } else {
-        currentValues.push(option);
-      }
+    const index = currentValues.findIndex(
+      (val) => JSON.stringify(val) === JSON.stringify(optionValue)
+    );
+
+    if (index > -1) {
+      currentValues.splice(index, 1);
     } else {
-      const optionValue = this.getOptionValue(option);
-      const index = currentValues.findIndex((val) => val === optionValue);
-      if (index > -1) {
-        currentValues.splice(index, 1);
-      } else {
-        currentValues.push(optionValue);
-      }
+      currentValues.push(optionValue);
     }
 
     this.value = currentValues;
@@ -386,14 +360,10 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   isOptionSelected(option: MultiSelectOption): boolean {
-    if (!this.optionValue) {
-      return this.value.some(
-        (val) => JSON.stringify(val) === JSON.stringify(option)
-      );
-    } else {
-      const optionValue = this.getOptionValue(option);
-      return this.value.includes(optionValue);
-    }
+    const optionValue = this.getOptionValue(option);
+    return this.value.some(
+      (val) => JSON.stringify(val) === JSON.stringify(optionValue)
+    );
   }
 
   /**
@@ -415,14 +385,9 @@ export class IMultiSelect implements ControlValueAccessor {
     event.originalEvent.stopPropagation();
     const currentValues = [...this.value];
 
-    let index: number;
-    if (!this.optionValue) {
-      index = currentValues.findIndex(
-        (val) => JSON.stringify(val) === JSON.stringify(event.chip.value)
-      );
-    } else {
-      index = currentValues.findIndex((val) => val === event.chip.value);
-    }
+    const index = currentValues.findIndex(
+      (val) => JSON.stringify(val) === JSON.stringify(event.chip.value)
+    );
 
     if (index > -1) {
       currentValues.splice(index, 1);
@@ -454,10 +419,7 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   getOptionValue(option: MultiSelectOption): any {
-    if (!this.optionValue) {
-      return option;
-    }
-    return option[this.optionValue] || option['value'] || option;
+    return option;
   }
 
   /**
@@ -476,20 +438,8 @@ export class IMultiSelect implements ControlValueAccessor {
    * @internal
    */
   getSelectedLabels(): string[] {
-    const currentOptions = this.options() || [];
-    if (!Array.isArray(currentOptions)) {
-      return [];
-    }
-
     return this.value.map((val) => {
-      if (!this.optionValue) {
-        return this.getOptionLabel(val);
-      } else {
-        const option = currentOptions.find(
-          (opt: MultiSelectOption) => this.getOptionValue(opt) === val
-        );
-        return option ? this.getOptionLabel(option) : String(val);
-      }
+      return this.getOptionLabel(val);
     });
   }
 

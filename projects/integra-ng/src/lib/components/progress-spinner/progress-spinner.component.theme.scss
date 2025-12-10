@@ -1,0 +1,108 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-progress-spinner-theme() {
+  .spinner-track {
+    stroke: colors.$color-primary;
+    opacity: 0.2;
+  }
+
+  .spinner-circle {
+    stroke: colors.$color-primary;
+  }
+
+  // Primary
+  .spinner--primary {
+    .spinner-circle {
+      stroke: colors.$color-contrast-inverse;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-primary;
+      }
+    }
+  }
+
+  // Secondary
+  .spinner--secondary {
+    .spinner-circle {
+      stroke: colors.$color-contrast-inverse;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-secondary;
+      }
+    }
+  }
+
+  // Tertiary
+  .spinner--tertiary {
+    .spinner-circle {
+      stroke: colors.$color-contrast-inverse;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-tertiary;
+      }
+    }
+  }
+
+  // Success
+  .spinner--success {
+    .spinner-circle {
+      stroke: colors.$color-contrast-inverse;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-success;
+      }
+    }
+  }
+
+  // Info
+  .spinner--info {
+    .spinner-circle {
+      stroke: colors.$color-contrast-inverse;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-info;
+      }
+    }
+  }
+
+  // Warning
+  .spinner--warning {
+    .spinner-circle {
+      stroke: colors.$color-white;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-warning;
+      }
+    }
+  }
+
+  // Danger
+  .spinner--danger {
+    .spinner-circle {
+      stroke: colors.$color-white;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-danger;
+      }
+    }
+  }
+
+  // Contrast
+  .spinner--contrast {
+    .spinner-circle {
+      stroke: colors.$color-contrast-inverse;
+    }
+    &--text {
+      .spinner-circle {
+        stroke: colors.$color-text-secondary;
+      }
+    }
+  }
+}

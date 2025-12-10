@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 export type TooltipPosition = 'above' | 'below' | 'left' | 'right';
 
 @Component({
   selector: 'i-tooltip',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div
       class="i-tooltip"

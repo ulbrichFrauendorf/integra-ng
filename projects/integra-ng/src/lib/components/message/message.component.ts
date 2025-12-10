@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 
 export type MessageSize = 'small' | 'medium' | 'large';
 
 @Component({
   selector: 'i-message',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
 })

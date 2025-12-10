@@ -1,0 +1,61 @@
+@use "../shared-demo-styles.scss" as *;
+
+.overlay-panels-demo {
+  @extend .demo-component;
+}
+
+.position-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.position-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+
+// User menu styling (for rich content example)
+.user-menu {
+  min-width: 250px;
+
+  .user-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--surface-border);
+    margin-bottom: 8px;
+
+    i {
+      font-size: 2rem;
+      color: var(--color-primary);
+    }
+
+    strong {
+      display: block;
+      color: var(--color-text-primary);
+      margin-bottom: 4px;
+    }
+
+    .user-email {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  .menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

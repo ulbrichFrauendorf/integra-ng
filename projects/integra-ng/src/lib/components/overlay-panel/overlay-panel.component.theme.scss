@@ -1,0 +1,72 @@
+@use "../../themes/color-variables.scss" as colors;
+
+@mixin i-overlay-panel-theme() {
+  .overlay-panel {
+    background: colors.$color-component-background-secondary;
+    border: 1px solid colors.$color-surface-border;
+    color: colors.$color-text-primary;
+    box-shadow: colors.$color-box-shadow;
+  }
+
+  .overlay-panel-arrow {
+    &::before {
+      border-color: colors.$color-surface-border;
+    }
+
+    &::after {
+      border-color: colors.$color-component-background-secondary;
+    }
+  }
+
+  // Arrow colors for bottom arrow (panel above target)
+  .overlay-panel-bottom .overlay-panel-arrow {
+    &::before {
+      border-top-color: colors.$color-surface-border;
+    }
+
+    &::after {
+      border-top-color: colors.$color-component-background-secondary;
+    }
+  }
+
+  // Arrow colors for top arrow (panel below target)
+  .overlay-panel-top .overlay-panel-arrow {
+    &::before {
+      border-bottom-color: colors.$color-surface-border;
+    }
+
+    &::after {
+      border-bottom-color: colors.$color-component-background-secondary;
+    }
+  }
+
+  // Arrow colors for right arrow (panel left of target)
+  .overlay-panel-right .overlay-panel-arrow {
+    &::before {
+      border-left-color: colors.$color-surface-border;
+    }
+
+    &::after {
+      border-left-color: colors.$color-component-background-secondary;
+    }
+  }
+
+  // Arrow colors for left arrow (panel right of target)
+  .overlay-panel-left .overlay-panel-arrow {
+    &::before {
+      border-right-color: colors.$color-surface-border;
+    }
+
+    &::after {
+      border-right-color: colors.$color-component-background-secondary;
+    }
+  }
+
+  .overlay-panel-close {
+    color: colors.$color-text-primary;
+
+    &:hover {
+      color: colors.$color-primary;
+    }
+  }
+}

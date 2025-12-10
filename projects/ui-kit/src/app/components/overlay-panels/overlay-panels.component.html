@@ -1,0 +1,148 @@
+<div class="overlay-panels-demo">
+  <header class="demo-header">
+    <h1>Overlay Panel Component</h1>
+    <p>
+      A floating panel that positions itself relative to a trigger element.
+      Features automatic collision detection, custom positioning, and
+      dismissable behavior. Perfect for contextual menus, user dropdowns, and
+      additional information displays.
+    </p>
+  </header>
+
+  <div class="cards-container">
+    <!-- Basic Usage -->
+    <app-demo-card [title]="'Basic Usage'" [sourceCode]="codeExamples.basic">
+      <div class="demo-content centered">
+        <i-button (clicked)="basicPanel.toggle($event)">Toggle Panel</i-button>
+        <i-overlay-panel #basicPanel>
+          <p>This is the content of the overlay panel.</p>
+          <p>It positions itself automatically relative to the button.</p>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Position Variants -->
+    <app-demo-card
+      [title]="'Position Variants'"
+      [sourceCode]="codeExamples.positions"
+    >
+      <div class="demo-content">
+        <div class="position-grid">
+          <div class="position-item">
+            <i-button (clicked)="bottomPanel.toggle($event)">Bottom</i-button>
+            <i-overlay-panel #bottomPanel position="bottom">
+              <p>Panel appears below the button</p>
+            </i-overlay-panel>
+          </div>
+
+          <div class="position-item">
+            <i-button (clicked)="topPanel.toggle($event)">Top</i-button>
+            <i-overlay-panel #topPanel position="top">
+              <p>Panel appears above the button</p>
+            </i-overlay-panel>
+          </div>
+
+          <div class="position-item">
+            <i-button (clicked)="leftPanel.toggle($event)">Left</i-button>
+            <i-overlay-panel #leftPanel position="left">
+              <p>Panel appears to the left</p>
+            </i-overlay-panel>
+          </div>
+
+          <div class="position-item">
+            <i-button (clicked)="rightPanel.toggle($event)">Right</i-button>
+            <i-overlay-panel #rightPanel position="right">
+              <p>Panel appears to the right</p>
+            </i-overlay-panel>
+          </div>
+
+          <div class="position-item">
+            <i-button (clicked)="autoPanel.toggle($event)">Auto</i-button>
+            <i-overlay-panel #autoPanel position="auto">
+              <p>Panel automatically chooses the best position</p>
+            </i-overlay-panel>
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- With Close Button -->
+    <app-demo-card
+      [title]="'With Close Button'"
+      [sourceCode]="codeExamples.closeButton"
+    >
+      <div class="demo-content centered">
+        <i-button (clicked)="panelWithClose.toggle($event)"
+          >Open Panel</i-button
+        >
+        <i-overlay-panel #panelWithClose [showCloseButton]="true">
+          <h3 style="margin-top: 0">Panel with Close Button</h3>
+          <p>Click the X button to close this panel.</p>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Non-Dismissable -->
+    <app-demo-card
+      [title]="'Non-Dismissable Panel'"
+      [sourceCode]="codeExamples.dismissable"
+    >
+      <div class="demo-content centered">
+        <i-button (clicked)="persistentPanel.toggle($event)"
+          >Persistent Panel</i-button
+        >
+        <i-overlay-panel
+          #persistentPanel
+          [dismissable]="false"
+          [showCloseButton]="true"
+        >
+          <p>This panel won't close when clicking outside.</p>
+          <p>Use the close button or toggle button to close it.</p>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Rich Content Example -->
+    <app-demo-card
+      [title]="'Rich Content'"
+      [sourceCode]="codeExamples.richContent"
+    >
+      <div class="demo-content centered">
+        <i-button (clicked)="richPanel.toggle($event)" icon="pi pi-user"
+          >User Menu</i-button
+        >
+        <i-overlay-panel #richPanel [showCloseButton]="true">
+          <div class="user-menu">
+            <div class="user-header">
+              <i class="pi pi-user"></i>
+              <div>
+                <strong>John Doe</strong>
+                <div class="user-email">john.doe@example.com</div>
+              </div>
+            </div>
+            <div class="menu-items">
+              <i-button [text]="true" [fluid]="true" icon="pi pi-user"
+                >Profile</i-button
+              >
+              <i-button [text]="true" [fluid]="true" icon="pi pi-cog"
+                >Settings</i-button
+              >
+              <i-button
+                [text]="true"
+                [fluid]="true"
+                icon="pi pi-sign-out"
+                severity="danger"
+                >Logout</i-button
+              >
+            </div>
+          </div>
+        </i-overlay-panel>
+      </div>
+    </app-demo-card>
+
+    <!-- Features -->
+    <app-demo-card [title]="'Features'">
+      <app-features-list [features]="features"></app-features-list>
+    </app-demo-card>
+  </div>
+</div>

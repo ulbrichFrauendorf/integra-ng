@@ -16,9 +16,9 @@ import { FormsModule } from '@angular/forms';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
-import { EmptyStateTableComponent } from '../empty-state-table/empty-state-table.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
+import { NoContentComponent } from '../no-content/no-content.component';
 
 /**
  * Column definition for the table
@@ -156,7 +156,7 @@ export interface TableDownloadEvent {
     IInputText,
     IButton,
     ICheckbox,
-    EmptyStateTableComponent,
+    NoContentComponent,
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
