@@ -310,13 +310,13 @@ describe('IChart', () => {
 
   describe('getChartHeightStyle', () => {
     it('should return display height when set', () => {
-      const display = { type: 'bar' as const, data: {}, options: {}, height: '30rem' };
+      const display = { id: 'test-1', type: 'bar' as const, data: {}, options: {}, height: '30rem' };
       expect(component.getChartHeightStyle(display)).toBe('30rem');
     });
 
     it('should return component height when display height is not set', () => {
       component.height = '25rem';
-      const display = { type: 'bar' as const, data: {}, options: {} };
+      const display = { id: 'test-2', type: 'bar' as const, data: {}, options: {} };
       expect(component.getChartHeightStyle(display)).toBe('25rem');
     });
   });

@@ -318,26 +318,62 @@ export class ChartsComponent {
   };
 
   // TypeScript initialization example
-  initializationCode = `import { IChart } from 'integra-ng';
-import { IChartData } from 'integra-ng';
+  initializationCode = `import { Component, Input } from '@angular/core';
+import { Chart } from 'app/web-api-client';
+import { IChart, IChartData } from 'integra-ng';
 
 @Component({
-  selector: 'app-example',
+  selector: 'app-dashboard-chart',
   imports: [IChart],
-  templateUrl: './example.component.html'
+  templateUrl: './dashboard-chart.component.html',
+  styleUrl: './dashboard-chart.component.scss',
 })
-export class ExampleComponent {
+export class DashboardChartComponent {
+  @Input() charts: Chart[];
+
+  get chartData(): IChartData[] {
+    return this.charts?.map((chart) => this.mapToChartData(chart)) ?? [];
+  }
+
+  private mapToChartData(chart: Chart): IChartData {
+    return {
+      chartId: chart.chartType,
+      chartType: chart.chartType as IChartData['chartType'],
+      labels: chart.labels,
+      dataSets: chart.dataSets.map((dataset) => ({
+        label: dataset.label,
+        data: dataset.data,
+        backgroundColors: dataset.backgroundColors,
+      })),
+    };
+  }
+}`;
+
+  // Template example
+  templateCode = `<!-- dashboard-chart.component.html -->
+<i-chart [charts]="chartData"></i-chart>`;
+
+  // Simple direct usage example
+  simpleUsageCode = `import { Component } from '@angular/core';
+import { IChart, IChartData } from 'integra-ng';
+
+@Component({
+  selector: 'app-simple-chart',
+  imports: [IChart],
+  template: '<i-chart [charts]="chartData"></i-chart>',
+})
+export class SimpleChartComponent {
   chartData: IChartData[] = [
     {
-      chartId: 'my-chart',
+      chartId: 'sales-chart',
       chartType: 'bar',
-      labels: ['Jan', 'Feb', 'Mar'],
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
       dataSets: [{
         label: 'Sales',
-        data: [100, 200, 150],
-        backgroundColors: ['--blue-500', '--green-500', '--orange-500']
-      }]
-    }
+        data: [65, 59, 80, 81, 56],
+        backgroundColors: ['--blue-500', '--blue-500', '--blue-500', '--blue-500', '--blue-500'],
+      }],
+    },
   ];
 }`;
 
