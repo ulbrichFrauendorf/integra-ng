@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 export interface Feature {
   title: string;
@@ -8,7 +8,7 @@ export interface Feature {
 
 @Component({
   selector: 'app-features-list',
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="features-grid">
       @for (feature of features; track feature.title) {

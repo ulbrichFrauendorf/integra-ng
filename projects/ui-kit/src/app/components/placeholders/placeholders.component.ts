@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,
@@ -15,12 +15,11 @@ import { IButton } from '@shared/components/button/button.component';
   selector: 'app-placeholders',
   standalone: true,
   imports: [
-    CommonModule,
     DemoCardComponent,
     FeaturesListComponent,
     IPlaceholder,
-    IButton,
-  ],
+    IButton
+],
   templateUrl: './placeholders.component.html',
   styleUrls: ['./placeholders.component.scss', '../shared-demo-styles.scss'],
 })

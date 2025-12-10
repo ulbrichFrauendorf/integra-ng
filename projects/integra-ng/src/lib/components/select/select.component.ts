@@ -13,7 +13,7 @@ import {
   InputSignal,
   input,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormsModule,
   ControlValueAccessor,
@@ -84,7 +84,7 @@ export interface SelectOption {
 @Component({
   selector: 'i-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, IInputText],
+  imports: [FormsModule, IInputText],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   providers: [

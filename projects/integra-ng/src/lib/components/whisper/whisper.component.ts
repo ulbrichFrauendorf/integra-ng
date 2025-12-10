@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgFor, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -79,7 +79,7 @@ export type IWhisperPosition =
 @Component({
   selector: 'i-whisper',
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, NgStyle, IButton],
+  imports: [NgClass, NgStyle, IButton],
   templateUrl: './whisper.component.html',
   styleUrl: './whisper.component.scss',
   encapsulation: ViewEncapsulation.None,

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IMessage } from '../../../../../integra-ng/src/lib/components/message/message.component';
 import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule, IMessage, DemoCardComponent, FeaturesListComponent],
+  imports: [IMessage, DemoCardComponent, FeaturesListComponent],
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss'],
 })

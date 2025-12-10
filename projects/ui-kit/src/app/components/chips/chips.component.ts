@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IChip } from '@shared/components/chip/chip.component';
 import {
   IChipsComponent,
@@ -17,13 +17,12 @@ import { IMessage } from '@shared/components/message/message.component';
   selector: 'app-chips',
   standalone: true,
   imports: [
-    CommonModule,
     IChip,
     IChipsComponent,
     DemoCardComponent,
     FeaturesListComponent,
-    IMessage,
-  ],
+    IMessage
+],
   templateUrl: './chips.component.html',
   styleUrls: ['./chips.component.scss'],
 })

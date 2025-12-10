@@ -14,7 +14,7 @@ import {
   input,
   WritableSignal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormsModule,
   ControlValueAccessor,
@@ -89,7 +89,7 @@ export interface MultiSelectOption {
 @Component({
   selector: 'i-multi-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, IChipsComponent, ICheckbox, IInputText],
+  imports: [FormsModule, IChipsComponent, ICheckbox, IInputText],
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss'],
   providers: [

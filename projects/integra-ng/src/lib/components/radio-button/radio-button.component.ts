@@ -10,7 +10,7 @@ import {
   ChangeDetectorRef,
   Injector,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -72,7 +72,7 @@ import { Subject, Subscription } from 'rxjs';
 @Component({
   selector: 'i-radio-button',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './radio-button.component.html',
   styleUrls: ['./radio-button.component.scss'],
   providers: [

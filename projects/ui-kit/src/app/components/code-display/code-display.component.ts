@@ -8,85 +8,95 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IButton } from '../../../../../integra-ng/src/lib/components/button/button.component';
 
 @Component({
   selector: 'app-code-display',
-  imports: [CommonModule, IButton],
+  imports: [IButton],
   template: `
     <div class="code-display-container">
       <div class="code-section">
         <div class="code-header">
-          <div class="tab-container" *ngIf="showTabs && (tsCode || scssCode)">
-            <i-button
-              [size]="'xtra-small'"
-              severity="primary"
-              [text]="true"
-              [class.active]="activeTab === 'html'"
-              (clicked)="activeTab = 'html'"
-              *ngIf="sourceCode"
-            >
-              HTML
-            </i-button>
-            <i-button
-              [size]="'xtra-small'"
-              severity="primary"
-              [text]="true"
-              [class.active]="activeTab === 'ts'"
-              (clicked)="activeTab = 'ts'"
-              *ngIf="tsCode"
-            >
-              TypeScript
-            </i-button>
-            <i-button
-              [size]="'xtra-small'"
-              severity="primary"
-              [text]="true"
-              [class.active]="activeTab === 'scss'"
-              (clicked)="activeTab = 'scss'"
-              *ngIf="scssCode"
-            >
-              SCSS
-            </i-button>
-          </div>
-          <span class="code-title" *ngIf="!showTabs || (!tsCode && !scssCode)">
-            {{
+          @if (showTabs && (tsCode || scssCode)) {
+            <div class="tab-container">
+              @if (sourceCode) {
+                <i-button
+                  [size]="'xtra-small'"
+                  severity="primary"
+                  [text]="true"
+                  [class.active]="activeTab === 'html'"
+                  (clicked)="activeTab = 'html'"
+                  >
+                  HTML
+                </i-button>
+              }
+              @if (tsCode) {
+                <i-button
+                  [size]="'xtra-small'"
+                  severity="primary"
+                  [text]="true"
+                  [class.active]="activeTab === 'ts'"
+                  (clicked)="activeTab = 'ts'"
+                  >
+                  TypeScript
+                </i-button>
+              }
+              @if (scssCode) {
+                <i-button
+                  [size]="'xtra-small'"
+                  severity="primary"
+                  [text]="true"
+                  [class.active]="activeTab === 'scss'"
+                  (clicked)="activeTab = 'scss'"
+                  >
+                  SCSS
+                </i-button>
+              }
+            </div>
+          }
+          @if (!showTabs || (!tsCode && !scssCode)) {
+            <span class="code-title">
+              {{
               activeTab === 'html'
-                ? 'HTML'
-                : activeTab === 'ts'
-                ? 'TypeScript'
-                : 'SCSS'
-            }}
-          </span>
+              ? 'HTML'
+              : activeTab === 'ts'
+              ? 'TypeScript'
+              : 'SCSS'
+              }}
+            </span>
+          }
           <i-button
             [size]="'small'"
             severity="secondary"
             [text]="true"
             (clicked)="copyCode()"
             [title]="'Copy code'"
-          >
+            >
             <i class="pi pi-copy"></i>
           </i-button>
         </div>
         <div class="code-block">
           <div class="code-scroll" role="region" aria-label="Code block scroll">
-            <pre
-              *ngIf="activeTab === 'html'"
-            ><code [innerHTML]="formattedCode"></code></pre>
-            <pre
-              *ngIf="activeTab === 'ts'"
-            ><code [innerHTML]="formattedTsCode"></code></pre>
-            <pre
-              *ngIf="activeTab === 'scss'"
-            ><code [innerHTML]="formattedScssCode"></code></pre>
+            @if (activeTab === 'html') {
+              <pre
+                ><code [innerHTML]="formattedCode"></code></pre>
+              }
+              @if (activeTab === 'ts') {
+                <pre
+                  ><code [innerHTML]="formattedTsCode"></code></pre>
+                }
+                @if (activeTab === 'scss') {
+                  <pre
+                    ><code [innerHTML]="formattedScssCode"></code></pre>
+                  }
+                </div>
+                <div class="scroll-indicator left" aria-hidden="true"></div>
+                <div class="scroll-indicator right" aria-hidden="true"></div>
+              </div>
+            </div>
           </div>
-          <div class="scroll-indicator left" aria-hidden="true"></div>
-          <div class="scroll-indicator right" aria-hidden="true"></div>
-        </div>
-      </div>
-    </div>
-  `,
+    `,
   styleUrls: ['./code-display.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })

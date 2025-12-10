@@ -9,7 +9,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -68,7 +68,7 @@ export type CalendarView = 'date' | 'month' | 'year';
 @Component({
   selector: 'i-calendar',
   standalone: true,
-  imports: [CommonModule, FormsModule, IInputText, IButton],
+  imports: [FormsModule, IInputText, IButton],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
   providers: [

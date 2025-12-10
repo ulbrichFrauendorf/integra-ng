@@ -13,7 +13,7 @@ import {
   InputSignal,
   input,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormsModule,
   ControlValueAccessor,
@@ -88,13 +88,12 @@ export interface ListboxOption {
   selector: 'i-listbox',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     IChipsComponent,
     ICheckbox,
     IInputText,
-    IButton,
-  ],
+    IButton
+],
   templateUrl: './listbox.component.html',
   styleUrls: ['./listbox.component.scss'],
   providers: [

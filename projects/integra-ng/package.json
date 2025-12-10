@@ -2,15 +2,13 @@
   "name": "integra-ng",
   "version": "20.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.3.3",
-    "@angular/core": "^20.3.3",
-    "chart.js": "^3.9.1 || ^4.0.0",
-    "primeflex": "^4.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "chart.js": "^4.0.0",
     "primeicons": "^7.0.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
-    "typescript": "^5.9.3"
+    "tslib": "^2.3.0"
   },
   "sideEffects": false
 }

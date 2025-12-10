@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 /**
  * Arrow direction options for the placeholder icon
@@ -39,7 +39,7 @@ export type PlaceholderArrowDirection =
 @Component({
   selector: 'i-placeholder',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './placeholder.component.html',
   styleUrl: './placeholder.component.scss',
 })

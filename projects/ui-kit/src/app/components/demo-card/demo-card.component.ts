@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ICard } from '@shared/components/card/card.component';
 import { CodeDisplayComponent } from '../code-display/code-display.component';
 
 @Component({
   selector: 'app-demo-card',
   standalone: true,
-  imports: [CommonModule, ICard, CodeDisplayComponent],
+  imports: [ICard, CodeDisplayComponent],
   template: `
     <i-card [title]="title">
       <div class="demo-card-content">
