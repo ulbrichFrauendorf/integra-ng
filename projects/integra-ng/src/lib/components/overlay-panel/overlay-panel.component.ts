@@ -1,280 +1,368 @@
-﻿import { NgClass, NgStyle } from '@angular/common';
-import {
+﻿import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   Output,
   ViewChild,
+  OnDestroy,
+  Renderer2,
+  NgZone,
 } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+  AnimationEvent,
+} from '@angular/animations';
+import { CommonModule } from '@angular/common';
 import { IButton } from '../button/button.component';
+import { ZIndexUtils } from '../../utils/zindexutils';
 
 /**
  * Overlay Panel Component
  *
  * A floating panel that positions itself relative to a target element.
- * Supports automatic collision detection and positioning, with optional close button
- * and dismissable behavior.
+ * Modeled after PrimeNG's OverlayPanel with automatic positioning and collision detection.
  *
  * @example
  * ```html
- * <!-- Basic overlay panel -->
+ * <!-- Basic usage -->
  * <i-button (clicked)="panel.toggle($event)">Show Panel</i-button>
  * <i-overlay-panel #panel>
  *   <p>Panel content goes here</p>
  * </i-overlay-panel>
  *
- * <!-- With close button and custom position -->
+ * <!-- With custom position -->
  * <i-button (clicked)="panel2.toggle($event)">Show Panel</i-button>
- * <i-overlay-panel #panel2 [showCloseButton]="true" position="top">
- *   <p>This panel opens above the button</p>
+ * <i-overlay-panel #panel2 [appendTo]="'body'">
+ *   <p>This panel is appended to body</p>
  * </i-overlay-panel>
  * ```
- *
- * @remarks
- * - Automatically positions itself to avoid viewport overflow
- * - Supports keyboard navigation (Escape to close)
- * - Click outside to dismiss (when dismissable is true)
- * - Includes arrow pointer to target element
  */
 @Component({
   selector: 'i-overlay-panel',
   standalone: true,
-  imports: [NgClass, NgStyle, IButton],
+  imports: [CommonModule, IButton],
   templateUrl: './overlay-panel.component.html',
   styleUrls: ['./overlay-panel.component.scss'],
+  animations: [
+    trigger('animation', [
+      state(
+        'void',
+        style({
+          transform: 'scaleY(0.8)',
+          opacity: 0,
+        })
+      ),
+      state(
+        'open',
+        style({
+          transform: 'scaleY(1)',
+          opacity: 1,
+        })
+      ),
+      state(
+        'closed',
+        style({
+          transform: 'scaleY(0.8)',
+          opacity: 0,
+        })
+      ),
+      transition('void => open', animate('150ms ease-out')),
+      transition('open => closed', animate('150ms ease-in')),
+    ]),
+  ],
 })
-export class IOverlayPanel {
+export class IOverlayPanel implements OnDestroy {
   /**
-   * Whether to show a close button in the top-right corner
-   * @default false
-   */
-  @Input() showCloseButton = false;
-
-  /**
-   * Whether the panel can be dismissed by clicking outside or pressing Escape
+   * Whether clicking outside closes the panel
    * @default true
    */
   @Input() dismissable = true;
 
   /**
-   * Preferred position relative to the target element
-   * Auto will choose the best position based on available space
-   * @default auto
+   * Where to append the panel ('body' or null for inline)
+   * @default 'body'
    */
-  @Input() position: 'top' | 'bottom' | 'left' | 'right' | 'auto' = 'auto';
+  @Input() appendTo: 'body' | null = 'body';
 
   /**
-   * Event emitted when visibility changes
+   * Base z-index value
+   * @default 1000
    */
-  @Output() visibleChange = new EventEmitter<boolean>();
+  @Input() baseZIndex = 1000;
 
-  @ViewChild('panel', { static: false }) panelElement?: ElementRef;
+  /**
+   * Auto z-index layering
+   * @default true
+   */
+  @Input() autoZIndex = true;
+
+  /**
+   * Event emitted when panel shows
+   */
+  @Output() onShow = new EventEmitter<void>();
+
+  /**
+   * Event emitted when panel hides
+   */
+  @Output() onHide = new EventEmitter<void>();
+
+  @ViewChild('container') containerViewChild?: ElementRef;
 
   visible = false;
-  private targetElement?: HTMLElement;
-  private documentClickListener?: (event: Event) => void;
+  private target?: HTMLElement;
+  private documentClickListener?: () => void;
+  private documentResizeListener?: () => void;
+  private scrollHandler?: any;
+  private selfClick = false;
+  private targetClick = false;
+  overlayVisible = false;
+  render = false;
 
-  positionStyle: { [key: string]: string } = {};
-  arrowStyle: { [key: string]: string } = {};
-  arrowPosition: 'top' | 'bottom' | 'left' | 'right' = 'bottom';
+  constructor(
+    public el: ElementRef,
+    private renderer: Renderer2,
+    private zone: NgZone
+  ) {}
 
-  toggle(event: MouseEvent | Event) {
+  ngOnDestroy() {
+    this.unbindDocumentClickListener();
+    this.unbindScrollListener();
+    this.unbindResizeListener();
+    if (this.appendTo === 'body' && this.containerViewChild) {
+      this.renderer.removeChild(
+        document.body,
+        this.containerViewChild.nativeElement
+      );
+    }
+    this.target = undefined;
+  }
+
+  toggle(event: Event, target?: HTMLElement) {
     if (this.visible) {
       this.hide();
     } else {
-      this.show(event);
+      this.show(event, target || (event.currentTarget as HTMLElement));
     }
   }
 
-  show(event: MouseEvent | Event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+  show(event: Event, target?: HTMLElement) {
+    this.target = target || (event.currentTarget as HTMLElement);
+    this.targetClick = true;
+
+    if (this.visible) {
+      return;
     }
 
-    this.targetElement = (event.target || event.currentTarget) as HTMLElement;
     this.visible = true;
-    this.visibleChange.emit(this.visible);
-
-    setTimeout(() => {
-      this.align();
-      this.bindDocumentClickListener();
-    }, 0);
+    this.render = true;
   }
 
   hide() {
     this.visible = false;
-    this.visibleChange.emit(this.visible);
     this.unbindDocumentClickListener();
+    this.unbindScrollListener();
+    this.unbindResizeListener();
   }
 
-  private align() {
-    if (!this.panelElement || !this.targetElement) {
+  onAnimationStart(event: any) {
+    if (event.toState === 'open') {
+      const zIndexUtils = ZIndexUtils();
+      this.containerViewChild!.nativeElement.style.zIndex = String(
+        this.autoZIndex
+          ? this.baseZIndex + zIndexUtils.getCurrent() + 1
+          : this.baseZIndex
+      );
+      this.appendContainer();
+      this.align();
+      this.bindDocumentClickListener();
+      this.bindScrollListener();
+      this.bindResizeListener();
+      this.overlayVisible = true;
+      this.onShow.emit();
+    }
+  }
+
+  onAnimationEnd(event: any) {
+    if (event.toState === 'closed') {
+      if (this.appendTo === 'body' && this.containerViewChild) {
+        this.renderer.removeChild(
+          document.body,
+          this.containerViewChild.nativeElement
+        );
+      }
+      this.unbindDocumentClickListener();
+      this.unbindScrollListener();
+      this.unbindResizeListener();
+      this.overlayVisible = false;
+      this.onHide.emit();
+      this.render = false;
+    }
+  }
+
+  appendContainer() {
+    if (this.appendTo === 'body') {
+      this.renderer.appendChild(
+        document.body,
+        this.containerViewChild!.nativeElement
+      );
+    }
+  }
+
+  align() {
+    if (!this.containerViewChild || !this.target) {
       return;
     }
 
-    const panel = this.panelElement.nativeElement;
-    const target = this.targetElement.getBoundingClientRect();
-    const viewport = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
+    const container = this.containerViewChild.nativeElement;
+    const target = this.target.getBoundingClientRect();
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
+    const targetWidth = target.width;
+    const targetHeight = target.height;
+    const viewport = { width: window.innerWidth, height: window.innerHeight };
+    const gap = 8;
 
-    const panelWidth = panel.offsetWidth;
-    const panelHeight = panel.offsetHeight;
-    const arrowSize = 8;
+    let top: number;
+    let left: number;
+    let arrowPosition: 'top' | 'bottom' | 'left' | 'right' = 'top';
 
-    let finalPosition: 'top' | 'bottom' | 'left' | 'right' =
-      this.position === 'auto' ? 'bottom' : this.position;
+    // Calculate best position
+    const spaceBelow = viewport.height - (target.top + targetHeight);
+    const spaceAbove = target.top;
+    const spaceRight = viewport.width - (target.left + targetWidth);
+    const spaceLeft = target.left;
 
-    if (this.position === 'auto') {
-      const spaceBelow = viewport.height - target.bottom;
-      const spaceAbove = target.top;
-      const spaceRight = viewport.width - target.right;
-      const spaceLeft = target.left;
-
-      if (spaceBelow >= panelHeight + arrowSize) {
-        finalPosition = 'bottom';
-      } else if (spaceAbove >= panelHeight + arrowSize) {
-        finalPosition = 'top';
-      } else if (spaceRight >= panelWidth + arrowSize) {
-        finalPosition = 'right';
-      } else if (spaceLeft >= panelWidth + arrowSize) {
-        finalPosition = 'left';
-      } else {
-        finalPosition = 'bottom';
-      }
+    // Determine position based on available space
+    if (spaceBelow >= containerHeight + gap) {
+      // Position below
+      top = target.top + targetHeight + gap;
+      left = target.left + targetWidth / 2 - containerWidth / 2;
+      arrowPosition = 'top';
+    } else if (spaceAbove >= containerHeight + gap) {
+      // Position above
+      top = target.top - containerHeight - gap;
+      left = target.left + targetWidth / 2 - containerWidth / 2;
+      arrowPosition = 'bottom';
+    } else if (spaceRight >= containerWidth + gap) {
+      // Position right
+      top = target.top + targetHeight / 2 - containerHeight / 2;
+      left = target.left + targetWidth + gap;
+      arrowPosition = 'left';
+    } else if (spaceLeft >= containerWidth + gap) {
+      // Position left
+      top = target.top + targetHeight / 2 - containerHeight / 2;
+      left = target.left - containerWidth - gap;
+      arrowPosition = 'right';
+    } else {
+      // Default to below if no space
+      top = target.top + targetHeight + gap;
+      left = target.left + targetWidth / 2 - containerWidth / 2;
+      arrowPosition = 'top';
     }
 
-    this.arrowPosition = this.getOppositePosition(finalPosition);
-
-    switch (finalPosition) {
-      case 'bottom':
-        this.positionStyle = {
-          top: `${target.bottom + arrowSize + window.scrollY}px`,
-          left: `${
-            target.left + target.width / 2 - panelWidth / 2 + window.scrollX
-          }px`,
-        };
-        this.arrowStyle = {
-          left: '50%',
-          transform: 'translateX(-50%)',
-        };
-        break;
-      case 'top':
-        this.positionStyle = {
-          top: `${target.top - panelHeight - arrowSize + window.scrollY}px`,
-          left: `${
-            target.left + target.width / 2 - panelWidth / 2 + window.scrollX
-          }px`,
-        };
-        this.arrowStyle = {
-          left: '50%',
-          transform: 'translateX(-50%)',
-        };
-        break;
-      case 'left':
-        this.positionStyle = {
-          top: `${
-            target.top + target.height / 2 - panelHeight / 2 + window.scrollY
-          }px`,
-          left: `${target.left - panelWidth - arrowSize + window.scrollX}px`,
-        };
-        this.arrowStyle = {
-          top: '50%',
-          transform: 'translateY(-50%)',
-        };
-        break;
-      case 'right':
-        this.positionStyle = {
-          top: `${
-            target.top + target.height / 2 - panelHeight / 2 + window.scrollY
-          }px`,
-          left: `${target.right + arrowSize + window.scrollX}px`,
-        };
-        this.arrowStyle = {
-          top: '50%',
-          transform: 'translateY(-50%)',
-        };
-        break;
+    // Keep within viewport bounds
+    if (left < 10) {
+      left = 10;
+    } else if (left + containerWidth > viewport.width - 10) {
+      left = viewport.width - containerWidth - 10;
     }
 
-    const left = parseFloat(this.positionStyle['left']);
-    const top = parseFloat(this.positionStyle['top']);
+    if (top < 10) {
+      top = 10;
+    } else if (top + containerHeight > viewport.height - 10) {
+      top = viewport.height - containerHeight - 10;
+    }
 
-    if (left + panelWidth > viewport.width + window.scrollX) {
-      this.positionStyle['left'] = `${
-        viewport.width + window.scrollX - panelWidth - 10
-      }px`;
-    }
-    if (left < window.scrollX) {
-      this.positionStyle['left'] = `${window.scrollX + 10}px`;
-    }
-    if (top + panelHeight > viewport.height + window.scrollY) {
-      this.positionStyle['top'] = `${
-        viewport.height + window.scrollY - panelHeight - 10
-      }px`;
-    }
-    if (top < window.scrollY) {
-      this.positionStyle['top'] = `${window.scrollY + 10}px`;
-    }
+    // Apply positioning
+    container.style.top = top + 'px';
+    container.style.left = left + 'px';
+    container.className = `overlay-panel overlay-panel-${arrowPosition}`;
   }
 
-  private getOppositePosition(
-    position: 'top' | 'bottom' | 'left' | 'right'
-  ): 'top' | 'bottom' | 'left' | 'right' {
-    switch (position) {
-      case 'top':
-        return 'bottom';
-      case 'bottom':
-        return 'top';
-      case 'left':
-        return 'right';
-      case 'right':
-        return 'left';
-    }
+  onContainerClick() {
+    this.selfClick = true;
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: Event) {
-    if (this.visible && this.dismissable) {
-      this.hide();
-      const keyboardEvent = event as KeyboardEvent;
-      if (typeof keyboardEvent.preventDefault === 'function') {
-        keyboardEvent.preventDefault();
-      }
-    }
-  }
-
-  private bindDocumentClickListener() {
+  bindDocumentClickListener() {
     if (!this.documentClickListener && this.dismissable) {
-      this.documentClickListener = (event: Event) => {
-        const target = event.target as HTMLElement | null;
-        if (!target) {
-          return;
-        }
+      this.zone.runOutsideAngular(() => {
+        this.documentClickListener = this.renderer.listen(
+          'document',
+          'click',
+          () => {
+            if (!this.selfClick && !this.targetClick && this.visible) {
+              this.zone.run(() => {
+                this.hide();
+              });
+            }
+            this.selfClick = false;
+            this.targetClick = false;
+          }
+        );
+      });
+    }
+  }
 
-        const panel = this.panelElement?.nativeElement;
+  unbindDocumentClickListener() {
+    if (this.documentClickListener) {
+      this.documentClickListener();
+      this.documentClickListener = undefined;
+    }
+  }
 
-        if (
-          panel &&
-          !panel.contains(target) &&
-          this.targetElement &&
-          !this.targetElement.contains(target)
-        ) {
-          this.hide();
+  bindScrollListener() {
+    if (!this.scrollHandler) {
+      this.scrollHandler = () => {
+        if (this.visible) {
+          this.zone.run(() => {
+            this.align();
+          });
         }
       };
-      document.addEventListener('click', this.documentClickListener);
+      window.addEventListener('scroll', this.scrollHandler, true);
     }
   }
 
-  private unbindDocumentClickListener() {
-    if (this.documentClickListener) {
-      document.removeEventListener('click', this.documentClickListener);
-      this.documentClickListener = undefined;
+  unbindScrollListener() {
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler, true);
+      this.scrollHandler = null;
+    }
+  }
+
+  bindResizeListener() {
+    if (!this.documentResizeListener) {
+      this.zone.runOutsideAngular(() => {
+        this.documentResizeListener = this.renderer.listen(
+          'window',
+          'resize',
+          () => {
+            if (this.visible) {
+              this.zone.run(() => {
+                this.align();
+              });
+            }
+          }
+        );
+      });
+    }
+  }
+
+  unbindResizeListener() {
+    if (this.documentResizeListener) {
+      this.documentResizeListener();
+      this.documentResizeListener = undefined;
+    }
+  }
+
+  onEscapeKey() {
+    if (this.dismissable) {
+      this.hide();
     }
   }
 }

@@ -27,8 +27,14 @@
         [colorMode]="outlined || text ? 'text' : 'accent'"
       ></i-progress-spinner>
     </div>
-    } @else {
-    <div [ngClass]="['button-content', iconOnly ? 'icon-only' : '']">
+    }
+    <div
+      [ngClass]="[
+        'button-content',
+        iconOnly ? 'icon-only' : '',
+        loading ? 'button-content--hidden' : ''
+      ]"
+    >
       @if (icon) {
       <i [ngClass]="[icon, 'i-button__icon', iconOnly ? 'icon-only' : '']"></i>
       }
@@ -36,6 +42,5 @@
         <ng-content></ng-content>
       </span>
     </div>
-    }
   </button>
 </div>

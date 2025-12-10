@@ -8,6 +8,8 @@ import {
   ViewChildren,
   ElementRef,
   QueryList,
+  ChangeDetectorRef,
+  inject,
 } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import {
@@ -261,6 +263,12 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    */
   private pendingAnimationFrame: number | null = null;
 
+  /**
+   * Change detector reference for manual change detection
+   * @internal
+   */
+  private cdr = inject(ChangeDetectorRef);
+
   ngAfterViewInit(): void {
     this.initialized = true;
     this.initializeCharts();
@@ -294,26 +302,37 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * @internal
    */
   private initializeCharts(): void {
-    this.chartDisplays = this.charts.map((chart) =>
-      this.transformToChartDisplay(chart)
+    this.chartDisplays = this.charts.map((chart, index) =>
+      this.transformToChartDisplay(chart, index)
     );
 
     // Cancel any pending initialization
     this.cancelPendingInitialization();
 
+    // Trigger change detection to ensure DOM is updated with canvas elements
+    this.cdr.detectChanges();
+
     // Use requestAnimationFrame for proper timing after view update
     this.pendingAnimationFrame = requestAnimationFrame(() => {
       this.pendingAnimationFrame = null;
-      this.canvasElements.forEach((canvasRef, index) => {
-        const chartDisplay = this.chartDisplays[index];
-        if (chartDisplay && canvasRef) {
-          const chartInstance = this.createChartInstance(
-            canvasRef.nativeElement,
-            chartDisplay
-          );
-          this.chartInstances.push(chartInstance);
-        }
-      });
+      this.createChartInstances();
+    });
+  }
+
+  /**
+   * Create Chart.js instances for all canvas elements
+   * @internal
+   */
+  private createChartInstances(): void {
+    this.canvasElements.forEach((canvasRef, index) => {
+      const chartDisplay = this.chartDisplays[index];
+      if (chartDisplay && canvasRef?.nativeElement) {
+        const chartInstance = this.createChartInstance(
+          canvasRef.nativeElement,
+          chartDisplay
+        );
+        this.chartInstances.push(chartInstance);
+      }
     });
   }
 
@@ -350,7 +369,7 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * Transform IChartData to IChartDisplay
    * @internal
    */
-  private transformToChartDisplay(chart: IChartData): IChartDisplay {
+  private transformToChartDisplay(chart: IChartData, index: number): IChartDisplay {
     const documentStyle = getComputedStyle(document.documentElement);
     // Use proper theme CSS variable names with fallbacks
     const textColor =
@@ -383,6 +402,7 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
     };
 
     return {
+      id: chart.chartId || `chart-${index}`,
       type: chartType,
       data,
       options,

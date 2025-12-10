@@ -1,157 +1,43 @@
-@use './overlay-panel.component.theme.scss' as theme;
+@use "./overlay-panel.component.theme.scss" as theme;
+@use "../../themes/variables" as vars;
+
 @include theme.i-overlay-panel-theme();
 
 .overlay-panel {
-    position: absolute;
-    border-radius: 6px;
-    padding: 1rem;
-    z-index: 1100;
-    min-width: 200px;
-    animation: overlay-panel-show 0.2s ease-out;
+  position: fixed;
+  border-radius: vars.$componentBorderRadius;
+  padding: 1rem;
+  min-width: 200px;
+  max-width: 600px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transform-origin: center top;
 
-    &.overlay-panel-top {
-        transform-origin: center bottom;
-    }
+  &.overlay-panel-top {
+    transform-origin: center bottom;
+  }
 
-    &.overlay-panel-bottom {
-        transform-origin: center top;
-    }
+  &.overlay-panel-bottom {
+    transform-origin: center top;
+  }
 
-    &.overlay-panel-left {
-        transform-origin: right center;
-    }
+  &.overlay-panel-left {
+    transform-origin: right center;
+  }
 
-    &.overlay-panel-right {
-        transform-origin: left center;
-    }
-}
+  &.overlay-panel-right {
+    transform-origin: left center;
+  }
 
-.overlay-panel-content {
+  .overlay-panel-content {
     position: relative;
     z-index: 1;
-}
+    margin-top: 18px;
+  }
 
-.overlay-panel-close {
+  .overlay-panel-close {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 10px;
+    right: 5px;
     z-index: 2;
-}
-
-.overlay-panel-arrow {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-
-    &::before,
-    &::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-style: solid;
-    }
-
-    &::before {
-        border-width: 9px;
-    }
-
-    &::after {
-        border-width: 8px;
-    }
-}
-
-// Arrow positioning for bottom arrow (panel above target)
-.overlay-panel-bottom .overlay-panel-arrow {
-    bottom: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    &::before {
-        top: -9px;
-        left: -9px;
-        border-color: transparent transparent transparent transparent;
-        border-bottom-width: 0;
-    }
-
-    &::after {
-        top: -8px;
-        left: -8px;
-        border-color: transparent transparent transparent transparent;
-        border-bottom-width: 0;
-    }
-}
-
-// Arrow positioning for top arrow (panel below target)
-.overlay-panel-top .overlay-panel-arrow {
-    top: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    &::before {
-        top: 7px;
-        left: -9px;
-        border-color: transparent transparent transparent transparent;
-        border-top-width: 0;
-    }
-
-    &::after {
-        top: 8px;
-        left: -8px;
-        border-color: transparent transparent transparent transparent;
-        border-top-width: 0;
-    }
-}
-
-// Arrow positioning for right arrow (panel left of target)
-.overlay-panel-right .overlay-panel-arrow {
-    right: -16px;
-    top: 50%;
-    transform: translateY(-50%);
-
-    &::before {
-        left: 7px;
-        top: -9px;
-        border-color: transparent transparent transparent transparent;
-        border-right-width: 0;
-    }
-
-    &::after {
-        left: 8px;
-        top: -8px;
-        border-color: transparent transparent transparent transparent;
-        border-right-width: 0;
-    }
-}
-
-// Arrow positioning for left arrow (panel right of target)
-.overlay-panel-left .overlay-panel-arrow {
-    left: -16px;
-    top: 50%;
-    transform: translateY(-50%);
-
-    &::before {
-        left: -9px;
-        top: -9px;
-        border-color: transparent transparent transparent transparent;
-        border-left-width: 0;
-    }
-
-    &::after {
-        left: -8px;
-        top: -8px;
-        border-color: transparent transparent transparent transparent;
-        border-left-width: 0;
-    }
-}
-
-@keyframes overlay-panel-show {
-    0% {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+  }
 }

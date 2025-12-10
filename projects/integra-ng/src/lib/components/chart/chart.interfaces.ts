@@ -63,6 +63,8 @@ export interface IChartData {
  * Internal display configuration for Chart.js
  */
 export interface IChartDisplay {
+  /** Unique identifier for tracking */
+  id: string;
   /** Chart.js data object */
   data: unknown;
   /** Chart.js options object */
