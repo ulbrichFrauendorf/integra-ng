@@ -1,6 +1,10 @@
 {
   "name": "integra-ng",
   "version": "21.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ulbrichFrauendorf/integra-ng"
+  },
   "peerDependencies": {
     "@angular/common": "^21.0.0",
     "@angular/core": "^21.0.0",
