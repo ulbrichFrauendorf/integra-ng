@@ -28,6 +28,7 @@
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.3",
     "@types/jasmine": "~5.1.0",
+    "baseline-browser-mapping": "^2.9.5",
     "chart.js": "^4.5.1",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
