@@ -1,4 +1,5 @@
 name: npm package deploy
+
 on:
   workflow_dispatch:
 
@@ -13,25 +14,34 @@ on:
         required: true
         default: false
 
+# Required for OIDC trusted publishing
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Extract version from tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org/"
 
+      - name: Ensure npm CLI supports OIDC
+        run: npm install -g npm@^11.5.1
+
       - name: Install root dependencies
-        run: npm install
+        run: npm ci
 
       - name: Update version in package.json
         run: |
@@ -44,9 +54,8 @@ jobs:
       - name: Build UI Kit application
         run: npm run ng -- build ui-kit --configuration production
 
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to NPM (OIDC)
+        # NOTE: No NODE_AUTH_TOKEN env/secret needed when using OIDC trusted publishing
         run: |
           cd dist/integra-ng
           npm publish --access public
