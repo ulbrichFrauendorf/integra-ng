@@ -80,38 +80,14 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     { name: 'Create Report', value: 'report', icon: 'pi pi-chart-bar' },
   ];
 
-  // Users data with status icons
-  users = [
-    {
-      name: 'John Doe',
-      id: 1,
-      status: 'online',
-      statusIcon: 'pi pi-circle-fill',
-    },
-    {
-      name: 'Jane Smith',
-      id: 2,
-      status: 'offline',
-      statusIcon: 'pi pi-circle',
-    },
-    {
-      name: 'Bob Johnson',
-      id: 3,
-      status: 'online',
-      statusIcon: 'pi pi-circle-fill',
-    },
-    {
-      name: 'Alice Brown',
-      id: 4,
-      status: 'away',
-      statusIcon: 'pi pi-circle-fill',
-    },
-    {
-      name: 'Charlie Wilson',
-      id: 5,
-      status: 'online',
-      statusIcon: 'pi pi-circle-fill',
-    },
+  // Menu items for displayAsMenu demo
+  menuItems = [
+    { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' },
+    { name: 'Settings', value: 'settings', icon: 'pi pi-cog' },
+    { name: 'Profile', value: 'profile', icon: 'pi pi-user' },
+    { name: 'Messages', value: 'messages', icon: 'pi pi-envelope' },
+    { name: 'Notifications', value: 'notifications', icon: 'pi pi-bell' },
+    { name: 'Help', value: 'help', icon: 'pi pi-question-circle' },
   ];
 
   // Multiple selection listbox values (now full objects)
@@ -131,8 +107,12 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
   ];
 
-  // Users selection (now full object)
-  selectedUser: ListboxOption | null = null;
+  // Menu selection
+  selectedMenuItem: ListboxOption | null = {
+    name: 'Dashboard',
+    value: 'dashboard',
+    icon: 'pi pi-home',
+  };
 
   constructor(private fb: FormBuilder) {
     // Initialize reactive form - now stores full department objects
@@ -247,7 +227,12 @@ export class ListboxesComponent implements OnInit, OnDestroy {
     {
       title: 'Option Icons',
       description:
-        'Add icons to left or right edge of each option using optionLeftIcon and optionRightIcon.',
+        'Add icons to options using the optionIcon property for enhanced visual clarity.',
+    },
+    {
+      title: 'Display as Menu',
+      description:
+        'Style listbox as a menu with larger text, chevron indicators, and menu-style selection highlighting.',
     },
     {
       title: 'Action Button',
@@ -310,7 +295,7 @@ selectedCountrySingle: ListboxOption | null = { name: 'United Kingdom', code: 'U
   [(ngModel)]="selectedCountrySingle">
 </i-listbox>`,
 
-    withIcons: `// Options with left icons
+    withIcons: `// Options with icons
 tasks = [
   { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
   { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
@@ -322,28 +307,29 @@ tasks = [
   [options]="tasks"
   optionLabel="name"
   [multiple]="true"
-  optionLeftIcon="icon"
+  optionIcon="icon"
   actionIcon="pi pi-cog"
   actionTooltip="Manage Tasks"
   (onAction)="onManageTasks()">
 </i-listbox>`,
 
-    rightIcons: `// Options with right status icons - ngModel stores full object
-users = [
-  { name: 'John Doe', id: 1, statusIcon: 'pi pi-circle-fill' },
-  { name: 'Jane Smith', id: 2, statusIcon: 'pi pi-circle' },
-  { name: 'Bob Johnson', id: 3, statusIcon: 'pi pi-circle-fill' }
+    displayAsMenu: `// Menu navigation - ngModel stores full object
+menuItems = [
+  { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' },
+  { name: 'Settings', value: 'settings', icon: 'pi pi-cog' },
+  { name: 'Profile', value: 'profile', icon: 'pi pi-user' }
 ];
 
+selectedMenuItem: ListboxOption | null = { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' };
+
 <i-listbox
-  title="Team Members"
-  [options]="users"
+  title="Navigation"
+  [options]="menuItems"
   optionLabel="name"
   [multiple]="false"
-  optionRightIcon="statusIcon"
-  actionIcon="pi pi-user-plus"
-  actionTooltip="Add User"
-  (onAction)="onAddUser()">
+  [displayAsMenu]="true"
+  [filter]="false"
+  [(ngModel)]="selectedMenuItem">
 </i-listbox>`,
 
     filter: `<i-listbox

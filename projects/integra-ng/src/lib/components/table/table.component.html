@@ -44,8 +44,181 @@
   <div
     class="i-table-container"
     [class.i-table-container--scrollable]="scrollable || height || scrollHeight"
-    [style.max-height]="height || scrollHeight || null"
+    [class.i-table-container--virtual-scroll]="virtualScroll"
+    [style.height]="virtualScroll ? height || scrollHeight || '400px' : null"
+    [style.max-height]="!virtualScroll ? height || scrollHeight || null : null"
   >
+    <!-- Virtual Scroll Mode -->
+    @if (virtualScroll) {
+    <!-- Sticky Header Table (outside viewport) -->
+    <div class="i-table-virtual-header">
+      <table class="i-table">
+        <thead>
+          <!-- Column Filters Row -->
+          @if (filterable) {
+          <tr class="i-table-filter-row">
+            @if (selectionMode === 'multiple') {
+            <th class="i-table-selection-header"></th>
+            } @if (rowExpandable) {
+            <th class="i-table-expand-header"></th>
+            } @for (column of columns(); track trackByColumn($index, column)) {
+            @if (column.filterable !== false) {
+            <th [style.width]="getColumnWidth(column)">
+              <input
+                type="text"
+                class="i-table-column-filter"
+                placeholder="Filter..."
+                [ngModel]="columnFilters()[column.field] || ''"
+                (ngModelChange)="onColumnFilterInput(column.field, $event)"
+              />
+            </th>
+            } @else {
+            <th [style.width]="getColumnWidth(column)"></th>
+            } } @if (showActions && actions.length > 0) {
+            <th class="i-table-actions-header"></th>
+            }
+          </tr>
+          }
+
+          <!-- Column Headers Row -->
+          <tr>
+            @if (selectionMode === 'multiple') {
+            <th class="i-table-selection-header">
+              <i-checkbox
+                [checked]="areAllRowsSelected()"
+                [indeterminate]="areSomeRowsSelected()"
+                (onChange)="toggleAllSelection()"
+              ></i-checkbox>
+            </th>
+            } @if (rowExpandable) {
+            <th class="i-table-expand-header"></th>
+            } @for (column of columns(); track trackByColumn($index, column)) {
+            <th
+              [style.width]="getColumnWidth(column)"
+              [style.text-align]="column.align || 'left'"
+              [class.i-table-sortable-column]="sortable && column.sortable"
+              [class.i-table-sorted]="sortField === column.field"
+              (click)="onSortColumn(column)"
+            >
+              <div class="i-table-header-content">
+                <span class="i-table-header-text">{{ column.header }}</span>
+                @if (sortable && column.sortable) {
+                <i [class]="getSortIcon(column)" class="i-table-sort-icon"></i>
+                }
+              </div>
+              @if (resizableColumns) {
+              <span
+                class="i-table-column-resizer"
+                (mousedown)="onColumnResizeStart($event, column)"
+              ></span>
+              }
+            </th>
+            } @if (showActions && actions.length > 0) {
+            <th class="i-table-actions-header">Actions</th>
+            }
+          </tr>
+        </thead>
+      </table>
+    </div>
+
+    <!-- Virtual Scroll Viewport (body only) -->
+    <cdk-virtual-scroll-viewport
+      [itemSize]="virtualScrollItemSize"
+      [minBufferPx]="virtualScrollMinBufferPx"
+      [maxBufferPx]="virtualScrollMaxBufferPx"
+      class="i-table-virtual-viewport"
+    >
+      <table class="i-table i-table-virtual-body">
+        <tbody>
+          @if (processedData().length === 0) {
+          <tr class="i-table-empty-row">
+            <td
+              [attr.colspan]="
+                columns().length +
+                (selectionMode === 'multiple' ? 1 : 0) +
+                (rowExpandable ? 1 : 0) +
+                (showActions && actions.length > 0 ? 1 : 0)
+              "
+            >
+              <i-no-content />
+            </td>
+          </tr>
+          }
+          <!-- Virtual Scroll Rows -->
+          <tr
+            *cdkVirtualFor="
+              let row of processedData();
+              let rowIndex = index;
+              trackBy: trackByRow
+            "
+            [style.height.px]="virtualScrollItemSize"
+            [class.i-table-row-odd]="rowIndex % 2 !== 0"
+            [class.i-table-row-selected]="isRowSelected(row)"
+            (click)="toggleRowSelection(row)"
+          >
+            @if (selectionMode === 'multiple') {
+            <td class="i-table-selection-cell">
+              <i-checkbox
+                [checked]="isRowSelected(row)"
+                (onChange)="toggleRowSelection(row)"
+                (click)="$event.stopPropagation()"
+              ></i-checkbox>
+            </td>
+            } @if (rowExpandable) {
+            <td class="i-table-expand-cell">
+              <i-button
+                severity="secondary"
+                [text]="true"
+                size="small"
+                [icon]="
+                  isRowExpanded(row)
+                    ? 'pi pi-chevron-down'
+                    : 'pi pi-chevron-right'
+                "
+                (clicked)="toggleRowExpansion(row, $event)"
+              ></i-button>
+            </td>
+            } @for (column of columns(); track trackByColumn($index, column)) {
+            <td
+              [style.text-align]="column.align || 'left'"
+              [style.width]="getColumnWidth(column)"
+            >
+              @if (isIconColumn(column)) {
+              <i
+                [class]="getCellIcon(row, column)"
+                [style.color]="getCellIconColor(row, column)"
+                [style.font-size]="column.iconSize || '1rem'"
+              ></i>
+              } @else {
+              {{ formatCellValue(getCellValue(row, column.field), column) }}
+              }
+            </td>
+            } @if (showActions && actions.length > 0) {
+            <td class="i-table-actions-cell">
+              <div class="i-table-actions">
+                @for (action of actions; track action.id) {
+                <i-button
+                  [severity]="action.severity || 'secondary'"
+                  [text]="true"
+                  size="small"
+                  [icon]="action.icon || ''"
+                  [disabled]="isActionDisabled(action, row)"
+                  (clicked)="onActionClick(action, row, $event)"
+                >
+                  @if (action.label) {
+                  {{ action.label }}
+                  }
+                </i-button>
+                }
+              </div>
+            </td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </cdk-virtual-scroll-viewport>
+    } @else {
+    <!-- Non-Virtual Scroll Table -->
     <table class="i-table">
       <!-- Table Header (sticky when scrollable) -->
       <thead>
@@ -214,7 +387,15 @@
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
           >
+            @if (isIconColumn(column)) {
+            <i
+              [class]="getCellIcon(row, column)"
+              [style.color]="getCellIconColor(row, column)"
+              [style.font-size]="column.iconSize || '1rem'"
+            ></i>
+            } @else {
             {{ formatCellValue(getCellValue(row, column.field), column) }}
+            }
           </td>
           } @if (showActions && actions.length > 0) {
           <td class="i-table-actions-cell">
@@ -305,7 +486,15 @@
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
           >
+            @if (isIconColumn(column)) {
+            <i
+              [class]="getCellIcon(row, column)"
+              [style.color]="getCellIconColor(row, column)"
+              [style.font-size]="column.iconSize || '1rem'"
+            ></i>
+            } @else {
             {{ formatCellValue(getCellValue(row, column.field), column) }}
+            }
           </td>
           } @if (showActions && actions.length > 0) {
           <td class="i-table-actions-cell">
@@ -348,5 +537,6 @@
       </tbody>
       }
     </table>
+    }
   </div>
 </div>

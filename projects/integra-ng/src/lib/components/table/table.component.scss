@@ -112,6 +112,60 @@ $table-transition: 0.15s ease;
         z-index: 2;
       }
     }
+
+    &--virtual-scroll {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+
+      .i-table-virtual-header {
+        flex-shrink: 0;
+        overflow: hidden;
+        background: var(--color-surface-50);
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          table-layout: fixed;
+        }
+      }
+
+      .i-table-virtual-viewport {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+
+        .cdk-virtual-scroll-content-wrapper {
+          width: 100%;
+        }
+      }
+
+      .i-table-virtual-body {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      table {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      tbody {
+        display: table-row-group;
+      }
+
+      tr {
+        display: table-row;
+        box-sizing: border-box;
+      }
+
+      td,
+      th {
+        display: table-cell;
+      }
+    }
   }
 
   table {

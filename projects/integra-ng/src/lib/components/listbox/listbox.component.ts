@@ -73,9 +73,29 @@ export interface ListboxOption {
  *   title="Select Items"
  *   [options]="items"
  *   optionLabel="name"
- *   optionLeftIcon="icon"
- *   optionRightIcon="statusIcon"
+ *   optionIcon="icon"
  *   formControlName="selection">
+ * </i-listbox>
+ *
+ * <!-- Multiple selection without chips -->
+ * <i-listbox
+ *   title="Choose Multiple"
+ *   [options]="items"
+ *   optionLabel="name"
+ *   [multiple]="true"
+ *   [showChips]="false"
+ *   formControlName="selectedItems">
+ * </i-listbox>
+ *
+ * <!-- Display as menu -->
+ * <i-listbox
+ *   title="Navigation"
+ *   [options]="menuItems"
+ *   optionLabel="name"
+ *   [multiple]="false"
+ *   [displayAsMenu]="true"
+ *   [filter]="false"
+ *   formControlName="selectedPage">
  * </i-listbox>
  * ```
  *
@@ -87,13 +107,7 @@ export interface ListboxOption {
 @Component({
   selector: 'i-listbox',
   standalone: true,
-  imports: [
-    FormsModule,
-    IChipsComponent,
-    ICheckbox,
-    IInputText,
-    IButton
-],
+  imports: [FormsModule, IChipsComponent, ICheckbox, IInputText, IButton],
   templateUrl: './listbox.component.html',
   styleUrls: ['./listbox.component.scss'],
   providers: [
@@ -128,16 +142,10 @@ export class IListbox implements ControlValueAccessor {
   @Input() actionTooltip?: string;
 
   /**
-   * Property name for left icon on each option
+   * Property name for icon on each option
    * The option object should have this property with an icon class string
    */
-  @Input() optionLeftIcon?: string;
-
-  /**
-   * Property name for right icon on each option
-   * The option object should have this property with an icon class string
-   */
-  @Input() optionRightIcon?: string;
+  @Input() optionIcon?: string;
 
   // Convert options to signal input
   options: InputSignal<ListboxOption[] | null | undefined> = input<
@@ -156,6 +164,19 @@ export class IListbox implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() multiple = true;
   @Input() readonly = true;
+
+  /**
+   * Whether to show chips for selected items in multiple selection mode
+   * @default true
+   */
+  @Input() showChips = true;
+
+  /**
+   * Display listbox as a menu with larger text and chevron icons
+   * Selected item uses menu-style highlighting
+   * @default false
+   */
+  @Input() displayAsMenu = false;
 
   @Output() onChange = new EventEmitter<any[] | any>();
   @Output() onClear = new EventEmitter<void>();
@@ -251,19 +272,11 @@ export class IListbox implements ControlValueAccessor {
   }
 
   /**
-   * Gets the left icon for an option
+   * Gets the icon for an option
    */
-  getOptionLeftIcon(option: ListboxOption): string | null {
-    if (!this.optionLeftIcon) return null;
-    return option[this.optionLeftIcon] || null;
-  }
-
-  /**
-   * Gets the right icon for an option
-   */
-  getOptionRightIcon(option: ListboxOption): string | null {
-    if (!this.optionRightIcon) return null;
-    return option[this.optionRightIcon] || null;
+  getOptionIcon(option: ListboxOption): string | null {
+    if (!this.optionIcon) return null;
+    return option[this.optionIcon] || null;
   }
 
   toggleOption(option: ListboxOption) {
@@ -372,7 +385,8 @@ export class IListbox implements ControlValueAccessor {
       }
       const option = currentOptions.find(
         (opt: ListboxOption) =>
-          JSON.stringify(this.getOptionValue(opt)) === JSON.stringify(this.value)
+          JSON.stringify(this.getOptionValue(opt)) ===
+          JSON.stringify(this.value)
       );
       return option ? [this.getOptionLabel(option)] : [String(this.value)];
     }
@@ -410,7 +424,8 @@ export class IListbox implements ControlValueAccessor {
       }
       const option = currentOptions.find(
         (opt: ListboxOption) =>
-          JSON.stringify(this.getOptionValue(opt)) === JSON.stringify(this.value)
+          JSON.stringify(this.getOptionValue(opt)) ===
+          JSON.stringify(this.value)
       );
       return option ? this.getOptionLabel(option) : String(this.value);
     }
