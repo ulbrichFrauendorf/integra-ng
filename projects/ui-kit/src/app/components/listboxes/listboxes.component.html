@@ -47,9 +47,9 @@
       ></i-listbox>
     </app-demo-card>
 
-    <!-- Options with Left Icons -->
+    <!-- Options with Icons -->
     <app-demo-card
-      [title]="'Options with Left Icons'"
+      [title]="'Options with Icons'"
       [sourceCode]="codeExamples.withIcons"
     >
       <i-listbox
@@ -57,7 +57,7 @@
         [options]="tasks"
         optionLabel="name"
         [multiple]="true"
-        optionLeftIcon="icon"
+        optionIcon="icon"
         actionIcon="pi pi-cog"
         actionTooltip="Manage Tasks"
         (onAction)="onManageTasks()"
@@ -65,21 +65,19 @@
       ></i-listbox>
     </app-demo-card>
 
-    <!-- Options with Right Icons -->
+    <!-- Display as Menu -->
     <app-demo-card
-      [title]="'Options with Right Icons (Status Indicators)'"
-      [sourceCode]="codeExamples.rightIcons"
+      [title]="'Display as Menu'"
+      [sourceCode]="codeExamples.displayAsMenu"
     >
       <i-listbox
-        title="Team Members"
-        [options]="users"
+        title="Navigation"
+        [options]="menuItems"
         optionLabel="name"
         [multiple]="false"
-        optionRightIcon="statusIcon"
-        actionIcon="pi pi-user-plus"
-        actionTooltip="Add User"
-        (onAction)="onAddUser()"
-        [(ngModel)]="selectedUser"
+        [displayAsMenu]="true"
+        [filter]="false"
+        [(ngModel)]="selectedMenuItem"
       ></i-listbox>
     </app-demo-card>
 

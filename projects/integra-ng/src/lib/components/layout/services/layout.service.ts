@@ -1,7 +1,6 @@
 import { Injectable, effect, signal, WritableSignal } from '@angular/core';
 import { Subject } from 'rxjs';
 
-export const LocalStorageThemeKey = 'viewModeTheme';
 export const LocalStorageColorSchemeKey = 'viewModeColorScheme';
 
 const MOBILE_BREAKPOINT = 991;
@@ -9,7 +8,6 @@ const MOBILE_BREAKPOINT = 991;
 export interface AppConfig {
   inputStyle: string;
   colorScheme: string;
-  theme: string;
   ripple: boolean;
   scale: number;
 }
@@ -30,7 +28,6 @@ export class LayoutService {
     ripple: true,
     inputStyle: 'outlined',
     colorScheme: localStorage.getItem(LocalStorageColorSchemeKey) || 'light',
-    theme: localStorage.getItem(LocalStorageThemeKey) || 'aura-light-amber',
     scale: 12,
   };
 
@@ -49,10 +46,6 @@ export class LayoutService {
   constructor() {
     effect(() => {
       const config = this.config();
-
-      if (this.updateStyle(config)) {
-        this.changeTheme();
-      }
       this.changeScale(config.scale);
       this.onConfigUpdate();
     });
@@ -68,10 +61,7 @@ export class LayoutService {
   }
 
   updateStyle(config: AppConfig) {
-    return (
-      config.theme !== this._config.theme ||
-      config.colorScheme !== this._config.colorScheme
-    );
+    return config.colorScheme !== this._config.colorScheme;
   }
 
   toggleSidebar() {
@@ -126,39 +116,6 @@ export class LayoutService {
   onConfigUpdate() {
     this._config = { ...this.config() };
     this.configUpdate.next(this.config());
-  }
-
-  changeTheme() {
-    const config = this.config();
-    const themeLink = <HTMLLinkElement>document.getElementById('theme-css');
-    const themeLinkHref = themeLink.getAttribute('href')!;
-    const newHref = themeLinkHref
-      .split('/')
-      .map((el) =>
-        el == this._config.theme
-          ? (el = config.theme)
-          : el == `theme-${this._config.colorScheme}`
-          ? (el = `theme-${config.colorScheme}`)
-          : el
-      )
-      .join('/');
-
-    this.replaceThemeLink(newHref);
-  }
-
-  replaceThemeLink(href: string) {
-    const id = 'theme-css';
-    const themeLink = <HTMLLinkElement>document.getElementById(id);
-    const cloneLinkElement = <HTMLLinkElement>themeLink.cloneNode(true);
-
-    cloneLinkElement.setAttribute('href', href);
-    cloneLinkElement.setAttribute('id', id + '-clone');
-
-    themeLink.parentNode!.insertBefore(cloneLinkElement, themeLink.nextSibling);
-    cloneLinkElement.addEventListener('load', () => {
-      themeLink.remove();
-      cloneLinkElement.setAttribute('id', id);
-    });
   }
 
   changeScale(value: number) {

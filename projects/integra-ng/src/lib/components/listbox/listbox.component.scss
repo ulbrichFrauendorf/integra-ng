@@ -87,8 +87,8 @@ $listbox-transition: 0.15s ease;
       }
     }
 
-    .i-listbox-chips {
-      padding: 4px 0;
+    .i-listbox-chips-wrapper {
+      height: 32px;
     }
   }
 
@@ -147,9 +147,11 @@ $listbox-transition: 0.15s ease;
             color: colors.$color-text-secondary;
           }
 
-          &--right {
+          &--chevron {
             color: colors.$color-text-tertiary;
             margin-left: auto;
+            font-size: 12px;
+            opacity: 0.6;
           }
         }
 
@@ -177,5 +179,29 @@ $listbox-transition: 0.15s ease;
     color: colors.$color-danger;
     background: rgba(239, 68, 68, 0.05);
     border-top: 1px solid colors.$color-danger;
+  }
+
+  // Menu display mode styling
+  &.i-listbox--menu {
+    .i-listbox-options {
+      .i-listbox-option {
+        padding: 14px 16px;
+        font-size: 1.05em;
+
+        &.has-icon {
+          padding: 18px 16px;
+        }
+
+        &.selected {
+          background-color: colors.$color-surface-hover;
+          border-left: 3px solid colors.$color-primary;
+          font-weight: 600;
+        }
+
+        .i-listbox-option-icon--chevron {
+          opacity: 0.8;
+        }
+      }
+    }
   }
 }

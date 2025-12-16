@@ -10,9 +10,15 @@ import {
   HostListener,
   ElementRef,
   effect,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { 
+  CdkVirtualScrollViewport, 
+  CdkVirtualForOf,
+  CdkFixedSizeVirtualScroll 
+} from '@angular/cdk/scrolling';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
 import { ICheckbox } from '../checkbox/checkbox.component';
@@ -37,9 +43,15 @@ export interface TableColumn {
   /** Text alignment within the column */
   align?: 'left' | 'center' | 'right';
   /** Data type for formatting */
-  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency';
+  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'icon';
   /** Format string for date/currency formatting */
   format?: string;
+  /** Icon class for 'icon' type - can be a field name or a function that returns the icon class */
+  iconClass?: string | ((row: any) => string);
+  /** Icon color for 'icon' type - can be a field name or a function that returns the color */
+  iconColor?: string | ((row: any) => string);
+  /** Icon size for 'icon' type */
+  iconSize?: string;
 }
 
 /**
@@ -107,6 +119,20 @@ export interface TableDownloadEvent {
 }
 
 /**
+ * Virtual scroll configuration
+ */
+export interface VirtualScrollConfig {
+  /** Enable virtual scrolling */
+  enabled: boolean;
+  /** Item size in pixels (height of each row) */
+  itemSize?: number;
+  /** Minimum buffer size in pixels */
+  minBufferPx?: number;
+  /** Maximum buffer size in pixels */
+  maxBufferPx?: number;
+}
+
+/**
  * Table Component
  *
  * A comprehensive table component with sorting, filtering, pagination, selection,
@@ -153,6 +179,9 @@ export interface TableDownloadEvent {
   imports: [
     CommonModule,
     FormsModule,
+    CdkVirtualScrollViewport,
+    CdkVirtualForOf,
+    CdkFixedSizeVirtualScroll,
     IInputText,
     IButton,
     ICheckbox,
@@ -351,6 +380,38 @@ export class ITable {
    * Alias Input for convenience — developer can set `height` or `scrollHeight`.
    */
   @Input() height?: string;
+
+  // ===== VIRTUAL SCROLL =====
+
+  /**
+   * Enable virtual scrolling for large datasets
+   * @default false
+   */
+  @Input() virtualScroll = false;
+
+  /**
+   * Item size for virtual scroll (height of each row in pixels)
+   * @default 48
+   */
+  @Input() virtualScrollItemSize = 48;
+
+  /**
+   * Minimum buffer size in pixels for virtual scroll
+   * @default 200
+   */
+  @Input() virtualScrollMinBufferPx = 200;
+
+  /**
+   * Maximum buffer size in pixels for virtual scroll
+   * @default 400
+   */
+  @Input() virtualScrollMaxBufferPx = 400;
+
+  /**
+   * Reference to the virtual scroll viewport
+   * @internal
+   */
+  @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport?: CdkVirtualScrollViewport;
 
   // ===== ADDITIONAL FEATURES =====
 
@@ -586,9 +647,57 @@ export class ITable {
         return Number(value).toLocaleString();
       case 'boolean':
         return value ? 'Yes' : 'No';
+      case 'icon':
+        // Icons are rendered in the template, not as text
+        return '';
       default:
         return String(value);
     }
+  }
+
+  /**
+   * Gets the icon class for a cell
+   * @internal
+   */
+  getCellIcon(row: any, column: TableColumn): string {
+    if (column.type !== 'icon') return '';
+
+    if (typeof column.iconClass === 'function') {
+      return column.iconClass(row);
+    } else if (typeof column.iconClass === 'string') {
+      // Check if it's a field reference or a direct icon class
+      const fieldValue = this.getCellValue(row, column.iconClass);
+      return fieldValue || column.iconClass;
+    }
+
+    // Fallback to field value
+    return this.getCellValue(row, column.field) || '';
+  }
+
+  /**
+   * Gets the icon color for a cell
+   * @internal
+   */
+  getCellIconColor(row: any, column: TableColumn): string {
+    if (column.type !== 'icon' || !column.iconColor) return '';
+
+    if (typeof column.iconColor === 'function') {
+      return column.iconColor(row);
+    } else if (typeof column.iconColor === 'string') {
+      // Check if it's a field reference or a direct color value
+      const fieldValue = this.getCellValue(row, column.iconColor);
+      return fieldValue || column.iconColor;
+    }
+
+    return '';
+  }
+
+  /**
+   * Checks if a column should render an icon
+   * @internal
+   */
+  isIconColumn(column: TableColumn): boolean {
+    return column.type === 'icon';
   }
 
   /**
@@ -1133,5 +1242,51 @@ export class ITable {
    */
   trackByColumn(index: number, column: TableColumn): string {
     return column.field;
+  }
+
+  // ===== VIRTUAL SCROLL METHODS =====
+
+  /**
+   * Scrolls to a specific index in the virtual scroll viewport
+   * @param index - The index to scroll to
+   * @param behavior - Scroll behavior ('auto' or 'smooth')
+   */
+  scrollToIndex(index: number, behavior: ScrollBehavior = 'auto'): void {
+    if (this.virtualScroll && this.virtualScrollViewport) {
+      this.virtualScrollViewport.scrollToIndex(index, behavior);
+    }
+  }
+
+  /**
+   * Scrolls to a specific offset in the virtual scroll viewport
+   * @param offset - The offset in pixels to scroll to
+   * @param behavior - Scroll behavior ('auto' or 'smooth')
+   */
+  scrollToOffset(offset: number, behavior: ScrollBehavior = 'auto'): void {
+    if (this.virtualScroll && this.virtualScrollViewport) {
+      this.virtualScrollViewport.scrollToOffset(offset, behavior);
+    }
+  }
+
+  /**
+   * Gets the total content size of the virtual scroll viewport
+   * @returns The total content size in pixels
+   */
+  getVirtualScrollContentSize(): number {
+    if (this.virtualScroll && this.virtualScrollViewport) {
+      return this.virtualScrollViewport.measureScrollOffset('bottom');
+    }
+    return 0;
+  }
+
+  /**
+   * Gets the current scroll offset of the virtual scroll viewport
+   * @returns The current scroll offset in pixels
+   */
+  getVirtualScrollOffset(): number {
+    if (this.virtualScroll && this.virtualScrollViewport) {
+      return this.virtualScrollViewport.measureScrollOffset();
+    }
+    return 0;
   }
 }

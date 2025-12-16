@@ -3,6 +3,7 @@
   [class.i-listbox--fluid]="fluid"
   [class.i-listbox--disabled]="disabled"
   [class.i-listbox--invalid]="showErrors"
+  [class.i-listbox--menu]="displayAsMenu"
   #dropdown
 >
   <!-- Header -->
@@ -23,16 +24,18 @@
     </div>
 
     <!-- Chips area for multiselect mode -->
-    @if (multiple && hasValue()) {
-    <i-chips
-      class="i-listbox-chips"
-      [chips]="getSelectedChipItems()"
-      [removable]="!disabled"
-      [disabled]="disabled"
-      [collapseOnOverflow]="true"
-      [overflowLabel]="getDisplayLabel()"
-      (removeChip)="onChipRemove($event)"
-    ></i-chips>
+    @if (multiple && showChips) {
+    <div class="i-listbox-chips-wrapper">
+      <i-chips
+        class="i-listbox-chips"
+        [chips]="getSelectedChipItems()"
+        [removable]="!disabled"
+        [disabled]="disabled"
+        [collapseOnOverflow]="true"
+        [overflowLabel]="getDisplayLabel()"
+        (removeChip)="onChipRemove($event)"
+      ></i-chips>
+    </div>
     }
   </div>
 
@@ -58,9 +61,7 @@
       <div
         class="i-listbox-option"
         [class.selected]="isOptionSelected(option)"
-        [class.has-icon]="
-          !multiple && (getOptionLeftIcon(option) || getOptionRightIcon(option))
-        "
+        [class.has-icon]="!multiple && getOptionIcon(option)"
         (click)="toggleOption(option)"
       >
         <!-- Checkbox only in multiple mode -->
@@ -74,9 +75,9 @@
         }
 
         <!-- Left icon -->
-        @if (getOptionLeftIcon(option)) {
+        @if (getOptionIcon(option) && !displayAsMenu) {
         <i
-          [class]="getOptionLeftIcon(option)"
+          [class]="getOptionIcon(option)"
           class="i-listbox-option-icon i-listbox-option-icon--left"
         ></i>
         }
@@ -85,11 +86,10 @@
           {{ getOptionLabel(option) }}
         </span>
 
-        <!-- Right icon -->
-        @if (getOptionRightIcon(option)) {
+        <!-- Right chevron for menu mode -->
+        @if (displayAsMenu) {
         <i
-          [class]="getOptionRightIcon(option)"
-          class="i-listbox-option-icon i-listbox-option-icon--right"
+          class="pi pi-chevron-right i-listbox-option-icon i-listbox-option-icon--chevron"
         ></i>
         }
       </div>

@@ -27,7 +27,7 @@
     table {
       thead {
         tr {
-          background: colors.$color-surface-section;
+          background: colors.$color-component-background;
 
           th {
             color: colors.$color-text-primary;
@@ -58,12 +58,12 @@
 
         .i-table-filter-row {
           th {
-            background: colors.$color-surface-ground;
+            background: colors.$color-component-background;
           }
 
           .i-table-column-filter {
             border: 1px solid colors.$color-surface-border;
-            background: colors.$color-component-background;
+            background: colors.$color-surface-ground;
             color: colors.$color-text-primary;
 
             &:focus {
@@ -89,16 +89,17 @@
           }
 
           &.i-table-row-odd {
-            background: colors.$color-surface-ground;
+            background: colors.$color-component-background;
           }
 
           &.i-table-row-selected {
-            background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.1);
+            background: colors.$color-surface-hover;
+            color: colors.$color-primary;
           }
         }
 
         .i-table-expanded-row {
-          background: colors.$color-surface-section;
+          background: colors.$color-component-background;
 
           .i-table-expanded-content {
             background: colors.$color-surface-ground;
@@ -108,13 +109,13 @@
 
         .i-table-empty-row {
           td {
-            background: colors.$color-surface-ground;
+            background: colors.$color-component-background;
           }
         }
 
         // Grouped data styles
         .i-table-group-header {
-          background: colors.$color-surface-section;
+          background: colors.$color-component-background;
           border-bottom: 2px solid colors.$color-surface-border;
 
           td {
@@ -135,7 +136,7 @@
         }
 
         .i-table-group-columns-header {
-          background: colors.$color-surface-ground;
+          background: colors.$color-component-background;
           border-bottom: 1px solid colors.$color-surface-border;
 
           th {
@@ -148,11 +149,12 @@
           background: colors.$color-component-background;
 
           &.i-table-row-odd {
-            background: colors.$color-surface-ground;
+            background: colors.$color-component-background;
           }
 
           &.i-table-row-selected {
-            background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.1);
+            background: colors.$color-surface-hover;
+            color: colors.$color-primary;
           }
         }
       }
@@ -172,13 +174,17 @@
 
     // Hoverable variant
     &.i-table--hoverable {
-      table tbody tr:not(.i-table-empty-row):not(.i-table-expanded-row):not(.i-table-group-header):not(.i-table-group-columns-header) {
+      table
+        tbody
+        tr:not(.i-table-empty-row):not(.i-table-expanded-row):not(
+          .i-table-group-header
+        ):not(.i-table-group-columns-header) {
         &:hover {
           background: colors.$color-surface-hover;
         }
 
         &.i-table-row-selected:hover {
-          background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.15);
+          background: colors.$color-surface-hover;
         }
       }
     }
@@ -190,13 +196,6 @@
       &:hover {
         background: colors.$color-primary;
       }
-    }
-  }
-
-  // Dark mode adjustments
-  :host-context([data-theme="dark"]) {
-    .i-table-loading-overlay {
-      background: rgba(0, 0, 0, 0.5);
     }
   }
 }
