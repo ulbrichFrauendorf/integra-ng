@@ -1,3 +1,11 @@
+:host {
+  // Map global theme variables to chart-specific variables
+  // This allows Chart.js to read the resolved values from the component host
+  --chart-grid-color: var(--surface-border);
+  --chart-text-color: var(--color-text-primary);
+  --chart-text-secondary: var(--color-text-secondary);
+}
+
 .i-charts-container {
   display: flex;
   flex-wrap: wrap;
