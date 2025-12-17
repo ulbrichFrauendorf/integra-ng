@@ -83,7 +83,7 @@ export class CardsComponent {
 
   // Sample content for scrollable demo
   scrollableContent = [
-    'This card demonstrates scrollable content with the application\'s custom scrollbar styling.',
+    "This card demonstrates scrollable content with the application's custom scrollbar styling.",
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',

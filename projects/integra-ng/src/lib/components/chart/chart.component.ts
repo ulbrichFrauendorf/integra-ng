@@ -269,6 +269,12 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    */
   private cdr = inject(ChangeDetectorRef);
 
+  /**
+   * Reference to the host element
+   * @internal
+   */
+  private el = inject(ElementRef);
+
   ngAfterViewInit(): void {
     this.initialized = true;
     this.initializeCharts();
@@ -369,21 +375,24 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * Transform IChartData to IChartDisplay
    * @internal
    */
-  private transformToChartDisplay(chart: IChartData, index: number): IChartDisplay {
+  private transformToChartDisplay(
+    chart: IChartData,
+    index: number
+  ): IChartDisplay {
+    // Read resolved CSS variables from the host element
+    // This picks up the values defined in chart.component.scss which map to the global theme
+    const computedStyle = getComputedStyle(this.el.nativeElement);
     const documentStyle = getComputedStyle(document.documentElement);
-    // Use proper theme CSS variable names with fallbacks
-    const textColor =
-      documentStyle.getPropertyValue('--color-text-primary').trim() ||
-      documentStyle.getPropertyValue('--text-color').trim() ||
-      '#333333';
-    const textColorSecondary =
-      documentStyle.getPropertyValue('--color-text-secondary').trim() ||
-      documentStyle.getPropertyValue('--text-color-secondary').trim() ||
-      '#666666';
-    const surfaceBorder =
-      documentStyle.getPropertyValue('--surface-border').trim() ||
-      documentStyle.getPropertyValue('--color-border').trim() ||
-      '#e2e8f0';
+
+    const getStyle = (name: string, fallback: string) => {
+      const value = computedStyle.getPropertyValue(name).trim();
+      return value && !value.startsWith('var(') ? value : fallback;
+    };
+
+    // Use the chart-specific variables defined in SCSS
+    const textColor = getStyle('--chart-text-color', '#334155');
+    const textColorSecondary = getStyle('--chart-text-secondary', '#64748b');
+    const surfaceBorder = getStyle('--chart-grid-color', '#e2e8f0');
 
     const chartType = this.mapChartType(chart.chartType);
     const height = this.getChartHeight(chart.chartType);
@@ -508,7 +517,7 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
       case 'line':
         return {
           ...baseOptions,
-          scales: this.getLineScales(textColorSecondary, surfaceBorder),
+          scales: this.getBarScales(textColorSecondary, surfaceBorder),
         };
 
       case 'radar':
@@ -606,35 +615,13 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   /**
-   * Get scales configuration for line charts
-   * @internal
-   */
-  private getLineScales(textColorSecondary: string, surfaceBorder: string) {
-    return {
-      x: {
-        ticks: {
-          color: textColorSecondary,
-        },
-        grid: {
-          color: surfaceBorder,
-        },
-      },
-      y: {
-        ticks: {
-          color: textColorSecondary,
-        },
-        grid: {
-          color: surfaceBorder,
-        },
-      },
-    };
-  }
-
-  /**
    * Transform dataset with resolved colors
    * @internal
    */
-  private transformDataset(dataset: IChartDataSet, documentStyle: CSSStyleDeclaration) {
+  private transformDataset(
+    dataset: IChartDataSet,
+    documentStyle: CSSStyleDeclaration
+  ) {
     return {
       label: dataset.label,
       data: dataset.data,
@@ -657,9 +644,16 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
    * - CSS custom properties (e.g., '--my-custom-color')
    * @internal
    */
-  private resolveColor(color: string, documentStyle: CSSStyleDeclaration): string {
+  private resolveColor(
+    color: string,
+    documentStyle: CSSStyleDeclaration
+  ): string {
     // If it's already a hex color or rgb/rgba, return as-is
-    if (color.startsWith('#') || color.startsWith('rgb(') || color.startsWith('rgba(')) {
+    if (
+      color.startsWith('#') ||
+      color.startsWith('rgb(') ||
+      color.startsWith('rgba(')
+    ) {
       return color;
     }
 
@@ -727,7 +721,9 @@ export class IChart implements AfterViewInit, OnDestroy, OnChanges {
     // If it's an rgb color, convert to rgba with transparency
     if (color.startsWith('rgb(')) {
       // Extract the rgb values and convert to rgba
-      const rgbMatch = color.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+      const rgbMatch = color.match(
+        /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/
+      );
       if (rgbMatch) {
         return `rgba(${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}, 0.75)`;
       }
