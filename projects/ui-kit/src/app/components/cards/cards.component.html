@@ -116,6 +116,20 @@
       <app-code-display [sourceCode]="codeExamples.closable"></app-code-display>
     </section>
 
+    <!-- Scrollable Content Card -->
+    <section class="demo-section">
+      <div class="card-example">
+        <i-card [title]="'Scrollable Content'" class="scrollable-card">
+          <div class="scrollable-content">
+            @for (paragraph of scrollableContent; track $index) {
+              <p>{{ paragraph }}</p>
+            }
+          </div>
+        </i-card>
+      </div>
+      <app-code-display [sourceCode]="codeExamples.scrollable"></app-code-display>
+    </section>
+
     <!-- Features -->
     <section class="demo-section">
       <app-features-list [features]="features"></app-features-list>

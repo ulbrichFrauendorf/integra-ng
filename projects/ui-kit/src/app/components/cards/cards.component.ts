@@ -64,7 +64,36 @@ export class CardsComponent {
     <p>The body area becomes scrollable if content overflows.</p>
   </i-card>
 </div>`,
+
+    scrollable: `<i-card [title]="'Scrollable Content'" class="scrollable-card">
+  <div class="scrollable-content">
+    <p>This card demonstrates scrollable content with custom scrollbar styling.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+    <p>Excepteur sint occaecat cupidatat non proident.</p>
+    <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Curabitur pretium tincidunt lacus nulla gravida orci a odio.</p>
+    <p>Sed non mauris vitae erat consequat auctor eu in elit.</p>
+    <p>Additional content to demonstrate scrolling behavior...</p>
+  </div>
+</i-card>`,
   };
+
+  // Sample content for scrollable demo
+  scrollableContent = [
+    'This card demonstrates scrollable content with the application\'s custom scrollbar styling.',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+    'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    'Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra.',
+    'Sed non mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra.',
+    'Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis.',
+    'Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet.',
+    'Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit.',
+  ];
 
   features: Feature[] = [
     {

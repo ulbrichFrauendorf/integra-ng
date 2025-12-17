@@ -9,6 +9,10 @@
     border-radius: vars.$componentBorderRadius;
     overflow: hidden;
 
+    .i-tree-view-select-all-container {
+      border-bottom: 1px solid colors.$color-surface-border;
+    }
+
     .i-tree-view-loading {
       color: colors.$color-text-secondary;
 
