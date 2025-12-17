@@ -1,5 +1,6 @@
 @use "../shared-demo-styles.scss" as *;
-@use "../../../../../integra-ng/src/lib/themes/scrollbar-mixins.scss" as scrollbar;
+@use "../../../../../integra-ng/src/lib/themes/scrollbar-mixins.scss" as
+  scrollbar;
 
 .cards-demo {
   @extend .demo-component;

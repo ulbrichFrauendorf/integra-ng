@@ -122,12 +122,14 @@
         <i-card [title]="'Scrollable Content'" class="scrollable-card">
           <div class="scrollable-content">
             @for (paragraph of scrollableContent; track $index) {
-              <p>{{ paragraph }}</p>
+            <p>{{ paragraph }}</p>
             }
           </div>
         </i-card>
       </div>
-      <app-code-display [sourceCode]="codeExamples.scrollable"></app-code-display>
+      <app-code-display
+        [sourceCode]="codeExamples.scrollable"
+      ></app-code-display>
     </section>
 
     <!-- Features -->
