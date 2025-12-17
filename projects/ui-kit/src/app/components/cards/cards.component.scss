@@ -1,4 +1,6 @@
 @use "../shared-demo-styles.scss" as *;
+@use "../../../../../integra-ng/src/lib/themes/scrollbar-mixins.scss" as
+  scrollbar;
 
 .cards-demo {
   @extend .demo-component;
@@ -36,5 +38,25 @@
     color: var(--text-color-secondary, #6c757d);
     font-style: italic;
     margin: 0;
+  }
+}
+
+.scrollable-card {
+  .scrollable-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
+
+    // Apply the application's scrollbar styling
+    @include scrollbar.dropdown-scrollbar();
+
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
