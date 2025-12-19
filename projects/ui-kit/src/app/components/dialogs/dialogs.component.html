@@ -87,6 +87,47 @@
       </i-dialog>
     </app-demo-card>
 
+    <!-- Single Button Dialog -->
+    <app-demo-card
+      [title]="'Single Button Dialog'"
+      [sourceCode]="codeExamples.singleButton"
+    >
+      <div class="demo-content">
+        <p>
+          Dialog with only one button by setting [showCancel]="false" on dialog actions.
+        </p>
+        <i-button severity="success" (clicked)="showSingleButtonDialogModal()"
+          >Open Single Button Dialog</i-button
+        >
+      </div>
+
+      <!-- Single Button Dialog Template -->
+      <i-dialog
+        [(visible)]="showSingleButtonDialog"
+        [closable]="true"
+        header="Notification"
+        width="24rem"
+        [breakpoints]="{
+          '640px': '90vw'
+        }"
+      >
+        <div class="dialog-content basic-dialog">
+          <div class="dialog-icon success">
+            <i class="pi pi-check-circle"></i>
+          </div>
+          <h4>Success!</h4>
+          <p class="dialog-description">
+            Your changes have been saved successfully. This dialog only has one action button for acknowledgment.
+          </p>
+        </div>
+        <i-dialog-actions
+          (submitEvent)="onSingleButtonDialogHide()"
+          submitLabel="OK"
+          [showCancel]="false"
+        ></i-dialog-actions>
+      </i-dialog>
+    </app-demo-card>
+
     <!-- Responsive Dialog -->
     <app-demo-card
       [title]="'Responsive Dialog'"

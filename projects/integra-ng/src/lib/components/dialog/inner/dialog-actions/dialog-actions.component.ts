@@ -12,6 +12,8 @@ export class IDialogActions {
   @Input() submitLabel = 'Submit';
   @Input() cancelLabel = 'Cancel';
   @Input() severity: ISeverity = 'primary';
+  @Input() showCancel = true;
+  @Input() showSubmit = true;
   @Output() cancelEvent = new EventEmitter<void>();
   @Output() submitEvent = new EventEmitter<void>();
 

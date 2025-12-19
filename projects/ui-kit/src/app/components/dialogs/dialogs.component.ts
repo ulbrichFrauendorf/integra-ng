@@ -46,6 +46,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
 
   showBasicDialog = false;
+  showSingleButtonDialog = false;
   showResponsiveDialog = false;
   showFullscreenDialog = false;
 
@@ -179,6 +180,22 @@ export class ExampleComponent {
   </div>
 </i-dialog>`,
 
+    singleButton: `<i-dialog
+  [visible]="showSingleButtonDialog"
+  (visibleChange)="showSingleButtonDialog = $event"
+  header="Notification"
+  width="24rem">
+  <div class="dialog-content">
+    <h4>Success!</h4>
+    <p>Your changes have been saved successfully.</p>
+  </div>
+  <i-dialog-actions
+    (submitEvent)="onSingleButtonDialogHide()"
+    submitLabel="OK"
+    [showCancel]="false"
+  ></i-dialog-actions>
+</i-dialog>`,
+
     responsive: `<i-dialog
   [visible]="showResponsiveDialog"
   (visibleChange)="showResponsiveDialog = $event"
@@ -276,6 +293,14 @@ export class ExampleComponent {
 
   onBasicDialogHide() {
     this.showBasicDialog = false;
+  }
+
+  showSingleButtonDialogModal() {
+    this.showSingleButtonDialog = true;
+  }
+
+  onSingleButtonDialogHide() {
+    this.showSingleButtonDialog = false;
   }
 
   onResponsiveDialogHide() {
