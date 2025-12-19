@@ -182,33 +182,39 @@
             <td
               [style.text-align]="column.align || 'left'"
               [style.width]="getColumnWidth(column)"
+              [class]="getCellSeverity(row, column) ? 'i-table-cell-' + getCellSeverity(row, column) : ''"
             >
               @if (isIconColumn(column)) {
               <i
                 [class]="getCellIcon(row, column)"
-                [style.color]="getCellIconColor(row, column)"
+                [class.i-severity-icon]="getCellSeverity(row, column)"
                 [style.font-size]="column.iconSize || '1rem'"
               ></i>
               } @else {
-              {{ formatCellValue(getCellValue(row, column.field), column) }}
+              <span [class.i-severity-text]="getCellSeverity(row, column)">
+                {{ formatCellValue(getCellValue(row, column.field), column) }}
+              </span>
               }
             </td>
             } @if (showActions && actions.length > 0) {
             <td class="i-table-actions-cell">
               <div class="i-table-actions">
                 @for (action of actions; track action.id) {
+                @if (isActionVisible(action, row)) {
                 <i-button
                   [severity]="action.severity || 'secondary'"
                   [text]="true"
                   size="small"
                   [icon]="action.icon || ''"
                   [disabled]="isActionDisabled(action, row)"
+                  [iTooltip]="getActionTooltip(action, row)"
                   (clicked)="onActionClick(action, row, $event)"
                 >
                   @if (action.label) {
                   {{ action.label }}
                   }
                 </i-button>
+                }
                 }
               </div>
             </td>
@@ -386,33 +392,39 @@
           <td
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
+            [class]="getCellSeverity(row, column) ? 'i-table-cell-' + getCellSeverity(row, column) : ''"
           >
             @if (isIconColumn(column)) {
             <i
               [class]="getCellIcon(row, column)"
-              [style.color]="getCellIconColor(row, column)"
+              [class.i-severity-icon]="getCellSeverity(row, column)"
               [style.font-size]="column.iconSize || '1rem'"
             ></i>
             } @else {
-            {{ formatCellValue(getCellValue(row, column.field), column) }}
+            <span [class.i-severity-text]="getCellSeverity(row, column)">
+              {{ formatCellValue(getCellValue(row, column.field), column) }}
+            </span>
             }
           </td>
           } @if (showActions && actions.length > 0) {
           <td class="i-table-actions-cell">
             <div class="i-table-actions">
               @for (action of actions; track action.id) {
+              @if (isActionVisible(action, row)) {
               <i-button
                 [severity]="action.severity || 'secondary'"
                 [text]="true"
                 size="small"
                 [icon]="action.icon || ''"
                 [disabled]="isActionDisabled(action, row)"
+                [iTooltip]="getActionTooltip(action, row)"
                 (clicked)="onActionClick(action, row, $event)"
               >
                 @if (action.label) {
                 {{ action.label }}
                 }
               </i-button>
+              }
               }
             </div>
           </td>
@@ -485,33 +497,39 @@
           <td
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
+            [class]="getCellSeverity(row, column) ? 'i-table-cell-' + getCellSeverity(row, column) : ''"
           >
             @if (isIconColumn(column)) {
             <i
               [class]="getCellIcon(row, column)"
-              [style.color]="getCellIconColor(row, column)"
+              [class.i-severity-icon]="getCellSeverity(row, column)"
               [style.font-size]="column.iconSize || '1rem'"
             ></i>
             } @else {
-            {{ formatCellValue(getCellValue(row, column.field), column) }}
+            <span [class.i-severity-text]="getCellSeverity(row, column)">
+              {{ formatCellValue(getCellValue(row, column.field), column) }}
+            </span>
             }
           </td>
           } @if (showActions && actions.length > 0) {
           <td class="i-table-actions-cell">
             <div class="i-table-actions">
               @for (action of actions; track action.id) {
+              @if (isActionVisible(action, row)) {
               <i-button
                 [severity]="action.severity || 'secondary'"
                 [text]="true"
                 size="small"
                 [icon]="action.icon || ''"
                 [disabled]="isActionDisabled(action, row)"
+                [iTooltip]="getActionTooltip(action, row)"
                 (clicked)="onActionClick(action, row, $event)"
               >
                 @if (action.label) {
                 {{ action.label }}
                 }
               </i-button>
+              }
               }
             </div>
           </td>

@@ -246,16 +246,16 @@ export class TablesComponent {
             return 'pi pi-circle';
         }
       },
-      iconColor: (row: any) => {
+      severity: (row: any) => {
         switch (row.status) {
           case 'In Stock':
-            return 'var(--color-success)';
+            return 'success';
           case 'Low Stock':
-            return 'var(--color-warning)';
+            return 'warning';
           case 'Out of Stock':
-            return 'var(--color-danger)';
+            return 'danger';
           default:
-            return 'var(--color-text-secondary)';
+            return 'secondary';
         }
       },
       iconSize: '1.25rem',
@@ -268,19 +268,36 @@ export class TablesComponent {
 
   // Table actions
   tableActions: TableAction[] = [
-    { id: 'view', icon: 'pi pi-eye', severity: 'info' },
-    { id: 'edit', icon: 'pi pi-pencil', severity: 'warning' },
+    { 
+      id: 'view', 
+      icon: 'pi pi-eye', 
+      severity: 'info',
+      tooltip: 'View details'
+    },
+    { 
+      id: 'edit', 
+      icon: 'pi pi-pencil', 
+      severity: 'warning',
+      tooltip: 'Edit product'
+    },
     {
       id: 'delete',
       icon: 'pi pi-trash',
       severity: 'danger',
       disabled: (row) => row.status === 'Out of Stock',
+      tooltip: (row) => row.status === 'Out of Stock' ? 'Cannot delete out of stock items' : 'Delete product',
+      visible: (row) => row.status !== 'Low Stock', // Hide delete for low stock items
     },
   ];
 
   // View action only (for grouped data)
   viewActions: TableAction[] = [
-    { id: 'view', icon: 'pi pi-eye', severity: 'info' },
+    { 
+      id: 'view', 
+      icon: 'pi pi-eye', 
+      severity: 'info',
+      tooltip: 'View product details'
+    },
   ];
 
   // Selection state
@@ -441,12 +458,12 @@ iconColumns: TableColumn[] = [
         default: return 'pi pi-circle';
       }
     },
-    iconColor: (row: any) => {
+    severity: (row: any) => {
       switch (row.status) {
-        case 'In Stock': return 'var(--color-success)';
-        case 'Low Stock': return 'var(--color-warning)';
-        case 'Out of Stock': return 'var(--color-danger)';
-        default: return 'var(--color-text-secondary)';
+        case 'In Stock': return 'success';
+        case 'Low Stock': return 'warning';
+        case 'Out of Stock': return 'danger';
+        default: return 'secondary';
       }
     },
     iconSize: '1.25rem',
