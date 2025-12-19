@@ -182,7 +182,11 @@
             <td
               [style.text-align]="column.align || 'left'"
               [style.width]="getColumnWidth(column)"
-              [class]="getCellSeverity(row, column) ? 'i-table-cell-' + getCellSeverity(row, column) : ''"
+              [class]="
+                getCellSeverity(row, column)
+                  ? 'i-table-cell-' + getCellSeverity(row, column)
+                  : ''
+              "
             >
               @if (isIconColumn(column)) {
               <i
@@ -200,7 +204,6 @@
             <td class="i-table-actions-cell">
               <div class="i-table-actions">
                 @for (action of actions; track action.id) {
-                @if (isActionVisible(action, row)) {
                 <i-button
                   [severity]="action.severity || 'secondary'"
                   [text]="true"
@@ -208,13 +211,13 @@
                   [icon]="action.icon || ''"
                   [disabled]="isActionDisabled(action, row)"
                   [iTooltip]="getActionTooltip(action, row)"
+                  [class.i-action-hidden]="!isActionVisible(action, row)"
                   (clicked)="onActionClick(action, row, $event)"
                 >
                   @if (action.label) {
                   {{ action.label }}
                   }
                 </i-button>
-                }
                 }
               </div>
             </td>
@@ -392,7 +395,11 @@
           <td
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
-            [class]="getCellSeverity(row, column) ? 'i-table-cell-' + getCellSeverity(row, column) : ''"
+            [class]="
+              getCellSeverity(row, column)
+                ? 'i-table-cell-' + getCellSeverity(row, column)
+                : ''
+            "
           >
             @if (isIconColumn(column)) {
             <i
@@ -410,7 +417,6 @@
           <td class="i-table-actions-cell">
             <div class="i-table-actions">
               @for (action of actions; track action.id) {
-              @if (isActionVisible(action, row)) {
               <i-button
                 [severity]="action.severity || 'secondary'"
                 [text]="true"
@@ -418,13 +424,13 @@
                 [icon]="action.icon || ''"
                 [disabled]="isActionDisabled(action, row)"
                 [iTooltip]="getActionTooltip(action, row)"
+                [class.i-action-hidden]="!isActionVisible(action, row)"
                 (clicked)="onActionClick(action, row, $event)"
               >
                 @if (action.label) {
                 {{ action.label }}
                 }
               </i-button>
-              }
               }
             </div>
           </td>
@@ -497,7 +503,11 @@
           <td
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
-            [class]="getCellSeverity(row, column) ? 'i-table-cell-' + getCellSeverity(row, column) : ''"
+            [class]="
+              getCellSeverity(row, column)
+                ? 'i-table-cell-' + getCellSeverity(row, column)
+                : ''
+            "
           >
             @if (isIconColumn(column)) {
             <i
@@ -515,7 +525,6 @@
           <td class="i-table-actions-cell">
             <div class="i-table-actions">
               @for (action of actions; track action.id) {
-              @if (isActionVisible(action, row)) {
               <i-button
                 [severity]="action.severity || 'secondary'"
                 [text]="true"
@@ -523,13 +532,13 @@
                 [icon]="action.icon || ''"
                 [disabled]="isActionDisabled(action, row)"
                 [iTooltip]="getActionTooltip(action, row)"
+                [class.i-action-hidden]="!isActionVisible(action, row)"
                 (clicked)="onActionClick(action, row, $event)"
               >
                 @if (action.label) {
                 {{ action.label }}
                 }
               </i-button>
-              }
               }
             </div>
           </td>

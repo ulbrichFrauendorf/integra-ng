@@ -389,6 +389,11 @@ $table-transition: 0.15s ease;
   }
 }
 
+.i-action-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .i-table-wrapper .i-table-header {
     padding: 8px 12px;

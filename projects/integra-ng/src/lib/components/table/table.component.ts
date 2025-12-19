@@ -14,10 +14,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { 
-  CdkVirtualScrollViewport, 
+import {
+  CdkVirtualScrollViewport,
   CdkVirtualForOf,
-  CdkFixedSizeVirtualScroll 
+  CdkFixedSizeVirtualScroll,
 } from '@angular/cdk/scrolling';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
@@ -417,7 +417,8 @@ export class ITable {
    * Reference to the virtual scroll viewport
    * @internal
    */
-  @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport?: CdkVirtualScrollViewport;
+  @ViewChild(CdkVirtualScrollViewport)
+  virtualScrollViewport?: CdkVirtualScrollViewport;
 
   // ===== ADDITIONAL FEATURES =====
 
