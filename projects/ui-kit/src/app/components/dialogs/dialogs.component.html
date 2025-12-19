@@ -60,8 +60,8 @@
           </div>
           <h4>Getting Started</h4>
           <p class="dialog-description">
-            Welcome to the Integra component library! This dialog demonstrates 
-            a clean, user-friendly design with proper spacing and hierarchy.
+            Welcome to the Integra component library! This dialog demonstrates a
+            clean, user-friendly design with proper spacing and hierarchy.
           </p>
           <div class="feature-highlights">
             <div class="highlight-item">
@@ -76,6 +76,25 @@
               <i class="pi pi-palette"></i>
               <span>Themeable</span>
             </div>
+          </div>
+          <div
+            class="tooltip-test"
+            style="
+              margin-top: 16px;
+              display: flex;
+              gap: 8px;
+              justify-content: center;
+            "
+          >
+            <i-button
+              severity="info"
+              [outlined]="true"
+              iTooltip="This tooltip should appear above the dialog"
+              tooltipPosition="above"
+            >
+              <i class="pi pi-info-circle"></i>
+              Hover me
+            </i-button>
           </div>
         </div>
         <i-dialog-actions
@@ -94,7 +113,8 @@
     >
       <div class="demo-content">
         <p>
-          Dialog with only one button by setting [showCancel]="false" on dialog actions.
+          Dialog with only one button by setting [showCancel]="false" on dialog
+          actions.
         </p>
         <i-button severity="success" (clicked)="showSingleButtonDialogModal()"
           >Open Single Button Dialog</i-button
@@ -117,7 +137,8 @@
           </div>
           <h4>Success!</h4>
           <p class="dialog-description">
-            Your changes have been saved successfully. This dialog only has one action button for acknowledgment.
+            Your changes have been saved successfully. This dialog only has one
+            action button for acknowledgment.
           </p>
         </div>
         <i-dialog-actions
@@ -163,7 +184,7 @@
               Resize your browser to see the dialog adapt automatically.
             </p>
           </div>
-          
+
           <div class="breakpoints-grid">
             <div class="breakpoint-card">
               <div class="breakpoint-icon">
@@ -196,17 +217,21 @@
               </div>
             </div>
           </div>
-          
+
           <p class="responsive-tip">
             <i class="pi pi-info-circle"></i>
-            All dialogs are constrained to a maximum height of 80vh for optimal mobile experience.
+            All dialogs are constrained to a maximum height of 80vh for optimal
+            mobile experience.
           </p>
         </div>
       </i-dialog>
     </app-demo-card>
 
     <!-- Large Dialog -->
-    <app-demo-card [title]="'Large Dialog'" [sourceCode]="codeExamples.fullscreen">
+    <app-demo-card
+      [title]="'Large Dialog'"
+      [sourceCode]="codeExamples.fullscreen"
+    >
       <div class="demo-content">
         <p>Dialogs with larger dimensions for complex content.</p>
         <i-button severity="warning" (clicked)="showFullscreenDialogModal()"
@@ -271,16 +296,32 @@
             </div>
             <div class="summary-stats">
               <div class="stat-item">
-                <span class="stat-value">{{ (largeDialogForm.get('selectedDepartments')?.value || []).length }}</span>
+                <span class="stat-value">{{
+                  (largeDialogForm.get("selectedDepartments")?.value || [])
+                    .length
+                }}</span>
                 <span class="stat-label">Selected</span>
               </div>
               <div class="stat-item">
-                <span class="stat-value">{{ (departmentOptions$ | async)?.length || 0 }}</span>
+                <span class="stat-value">{{
+                  (departmentOptions$ | async)?.length || 0
+                }}</span>
                 <span class="stat-label">Available</span>
               </div>
-              <div class="stat-item status" [class.valid]="largeDialogForm.valid">
-                <i [class]="largeDialogForm.valid ? 'pi pi-check-circle' : 'pi pi-times-circle'"></i>
-                <span class="stat-label">{{ largeDialogForm.valid ? 'Ready' : 'Incomplete' }}</span>
+              <div
+                class="stat-item status"
+                [class.valid]="largeDialogForm.valid"
+              >
+                <i
+                  [class]="
+                    largeDialogForm.valid
+                      ? 'pi pi-check-circle'
+                      : 'pi pi-times-circle'
+                  "
+                ></i>
+                <span class="stat-label">{{
+                  largeDialogForm.valid ? "Ready" : "Incomplete"
+                }}</span>
               </div>
             </div>
           </div>

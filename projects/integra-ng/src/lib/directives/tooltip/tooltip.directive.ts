@@ -13,6 +13,16 @@ import {
 } from '@angular/core';
 import { TooltipComponent, TooltipPosition } from './tooltip.component';
 
+/**
+ * Tooltip Directive
+ * 
+ * Displays contextual tooltips on hover or focus.
+ * Tooltips are appended to document.body with z-index: 10000 to ensure
+ * they appear above all other elements including dialogs (z-index: 1000).
+ * 
+ * @example
+ * <button iTooltip="Click to save" tooltipPosition="above">Save</button>
+ */
 @Directive({
   selector: '[iTooltip]',
   standalone: true,
@@ -202,9 +212,11 @@ export class TooltipDirective implements OnDestroy {
     }
 
     // Apply final position and make visible
+    // Use z-index 10000 to ensure tooltips appear above dialogs (z-index: 1000)
     this.renderer.setStyle(tooltipElement, 'position', 'absolute');
     this.renderer.setStyle(tooltipElement, 'top', `${top}px`);
     this.renderer.setStyle(tooltipElement, 'left', `${left}px`);
+    this.renderer.setStyle(tooltipElement, 'z-index', '10000');
     this.renderer.setStyle(tooltipElement, 'visibility', 'visible');
   }
 

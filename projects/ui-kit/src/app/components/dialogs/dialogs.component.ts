@@ -23,6 +23,7 @@ import {
   IListbox,
   ListboxOption,
 } from '@shared/components/listbox/listbox.component';
+import { TooltipDirective } from '@shared/directives/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-dialogs',
@@ -36,6 +37,7 @@ import {
     FeaturesListComponent,
     IDialogActions,
     IListbox,
+    TooltipDirective,
   ],
   templateUrl: './dialogs.component.html',
   styleUrl: './dialogs.component.scss',
