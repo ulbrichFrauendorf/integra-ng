@@ -26,6 +26,7 @@ interface Product {
   quantity: number;
   status: string;
   date: string;
+  _allWarning?: boolean;
 }
 
 @Component({
@@ -163,37 +164,112 @@ export class TablesComponent {
       status: 'In Stock',
       date: '2024-12-15',
     },
+    // Demo row: make all columns show warning severity via column severity functions
+    {
+      id: 999,
+      name: 'Demo — All Columns Warning',
+      category: 'Demo',
+      price: 0,
+      quantity: 0,
+      status: 'Low Stock',
+      date: '2025-01-01',
+      _allWarning: true,
+    },
   ];
 
   // Basic table columns
   basicColumns: TableColumn[] = [
-    { field: 'name', header: 'Product Name' },
-    { field: 'category', header: 'Category' },
-    { field: 'price', header: 'Price', type: 'currency' },
-    { field: 'quantity', header: 'Quantity', type: 'number' },
+    {
+      field: 'name',
+      header: 'Product Name',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'category',
+      header: 'Category',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'price',
+      header: 'Price',
+      type: 'currency',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'quantity',
+      header: 'Quantity',
+      type: 'number',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
   ];
 
   // Sortable columns
   sortableColumns: TableColumn[] = [
-    { field: 'name', header: 'Product Name', sortable: true },
-    { field: 'category', header: 'Category', sortable: true },
-    { field: 'price', header: 'Price', type: 'currency', sortable: true },
-    { field: 'quantity', header: 'Quantity', type: 'number', sortable: true },
-    { field: 'status', header: 'Status', sortable: true },
+    {
+      field: 'name',
+      header: 'Product Name',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'category',
+      header: 'Category',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'price',
+      header: 'Price',
+      type: 'currency',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'quantity',
+      header: 'Quantity',
+      type: 'number',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'status',
+      header: 'Status',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
   ];
 
   // Filterable columns
   filterableColumns: TableColumn[] = [
-    { field: 'name', header: 'Product Name', sortable: true, filterable: true },
-    { field: 'category', header: 'Category', sortable: true, filterable: true },
+    {
+      field: 'name',
+      header: 'Product Name',
+      sortable: true,
+      filterable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'category',
+      header: 'Category',
+      sortable: true,
+      filterable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
     {
       field: 'price',
       header: 'Price',
       type: 'currency',
       sortable: true,
       filterable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
     },
-    { field: 'status', header: 'Status', sortable: true, filterable: true },
+    {
+      field: 'status',
+      header: 'Status',
+      sortable: true,
+      filterable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
   ];
 
   // Full featured columns
@@ -203,16 +279,30 @@ export class TablesComponent {
       header: 'ID',
       width: '80px',
       align: 'center',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
       sortable: true,
     },
-    { field: 'name', header: 'Product Name', sortable: true, filterable: true },
-    { field: 'category', header: 'Category', sortable: true, filterable: true },
+    {
+      field: 'name',
+      header: 'Product Name',
+      sortable: true,
+      filterable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'category',
+      header: 'Category',
+      sortable: true,
+      filterable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
     {
       field: 'price',
       header: 'Price',
       type: 'currency',
       align: 'right',
       sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
     },
     {
       field: 'quantity',
@@ -221,15 +311,35 @@ export class TablesComponent {
       width: '100px',
       align: 'center',
       sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
     },
-    { field: 'status', header: 'Status', sortable: true },
-    { field: 'date', header: 'Date', type: 'date', sortable: true },
+    {
+      field: 'status',
+      header: 'Status',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'date',
+      header: 'Date',
+      type: 'date',
+      sortable: true,
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
   ];
 
   // Icon columns - demonstrates dynamic icon rendering
   iconColumns: TableColumn[] = [
-    { field: 'name', header: 'Product Name' },
-    { field: 'category', header: 'Category' },
+    {
+      field: 'name',
+      header: 'Product Name',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'category',
+      header: 'Category',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
     {
       field: 'statusIcon',
       header: 'Status',
@@ -246,41 +356,71 @@ export class TablesComponent {
             return 'pi pi-circle';
         }
       },
-      iconColor: (row: any) => {
+      severity: (row: any) => {
         switch (row.status) {
           case 'In Stock':
-            return 'var(--color-success)';
+            return 'success';
           case 'Low Stock':
-            return 'var(--color-warning)';
+            return 'warning';
           case 'Out of Stock':
-            return 'var(--color-danger)';
+            return 'danger';
           default:
-            return 'var(--color-text-secondary)';
+            return 'secondary';
         }
       },
       iconSize: '1.25rem',
       align: 'center',
       width: '80px',
     },
-    { field: 'price', header: 'Price', type: 'currency' },
-    { field: 'quantity', header: 'Quantity', type: 'number' },
+    {
+      field: 'price',
+      header: 'Price',
+      type: 'currency',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
+    {
+      field: 'quantity',
+      header: 'Quantity',
+      type: 'number',
+      severity: (row: any) => (row._allWarning ? 'warning' : ''),
+    },
   ];
 
   // Table actions
   tableActions: TableAction[] = [
-    { id: 'view', icon: 'pi pi-eye', severity: 'info' },
-    { id: 'edit', icon: 'pi pi-pencil', severity: 'warning' },
+    {
+      id: 'view',
+      icon: 'pi pi-eye',
+      severity: 'info',
+      tooltip: 'View details',
+    },
+    {
+      id: 'edit',
+      icon: 'pi pi-pencil',
+      severity: 'warning',
+      tooltip: 'Edit product',
+    },
     {
       id: 'delete',
       icon: 'pi pi-trash',
       severity: 'danger',
       disabled: (row) => row.status === 'Out of Stock',
+      tooltip: (row) =>
+        row.status === 'Out of Stock'
+          ? 'Cannot delete out of stock items'
+          : 'Delete product',
+      visible: (row) => row.status !== 'Low Stock', // Hide delete for low stock items
     },
   ];
 
   // View action only (for grouped data)
   viewActions: TableAction[] = [
-    { id: 'view', icon: 'pi pi-eye', severity: 'info' },
+    {
+      id: 'view',
+      icon: 'pi pi-eye',
+      severity: 'info',
+      tooltip: 'View product details',
+    },
   ];
 
   // Selection state
@@ -441,12 +581,12 @@ iconColumns: TableColumn[] = [
         default: return 'pi pi-circle';
       }
     },
-    iconColor: (row: any) => {
+    severity: (row: any) => {
       switch (row.status) {
-        case 'In Stock': return 'var(--color-success)';
-        case 'Low Stock': return 'var(--color-warning)';
-        case 'Out of Stock': return 'var(--color-danger)';
-        default: return 'var(--color-text-secondary)';
+        case 'In Stock': return 'success';
+        case 'Low Stock': return 'warning';
+        case 'Out of Stock': return 'danger';
+        default: return 'secondary';
       }
     },
     iconSize: '1.25rem',

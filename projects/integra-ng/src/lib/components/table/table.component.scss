@@ -359,6 +359,41 @@ $table-transition: 0.15s ease;
   }
 }
 
+// ===== SEVERITY STYLES =====
+// Apply severity colors to cell content (text and icons)
+.i-severity-icon,
+.i-severity-text {
+  &.success,
+  .i-table-cell-success & {
+    color: var(--color-success);
+  }
+
+  &.info,
+  .i-table-cell-info & {
+    color: var(--color-info);
+  }
+
+  &.warning,
+  .i-table-cell-warning & {
+    color: var(--color-warning);
+  }
+
+  &.danger,
+  .i-table-cell-danger & {
+    color: var(--color-danger);
+  }
+
+  &.secondary,
+  .i-table-cell-secondary & {
+    color: var(--color-text-secondary);
+  }
+}
+
+.i-action-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .i-table-wrapper .i-table-header {
     padding: 8px 12px;

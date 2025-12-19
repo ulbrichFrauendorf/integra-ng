@@ -182,15 +182,22 @@
             <td
               [style.text-align]="column.align || 'left'"
               [style.width]="getColumnWidth(column)"
+              [class]="
+                getCellSeverity(row, column)
+                  ? 'i-table-cell-' + getCellSeverity(row, column)
+                  : ''
+              "
             >
               @if (isIconColumn(column)) {
               <i
                 [class]="getCellIcon(row, column)"
-                [style.color]="getCellIconColor(row, column)"
+                [class.i-severity-icon]="getCellSeverity(row, column)"
                 [style.font-size]="column.iconSize || '1rem'"
               ></i>
               } @else {
-              {{ formatCellValue(getCellValue(row, column.field), column) }}
+              <span [class.i-severity-text]="getCellSeverity(row, column)">
+                {{ formatCellValue(getCellValue(row, column.field), column) }}
+              </span>
               }
             </td>
             } @if (showActions && actions.length > 0) {
@@ -203,6 +210,8 @@
                   size="small"
                   [icon]="action.icon || ''"
                   [disabled]="isActionDisabled(action, row)"
+                  [iTooltip]="getActionTooltip(action, row)"
+                  [class.i-action-hidden]="!isActionVisible(action, row)"
                   (clicked)="onActionClick(action, row, $event)"
                 >
                   @if (action.label) {
@@ -386,15 +395,22 @@
           <td
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
+            [class]="
+              getCellSeverity(row, column)
+                ? 'i-table-cell-' + getCellSeverity(row, column)
+                : ''
+            "
           >
             @if (isIconColumn(column)) {
             <i
               [class]="getCellIcon(row, column)"
-              [style.color]="getCellIconColor(row, column)"
+              [class.i-severity-icon]="getCellSeverity(row, column)"
               [style.font-size]="column.iconSize || '1rem'"
             ></i>
             } @else {
-            {{ formatCellValue(getCellValue(row, column.field), column) }}
+            <span [class.i-severity-text]="getCellSeverity(row, column)">
+              {{ formatCellValue(getCellValue(row, column.field), column) }}
+            </span>
             }
           </td>
           } @if (showActions && actions.length > 0) {
@@ -407,6 +423,8 @@
                 size="small"
                 [icon]="action.icon || ''"
                 [disabled]="isActionDisabled(action, row)"
+                [iTooltip]="getActionTooltip(action, row)"
+                [class.i-action-hidden]="!isActionVisible(action, row)"
                 (clicked)="onActionClick(action, row, $event)"
               >
                 @if (action.label) {
@@ -485,15 +503,22 @@
           <td
             [style.text-align]="column.align || 'left'"
             [style.width]="getColumnWidth(column)"
+            [class]="
+              getCellSeverity(row, column)
+                ? 'i-table-cell-' + getCellSeverity(row, column)
+                : ''
+            "
           >
             @if (isIconColumn(column)) {
             <i
               [class]="getCellIcon(row, column)"
-              [style.color]="getCellIconColor(row, column)"
+              [class.i-severity-icon]="getCellSeverity(row, column)"
               [style.font-size]="column.iconSize || '1rem'"
             ></i>
             } @else {
-            {{ formatCellValue(getCellValue(row, column.field), column) }}
+            <span [class.i-severity-text]="getCellSeverity(row, column)">
+              {{ formatCellValue(getCellValue(row, column.field), column) }}
+            </span>
             }
           </td>
           } @if (showActions && actions.length > 0) {
@@ -506,6 +531,8 @@
                 size="small"
                 [icon]="action.icon || ''"
                 [disabled]="isActionDisabled(action, row)"
+                [iTooltip]="getActionTooltip(action, row)"
+                [class.i-action-hidden]="!isActionVisible(action, row)"
                 (clicked)="onActionClick(action, row, $event)"
               >
                 @if (action.label) {

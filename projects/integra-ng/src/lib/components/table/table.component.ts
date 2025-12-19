@@ -14,10 +14,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { 
-  CdkVirtualScrollViewport, 
+import {
+  CdkVirtualScrollViewport,
   CdkVirtualForOf,
-  CdkFixedSizeVirtualScroll 
+  CdkFixedSizeVirtualScroll,
 } from '@angular/cdk/scrolling';
 import { IInputText } from '../input-text/input-text.component';
 import { IButton } from '../button/button.component';
@@ -25,6 +25,7 @@ import { ICheckbox } from '../checkbox/checkbox.component';
 import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 import { NoContentComponent } from '../no-content/no-content.component';
+import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 
 /**
  * Column definition for the table
@@ -48,8 +49,8 @@ export interface TableColumn {
   format?: string;
   /** Icon class for 'icon' type - can be a field name or a function that returns the icon class */
   iconClass?: string | ((row: any) => string);
-  /** Icon color for 'icon' type - can be a field name or a function that returns the color */
-  iconColor?: string | ((row: any) => string);
+  /** Severity/color for content - applies to text and icons, can be a field name or a function */
+  severity?: ISeverity | string | ((row: any) => ISeverity | string);
   /** Icon size for 'icon' type */
   iconSize?: string;
 }
@@ -68,6 +69,10 @@ export interface TableAction {
   severity?: ISeverity;
   /** Whether the action is disabled (can be a function) */
   disabled?: boolean | ((row: any) => boolean);
+  /** Tooltip text to display on hover */
+  tooltip?: string | ((row: any) => string);
+  /** Whether the action is visible (can be a function) */
+  visible?: boolean | ((row: any) => boolean);
 }
 
 /**
@@ -186,6 +191,7 @@ export interface VirtualScrollConfig {
     IButton,
     ICheckbox,
     NoContentComponent,
+    TooltipDirective,
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
@@ -411,7 +417,8 @@ export class ITable {
    * Reference to the virtual scroll viewport
    * @internal
    */
-  @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport?: CdkVirtualScrollViewport;
+  @ViewChild(CdkVirtualScrollViewport)
+  virtualScrollViewport?: CdkVirtualScrollViewport;
 
   // ===== ADDITIONAL FEATURES =====
 
@@ -675,18 +682,18 @@ export class ITable {
   }
 
   /**
-   * Gets the icon color for a cell
+   * Gets the severity/color for a cell (applies to text and icons)
    * @internal
    */
-  getCellIconColor(row: any, column: TableColumn): string {
-    if (column.type !== 'icon' || !column.iconColor) return '';
+  getCellSeverity(row: any, column: TableColumn): string {
+    if (!column.severity) return '';
 
-    if (typeof column.iconColor === 'function') {
-      return column.iconColor(row);
-    } else if (typeof column.iconColor === 'string') {
-      // Check if it's a field reference or a direct color value
-      const fieldValue = this.getCellValue(row, column.iconColor);
-      return fieldValue || column.iconColor;
+    if (typeof column.severity === 'function') {
+      return String(column.severity(row));
+    } else if (typeof column.severity === 'string') {
+      // Check if it's a field reference or a direct severity value
+      const fieldValue = this.getCellValue(row, column.severity);
+      return fieldValue || column.severity;
     }
 
     return '';
@@ -928,6 +935,30 @@ export class ITable {
       return action.disabled(row);
     }
     return action.disabled ?? false;
+  }
+
+  /**
+   * Checks if an action is visible for a row
+   * @internal
+   */
+  isActionVisible(action: TableAction, row: any): boolean {
+    if (action.visible === undefined) return true;
+    if (typeof action.visible === 'function') {
+      return action.visible(row);
+    }
+    return action.visible;
+  }
+
+  /**
+   * Gets the tooltip text for an action
+   * @internal
+   */
+  getActionTooltip(action: TableAction, row: any): string {
+    if (!action.tooltip) return '';
+    if (typeof action.tooltip === 'function') {
+      return action.tooltip(row);
+    }
+    return action.tooltip;
   }
 
   // ===== ROW EXPANSION METHODS =====
