@@ -17,14 +17,14 @@
         @if (config.enablePullToRefresh && layoutService.state().isMobileViewport) {
           <div 
             class="pull-to-refresh-indicator"
-            [style.transform]="'translateY(' + Math.max(-60, pullDistance() - 60) + 'px)'"
-            [style.opacity]="Math.min(1, pullDistance() / 80)"
+            [style.transform]="'translateY(' + Math.max(-INDICATOR_OFFSET, pullDistance() - INDICATOR_OFFSET) + 'px)'"
+            [style.opacity]="Math.min(1, pullDistance() / PULL_THRESHOLD)"
           >
             <div class="refresh-icon" [class.refreshing]="isRefreshing()">
               <i class="pi pi-refresh"></i>
             </div>
             <div class="refresh-text">
-              {{ isRefreshing() ? 'Refreshing...' : (pullDistance() >= 80 ? 'Release to refresh' : 'Pull to refresh') }}
+              {{ isRefreshing() ? 'Refreshing...' : (pullDistance() >= PULL_THRESHOLD ? 'Release to refresh' : 'Pull to refresh') }}
             </div>
           </div>
         }

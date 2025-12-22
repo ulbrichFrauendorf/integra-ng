@@ -79,8 +79,8 @@ describe('LayoutComponent', () => {
       expect(component['PULL_THRESHOLD']).toBe(80);
     });
 
-    it('should have max pull distance set to 150', () => {
-      expect(component['MAX_PULL_DISTANCE']).toBe(150);
+    it('should have indicator offset set to 60', () => {
+      expect(component['INDICATOR_OFFSET']).toBe(60);
     });
 
     it('should track pull distance when pulling down', () => {

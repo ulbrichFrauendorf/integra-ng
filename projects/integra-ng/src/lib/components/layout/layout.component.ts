@@ -40,13 +40,15 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   pullDistance = signal(0);
   isRefreshing = signal(false);
 
-  private readonly PULL_THRESHOLD = 80;
+  protected readonly PULL_THRESHOLD = 80;
   private readonly MAX_PULL_DISTANCE = 150;
+  protected readonly INDICATOR_OFFSET = 60;
 
   // Store bound event handlers for cleanup
   private boundHandleTouchStart?: (event: TouchEvent) => void;
   private boundHandleTouchMove?: (event: TouchEvent) => void;
   private boundHandleTouchEnd?: (event: TouchEvent) => void;
+  private refreshTimeoutId?: number;
 
   constructor(
     public layoutService: LayoutService,
@@ -106,7 +108,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private handleTouchStart(event: TouchEvent): void {
     const state = this.layoutService.state();
-    if (!state.isMobileViewport) {
+    if (!state.isMobileViewport || event.touches.length === 0) {
       return;
     }
 
@@ -120,7 +122,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private handleTouchMove(event: TouchEvent): void {
-    if (!this.isPulling) {
+    if (!this.isPulling || event.touches.length === 0) {
       return;
     }
 
@@ -165,7 +167,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     this.pullDistance.set(0);
     
     // Delay reload slightly to show the refreshing state
-    setTimeout(() => {
+    this.refreshTimeoutId = window.setTimeout(() => {
       if (typeof window !== 'undefined') {
         window.location.reload();
       }
@@ -204,6 +206,11 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
+    }
+
+    // Clear any pending refresh timeout
+    if (this.refreshTimeoutId !== undefined) {
+      window.clearTimeout(this.refreshTimeoutId);
     }
 
     // Clean up event listeners
