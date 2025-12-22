@@ -69,6 +69,7 @@ interface LayoutConfig {
   logoLight?: string;         // Optional: Logo URL for light theme
   logoDark?: string;          // Optional: Logo URL for dark theme
   showThemeToggle?: boolean;  // Optional: Show/hide theme toggle (default: true)
+  enablePullToRefresh?: boolean; // Optional: Enable pull-to-refresh on mobile (default: false)
 }
 ```
 
@@ -112,6 +113,24 @@ layoutConfig: LayoutConfig = {
   showThemeToggle: false
 };
 ```
+
+### Pull-to-Refresh
+
+On mobile devices (viewport width ≤ 991px), you can enable pull-to-refresh functionality that allows users to refresh the page by pulling down from the top of the content area:
+
+```typescript
+layoutConfig: LayoutConfig = {
+  websiteName: 'My App',
+  enablePullToRefresh: true
+};
+```
+
+When enabled, users can:
+1. Pull down from the top of the page (when scrolled to the top)
+2. See a visual indicator showing the pull distance
+3. Release to trigger a page refresh when the threshold is reached
+
+The feature only activates on mobile viewports and when the content is scrolled to the top.
 
 ## Components
 

@@ -21,6 +21,7 @@ export class AppLayoutComponent {
     logoLight: 'assets/layout/images/invensys-icon-light.png',
     logoDark: 'assets/layout/images/invensys-icon-dark.png',
     showThemeToggle: true,
+    enablePullToRefresh: true,
   };
 
   menuModel: MenuModel[] = [
