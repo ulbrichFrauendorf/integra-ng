@@ -43,6 +43,11 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly PULL_THRESHOLD = 80;
   private readonly MAX_PULL_DISTANCE = 150;
 
+  // Store bound event handlers for cleanup
+  private boundHandleTouchStart?: (event: TouchEvent) => void;
+  private boundHandleTouchMove?: (event: TouchEvent) => void;
+  private boundHandleTouchEnd?: (event: TouchEvent) => void;
+
   constructor(
     public layoutService: LayoutService,
     public router: Router
@@ -85,13 +90,18 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    container.addEventListener('touchstart', this.handleTouchStart.bind(this), {
+    // Bind event handlers and store references for cleanup
+    this.boundHandleTouchStart = this.handleTouchStart.bind(this);
+    this.boundHandleTouchMove = this.handleTouchMove.bind(this);
+    this.boundHandleTouchEnd = this.handleTouchEnd.bind(this);
+
+    container.addEventListener('touchstart', this.boundHandleTouchStart, {
       passive: false,
     });
-    container.addEventListener('touchmove', this.handleTouchMove.bind(this), {
+    container.addEventListener('touchmove', this.boundHandleTouchMove, {
       passive: false,
     });
-    container.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    container.addEventListener('touchend', this.boundHandleTouchEnd);
   }
 
   private handleTouchStart(event: TouchEvent): void {
@@ -152,6 +162,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private refresh(): void {
     this.isRefreshing.set(true);
+    this.pullDistance.set(0);
     
     // Delay reload slightly to show the refreshing state
     setTimeout(() => {
@@ -193,6 +204,14 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
+    }
+
+    // Clean up event listeners
+    const container = this.mainContainer?.nativeElement;
+    if (container && this.boundHandleTouchStart && this.boundHandleTouchMove && this.boundHandleTouchEnd) {
+      container.removeEventListener('touchstart', this.boundHandleTouchStart);
+      container.removeEventListener('touchmove', this.boundHandleTouchMove);
+      container.removeEventListener('touchend', this.boundHandleTouchEnd);
     }
   }
 }
