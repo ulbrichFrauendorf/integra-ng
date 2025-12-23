@@ -9,17 +9,22 @@
 
   <div class="cards-container">
     <!-- Basic Card -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Basic Card'"
+      [sourceCode]="codeExamples.basic"
+    >
       <div class="card-example">
         <i-card [title]="'Card Title'">
           <p>This is the card content in the body section.</p>
         </i-card>
       </div>
-      <app-code-display [sourceCode]="codeExamples.basic"></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Card with Footer -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Card with Actions'"
+      [sourceCode]="codeExamples.withFooter"
+    >
       <div class="card-example">
         <i-card [title]="'Card with Actions'">
           <p>This card includes footer content with action buttons.</p>
@@ -31,13 +36,13 @@
           </div>
         </i-card>
       </div>
-      <app-code-display
-        [sourceCode]="codeExamples.withFooter"
-      ></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Custom Header -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Custom Header'"
+      [sourceCode]="codeExamples.customHeader"
+    >
       <div class="card-example">
         <i-card>
           <div slot="header">
@@ -51,13 +56,13 @@
           </p>
         </i-card>
       </div>
-      <app-code-display
-        [sourceCode]="codeExamples.customHeader"
-      ></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Content Only -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Content Only'"
+      [sourceCode]="codeExamples.contentOnly"
+    >
       <div class="card-example">
         <i-card>
           <p>Simple card with just content, no title or footer.</p>
@@ -67,13 +72,14 @@
           </p>
         </i-card>
       </div>
-      <app-code-display
-        [sourceCode]="codeExamples.contentOnly"
-      ></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Full Height Card -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Full Height Card'"
+      [sourceCode]="codeExamples.fullHeight"
+      [scssCode]="scssExamples.fullHeight"
+    >
       <div class="card-example">
         <div class="full-height-container">
           <i-card [title]="'Full Height Card'" [fullHeight]="true">
@@ -88,13 +94,14 @@
           </i-card>
         </div>
       </div>
-      <app-code-display
-        [sourceCode]="codeExamples.fullHeight"
-      ></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Closable Card -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Closable Card'"
+      [sourceCode]="codeExamples.closable"
+      [tsCode]="tsExamples.closable"
+    >
       <div class="card-example">
         @if (showClosableCard) {
         <i-card
@@ -113,11 +120,14 @@
         </div>
         }
       </div>
-      <app-code-display [sourceCode]="codeExamples.closable"></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Scrollable Content Card -->
-    <section class="demo-section">
+    <app-demo-card
+      [title]="'Scrollable Content'"
+      [sourceCode]="codeExamples.scrollable"
+      [scssCode]="scssExamples.scrollable"
+    >
       <div class="card-example">
         <i-card [title]="'Scrollable Content'" class="scrollable-card">
           <div class="scrollable-content">
@@ -127,14 +137,11 @@
           </div>
         </i-card>
       </div>
-      <app-code-display
-        [sourceCode]="codeExamples.scrollable"
-      ></app-code-display>
-    </section>
+    </app-demo-card>
 
     <!-- Features -->
-    <section class="demo-section">
+    <app-demo-card [title]="'Features'">
       <app-features-list [features]="features"></app-features-list>
-    </section>
+    </app-demo-card>
   </div>
 </div>

@@ -258,20 +258,7 @@ export class ListboxesComponent implements OnInit, OnDestroy {
 
   // Code examples for demo cards
   codeExamples = {
-    multiple: `// Component setup - ngModel now stores full objects
-countries = [
-  { name: 'United States', code: 'US' },
-  { name: 'Canada', code: 'CA' },
-  { name: 'United Kingdom', code: 'UK' }
-];
-
-selectedCountriesMultiple: ListboxOption[] = [
-  { name: 'United States', code: 'US' },
-  { name: 'Canada', code: 'CA' }
-];
-
-// Template usage - Multiple select with chips in header
-<i-listbox
+    multiple: `<i-listbox
   title="Countries"
   [options]="countries"
   optionLabel="name"
@@ -283,10 +270,7 @@ selectedCountriesMultiple: ListboxOption[] = [
   [(ngModel)]="selectedCountriesMultiple">
 </i-listbox>`,
 
-    single: `// Single select - ngModel stores full object
-selectedCountrySingle: ListboxOption | null = { name: 'United Kingdom', code: 'UK' };
-
-<i-listbox
+    single: `<i-listbox
   title="Select Country"
   [options]="countries"
   optionLabel="name"
@@ -295,14 +279,7 @@ selectedCountrySingle: ListboxOption | null = { name: 'United Kingdom', code: 'U
   [(ngModel)]="selectedCountrySingle">
 </i-listbox>`,
 
-    withIcons: `// Options with icons
-tasks = [
-  { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
-  { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
-  { name: 'Schedule Meeting', value: 'meeting', icon: 'pi pi-calendar' }
-];
-
-<i-listbox
+    withIcons: `<i-listbox
   title="Tasks"
   [options]="tasks"
   optionLabel="name"
@@ -313,16 +290,7 @@ tasks = [
   (onAction)="onManageTasks()">
 </i-listbox>`,
 
-    displayAsMenu: `// Menu navigation - ngModel stores full object
-menuItems = [
-  { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' },
-  { name: 'Settings', value: 'settings', icon: 'pi pi-cog' },
-  { name: 'Profile', value: 'profile', icon: 'pi pi-user' }
-];
-
-selectedMenuItem: ListboxOption | null = { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' };
-
-<i-listbox
+    displayAsMenu: `<i-listbox
   title="Navigation"
   [options]="menuItems"
   optionLabel="name"
@@ -351,23 +319,16 @@ selectedMenuItem: ListboxOption | null = { name: 'Dashboard', value: 'dashboard'
   [showClear]="true">
 </i-listbox>`,
 
-    disabled: `// Disabled listbox with preselected objects
-<i-listbox
+    disabled: `<i-listbox
   title="Disabled Listbox"
   [options]="countries"
   optionLabel="name"
   [multiple]="true"
   [disabled]="true"
-  [ngModel]="[
-    { name: 'United States', code: 'US' },
-    { name: 'Canada', code: 'CA' }
-  ]">
+  [ngModel]="preselectedCountries">
 </i-listbox>`,
 
-    constrained: `// Constrained container example (500px height)
-// ngModel stores full object from largeDataset
-
-<div class="wrapper">
+    constrained: `<div class="constrained-wrapper">
   <i-listbox
     title="Items (50 total)"
     [options]="largeDataset"
@@ -375,22 +336,11 @@ selectedMenuItem: ListboxOption | null = { name: 'Dashboard', value: 'dashboard'
     [multiple]="false"
     [filter]="true"
     [showClear]="true"
-    [(ngModel)]="selectedLargeItems"
-  ></i-listbox>
+    [(ngModel)]="selectedLargeItems">
+  </i-listbox>
 </div>`,
 
-    reactive: `// Component setup with reactive forms - stores full objects
-departmentsForm = this.fb.group({
-  selectedDepartments: [[
-    { id: 1, name: 'Engineering', code: 'ENG', employees: 25 },
-    { id: 2, name: 'Marketing', code: 'MKT', employees: 12 }
-  ], [Validators.required, Validators.minLength(1)]]
-});
-
-departmentOptions$ = this.departmentSubject.asObservable();
-
-// Template usage with reactive forms
-<form [formGroup]="departmentsForm">
+    reactive: `<form [formGroup]="departmentsForm">
   <i-listbox
     title="Departments"
     [options]="departmentOptions$ | async"
@@ -403,5 +353,91 @@ departmentOptions$ = this.departmentSubject.asObservable();
     selectedItemsLabel="{0} departments selected">
   </i-listbox>
 </form>`,
+  };
+
+  // TypeScript examples
+  tsExamples = {
+    multiple: `import { IListbox, ListboxOption } from 'integra-ng';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-example',
+  imports: [IListbox, FormsModule],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  countries = [
+    { name: 'United States', code: 'US' },
+    { name: 'Canada', code: 'CA' },
+    { name: 'United Kingdom', code: 'UK' }
+  ];
+
+  selectedCountriesMultiple: ListboxOption[] = [
+    { name: 'United States', code: 'US' },
+    { name: 'Canada', code: 'CA' }
+  ];
+
+  onAddCountry() {
+    console.log('Add country action clicked');
+  }
+}`,
+
+    single: `selectedCountrySingle: ListboxOption | null = {
+  name: 'United Kingdom',
+  code: 'UK'
+};`,
+
+    withIcons: `tasks = [
+  { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
+  { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
+  { name: 'Schedule Meeting', value: 'meeting', icon: 'pi pi-calendar' }
+];`,
+
+    displayAsMenu: `menuItems = [
+  { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' },
+  { name: 'Settings', value: 'settings', icon: 'pi pi-cog' },
+  { name: 'Profile', value: 'profile', icon: 'pi pi-user' }
+];
+
+selectedMenuItem: ListboxOption | null = {
+  name: 'Dashboard',
+  value: 'dashboard',
+  icon: 'pi pi-home'
+};`,
+
+    reactive: `import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { IListbox, ListboxOption } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [IListbox, ReactiveFormsModule, AsyncPipe],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  departmentOptions$: Observable<ListboxOption[]>;
+  private departmentSubject = new BehaviorSubject<ListboxOption[]>([]);
+
+  departmentsForm = this.fb.group({
+    selectedDepartments: [[
+      { id: 1, name: 'Engineering', code: 'ENG' },
+      { id: 2, name: 'Marketing', code: 'MKT' }
+    ], [Validators.required]]
+  });
+
+  constructor(private fb: FormBuilder) {
+    this.departmentOptions$ = this.departmentSubject.asObservable();
+  }
+}`,
+  };
+
+  // SCSS examples
+  scssExamples = {
+    constrained: `.constrained-wrapper {
+  height: 500px;
+  border: 2px dashed var(--surface-400);
+  border-radius: 8px;
+  padding: 8px;
+}`,
   };
 }

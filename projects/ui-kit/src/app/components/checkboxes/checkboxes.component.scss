@@ -40,36 +40,6 @@
     flex-wrap: wrap;
   }
 
-  .demo-button {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--surface-border);
-    border-radius: 4px;
-    background: var(--surface-ground);
-    color: var(--text-color);
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      background: var(--surface-hover);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    &.primary {
-      background: var(--primary-color);
-      color: var(--primary-color-text);
-      border-color: var(--primary-color);
-
-      &:hover:not(:disabled) {
-        background: var(--primary-color-dark);
-      }
-    }
-  }
-
   .form-output {
     background: var(--surface-section);
     border: 1px solid var(--surface-border);
@@ -98,50 +68,6 @@
 
     pre:last-child {
       margin-bottom: 0;
-    }
-  }
-
-  .features-section {
-    margin-top: 3rem;
-
-    h2 {
-      margin-bottom: 1.5rem;
-      color: var(--text-color);
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-
-      .feature-card {
-        background: var(--surface-card);
-        border: 1px solid var(--surface-border);
-        border-radius: 8px;
-        padding: 1.5rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        h3 {
-          margin: 0 0 0.75rem 0;
-          color: var(--primary-color);
-          font-size: 1rem;
-          font-weight: 600;
-        }
-
-        p {
-          margin: 0;
-          color: var(--text-color-secondary);
-          font-size: 0.875rem;
-          line-height: 1.5;
-        }
-      }
     }
   }
 }

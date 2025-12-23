@@ -12,6 +12,7 @@
     <app-demo-card
       [title]="'Text Only Tabs'"
       [sourceCode]="codeExamples.textOnly"
+      [tsCode]="tsExamples.basic"
     >
       <div class="tab-examples">
         <i-tabs [(activeIndex)]="textOnlyActiveIndex">
@@ -128,6 +129,7 @@
     <app-demo-card
       [title]="'Closable Tabs'"
       [sourceCode]="codeExamples.closable"
+      [tsCode]="tsExamples.closable"
     >
       <div class="tab-examples">
         @if (closableTabs.length > 0) {
