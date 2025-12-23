@@ -372,7 +372,6 @@ export class ExampleComponent {
     { name: 'United Kingdom', code: 'UK' }
   ];
 
-  // ngModel stores full objects
   selectedCountriesMultiple: ListboxOption[] = [
     { name: 'United States', code: 'US' },
     { name: 'Canada', code: 'CA' }
@@ -383,21 +382,18 @@ export class ExampleComponent {
   }
 }`,
 
-    single: `// Single select - ngModel stores full object
-selectedCountrySingle: ListboxOption | null = {
+    single: `selectedCountrySingle: ListboxOption | null = {
   name: 'United Kingdom',
   code: 'UK'
 };`,
 
-    withIcons: `// Options with icons
-tasks = [
+    withIcons: `tasks = [
   { name: 'Review Documents', value: 'review', icon: 'pi pi-file' },
   { name: 'Send Emails', value: 'email', icon: 'pi pi-envelope' },
   { name: 'Schedule Meeting', value: 'meeting', icon: 'pi pi-calendar' }
 ];`,
 
-    displayAsMenu: `// Menu navigation - ngModel stores full object
-menuItems = [
+    displayAsMenu: `menuItems = [
   { name: 'Dashboard', value: 'dashboard', icon: 'pi pi-home' },
   { name: 'Settings', value: 'settings', icon: 'pi pi-cog' },
   { name: 'Profile', value: 'profile', icon: 'pi pi-user' }

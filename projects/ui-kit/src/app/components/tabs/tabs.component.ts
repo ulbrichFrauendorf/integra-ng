@@ -38,9 +38,12 @@ export class TabsComponent {
 </i-tabs>`,
 
     iconOnly: `<i-tabs [(activeIndex)]="activeTab">
-  <i-tab-panel icon="pi pi-home">Home content</i-tab-panel>
-  <i-tab-panel icon="pi pi-user">User content</i-tab-panel>
-  <i-tab-panel icon="pi pi-cog">Settings content</i-tab-panel>
+  <i-tab-panel icon="pi pi-home">
+    <!-- Panel content shown when tab is selected -->
+    Home panel content
+  </i-tab-panel>
+  <i-tab-panel icon="pi pi-user">User panel content</i-tab-panel>
+  <i-tab-panel icon="pi pi-cog">Settings panel content</i-tab-panel>
 </i-tabs>`,
 
     iconText: `<i-tabs [(activeIndex)]="activeTab">
