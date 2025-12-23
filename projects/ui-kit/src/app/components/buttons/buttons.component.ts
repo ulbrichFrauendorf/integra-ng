@@ -68,6 +68,18 @@ export class ButtonsComponent {
 </i-button>`,
   };
 
+  // TypeScript code example
+  tsExamples = {
+    basic: `import { IButton } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [IButton],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {}`,
+  };
+
   features: Feature[] = [
     {
       title: 'Multiple Severities',
