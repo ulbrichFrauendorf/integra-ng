@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { ICard } from '../../../../../integra-ng/src/lib/components/card/card.component';
 import { IDialogActions } from '@shared/components/dialog/inner/dialog-actions/dialog-actions.component';
-import { CodeDisplayComponent } from '../code-display/code-display.component';
+import { DemoCardComponent } from '../demo-card/demo-card.component';
 import {
   FeaturesListComponent,
   Feature,
@@ -9,7 +9,7 @@ import {
 
 @Component({
   selector: 'i-cards',
-  imports: [ICard, IDialogActions, CodeDisplayComponent, FeaturesListComponent],
+  imports: [ICard, IDialogActions, DemoCardComponent, FeaturesListComponent],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss',
 })
@@ -26,15 +26,17 @@ export class CardsComponent {
 
   // Code examples organized by category
   codeExamples = {
-    basic: `
-<i-card [title]="'Card Title'" sub[title]="'Optional subtitle'">
+    basic: `<i-card [title]="'Card Title'">
   <p>This is the card content in the body section.</p>
 </i-card>`,
 
     withFooter: `<i-card [title]="'Card with Actions'">
   <p>This card includes footer content.</p>
   <div slot="footer">
-    <i-button severity="primary">Action</i-button>
+    <i-dialog-actions
+      (submitEvent)="onSubmit()"
+      (cancelEvent)="onCancel()"
+    />
   </div>
 </i-card>`,
 
@@ -52,13 +54,12 @@ export class CardsComponent {
     closable: `<i-card
   [title]="'Closable Card'"
   [closable]="true"
-  (closeCard)="onCardClosed()"
->
+  (closeCard)="onCardClosed()">
   <p>This card can be closed using the X button.</p>
 </i-card>`,
 
     fullHeight: `<!-- Container with fixed height -->
-<div style="height: 300px;">
+<div class="full-height-container">
   <i-card [title]="'Full Height Card'" [fullHeight]="true">
     <p>This card fills the height of its container.</p>
     <p>The body area becomes scrollable if content overflows.</p>
@@ -67,18 +68,54 @@ export class CardsComponent {
 
     scrollable: `<i-card [title]="'Scrollable Content'" class="scrollable-card">
   <div class="scrollable-content">
-    <p>This card demonstrates scrollable content with custom scrollbar styling.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
-    <p>Excepteur sint occaecat cupidatat non proident.</p>
-    <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <p>Curabitur pretium tincidunt lacus nulla gravida orci a odio.</p>
-    <p>Sed non mauris vitae erat consequat auctor eu in elit.</p>
-    <p>Additional content to demonstrate scrolling behavior...</p>
+    <p>Scrollable content here...</p>
   </div>
 </i-card>`,
+  };
+
+  // TypeScript code examples
+  tsExamples = {
+    closable: `import { ICard } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [ICard],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  showCard = true;
+
+  onCardClosed() {
+    this.showCard = false;
+  }
+}`,
+  };
+
+  // SCSS code examples
+  scssExamples = {
+    fullHeight: `.full-height-container {
+  height: 250px;
+  border: 2px dashed var(--surface-400);
+  border-radius: 8px;
+  padding: 8px;
+}`,
+
+    scrollable: `.scrollable-card {
+  .scrollable-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
+
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}`,
   };
 
   // Sample content for scrollable demo

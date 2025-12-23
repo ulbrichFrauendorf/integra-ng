@@ -38,9 +38,12 @@ export class TabsComponent {
 </i-tabs>`,
 
     iconOnly: `<i-tabs [(activeIndex)]="activeTab">
-  <i-tab-panel icon="pi pi-home"></i-tab-panel>
-  <i-tab-panel icon="pi pi-user"></i-tab-panel>
-  <i-tab-panel icon="pi pi-cog"></i-tab-panel>
+  <i-tab-panel icon="pi pi-home">
+    <!-- Panel content shown when tab is selected -->
+    Home panel content
+  </i-tab-panel>
+  <i-tab-panel icon="pi pi-user">User panel content</i-tab-panel>
+  <i-tab-panel icon="pi pi-cog">Settings panel content</i-tab-panel>
 </i-tabs>`,
 
     iconText: `<i-tabs [(activeIndex)]="activeTab">
@@ -67,8 +70,20 @@ export class TabsComponent {
 </i-tabs>`,
   };
 
-  // TypeScript initialization example
-  initializationCode = `import { ITabs, ITabPanel } from 'integra-ng';
+  // TypeScript examples
+  tsExamples = {
+    basic: `import { ITabs, ITabPanel } from 'integra-ng';
+
+@Component({
+  selector: 'app-example',
+  imports: [ITabs, ITabPanel],
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  activeTab = 0;
+}`,
+
+    closable: `import { ITabs, ITabPanel } from 'integra-ng';
 
 @Component({
   selector: 'app-example',
@@ -78,14 +93,12 @@ export class TabsComponent {
 export class ExampleComponent {
   activeTab = 0;
 
-  onTabChange(event: { originalEvent: Event; index: number }) {
-    console.log('Tab changed to:', event.index);
-  }
-
   onTabClose(event: { originalEvent: Event; index: number }) {
     // Handle tab close - remove from array, etc.
+    console.log('Tab closed at index:', event.index);
   }
-}`;
+}`,
+  };
 
   features: Feature[] = [
     {

@@ -85,8 +85,7 @@ export class SelectsComponent implements OnInit {
 
   // HTML Code examples organized by category
   codeExamples = {
-    ngModel: `// ngModel now stores the full object
-<i-select
+    ngModel: `<i-select
   label="Country"
   [options]="countries"
   optionLabel="label"
@@ -100,8 +99,7 @@ export class SelectsComponent implements OnInit {
   [(ngModel)]="statusValue"
   placeholder="Select status" />`,
 
-    reactiveForm: `// Form controls now store full objects
-<form [formGroup]="basicForm">
+    reactiveForm: `<form [formGroup]="basicForm">
   <i-select
     label="Country"
     [options]="countries"
@@ -126,8 +124,7 @@ export class SelectsComponent implements OnInit {
     formControlName="status" />
 </form>`,
 
-    advanced: `// Advanced select with filtering - stores full object
-<i-select
+    advanced: `<i-select
   [options]="reports"
   [filter]="true"
   [showClear]="true"
