@@ -1,5 +1,7 @@
 @use "./card.component.theme.scss" as theme;
 @use "../../themes/_variables.scss" as vars;
+@use "../../../../../integra-ng/src/lib/themes/scrollbar-mixins.scss" as
+  scrollbar;
 
 @include theme.i-card-theme();
 
@@ -17,6 +19,7 @@
       .i-card-body {
         flex: 1;
         overflow: auto;
+        @include scrollbar.dropdown-scrollbar();
       }
     }
   }

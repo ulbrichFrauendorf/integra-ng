@@ -66,11 +66,16 @@ export class CardsComponent {
   </i-card>
 </div>`,
 
-    scrollable: `<i-card [title]="'Scrollable Content'" class="scrollable-card">
-  <div class="scrollable-content">
-    <p>Scrollable content here...</p>
-  </div>
-</i-card>`,
+    scrollable: `<!-- Container with fixed height -->
+<div style="height: 300px;">
+  <i-card [fullHeight]="true">
+    <div>
+      @for (paragraph of scrollableContent; track $index) {
+        <p>{{ paragraph }}</p>
+      }
+    </div>
+  </i-card>
+</div>`,
   };
 
   // TypeScript code examples
