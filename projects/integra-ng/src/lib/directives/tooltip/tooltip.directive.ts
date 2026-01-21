@@ -15,11 +15,11 @@ import { TooltipComponent, TooltipPosition } from './tooltip.component';
 
 /**
  * Tooltip Directive
- * 
+ *
  * Displays contextual tooltips on hover or focus.
  * Tooltips are appended to document.body with z-index: 10000 to ensure
  * they appear above all other elements including dialogs (z-index: 1000).
- * 
+ *
  * @example
  * <button iTooltip="Click to save" tooltipPosition="above">Save</button>
  */
@@ -41,7 +41,7 @@ export class TooltipDirective implements OnDestroy {
     private renderer: Renderer2,
     private applicationRef: ApplicationRef,
     private injector: Injector,
-    private environmentInjector: EnvironmentInjector
+    private environmentInjector: EnvironmentInjector,
   ) {
     this.setupEventListeners();
   }
@@ -70,7 +70,11 @@ export class TooltipDirective implements OnDestroy {
     }
 
     // Check for empty, null, or whitespace-only tooltip text
-    if (!this.tooltipText || !this.tooltipText.trim() || this.tooltipComponent) {
+    if (
+      !this.tooltipText ||
+      !this.tooltipText.trim() ||
+      this.tooltipComponent
+    ) {
       return;
     }
 
@@ -108,12 +112,12 @@ export class TooltipDirective implements OnDestroy {
     this.renderer.setAttribute(
       this.tooltipComponent.location.nativeElement,
       'id',
-      tooltipId
+      tooltipId,
     );
     this.renderer.setAttribute(
       this.tooltipComponent.location.nativeElement,
       'data-tooltip-for',
-      this.elementRef.nativeElement.id || 'unknown'
+      this.elementRef.nativeElement.id || 'unknown',
     );
 
     // Register with ApplicationRef for change detection first
