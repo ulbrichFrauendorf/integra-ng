@@ -11,14 +11,10 @@
   .i-tabs__header {
     display: flex;
     overflow-x: auto;
-    scrollbar-width: thin;
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: vars.$componentBorderRadius;
+      display: none;
     }
   }
 
