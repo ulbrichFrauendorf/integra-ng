@@ -11,7 +11,7 @@
     [style.height]="height"
     (click)="$event.stopPropagation()"
   >
-    <i-card [title]="header" [closable]="closable" (closeCard)="onCloseClick()">
+    <i-card [title]="header" [closable]="closable" [fullHeight]="true" (closeCard)="onCloseClick()">
       <!-- Main content -->
       <div class="i-dialog-content" [ngStyle]="contentStyle">
         <ng-content></ng-content>
