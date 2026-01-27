@@ -11,12 +11,14 @@
     [style.height]="height"
     (click)="$event.stopPropagation()"
   >
-    <i-card [title]="header" [closable]="closable" (closeCard)="onCloseClick()">
-      <!-- Main content -->
-      <div class="i-dialog-content" [ngStyle]="contentStyle">
-        <ng-content></ng-content>
-      </div>
-    </i-card>
+    <div class="i-dialog-card-wrapper">
+      <i-card [title]="header" [closable]="closable" [fullHeight]="true" (closeCard)="onCloseClick()">
+        <!-- Main content -->
+        <div class="i-dialog-content" [ngStyle]="contentStyle">
+          <ng-content></ng-content>
+        </div>
+      </i-card>
+    </div>
   </div>
 </div>
 }
