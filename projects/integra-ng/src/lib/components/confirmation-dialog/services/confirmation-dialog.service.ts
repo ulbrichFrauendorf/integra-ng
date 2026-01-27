@@ -128,9 +128,8 @@ export class ConfirmationDialogService {
    * ```
    */
   async confirm(config: ConfirmationDialogConfig): Promise<IDynamicDialogRef> {
-    const { ConfirmationDialogComponent } = await import(
-      '../confirmation-dialog.component'
-    );
+    const { ConfirmationDialogComponent } =
+      await import('../confirmation-dialog.component');
 
     this.acceptLabel = config.acceptLabel || 'Confirm';
     this.rejectLabel = config.rejectLabel || 'Cancel';
@@ -140,8 +139,8 @@ export class ConfirmationDialogService {
       width: '400px',
       contentStyle: { overflow: 'auto' },
       breakpoints: {
-        '960px': '75vw',
-        '640px': '90vw',
+        '960px': { width: '720px' },
+        '640px': { width: '576px' },
       },
       data: {
         message: config.message,

@@ -21,16 +21,17 @@ export interface IDynamicDialogConfig {
   contentStyle?: { [key: string]: any };
 
   /**
-   * Responsive breakpoints for dialog width at different screen sizes.
+   * Responsive breakpoints for dialog dimensions at different screen sizes.
+   * Object with width and/or height properties.
    * @example
    * ```typescript
    * breakpoints: {
-   *   '960px': '75vw',
-   *   '640px': '90vw'
+   *   '960px': { width: '75vw', height: '70vh' },
+   *   '640px': { width: '90vw', height: '80vh' }
    * }
    * ```
    */
-  breakpoints?: { [key: string]: string };
+  breakpoints?: { [key: string]: { width?: string; height?: string } };
 
   /** Whether the dialog can be closed via the close button, ESC key, or overlay click. Defaults to true */
   closable?: boolean;

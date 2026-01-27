@@ -49,9 +49,10 @@
         [(visible)]="showBasicDialog"
         [closable]="true"
         header="Welcome to Integra"
-        width="24rem"
+        width="500px"
+        height="600px"
         [breakpoints]="{
-          '640px': '90vw',
+          '640px': { width: '576px', height: '510px' },
         }"
       >
         <div class="dialog-content basic-dialog">
@@ -98,6 +99,7 @@
           </div>
         </div>
         <i-dialog-actions
+          slot="footer"
           (cancelEvent)="onBasicDialogHide()"
           (submitEvent)="onBasicDialogHide()"
           submitLabel="Get Started"
@@ -128,7 +130,7 @@
         header="Notification"
         width="24rem"
         [breakpoints]="{
-          '640px': '90vw',
+          '640px': { width: '576px' },
         }"
       >
         <div class="dialog-content basic-dialog">
@@ -142,6 +144,7 @@
           </p>
         </div>
         <i-dialog-actions
+          slot="footer"
           (submitEvent)="onSingleButtonDialogHide()"
           submitLabel="OK"
           [showCancel]="false"
@@ -164,14 +167,12 @@
       <!-- Responsive Dialog Template -->
       <i-dialog
         [(visible)]="showResponsiveDialog"
-        (onHide)="onResponsiveDialogHide()"
-        (submitEvent)="onResponsiveDialogHide()"
-        (cancelEvent)="onResponsiveDialogHide()"
         header="Screen Size Adaptation"
-        width="50vw"
+        width="800px"
+        height="600px"
         [breakpoints]="{
-          '960px': '75vw',
-          '640px': '90vw',
+          '960px': { width: '720px', height: '420px' },
+          '640px': { width: '576px', height: '480px' },
         }"
       >
         <div class="dialog-content responsive-dialog">
@@ -224,6 +225,13 @@
             mobile experience.
           </p>
         </div>
+        <i-dialog-actions
+          slot="footer"
+          (cancelEvent)="onResponsiveDialogHide()"
+          (submitEvent)="onResponsiveDialogHide()"
+          submitLabel="Got It"
+          cancelLabel="Close"
+        ></i-dialog-actions>
       </i-dialog>
     </app-demo-card>
 
@@ -242,15 +250,13 @@
       <!-- Fullscreen Dialog Template -->
       <i-dialog
         [(visible)]="showFullscreenDialog"
-        (onHide)="onFullscreenDialogHide()"
-        (submitEvent)="onFullscreenDialogHide()"
-        (cancelEvent)="onFullscreenDialogHide()"
         header="Team Assignment"
         [modal]="true"
         width="600px"
+        height="800px"
         [breakpoints]="{
-          '960px': '80vw',
-          '640px': '95vw',
+          '960px': { width: '768px', height: '680px' },
+          '640px': { width: '608px', height: '720px' },
         }"
       >
         <div class="dialog-content large-dialog">
@@ -328,6 +334,14 @@
             </div>
           </div>
         </div>
+        <i-dialog-actions
+          slot="footer"
+          (cancelEvent)="onFullscreenDialogHide()"
+          (submitEvent)="onFullscreenDialogSubmit()"
+          submitLabel="Assign Departments"
+          cancelLabel="Cancel"
+          [submitDisabled]="largeDialogForm.invalid"
+        ></i-dialog-actions>
       </i-dialog>
     </app-demo-card>
 

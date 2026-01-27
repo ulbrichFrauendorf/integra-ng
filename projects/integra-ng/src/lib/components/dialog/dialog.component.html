@@ -1,24 +1,29 @@
 @if (visible) {
-<div
-  class="i-dialog-overlay"
-  (click)="onOverlayClick($event)"
-  [attr.id]="componentId"
->
   <div
-    #dialogElement
-    class="i-dialog-container"
-    [style.width]="width"
-    [style.height]="height"
-    (click)="$event.stopPropagation()"
+    class="i-dialog-overlay"
+    (click)="onOverlayClick($event)"
+    [attr.id]="componentId"
   >
-    <div class="i-dialog-card-wrapper">
-      <i-card [title]="header" [closable]="closable" [fullHeight]="true" (closeCard)="onCloseClick()">
+    <div
+      #dialogElement
+      class="i-dialog-container"
+      [style.width]="currentWidth || width"
+      [style.height]="currentHeight || height"
+      (click)="$event.stopPropagation()"
+    >
+      <i-card
+        [title]="header"
+        [closable]="closable"
+        [fullHeight]="true"
+        (closeCard)="onCloseClick()"
+      >
         <!-- Main content -->
         <div class="i-dialog-content" [ngStyle]="contentStyle">
           <ng-content></ng-content>
         </div>
+        <!-- Footer content -->
+        <ng-content slot="footer" select="[slot='footer']"></ng-content>
       </i-card>
     </div>
   </div>
-</div>
 }

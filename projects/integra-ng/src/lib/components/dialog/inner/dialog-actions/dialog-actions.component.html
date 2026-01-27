@@ -4,7 +4,7 @@
     cancelLabel
   }}</i-button>
   } @if (showSubmit) {
-  <i-button [outlined]="true" [severity]="severity" (click)="onSubmit()">{{
+  <i-button [outlined]="true" [severity]="severity" [disabled]="submitDisabled" (click)="onSubmit()">{{
     submitLabel
   }}</i-button>
   }
