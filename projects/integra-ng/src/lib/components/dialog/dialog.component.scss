@@ -22,7 +22,6 @@
     display: flex;
     flex-direction: column;
     max-width: 90vw;
-    max-height: 80vh;
     animation: slideInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform, opacity;
     transform: translateZ(0);
@@ -33,11 +32,6 @@
 
     @media (max-width: 640px) {
       max-width: 90vw;
-    }
-
-    .i-dialog-card-wrapper {
-      display: flex;
-      max-height: 80vh;
     }
 
     .i-dialog-content {
