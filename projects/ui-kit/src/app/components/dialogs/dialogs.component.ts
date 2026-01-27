@@ -126,16 +126,73 @@ export class DialogsComponent implements OnInit, OnDestroy {
   }
 
   // TypeScript code example for Dynamic Dialog Service
-  dynamicDialogTsCode = `import { Component, inject } from '@angular/core';
-import { DialogService } from 'integra-ng';
-import { IDynamicDialogRef } from 'integra-ng';
+  dynamicDialogTsCode = `// example-dialog.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { IDialogBase } from 'integra-ng';
+import { IDialogActions } from 'integra-ng';
+import { IInputText } from 'integra-ng';
+
+@Component({
+  selector: 'app-example-dialog',
+  imports: [CommonModule, ReactiveFormsModule, IDialogActions, IInputText],
+  template: \`
+    <div class="example-dialog-content">
+      <p>{{ getData()?.message }}</p>
+      <form [formGroup]="form">
+        <i-input-text label="Your Name" formControlName="user" [fluid]="true"></i-input-text>
+      </form>
+    </div>
+    <i-dialog-actions
+      slot="footer"
+      (cancelEvent)="onHide()"
+      (submitEvent)="onSubmit()"
+      submitLabel="Submit"
+      cancelLabel="Cancel"
+      [submitDisabled]="form.invalid"
+    ></i-dialog-actions>
+  \`,
+})
+export class ExampleDialogComponent extends IDialogBase {
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    super();
+    this.form = this.fb.group({
+      user: ['', [Validators.required]],
+    });
+  }
+
+  override ngOnInit() {
+    super.ngOnInit();
+    const data = this.getData();
+    if (data) {
+      this.form.patchValue({ user: data.user || '' });
+    }
+  }
+
+  onSubmit() {
+    if (this.form.valid) {
+      this.close(this.form.value);
+    }
+  }
+
+  onHide() {
+    this.close();
+  }
+}
+
+// dialogs.component.ts - Opening the dialog
+import { Component, inject } from '@angular/core';
+import { DialogService, IDynamicDialogRef } from 'integra-ng';
 import { ExampleDialogComponent } from './example-dialog.component';
 
 @Component({
-  selector: 'app-example',
-  templateUrl: './example.component.html'
+  selector: 'app-dialogs',
+  templateUrl: './dialogs.component.html'
 })
-export class ExampleComponent {
+export class DialogsComponent {
   ref: IDynamicDialogRef | undefined;
   dialogService = inject(DialogService);
 
@@ -145,8 +202,8 @@ export class ExampleComponent {
       width: '600px',
       contentStyle: { overflow: 'auto' },
       breakpoints: {
-        '960px': '75vw',
-        '640px': '90vw',
+        '960px': { width: '720px', height: '420px' },
+        '640px': { width: '576px', height: '480px' },
       },
       data: {
         message: 'Hello from Dialog Service!',
@@ -155,7 +212,6 @@ export class ExampleComponent {
       },
     });
 
-    // Optional: Handle dialog close event
     this.ref.onClose.subscribe((result) => {
       console.log('Dialog closed with result:', result);
     });
@@ -170,28 +226,67 @@ export class ExampleComponent {
 </i-button>`,
 
     basic: `<i-dialog
-  [visible]="showBasicDialog"
-  (visibleChange)="showBasicDialog = $event"
-  (onHide)="onBasicDialogHide()"
+  [(visible)]="showBasicDialog"
   [closable]="true"
-  header="Basic Dialog Example"
-  width="20rem">
-  <div class="dialog-content">
-    <h4>Basic Dialog</h4>
-    <p>This is a basic dialog component.</p>
+  header="Welcome to Integra"
+  width="500px"
+  height="600px"
+  [breakpoints]="{
+    '640px': { width: '576px', height: '510px' },
+  }">
+  <div class="dialog-content basic-dialog">
+    <div class="dialog-icon">
+      <i class="pi pi-check-circle"></i>
+    </div>
+    <h4>Getting Started</h4>
+    <p class="dialog-description">
+      Welcome to the Integra component library! This dialog demonstrates a
+      clean, user-friendly design with proper spacing and hierarchy.
+    </p>
+    <div class="feature-highlights">
+      <div class="highlight-item">
+        <i class="pi pi-bolt"></i>
+        <span>Fast & Responsive</span>
+      </div>
+      <div class="highlight-item">
+        <i class="pi pi-shield"></i>
+        <span>Accessible (WCAG 2.1)</span>
+      </div>
+      <div class="highlight-item">
+        <i class="pi pi-palette"></i>
+        <span>Themeable</span>
+      </div>
+    </div>
   </div>
+  <i-dialog-actions
+    slot="footer"
+    (cancelEvent)="onBasicDialogHide()"
+    (submitEvent)="onBasicDialogHide()"
+    submitLabel="Get Started"
+    cancelLabel="Maybe Later"
+  ></i-dialog-actions>
 </i-dialog>`,
 
     singleButton: `<i-dialog
-  [visible]="showSingleButtonDialog"
-  (visibleChange)="showSingleButtonDialog = $event"
+  [(visible)]="showSingleButtonDialog"
+  [closable]="true"
   header="Notification"
-  width="24rem">
-  <div class="dialog-content">
+  width="24rem"
+  [breakpoints]="{
+    '640px': { width: '576px' },
+  }">
+  <div class="dialog-content basic-dialog">
+    <div class="dialog-icon success">
+      <i class="pi pi-check-circle"></i>
+    </div>
     <h4>Success!</h4>
-    <p>Your changes have been saved successfully.</p>
+    <p class="dialog-description">
+      Your changes have been saved successfully. This dialog only has one
+      action button for acknowledgment.
+    </p>
   </div>
   <i-dialog-actions
+    slot="footer"
     (submitEvent)="onSingleButtonDialogHide()"
     submitLabel="OK"
     [showCancel]="false"
@@ -199,29 +294,63 @@ export class ExampleComponent {
 </i-dialog>`,
 
     responsive: `<i-dialog
-  [visible]="showResponsiveDialog"
-  (visibleChange)="showResponsiveDialog = $event"
-  header="Responsive Dialog"
-  width="50vw"
+  [(visible)]="showResponsiveDialog"
+  header="Screen Size Adaptation"
+  width="800px"
+  height="600px"
   [breakpoints]="{
-    '960px': '75vw',
-    '640px': '90vw'
+    '960px': { width: '720px', height: '420px' },
+    '640px': { width: '576px', height: '480px' },
   }">
-  <div class="dialog-content">
-    <p>This dialog adapts to different screen sizes.</p>
+  <div class="dialog-content responsive-dialog">
+    <div class="responsive-info-card">
+      <div class="info-header">
+        <i class="pi pi-desktop"></i>
+        <h5>Current Breakpoint</h5>
+      </div>
+      <p class="breakpoint-indicator">
+        Resize your browser to see the dialog adapt automatically.
+      </p>
+    </div>
+    <!-- Breakpoint cards and content -->
   </div>
+  <i-dialog-actions
+    slot="footer"
+    (cancelEvent)="onResponsiveDialogHide()"
+    (submitEvent)="onResponsiveDialogHide()"
+    submitLabel="Got It"
+    cancelLabel="Close"
+  ></i-dialog-actions>
 </i-dialog>`,
 
     fullscreen: `<i-dialog
-  [visible]="showFullscreenDialog"
-  (visibleChange)="showFullscreenDialog = $event"
-  header="Large Dialog"
+  [(visible)]="showFullscreenDialog"
+  header="Team Assignment"
   [modal]="true"
-  width="80vw"
-  height="80vh">
-  <div class="dialog-content">
-    <p>Large dialog for complex content.</p>
+  width="600px"
+  height="800px"
+  [breakpoints]="{
+    '960px': { width: '768px', height: '680px' },
+    '640px': { width: '608px', height: '720px' },
+  }">
+  <div class="dialog-content large-dialog">
+    <div class="dialog-intro">
+      <i class="pi pi-users"></i>
+      <div>
+        <h4>Select Team Departments</h4>
+        <p>Choose the departments you want to assign to this project.</p>
+      </div>
+    </div>
+    <!-- Form content -->
   </div>
+  <i-dialog-actions
+    slot="footer"
+    (cancelEvent)="onFullscreenDialogHide()"
+    (submitEvent)="onFullscreenDialogSubmit()"
+    submitLabel="Assign Departments"
+    cancelLabel="Cancel"
+    [submitDisabled]="largeDialogForm.invalid"
+  ></i-dialog-actions>
 </i-dialog>`,
   };
 
@@ -266,8 +395,8 @@ export class ExampleComponent {
       width: '600px',
       contentStyle: { overflow: 'auto' },
       breakpoints: {
-        '960px': '75vw',
-        '640px': '90vw',
+        '960px': { width: '75vw', height: '70vh' },
+        '640px': { width: '90vw', height: '80vh' },
       },
       data: {
         message: 'Hello from Dialog Service!',
@@ -311,5 +440,12 @@ export class ExampleComponent {
 
   onFullscreenDialogHide() {
     this.showFullscreenDialog = false;
+  }
+
+  onFullscreenDialogSubmit() {
+    if (this.largeDialogForm.valid) {
+      console.log('Selected departments:', this.largeDialogForm.value);
+      this.showFullscreenDialog = false;
+    }
   }
 }
