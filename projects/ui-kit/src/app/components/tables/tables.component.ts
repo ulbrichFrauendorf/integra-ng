@@ -29,6 +29,10 @@ interface Product {
   _allWarning?: boolean;
 }
 
+interface ProductWithTags extends Product {
+  tags: string[];
+}
+
 @Component({
   selector: 'app-tables',
   standalone: true,
@@ -386,6 +390,73 @@ export class TablesComponent {
     },
   ];
 
+  // Sample product data with tags for list column demo
+  productsWithTags: ProductWithTags[] = [
+    {
+      id: 1,
+      name: 'Laptop Pro',
+      category: 'Electronics',
+      price: 1299.99,
+      quantity: 50,
+      status: 'In Stock',
+      date: '2024-01-15',
+      tags: ['Featured', 'Best Seller', 'Premium'],
+    },
+    {
+      id: 2,
+      name: 'Wireless Mouse',
+      category: 'Accessories',
+      price: 29.99,
+      quantity: 200,
+      status: 'In Stock',
+      date: '2024-02-20',
+      tags: ['Ergonomic', 'Wireless'],
+    },
+    {
+      id: 3,
+      name: 'Mechanical Keyboard',
+      category: 'Accessories',
+      price: 149.99,
+      quantity: 75,
+      status: 'Low Stock',
+      date: '2024-03-10',
+      tags: ['RGB', 'Gaming', 'Mechanical'],
+    },
+    {
+      id: 4,
+      name: 'Monitor 27"',
+      category: 'Electronics',
+      price: 399.99,
+      quantity: 30,
+      status: 'In Stock',
+      date: '2024-04-05',
+      tags: ['4K', 'IPS'],
+    },
+    {
+      id: 5,
+      name: 'USB Hub',
+      category: 'Accessories',
+      price: 24.99,
+      quantity: 150,
+      status: 'In Stock',
+      date: '2024-05-25',
+      tags: ['USB-C'],
+    },
+  ];
+
+  // List columns - demonstrates list/array rendering as chips
+  listColumns: TableColumn[] = [
+    { field: 'name', header: 'Product Name' },
+    { field: 'category', header: 'Category' },
+    {
+      field: 'tags',
+      header: 'Tags',
+      type: 'list',
+      width: '200px',
+    },
+    { field: 'price', header: 'Price', type: 'currency' },
+  ];
+
   // Table actions
   tableActions: TableAction[] = [
     {
@@ -591,6 +662,37 @@ iconColumns: TableColumn[] = [
     },
     iconSize: '1.25rem',
     align: 'center'
+  },
+  { field: 'price', header: 'Price', type: 'currency' }
+];`,
+
+    listColumns: `<i-table
+  [data]="productsWithTags"
+  [columns]="listColumns"
+  [striped]="true">
+</i-table>
+
+// TypeScript - List column renders arrays as stacked chips
+interface ProductWithTags {
+  id: number;
+  name: string;
+  tags: string[];
+  // ...other fields
+}
+
+productsWithTags: ProductWithTags[] = [
+  { id: 1, name: 'Laptop Pro', tags: ['Featured', 'Best Seller', 'Premium'], ... },
+  { id: 2, name: 'Wireless Mouse', tags: ['Ergonomic', 'Wireless'], ... }
+];
+
+listColumns: TableColumn[] = [
+  { field: 'name', header: 'Product Name' },
+  { field: 'category', header: 'Category' },
+  { 
+    field: 'tags', 
+    header: 'Tags', 
+    type: 'list',
+    width: '200px'
   },
   { field: 'price', header: 'Price', type: 'currency' }
 ];`,

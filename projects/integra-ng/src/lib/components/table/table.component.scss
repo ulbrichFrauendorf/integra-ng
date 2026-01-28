@@ -195,7 +195,9 @@ $table-transition: 0.15s ease;
         .i-table-sort-icon {
           font-size: 1em;
           opacity: 0.6;
-          transition: opacity $table-transition, color $table-transition;
+          transition:
+            opacity $table-transition,
+            color $table-transition;
         }
 
         &.i-table-sortable-column {
@@ -224,7 +226,8 @@ $table-transition: 0.15s ease;
           padding: 6px 10px;
           font-size: 1em;
           border-radius: vars.$componentBorderRadius;
-          transition: border-color $table-transition,
+          transition:
+            border-color $table-transition,
             box-shadow $table-transition;
         }
       }
@@ -351,7 +354,9 @@ $table-transition: 0.15s ease;
     height: 60%;
     cursor: col-resize;
     opacity: 0;
-    transition: opacity $table-transition, background-color $table-transition;
+    transition:
+      opacity $table-transition,
+      background-color $table-transition;
 
     &:hover {
       opacity: 1;
@@ -386,6 +391,17 @@ $table-transition: 0.15s ease;
   &.secondary,
   .i-table-cell-secondary & {
     color: var(--color-text-secondary);
+  }
+}
+
+.i-table-list-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+
+  i-chip {
+    display: block;
   }
 }
 

@@ -26,6 +26,7 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { ISeverity } from '@shared/enums/IButtonSeverity';
 import { NoContentComponent } from '../no-content/no-content.component';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
+import { IChip } from '../chip/chip.component';
 
 /**
  * Column definition for the table
@@ -44,7 +45,7 @@ export interface TableColumn {
   /** Text alignment within the column */
   align?: 'left' | 'center' | 'right';
   /** Data type for formatting */
-  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'icon';
+  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'icon' | 'list';
   /** Format string for date/currency formatting */
   format?: string;
   /** Icon class for 'icon' type - can be a field name or a function that returns the icon class */
@@ -190,6 +191,7 @@ export interface VirtualScrollConfig {
     IInputText,
     IButton,
     ICheckbox,
+    IChip,
     NoContentComponent,
     TooltipDirective,
   ],
@@ -574,7 +576,7 @@ export class ITable {
           return String(value)
             .toLowerCase()
             .includes(globalFilter.toLowerCase());
-        })
+        }),
       );
     }
 
@@ -657,9 +659,33 @@ export class ITable {
       case 'icon':
         // Icons are rendered in the template, not as text
         return '';
+      case 'list':
+        // Lists are rendered in the template as chips, not as text
+        return '';
       default:
         return String(value);
     }
+  }
+
+  /**
+   * Checks if a column should render a list of chips
+   * @internal
+   */
+  isListColumn(column: TableColumn): boolean {
+    return column.type === 'list';
+  }
+
+  /**
+   * Gets the list items for a cell
+   * @internal
+   */
+  getCellListItems(row: any, column: TableColumn): string[] {
+    if (column.type !== 'list') return [];
+    const value = this.getCellValue(row, column.field);
+    if (Array.isArray(value)) {
+      return value.map((item) => String(item));
+    }
+    return [];
   }
 
   /**
@@ -839,7 +865,7 @@ export class ITable {
     } else if (this.selectionMode === 'multiple') {
       if (isSelected) {
         this.selection = this.selection.filter(
-          (s) => !this.compareObjects(s, row)
+          (s) => !this.compareObjects(s, row),
         );
         this.onRowUnselect.emit(row);
       } else {
@@ -865,12 +891,12 @@ export class ITable {
     if (allSelected) {
       // Deselect all visible rows
       this.selection = this.selection.filter(
-        (s: any) => !data.some((d: any) => this.compareObjects(s, d))
+        (s: any) => !data.some((d: any) => this.compareObjects(s, d)),
       );
     } else {
       // Select all visible rows
       const newSelections = data.filter(
-        (d: any) => !this.selection.some((s: any) => this.compareObjects(s, d))
+        (d: any) => !this.selection.some((s: any) => this.compareObjects(s, d)),
       );
       this.selection = [...this.selection, ...newSelections];
     }
@@ -887,7 +913,7 @@ export class ITable {
     const data = this.processedData();
     if (data.length === 0) return false;
     return data.every((d: any) =>
-      this.selection?.some((s: any) => this.compareObjects(s, d))
+      this.selection?.some((s: any) => this.compareObjects(s, d)),
     );
   }
 
@@ -898,7 +924,7 @@ export class ITable {
   areSomeRowsSelected(): boolean {
     const data = this.processedData();
     const selectedCount = data.filter((d: any) =>
-      this.selection?.some((s: any) => this.compareObjects(s, d))
+      this.selection?.some((s: any) => this.compareObjects(s, d)),
     ).length;
     return selectedCount > 0 && selectedCount < data.length;
   }
@@ -1105,7 +1131,7 @@ export class ITable {
     data: any[],
     columns: TableColumn[],
     filename: string,
-    extension: string = 'csv'
+    extension: string = 'csv',
   ): void {
     // Create CSV header
     const headers = columns
@@ -1159,7 +1185,7 @@ export class ITable {
   private downloadFile(
     content: string,
     filename: string,
-    mimeType: string
+    mimeType: string,
   ): void {
     const blob = new Blob([content], { type: mimeType });
     const url = window.URL.createObjectURL(blob);

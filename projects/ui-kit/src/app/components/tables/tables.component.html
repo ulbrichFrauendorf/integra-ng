@@ -97,6 +97,25 @@
       </i-table>
     </app-demo-card>
 
+    <!-- List Columns -->
+    <app-demo-card
+      [title]="'List Columns (Chips)'"
+      [sourceCode]="codeExamples.listColumns"
+    >
+      <p class="demo-description">
+        Display array data as stacked chips in a column. Use
+        <code>type: 'list'</code>
+        to render arrays as vertical chip lists. Useful for tags, categories, or
+        any multi-value fields.
+      </p>
+      <i-table
+        [data]="productsWithTags"
+        [columns]="listColumns"
+        [striped]="true"
+      >
+      </i-table>
+    </app-demo-card>
+
     <!-- Visual Variants & Sizes -->
     <app-demo-card
       [title]="'Visual Variants & Sizes'"
