@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, inject, signal } from '@angular/co
 import { MenuModel, MenuItem } from '../models/menu.model';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CLAIMS_CHECKER, ClaimsChecker } from '../services/claims-checker.token';
-import { Subject, BehaviorSubject, forkJoin, of } from 'rxjs';
+import { Subject, BehaviorSubject, forkJoin, of, Observable } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -38,7 +38,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private filterModelByClaims(model: MenuModel[]) {
+  private filterModelByClaims(model: MenuModel[]): Observable<MenuModel[]> {
     // If no claims checker is provided, return all menu items (backward compatible)
     if (!this.claimsChecker) {
       return of(model);
@@ -52,14 +52,19 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
 
     // Check all claims in parallel using forkJoin
-    const claimChecks: { [key: string]: any } = {};
+    const claimChecks: { [key: string]: Observable<boolean> } = {};
     claims.forEach((claim) => {
       claimChecks[claim] = this.claimsChecker!.hasClaim(claim);
     });
 
+    if (Object.keys(claimChecks).length === 0) {
+      return of(model);
+    }
+
     return forkJoin(claimChecks).pipe(
       switchMap((claimsMap) => {
-        const filtered = this.filterModel(model, claimsMap);
+        // Cast to the correct type since we know the structure
+        const filtered = this.filterModel(model, claimsMap as { [key: string]: boolean });
         return of(filtered);
       })
     );
