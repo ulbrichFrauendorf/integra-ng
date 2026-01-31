@@ -3,7 +3,7 @@ import { MenuModel, MenuItem } from '../models/menu.model';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CLAIMS_CHECKER, ClaimsChecker } from '../services/claims-checker.token';
 import { Subject, BehaviorSubject, forkJoin, of, Observable } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { takeUntil, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'i-menu',
@@ -62,11 +62,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
 
     return forkJoin(claimChecks).pipe(
-      switchMap((claimsMap) => {
-        // Cast to the correct type since we know the structure
-        const filtered = this.filterModel(model, claimsMap as { [key: string]: boolean });
-        return of(filtered);
-      })
+      map((claimsMap) => this.filterModel(model, claimsMap))
     );
   }
 
