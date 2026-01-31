@@ -119,6 +119,94 @@
       </p>
     </app-demo-card>
 
+    <!-- Claims-Based Access Control -->
+    <app-demo-card [title]="'Claims-Based Access Control'">
+      <p class="section-description">
+        Control menu visibility based on user permissions using claims.
+        Perfect for role-based access control in your application.
+      </p>
+    </app-demo-card>
+
+    <!-- Step 1: Create Claims Service -->
+    <app-demo-card
+      [title]="'Step 1: Create Claims Service'"
+      [sourceCode]="codeExamples.claimsService"
+      [language]="'ts'"
+    >
+      <p class="section-description">
+        Create a service that implements the <code>ClaimsChecker</code> interface.
+        This service determines which claims the current user has.
+      </p>
+      <div class="usage-notes" style="margin-top: 1rem;">
+        <div class="note-item">
+          <i class="pi pi-lightbulb"></i>
+          <div>
+            In a real application, claims would typically come from your
+            authentication system (e.g., JWT tokens, OAuth, etc.)
+          </div>
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Step 2: Configure Provider -->
+    <app-demo-card
+      [title]="'Step 2: Configure Provider'"
+      [sourceCode]="codeExamples.claimsProvider"
+      [language]="'ts'"
+    >
+      <p class="section-description">
+        Use the <code>provideMenuClaimsChecker()</code> function in your app
+        configuration. This is the recommended approach following Angular's
+        modern provider pattern.
+      </p>
+    </app-demo-card>
+
+    <!-- Step 3: Add Claims to Menu -->
+    <app-demo-card
+      [title]="'Step 3: Add Claims to Menu'"
+      [sourceCode]="codeExamples.claimsMenu"
+      [language]="'ts'"
+    >
+      <p class="section-description">
+        Add <code>claim</code> properties to your menu items and groups. Items
+        without claims are always visible.
+      </p>
+      <div class="config-examples" style="margin-top: 1rem;">
+        <div class="config-item">
+          <strong>Item Claim:</strong> Controls visibility of individual menu items
+        </div>
+        <div class="config-item">
+          <strong>Group Claim:</strong> Controls visibility of entire menu groups
+        </div>
+        <div class="config-item">
+          <strong>Nested Claims:</strong> Works with sub-menu items at any level
+        </div>
+        <div class="config-item">
+          <strong>Auto-Hide Empty Groups:</strong> Groups with no visible items are automatically hidden
+        </div>
+      </div>
+    </app-demo-card>
+
+    <!-- Claims Features -->
+    <app-demo-card [title]="'Claims Checker Features'">
+      <p class="section-description">
+        <code>{{ codeExamples.claimsFeatures }}</code>
+      </p>
+    </app-demo-card>
+
+    <!-- Alternative Configuration -->
+    <app-demo-card
+      [title]="'Alternative: Manual Configuration'"
+      [sourceCode]="codeExamples.claimsManual"
+      [language]="'ts'"
+    >
+      <p class="section-description">
+        If you prefer manual provider configuration instead of using
+        <code>provideMenuClaimsChecker()</code>, you can configure the
+        <code>CLAIMS_CHECKER</code> token directly.
+      </p>
+    </app-demo-card>
+
     <!-- Custom Topbar Actions -->
     <app-demo-card
       [title]="'Custom Topbar Actions'"
