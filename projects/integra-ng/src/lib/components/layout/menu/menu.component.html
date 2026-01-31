@@ -1,5 +1,5 @@
 <ul class="menu">
-  @for(group of model; track $index) {
+  @for(group of filteredModel(); track $index) {
   <li class="menu-group">
     @if (group.label) {
     <div class="menu-group-label">
