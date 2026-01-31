@@ -1,4 +1,4 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, Provider } from '@angular/core';
 import { Observable } from 'rxjs';
 
 /**
@@ -30,3 +30,36 @@ export interface ClaimsChecker {
  * ]
  */
 export const CLAIMS_CHECKER = new InjectionToken<ClaimsChecker>('ClaimsChecker');
+
+/**
+ * Provides a claims checker service for menu item filtering.
+ * This is the recommended way to configure claims-based access control in your application.
+ * 
+ * @param claimsService The claims service instance that implements the ClaimsChecker interface
+ * @returns Provider configuration for dependency injection
+ * 
+ * @example
+ * // In your app.config.ts:
+ * import { provideMenuClaimsChecker } from 'integra-ng';
+ * import { ClaimsService } from './services/claims.service';
+ * 
+ * export const appConfig: ApplicationConfig = {
+ *   providers: [
+ *     provideMenuClaimsChecker(ClaimsService),
+ *     // ... other providers
+ *   ]
+ * };
+ * 
+ * @example
+ * // Or provide an existing service instance:
+ * providers: [
+ *   ClaimsService,
+ *   provideMenuClaimsChecker(ClaimsService)
+ * ]
+ */
+export function provideMenuClaimsChecker(claimsService: any): Provider {
+  return {
+    provide: CLAIMS_CHECKER,
+    useExisting: claimsService,
+  };
+}

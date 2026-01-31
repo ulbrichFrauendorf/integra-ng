@@ -62,12 +62,14 @@ export class AppComponent {
   icon?: string;              // PrimeIcons class name
   routerLink?: string[];      // Angular router link
   items?: MenuItem[];         // Nested menu items
+  claim?: string;             // Optional claim for access control
 }
 
 interface MenuModel {
   label: string;              // Menu group label
   items: MenuItem[];          // Menu items in group
   separator?: boolean;        // Add separator after group
+  claim?: string;             // Optional claim for group access control
 }`,
 
     customTopbar: `<i-layout [config]="layoutConfig" [menuModel]="menuModel">
@@ -125,6 +127,99 @@ import { LayoutComponent, MenuModel, LayoutConfig } from 'integra-ng';
 
 // Use in your template
 <i-layout [config]="layoutConfig" [menuModel]="menuModel" />`,
+
+    // Claims-based access control examples
+    claimsService: `import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { ClaimsChecker } from 'integra-ng';
+
+@Injectable({ providedIn: 'root' })
+export class ClaimsService implements ClaimsChecker {
+  // In a real app, these would come from your authentication system
+  private userClaims = ['view-dashboard', 'view-reports', 'admin-access'];
+
+  hasClaim(claim: string): Observable<boolean> {
+    // Check if the user has the specified claim
+    return of(this.userClaims.includes(claim));
+  }
+}`,
+
+    claimsProvider: `// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideMenuClaimsChecker } from 'integra-ng';
+import { ClaimsService } from './services/claims.service';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // Use the provider function (recommended)
+    provideMenuClaimsChecker(ClaimsService),
+    
+    // ... other providers
+    provideRouter(routes),
+    provideAnimationsAsync()
+  ]
+};`,
+
+    claimsMenu: `// Menu with claims-based access control
+menuModel: MenuModel[] = [
+  {
+    label: 'General',
+    items: [
+      {
+        label: 'Dashboard',
+        icon: 'pi pi-home',
+        routerLink: ['/dashboard'],
+        claim: 'view-dashboard'  // Only visible if user has this claim
+      },
+      {
+        label: 'Reports',
+        icon: 'pi pi-chart-line',
+        routerLink: ['/reports'],
+        claim: 'view-reports'
+      }
+    ]
+  },
+  {
+    label: 'Administration',
+    claim: 'admin-access',  // Entire group requires this claim
+    items: [
+      {
+        label: 'Users',
+        icon: 'pi pi-users',
+        routerLink: ['/admin/users']
+      },
+      {
+        label: 'Settings',
+        icon: 'pi pi-cog',
+        routerLink: ['/admin/settings'],
+        claim: 'admin-settings'  // Additional claim on specific item
+      }
+    ]
+  }
+];
+
+// Result: Only items the user has claims for will be visible
+// If a group has no visible items, the entire group is hidden`,
+
+    claimsManual: `// Manual provider configuration (alternative)
+import { CLAIMS_CHECKER } from 'integra-ng';
+import { ClaimsService } from './services/claims.service';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    {
+      provide: CLAIMS_CHECKER,
+      useExisting: ClaimsService
+    }
+  ]
+};`,
+
+    claimsFeatures: `Key Features:
+• Backward compatible - no claims checker = all items visible
+• Performance optimized - claims checked in parallel
+• Hierarchical support - claims at group, item, and nested levels
+• Automatic cleanup - proper RxJS subscription management
+• Smart filtering - empty groups automatically hidden`,
   };
 
   features: Feature[] = [
