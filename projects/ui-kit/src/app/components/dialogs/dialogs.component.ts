@@ -24,6 +24,8 @@ import {
   ListboxOption,
 } from '@shared/components/listbox/listbox.component';
 import { TooltipDirective } from '@shared/directives/tooltip/tooltip.directive';
+import { ISelect } from '@shared/components/select/select.component';
+import { IMultiSelect } from '@shared/components/multi-select/multi-select.component';
 
 @Component({
   selector: 'app-dialogs',
@@ -38,6 +40,8 @@ import { TooltipDirective } from '@shared/directives/tooltip/tooltip.directive';
     IDialogActions,
     IListbox,
     TooltipDirective,
+    ISelect,
+    IMultiSelect,
   ],
   templateUrl: './dialogs.component.html',
   styleUrl: './dialogs.component.scss',
@@ -51,13 +55,39 @@ export class DialogsComponent implements OnInit, OnDestroy {
   showSingleButtonDialog = false;
   showResponsiveDialog = false;
   showFullscreenDialog = false;
+  showDropdownTestDialog = false;
 
   // Form for the large dialog listbox
   largeDialogForm: FormGroup;
 
+  // Form for the dropdown test dialog
+  dropdownTestForm: FormGroup;
+
   // Observable data for the listbox
   departmentOptions$: Observable<ListboxOption[]>;
   private departmentSubject = new BehaviorSubject<ListboxOption[]>([]);
+
+  // Dropdown test options
+  countryOptions = [
+    { label: 'United States', value: 'us' },
+    { label: 'Canada', value: 'ca' },
+    { label: 'United Kingdom', value: 'uk' },
+    { label: 'Germany', value: 'de' },
+    { label: 'France', value: 'fr' },
+    { label: 'Japan', value: 'jp' },
+    { label: 'Australia', value: 'au' },
+  ];
+
+  skillOptions = [
+    { label: 'JavaScript', value: 'js' },
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'Angular', value: 'angular' },
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Node.js', value: 'node' },
+    { label: 'Python', value: 'python' },
+    { label: 'Java', value: 'java' },
+  ];
 
   // Initial data
   private initialDepartments: ListboxOption[] = [
@@ -77,6 +107,12 @@ export class DialogsComponent implements OnInit, OnDestroy {
     // Initialize the form with the selectedDepartments field
     this.largeDialogForm = this.fb.group({
       selectedDepartments: [[], [Validators.required, Validators.minLength(1)]],
+    });
+
+    // Initialize the dropdown test form
+    this.dropdownTestForm = this.fb.group({
+      country: [null, Validators.required],
+      skills: [[], Validators.required],
     });
 
     // Set up the observable
@@ -446,6 +482,23 @@ export class DialogsComponent {
     if (this.largeDialogForm.valid) {
       console.log('Selected departments:', this.largeDialogForm.value);
       this.showFullscreenDialog = false;
+    }
+  }
+
+  showDropdownTestDialogModal() {
+    this.showDropdownTestDialog = true;
+  }
+
+  onDropdownTestDialogHide() {
+    this.showDropdownTestDialog = false;
+    this.dropdownTestForm.reset();
+  }
+
+  onDropdownTestDialogSubmit() {
+    if (this.dropdownTestForm.valid) {
+      console.log('Dropdown test form:', this.dropdownTestForm.value);
+      this.showDropdownTestDialog = false;
+      this.dropdownTestForm.reset();
     }
   }
 }
