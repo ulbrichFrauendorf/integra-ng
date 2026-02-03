@@ -139,7 +139,15 @@ export class IDialog extends AbstractDialog implements OnInit, OnDestroy {
    * @internal
    */
   onOverlayClick(event: Event): void {
-    if (this.modal && event.target === event.currentTarget && this.closable) {
+    // Check if click was directly on overlay (not on dialog container or its children)
+    const target = event.target as HTMLElement;
+    const overlay = event.currentTarget as HTMLElement;
+    
+    if (
+      this.modal &&
+      this.closable &&
+      target === overlay
+    ) {
       this.hide();
     }
   }

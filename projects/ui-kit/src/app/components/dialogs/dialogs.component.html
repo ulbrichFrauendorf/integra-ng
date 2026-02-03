@@ -50,7 +50,7 @@
         [closable]="true"
         header="Welcome to Integra"
         width="500px"
-        height="600px"
+        height="400px"
         [breakpoints]="{
           '640px': { width: '576px', height: '510px' },
         }"
@@ -231,6 +231,121 @@
           (submitEvent)="onResponsiveDialogHide()"
           submitLabel="Got It"
           cancelLabel="Close"
+        ></i-dialog-actions>
+      </i-dialog>
+    </app-demo-card>
+
+    <!-- Dropdown Test Dialog -->
+    <app-demo-card [title]="'Dialog with Dropdowns (Test Case)'">
+      <div class="demo-content">
+        <p>
+          <strong>Testing dropdown behavior in dialogs:</strong> This dialog
+          contains select and multi-select dropdowns. Click inside the dialog
+          but outside an expanded dropdown to test if it properly closes.
+        </p>
+        <i-button severity="danger" (clicked)="showDropdownTestDialogModal()"
+          >Open Dropdown Test Dialog</i-button
+        >
+      </div>
+
+      <!-- Dropdown Test Dialog Template -->
+      <i-dialog
+        [(visible)]="showDropdownTestDialog"
+        header="Dropdown Test in Dialog"
+        width="600px"
+        height="500px"
+        [breakpoints]="{
+          '960px': { width: '720px', height: '420px' },
+          '640px': { width: '576px', height: '480px' },
+        }"
+      >
+        <div class="dialog-content" style="height: 100%">
+          <div class="dropdown-test-instruction">
+            <strong>Test Instructions:</strong>
+            <ol style="margin: 8px 0 0 0; padding-left: 20px">
+              <li>Open the "Country" dropdown below</li>
+              <li>
+                Click anywhere else in the dialog (but not on the dropdown)
+              </li>
+              <li>
+                Observe if the dropdown closes automatically (expected behavior)
+              </li>
+              <li>Repeat with the "Skills" multi-select dropdown</li>
+            </ol>
+          </div>
+
+          <form
+            [formGroup]="dropdownTestForm"
+            style="display: flex; flex-direction: column; gap: 16px"
+          >
+            <div class="form-field">
+              <i-select
+                id="country"
+                label="Country"
+                [options]="countryOptions"
+                optionLabel="label"
+                formControlName="country"
+                [filter]="true"
+                [showClear]="true"
+                [fluid]="true"
+              >
+              </i-select>
+              @if (
+                dropdownTestForm.get("country")?.invalid &&
+                dropdownTestForm.get("country")?.touched
+              ) {
+                <small class="error-message">
+                  <i class="pi pi-exclamation-circle"></i>
+                  Please select a country
+                </small>
+              }
+            </div>
+
+            <div class="form-field">
+              <i-multi-select
+                id="skills"
+                label="Skills"
+                [options]="skillOptions"
+                optionLabel="label"
+                formControlName="skills"
+                [filter]="true"
+                [showClear]="true"
+                [fluid]="true"
+                [maxSelectedLabels]="3"
+                selectedItemsLabel="{0} skills selected"
+              >
+              </i-multi-select>
+              @if (
+                dropdownTestForm.get("skills")?.invalid &&
+                dropdownTestForm.get("skills")?.touched
+              ) {
+                <small class="error-message">
+                  <i class="pi pi-exclamation-circle"></i>
+                  Please select at least one skill
+                </small>
+              }
+            </div>
+
+            <div class="dropdown-values-panel">
+              <p style="margin: 0; font-size: 14px">
+                <strong>Current Values:</strong><br />
+                Country:
+                {{ dropdownTestForm.get("country")?.value?.label || "None"
+                }}<br />
+                Skills:
+                {{ (dropdownTestForm.get("skills")?.value || []).length }}
+                selected
+              </p>
+            </div>
+          </form>
+        </div>
+        <i-dialog-actions
+          slot="footer"
+          (cancelEvent)="onDropdownTestDialogHide()"
+          (submitEvent)="onDropdownTestDialogSubmit()"
+          submitLabel="Submit"
+          cancelLabel="Cancel"
+          [submitDisabled]="dropdownTestForm.invalid"
         ></i-dialog-actions>
       </i-dialog>
     </app-demo-card>

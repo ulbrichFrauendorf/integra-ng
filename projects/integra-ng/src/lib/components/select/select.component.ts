@@ -411,8 +411,9 @@ export class ISelect implements ControlValueAccessor {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (
+      this.isOpen &&
       this.dropdownRef &&
-      !this.dropdownRef.nativeElement.contains(event.target)
+      !this.dropdownRef.nativeElement.contains(event.target as Node)
     ) {
       this.isOpen = false;
       this.filterValue.set('');
