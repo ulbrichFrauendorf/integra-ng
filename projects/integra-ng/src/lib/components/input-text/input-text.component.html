@@ -17,6 +17,7 @@
       </span>
       }
       <input
+        #inputElement
         [id]="id || componentId"
         [type]="type"
         [disabled]="disabled"
@@ -34,12 +35,34 @@
         tooltipPosition="below"
         [tooltipDelay]="100"
       />
+      @if (type === 'number' && !disabled && !readonly) {
+      <div class="i-input-spinners">
+        <button
+          type="button"
+          class="i-input-spinner-button i-input-spinner-up"
+          (click)="incrementNumber(inputElement)"
+          [attr.aria-label]="'Increment ' + label"
+          tabindex="-1"
+        >
+          <i class="pi pi-chevron-up"></i>
+        </button>
+        <button
+          type="button"
+          class="i-input-spinner-button i-input-spinner-down"
+          (click)="decrementNumber(inputElement)"
+          [attr.aria-label]="'Decrement ' + label"
+          tabindex="-1"
+        >
+          <i class="pi pi-chevron-down"></i>
+        </button>
+      </div>
+      }
     </div>
     @if (useFloatLabel) {
     <label
       [for]="id || componentId"
       class="i-label"
-      [class.floated]="forceFloated || (value && value.length) || false"
+      [class.floated]="forceFloated || hasValue"
       >{{ label }}</label
     >
     }

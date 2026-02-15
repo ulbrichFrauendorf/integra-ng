@@ -40,12 +40,14 @@ export class InputTextsComponent implements OnInit {
   basicForm: FormGroup;
   validationForm: FormGroup;
   fluidForm: FormGroup;
+  prefilledForm: FormGroup;
 
   // NgModel examples
   textValue = '';
   emailValue = '';
   passwordValue = '';
   numberValue = 0;
+  prefilledNumberValue = 42;
 
   // Organized input examples by category
   inputExamples = {
@@ -108,7 +110,8 @@ export class InputTextsComponent implements OnInit {
     ngModel: `<i-input-text label="Text Input" type="text" [(ngModel)]="textValue" />
 <i-input-text label="Email Input" type="email" [(ngModel)]="emailValue" />
 <i-input-text label="Password Input" type="password" [(ngModel)]="passwordValue" />
-<i-input-text label="Number Input" type="number" [(ngModel)]="numberValue" />`,
+<i-input-text label="Number Input" type="number" [(ngModel)]="numberValue" />
+<i-input-text label="Pre-filled Number" type="number" [(ngModel)]="prefilledNumberValue" />`,
 
     reactiveForm: `<form [formGroup]="basicForm">
   <i-input-text label="Text Input" type="text" formControlName="textInput" />
@@ -127,6 +130,13 @@ export class InputTextsComponent implements OnInit {
     fluid: `<i-input-text label="Fluid Text Input" type="text" [fluid]="true" formControlName="fluidText" />
 <i-input-text label="Fluid Email Input" type="email" [fluid]="true" formControlName="fluidEmail" />
 <i-input-text label="Fluid Password Input" type="password" [fluid]="true" formControlName="fluidPassword" />`,
+
+    prefilled: `<form [formGroup]="prefilledForm">
+  <i-input-text label="Full Name" type="text" formControlName="prefilledText" />
+  <i-input-text label="Email Address" type="email" formControlName="prefilledEmail" />
+  <i-input-text label="Price" type="number" formControlName="prefilledNumber" [attr.step]="0.01" />
+  <i-input-text label="Quantity" type="number" formControlName="prefilledQuantity" />
+</form>`,
   };
 
   // TypeScript examples
@@ -144,6 +154,7 @@ export class ExampleComponent {
   emailValue = '';
   passwordValue = '';
   numberValue = 0;
+  prefilledNumberValue = 42;
 }`,
 
     reactiveForm: `import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -172,6 +183,15 @@ validationForm = this.fb.group({
   minLengthField: ['', [Validators.minLength(5)]],
   emailValidation: ['', [Validators.required, Validators.email]],
   patternField: ['', [Validators.pattern(/^[A-Za-z]+$/)]]
+});`,
+
+    prefilled: `import { FormBuilder } from '@angular/forms';
+
+prefilledForm = this.fb.group({
+  prefilledText: ['John Doe'],
+  prefilledEmail: ['john.doe@example.com'],
+  prefilledNumber: [123.45],
+  prefilledQuantity: [5]
 });`,
   };
 
@@ -241,6 +261,13 @@ export class ExampleComponent {
       fluidText: [''],
       fluidEmail: [''],
       fluidPassword: [''],
+    });
+
+    this.prefilledForm = this.fb.group({
+      prefilledText: ['John Doe'],
+      prefilledEmail: ['john.doe@example.com'],
+      prefilledNumber: [123.45],
+      prefilledQuantity: [5],
     });
   }
 
