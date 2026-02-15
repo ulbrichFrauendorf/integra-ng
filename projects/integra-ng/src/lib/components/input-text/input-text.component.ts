@@ -296,4 +296,52 @@ export class IInputText implements ControlValueAccessor {
           : 'Invalid value';
     }
   }
+
+  /**
+   * Checks if the input has a value (works for all input types including number)
+   * @internal
+   */
+  get hasValue(): boolean {
+    if (this.value === null || this.value === undefined) return false;
+    if (typeof this.value === 'string') return this.value.length > 0;
+    return true; // For numbers including 0
+  }
+
+  /**
+   * Increment number input value
+   * @internal
+   */
+  incrementNumber(inputElement: HTMLInputElement) {
+    const step = parseFloat(inputElement.step) || 1;
+    const currentValue = parseFloat(this.value || '0');
+    const newValue = currentValue + step;
+    
+    // Check max constraint if exists
+    if (inputElement.max && newValue > parseFloat(inputElement.max)) {
+      return;
+    }
+    
+    this.value = newValue.toString();
+    this.onChange(this.value);
+    inputElement.value = this.value;
+  }
+
+  /**
+   * Decrement number input value
+   * @internal
+   */
+  decrementNumber(inputElement: HTMLInputElement) {
+    const step = parseFloat(inputElement.step) || 1;
+    const currentValue = parseFloat(this.value || '0');
+    const newValue = currentValue - step;
+    
+    // Check min constraint if exists
+    if (inputElement.min && newValue < parseFloat(inputElement.min)) {
+      return;
+    }
+    
+    this.value = newValue.toString();
+    this.onChange(this.value);
+    inputElement.value = this.value;
+  }
 }

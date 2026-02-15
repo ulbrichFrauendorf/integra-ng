@@ -47,4 +47,19 @@
       color: colors.$color-danger;
     }
   }
+
+  .i-input-spinner-button {
+    color: colors.$color-text-secondary;
+    background: transparent;
+
+    &:hover {
+      background: colors.$color-surface-hover;
+      color: colors.$color-text-primary;
+    }
+
+    &:active {
+      background: colors.$color-surface-hover;
+      color: colors.$color-primary;
+    }
+  }
 }

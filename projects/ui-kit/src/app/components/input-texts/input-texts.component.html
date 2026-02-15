@@ -36,6 +36,11 @@
             type="number"
             [(ngModel)]="numberValue"
           />
+          <i-input-text
+            label="Pre-filled Number"
+            type="number"
+            [(ngModel)]="prefilledNumberValue"
+          />
         </div>
 
         <div class="values-display">
@@ -44,6 +49,7 @@
           <p><strong>Email:</strong> {{ emailValue || "(empty)" }}</p>
           <p><strong>Password:</strong> {{ passwordValue || "(empty)" }}</p>
           <p><strong>Number:</strong> {{ numberValue }}</p>
+          <p><strong>Pre-filled Number:</strong> {{ prefilledNumberValue }}</p>
         </div>
       </div>
     </app-demo-card>
@@ -119,6 +125,66 @@
           (click)="onSubmit(fluidForm, 'fluid')"
         >
           Submit Fluid Form
+        </i-button>
+      </form>
+    </app-demo-card>
+
+    <!-- Pre-filled Values Demo -->
+    <app-demo-card
+      [title]="'Pre-filled Values (Float Label Test)'"
+      [sourceCode]="codeExamples.prefilled"
+      [tsCode]="tsExamples.prefilled"
+    >
+      <form [formGroup]="prefilledForm" class="demo-form">
+        <div class="input-grid">
+          <i-input-text
+            label="Full Name"
+            type="text"
+            formControlName="prefilledText"
+          />
+          <i-input-text
+            label="Email Address"
+            type="email"
+            formControlName="prefilledEmail"
+          />
+          <i-input-text
+            label="Price"
+            type="number"
+            formControlName="prefilledNumber"
+            [attr.step]="0.01"
+          />
+          <i-input-text
+            label="Quantity"
+            type="number"
+            formControlName="prefilledQuantity"
+          />
+        </div>
+
+        <div class="values-display">
+          <h4>Pre-filled Values:</h4>
+          <p>
+            <strong>Name:</strong> {{ prefilledForm.get("prefilledText")?.value
+            }}
+          </p>
+          <p>
+            <strong>Email:</strong>
+            {{ prefilledForm.get("prefilledEmail")?.value }}
+          </p>
+          <p>
+            <strong>Price:</strong>
+            {{ prefilledForm.get("prefilledNumber")?.value }}
+          </p>
+          <p>
+            <strong>Quantity:</strong>
+            {{ prefilledForm.get("prefilledQuantity")?.value }}
+          </p>
+        </div>
+
+        <i-button
+          severity="primary"
+          (click)="onSubmit(prefilledForm, 'prefilled')"
+        >
+          Submit Pre-filled Form
         </i-button>
       </form>
     </app-demo-card>
