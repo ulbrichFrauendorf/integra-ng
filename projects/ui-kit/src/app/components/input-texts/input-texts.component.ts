@@ -13,7 +13,6 @@ import {
   FeaturesListComponent,
   Feature,
 } from '../features-list/features-list.component';
-import { InputAutofillTestComponent } from './input-autofill-test.component';
 
 interface InputExample {
   label: string;
@@ -33,7 +32,6 @@ interface InputExample {
     FormsModule,
     DemoCardComponent,
     FeaturesListComponent,
-    InputAutofillTestComponent,
   ],
   templateUrl: './input-texts.component.html',
   styleUrl: './input-texts.component.scss',
@@ -138,12 +136,6 @@ export class InputTextsComponent implements OnInit {
   <i-input-text label="Email Address" type="email" formControlName="prefilledEmail" />
   <i-input-text label="Price" type="number" formControlName="prefilledNumber" [attr.step]="0.01" />
   <i-input-text label="Quantity" type="number" formControlName="prefilledQuantity" />
-</form>`,
-
-    autofill: `<form autocomplete="on" method="post">
-  <i-input-text label="Username" type="text" name="username" autocomplete="username" />
-  <i-input-text label="Password" type="password" name="current-password" autocomplete="current-password" />
-  <i-button type="submit" severity="primary">Submit</i-button>
 </form>`,
   };
 

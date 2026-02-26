@@ -52,18 +52,6 @@ describe('IInputText', () => {
       expect(component.type).toBe('password');
     });
 
-    it('should accept name input', () => {
-      component.name = 'username';
-      fixture.detectChanges();
-      expect(component.name).toBe('username');
-    });
-
-    it('should accept autocomplete input', () => {
-      component.autocomplete = 'current-password';
-      fixture.detectChanges();
-      expect(component.autocomplete).toBe('current-password');
-    });
-
     it('should accept icon input', () => {
       component.icon = 'pi pi-search';
       fixture.detectChanges();
@@ -158,33 +146,6 @@ describe('IInputText', () => {
       const mockEvent = { target: { value: 'typed value' } } as any;
       component.handleInput(mockEvent);
       expect(component.value).toBe('typed value');
-    });
-
-    it('should sync value from native input for browser autofill', () => {
-      const fn = jasmine.createSpy('onChange');
-      component.registerOnChange(fn);
-
-      inputElement.nativeElement.value = 'autofilled-user';
-      component.syncValueFromNativeInput(true);
-
-      expect(component.value).toBe('autofilled-user');
-      expect(component.hasValue).toBe(true);
-      expect(fn).toHaveBeenCalledWith('autofilled-user');
-    });
-
-    it('should sync on blur to keep touched and value states consistent', () => {
-      const onChange = jasmine.createSpy('onChange');
-      const onTouched = jasmine.createSpy('onTouched');
-
-      component.registerOnChange(onChange);
-      component.registerOnTouched(onTouched);
-      inputElement.nativeElement.value = 'autofilled-password';
-
-      component.handleBlur();
-
-      expect(component.value).toBe('autofilled-password');
-      expect(onChange).toHaveBeenCalledWith('autofilled-password');
-      expect(onTouched).toHaveBeenCalled();
     });
   });
 
