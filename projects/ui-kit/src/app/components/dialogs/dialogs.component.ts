@@ -176,18 +176,18 @@ import { IInputText } from 'integra-ng';
   template: \`
     <div class="example-dialog-content">
       <p>{{ getData()?.message }}</p>
-      <form [formGroup]="form">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <i-input-text label="Your Name" formControlName="user" [fluid]="true"></i-input-text>
+        <i-dialog-actions
+          slot="footer"
+          (cancelEvent)="onHide()"
+          (submitEvent)="onSubmit()"
+          submitLabel="Submit"
+          cancelLabel="Cancel"
+          [submitDisabled]="form.invalid"
+        ></i-dialog-actions>
       </form>
     </div>
-    <i-dialog-actions
-      slot="footer"
-      (cancelEvent)="onHide()"
-      (submitEvent)="onSubmit()"
-      submitLabel="Submit"
-      cancelLabel="Cancel"
-      [submitDisabled]="form.invalid"
-    ></i-dialog-actions>
   \`,
 })
 export class ExampleDialogComponent extends IDialogBase {

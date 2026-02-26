@@ -44,6 +44,14 @@
         </i-listbox>
       </div>
     </div>
+    <i-dialog-actions
+      slot="footer"
+      (cancelEvent)="onHide()"
+      (submitEvent)="onSubmit()"
+      submitLabel="Submit Request"
+      cancelLabel="Discard"
+      [showCancel]="false"
+    ></i-dialog-actions>
   </form>
 
   <div class="form-summary">
@@ -69,13 +77,4 @@
       >
     </div>
   </div>
-</div>
-<div slot="footer">
-  <i-dialog-actions
-    (cancelEvent)="onHide()"
-    (submitEvent)="onSubmit()"
-    submitLabel="Submit Request"
-    cancelLabel="Discard"
-    [showCancel]="false"
-  ></i-dialog-actions>
 </div>
