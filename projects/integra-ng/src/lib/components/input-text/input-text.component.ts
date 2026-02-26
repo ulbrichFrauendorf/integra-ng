@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  Optional,
-  Self,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, Optional, Self } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
@@ -80,9 +71,7 @@ export type IInputBackgroundStyle = 'surface' | 'component';
   templateUrl: './input-text.component.html',
   styleUrls: ['./input-text.component.scss'],
 })
-export class IInputText
-  implements ControlValueAccessor, AfterViewInit, OnDestroy
-{
+export class IInputText implements ControlValueAccessor {
   /**
    * Label text displayed for the input
    * @default 'Label'
@@ -99,11 +88,6 @@ export class IInputText
    * HTML id attribute for the input element
    */
   @Input() id?: string;
-
-  /**
-   * HTML name attribute for better browser autofill support
-   */
-  @Input() name?: string;
 
   /**
    * Whether the input should take full width of its container
@@ -133,11 +117,6 @@ export class IInputText
    * Placeholder text for the input
    */
   @Input() placeholder?: string;
-
-  /**
-   * HTML autocomplete attribute (e.g. 'username', 'current-password')
-   */
-  @Input() autocomplete?: string;
 
   /**
    * Allows external control to override validation state
@@ -192,18 +171,6 @@ export class IInputText
   componentId = UniqueComponentId('i-input-text-');
 
   /**
-   * Native input element reference
-   * @internal
-   */
-  @ViewChild('inputElement') inputElementRef?: ElementRef<HTMLInputElement>;
-
-  /**
-   * Pending autofill sync timers
-   * @internal
-   */
-  private autofillCheckTimeouts: ReturnType<typeof setTimeout>[] = [];
-
-  /**
    * Callback for ControlValueAccessor
    * @internal
    */
@@ -219,22 +186,6 @@ export class IInputText
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
-  }
-
-  /**
-   * Runs post-render checks to catch browser autofill values
-   * @internal
-   */
-  ngAfterViewInit(): void {
-    this.scheduleAutofillChecks();
-  }
-
-  /**
-   * Clears pending timers
-   * @internal
-   */
-  ngOnDestroy(): void {
-    this.clearAutofillChecks();
   }
 
   /**
@@ -285,50 +236,6 @@ export class IInputText
    */
   touch() {
     this.onTouched();
-  }
-
-  /**
-   * Handles blur event
-   * @internal
-   */
-  handleBlur() {
-    this.syncValueFromNativeInput(true);
-    this.touch();
-  }
-
-  /**
-   * Handles focus event
-   * @internal
-   */
-  handleFocus() {
-    this.syncValueFromNativeInput(true);
-  }
-
-  /**
-   * Handles browser autofill animation hook
-   * @internal
-   */
-  handleAutoFillAnimation(event: AnimationEvent) {
-    if (event.animationName === 'i-input-autofill-start') {
-      this.syncValueFromNativeInput(true);
-    }
-  }
-
-  /**
-   * Synchronizes component value from native input value
-   * @internal
-   */
-  syncValueFromNativeInput(emitChange = false) {
-    const nativeValue = this.inputElementRef?.nativeElement?.value;
-    if (typeof nativeValue !== 'string') return;
-
-    const normalized = nativeValue === '' ? null : nativeValue;
-    if (this.value === normalized) return;
-
-    this.value = normalized;
-    if (emitChange) {
-      this.onChange(this.value);
-    }
   }
 
   /**
@@ -395,37 +302,9 @@ export class IInputText
    * @internal
    */
   get hasValue(): boolean {
-    const nativeValue = this.inputElementRef?.nativeElement?.value;
-    const hasNativeValue =
-      typeof nativeValue === 'string' && nativeValue.length > 0;
-
-    if (this.value === null || this.value === undefined) return hasNativeValue;
+    if (this.value === null || this.value === undefined) return false;
     if (typeof this.value === 'string') return this.value.length > 0;
-
     return true; // For numbers including 0
-  }
-
-  /**
-   * Queues multiple checks because browsers may autofill asynchronously
-   * @internal
-   */
-  private scheduleAutofillChecks() {
-    this.clearAutofillChecks();
-    [0, 50, 250, 1000].forEach((delay) => {
-      const timeoutId = setTimeout(() => {
-        this.syncValueFromNativeInput(true);
-      }, delay);
-      this.autofillCheckTimeouts.push(timeoutId);
-    });
-  }
-
-  /**
-   * Clears queued autofill checks
-   * @internal
-   */
-  private clearAutofillChecks() {
-    this.autofillCheckTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
-    this.autofillCheckTimeouts = [];
   }
 
   /**
