@@ -19,12 +19,16 @@
       <input
         #inputElement
         [id]="id || componentId"
+        [attr.name]="name"
         [type]="type"
+        [attr.autocomplete]="autocomplete"
         [disabled]="disabled"
         [readonly]="readonly"
         [value]="hideText ? '' : value || ''"
         (input)="handleInput($event)"
-        (blur)="touch()"
+        (focus)="handleFocus()"
+        (blur)="handleBlur()"
+        (animationstart)="handleAutoFillAnimation($event)"
         [placeholder]="useFloatLabel ? ' ' : placeholder || label"
         class="i-input"
         [class.has-icon]="icon"

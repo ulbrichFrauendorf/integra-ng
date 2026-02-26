@@ -6,6 +6,13 @@
 $input-icon-size: 16px;
 $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
+@keyframes i-input-autofill-start {
+  from {
+  }
+  to {
+  }
+}
+
 .i-input-wrapper {
   display: flex;
   flex-direction: column;
@@ -16,7 +23,7 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
   &.i-input--fluid {
     width: 100%;
-  }Ch
+  }
 
   &.i-input--no-float {
     margin-top: 0;
@@ -88,6 +95,11 @@ $input-transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
     .i-input {
       padding: 14px 10px;
+
+      &:-webkit-autofill {
+        animation-name: i-input-autofill-start;
+        animation-duration: 0.01s;
+      }
 
       &.has-icon {
         padding-left: $input-icon-size + 18px;
