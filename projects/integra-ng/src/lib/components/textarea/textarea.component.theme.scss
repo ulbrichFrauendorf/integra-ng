@@ -1,7 +1,7 @@
 @use "../../themes/color-variables.scss" as colors;
 
-@mixin i-input-theme() {
-  .i-input {
+@mixin i-textarea-theme() {
+  .i-textarea {
     color: colors.$color-text-primary;
     border: 1px solid colors.$color-surface-border;
     background: colors.$color-component-background-secondary;
@@ -11,36 +11,40 @@
     }
   }
 
-  .i-input:focus {
+  .i-textarea:focus {
     outline: none;
     border-color: colors.$color-primary;
     box-shadow: colors.$color-box-shadow;
   }
 
-  .i-label {
+  .i-textarea-label {
     color: colors.$color-text-secondary;
   }
 
-  /* Float when input has value or is focused */
-  .i-input:focus + .i-label,
-  .i-input:not(:placeholder-shown) + .i-label,
-  .i-label.floated {
+  /* Float when textarea has value or is focused */
+  .i-textarea:focus + .i-textarea-label,
+  .i-textarea:not(:placeholder-shown) + .i-textarea-label,
+  .i-textarea-label.floated {
     background: colors.$color-component-background-secondary;
   }
 
-  .i-input[disabled] {
+  .i-textarea[disabled] {
     background: colors.$color-disabled-background;
     border-color: colors.$color-disabled-border;
     color: colors.$color-text-disabled;
     cursor: not-allowed;
+
+    & + .i-textarea-label {
+      color: colors.$color-text-disabled;
+    }
   }
 
   .invalid {
-    .i-input {
+    .i-textarea {
       border-color: colors.$color-danger;
     }
 
-    .i-label {
+    .i-textarea-label {
       color: colors.$color-danger;
     }
 
@@ -49,18 +53,15 @@
     }
   }
 
-  .i-input-spinner-button {
+  .i-char-count {
     color: colors.$color-text-secondary;
-    background: transparent;
 
-    &:hover {
-      background: colors.$color-surface-hover;
-      color: colors.$color-text-primary;
+    &.i-char-count--warn {
+      color: colors.$color-warning;
     }
 
-    &:active {
-      background: colors.$color-surface-hover;
-      color: colors.$color-primary;
+    &.i-char-count--over {
+      color: colors.$color-danger;
     }
   }
 }

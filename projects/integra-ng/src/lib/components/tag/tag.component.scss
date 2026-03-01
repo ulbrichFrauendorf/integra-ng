@@ -1,0 +1,41 @@
+@use "./tag.component.theme.scss" as theme;
+
+@include theme.i-tag-theme();
+
+.i-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1.4;
+  transition: opacity 0.15s ease;
+
+  &.i-tag-rounded {
+    border-radius: 999px;
+  }
+
+  &.i-tag-lg {
+    font-size: 0.9em;
+    padding: 4px 12px;
+  }
+
+  &.i-tag-sm {
+    font-size: 0.72em;
+    padding: 2px 8px;
+  }
+
+  .i-tag-icon {
+    font-size: 0.9em;
+    flex-shrink: 0;
+  }
+
+  .i-tag-value {
+    line-height: 1;
+  }
+}

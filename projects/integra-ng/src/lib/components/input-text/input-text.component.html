@@ -12,9 +12,9 @@
   >
     <div class="i-input-icon-wrapper">
       @if (icon) {
-      <span class="i-input-icon" [attr.aria-hidden]="true">
-        <i [class]="icon" [attr.aria-hidden]="true"></i>
-      </span>
+        <span class="i-input-icon" [attr.aria-hidden]="true">
+          <i [class]="icon" [attr.aria-hidden]="true"></i>
+        </span>
       }
       <input
         #inputElement
@@ -31,40 +31,40 @@
         [class.hide-text]="hideText"
         [class.readonly]="readonly"
         [class.component-border]="backgroundStyle === 'component'"
-        [iTooltip]="showErrors ? (getErrorMessage() || '') : ''"
+        [iTooltip]="showErrors ? getErrorMessage() || '' : ''"
         tooltipPosition="below"
         [tooltipDelay]="100"
       />
-      @if (type === 'number' && !disabled && !readonly) {
-      <div class="i-input-spinners">
-        <button
-          type="button"
-          class="i-input-spinner-button i-input-spinner-up"
-          (click)="incrementNumber(inputElement)"
-          [attr.aria-label]="'Increment ' + label"
-          tabindex="-1"
-        >
-          <i class="pi pi-chevron-up"></i>
-        </button>
-        <button
-          type="button"
-          class="i-input-spinner-button i-input-spinner-down"
-          (click)="decrementNumber(inputElement)"
-          [attr.aria-label]="'Decrement ' + label"
-          tabindex="-1"
-        >
-          <i class="pi pi-chevron-down"></i>
-        </button>
-      </div>
+      @if (type === "number" && !disabled && !readonly) {
+        <div class="i-input-spinners">
+          <button
+            type="button"
+            class="i-input-spinner-button i-input-spinner-up"
+            (click)="incrementNumber(inputElement)"
+            [attr.aria-label]="'Increment ' + label"
+            tabindex="-1"
+          >
+            <i class="pi pi-chevron-up"></i>
+          </button>
+          <button
+            type="button"
+            class="i-input-spinner-button i-input-spinner-down"
+            (click)="decrementNumber(inputElement)"
+            [attr.aria-label]="'Decrement ' + label"
+            tabindex="-1"
+          >
+            <i class="pi pi-chevron-down"></i>
+          </button>
+        </div>
       }
     </div>
     @if (useFloatLabel) {
-    <label
-      [for]="id || componentId"
-      class="i-label"
-      [class.floated]="forceFloated || hasValue"
-      >{{ label }}</label
-    >
+      <label
+        [for]="id || componentId"
+        class="i-label"
+        [class.floated]="forceFloated || hasValue"
+        >{{ label }}</label
+      >
     }
     <ng-content></ng-content>
   </div>
