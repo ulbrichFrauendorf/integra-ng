@@ -3,6 +3,7 @@ import { AppLayoutComponent } from './layout/app-layout.component';
 import { AccordionsComponent } from './components/accordions/accordions.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { InputTextsComponent } from './components/input-texts/input-texts.component';
+import { TextareasComponent } from './components/textareas/textareas.component';
 import { CalendarsComponent } from './components/calendars/calendars.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { DialogsComponent } from './components/dialogs/dialogs.component';
@@ -11,6 +12,7 @@ import { TooltipsComponent } from './components/tooltips/tooltips.component';
 import { MultiSelectsComponent } from './components/multi-selects/multi-selects.component';
 import { SelectsComponent } from './components/selects/selects.component';
 import { ChipsComponent } from './components/chips/chips.component';
+import { TagsComponent } from './components/tags/tags.component';
 import { ListboxesComponent } from './components/listboxes/listboxes.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { WhispersComponent } from './components/whispers/whispers.component';
@@ -58,12 +60,14 @@ export const routes: Routes = [
           { path: 'charts', component: ChartsComponent },
           { path: 'checkboxes', component: CheckboxesComponent },
           { path: 'chips', component: ChipsComponent },
+          { path: 'tags', component: TagsComponent },
           {
             path: 'confirmation-dialogs',
             component: ConfirmationDialogsComponent,
           },
           { path: 'dialogs', component: DialogsComponent },
           { path: 'input-texts', component: InputTextsComponent },
+          { path: 'textareas', component: TextareasComponent },
           { path: 'layouts', component: LayoutsComponent },
           { path: 'listboxes', component: ListboxesComponent },
           { path: 'messages', component: MessagesComponent },

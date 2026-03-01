@@ -1,0 +1,114 @@
+@use "./textarea.component.theme.scss" as theme;
+@use "../../themes/variables" as vars;
+
+@include theme.i-textarea-theme();
+
+$textarea-transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+.i-textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 1em;
+
+  &.i-textarea--fluid {
+    width: 100%;
+  }
+
+  &.i-textarea--no-float {
+    margin-top: 0;
+    height: auto;
+  }
+
+  .i-textarea-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .i-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: vars.$componentBorderRadius;
+    transition: $textarea-transition;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+    resize: vertical;
+
+    &:focus {
+      outline: none;
+    }
+
+    &.readonly {
+      cursor: pointer;
+      user-select: none;
+      caret-color: transparent;
+      resize: none;
+    }
+
+    &.no-resize {
+      resize: none;
+    }
+  }
+
+  .i-textarea-icon-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+  }
+
+  .float-label {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+
+    .i-textarea {
+      padding: 20px 10px 8px;
+    }
+
+    .i-textarea-label {
+      position: absolute;
+      top: 16px;
+      left: 8px;
+      padding: 0 4px;
+      pointer-events: none;
+      transition: all 0.15s ease;
+      font-size: 1em;
+    }
+
+    .i-textarea:focus + .i-textarea-label,
+    .i-textarea:not(:placeholder-shown) + .i-textarea-label,
+    .i-textarea-label.floated {
+      top: -8px;
+      font-size: 0.78em;
+    }
+  }
+
+  .normal-input {
+    position: relative;
+
+    .i-textarea {
+      padding: 8px 12px;
+    }
+  }
+
+  .i-textarea-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    min-height: 16px;
+  }
+
+  .i-char-count {
+    font-size: 0.75em;
+  }
+
+  .i-error {
+    font-size: 0.75em;
+    flex: 1;
+  }
+}

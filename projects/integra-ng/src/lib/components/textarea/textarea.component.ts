@@ -9,88 +9,70 @@ import { UniqueComponentId } from '../../utils/uniquecomponentid';
 import { TooltipDirective } from '../../directives/tooltip/tooltip.directive';
 
 /**
- * Supported background style options for the input
+ * Supported background style options for the textarea
  */
-export type IInputBackgroundStyle = 'surface' | 'component';
+export type ITextareaBackgroundStyle = 'surface' | 'component';
 
 /**
- * Input Text Component
+ * Textarea Component
  *
- * A form control text input component with floating labels, icons, and validation support.
+ * A form control multi-line text input component with floating labels and validation support.
  * Fully compatible with Angular Reactive Forms and Template-driven Forms.
+ * Supports character counting, auto-resize, and custom error messages.
  *
  * @example
  * ```html
- * <!-- Basic input -->
- * <i-input-text label="Username"></i-input-text>
+ * <!-- Basic textarea -->
+ * <i-textarea label="Description"></i-textarea>
  *
- * <!-- Input with reactive form -->
- * <i-input-text
- *   label="Email"
- *   type="email"
- *   formControlName="email">
- * </i-input-text>
+ * <!-- Textarea with reactive form -->
+ * <i-textarea
+ *   label="Bio"
+ *   formControlName="bio"
+ *   [rows]="5">
+ * </i-textarea>
  *
- * <!-- Input with icon -->
- * <i-input-text
- *   label="Search"
- *   icon="pi pi-search"
- *   [(ngModel)]="searchTerm">
- * </i-input-text>
+ * <!-- Textarea with character limit -->
+ * <i-textarea
+ *   label="Comment"
+ *   [(ngModel)]="comment"
+ *   [maxLength]="200">
+ * </i-textarea>
  *
- * <!-- Password input -->
- * <i-input-text
- *   label="Password"
- *   type="password"
- *   formControlName="password">
- * </i-input-text>
- *
- * <!-- Full width input -->
- * <i-input-text
- *   label="Address"
+ * <!-- Full width textarea -->
+ * <i-textarea
+ *   label="Notes"
  *   [fluid]="true"
- *   formControlName="address">
- * </i-input-text>
- *
- * <!-- Input with custom error messages -->
- * <i-input-text
- *   label="Phone"
- *   formControlName="phone"
- *   [errorMessages]="{pattern: 'Please enter a valid phone number'}">
- * </i-input-text>
+ *   [rows]="6"
+ *   formControlName="notes">
+ * </i-textarea>
  * ```
  *
  * @remarks
  * This component implements ControlValueAccessor for seamless integration with Angular Forms.
- * Supports floating labels, custom validation messages, and external validation state.
+ * Supports floating labels, character counting, and custom validation messages.
  */
 @Component({
-  selector: 'i-input-text',
+  selector: 'i-textarea',
   standalone: true,
   imports: [CommonModule, TooltipDirective],
-  templateUrl: './input-text.component.html',
-  styleUrls: ['./input-text.component.scss'],
+  templateUrl: './textarea.component.html',
+  styleUrls: ['./textarea.component.scss'],
 })
-export class IInputText implements ControlValueAccessor {
+export class ITextarea implements ControlValueAccessor {
   /**
-   * Label text displayed for the input
+   * Label text displayed for the textarea
    * @default 'Label'
    */
   @Input() label = 'Label';
 
   /**
-   * HTML input type attribute
-   * @default 'text'
-   */
-  @Input() type: string = 'text';
-
-  /**
-   * HTML id attribute for the input element
+   * HTML id attribute for the textarea element
    */
   @Input() id?: string;
 
   /**
-   * Whether the input should take full width of its container
+   * Whether the textarea should take full width of its container
    * @default false
    */
   @Input() fluid = false;
@@ -102,21 +84,44 @@ export class IInputText implements ControlValueAccessor {
   @Input() forceFloated = false;
 
   /**
-   * Hides the input text (useful for password fields with toggle)
-   * @default false
-   */
-  @Input() hideText = false;
-
-  /**
    * Enables floating label animation
    * @default true
    */
   @Input() useFloatLabel = true;
 
   /**
-   * Placeholder text for the input
+   * Placeholder text for the textarea
    */
   @Input() placeholder?: string;
+
+  /**
+   * Number of visible text rows
+   * @default 4
+   */
+  @Input() rows = 4;
+
+  /**
+   * Maximum number of characters allowed (also shows character counter)
+   */
+  @Input() maxLength?: number;
+
+  /**
+   * Whether the textarea can be resized by the user
+   * @default true
+   */
+  @Input() resizable = true;
+
+  /**
+   * Whether the textarea is readonly
+   * @default false
+   */
+  @Input() readonly = false;
+
+  /**
+   * Whether the textarea is disabled
+   * @default false
+   */
+  @Input() disabled = false;
 
   /**
    * Allows external control to override validation state
@@ -130,27 +135,10 @@ export class IInputText implements ControlValueAccessor {
   @Input() externalErrorMessage?: string;
 
   /**
-   * Background style of the input
+   * Background style of the textarea
    * @default 'surface'
    */
-  @Input() backgroundStyle: IInputBackgroundStyle = 'surface';
-
-  /**
-   * Icon class name to display (e.g., 'pi pi-search')
-   */
-  @Input() icon?: string;
-
-  /**
-   * Whether the input is readonly
-   * @default false
-   */
-  @Input() readonly = false;
-
-  /**
-   * Whether the input is disabled
-   * @default false
-   */
-  @Input() disabled = false;
+  @Input() backgroundStyle: ITextareaBackgroundStyle = 'surface';
 
   /**
    * Custom error messages for validation rules
@@ -159,7 +147,13 @@ export class IInputText implements ControlValueAccessor {
   @Input() errorMessages: { [key: string]: string } = {};
 
   /**
-   * Current input value
+   * Percentage threshold (0–100) at which to show the character count warning colour
+   * @default 80
+   */
+  @Input() charCountWarnAt = 80;
+
+  /**
+   * Current textarea value
    * @internal
    */
   value: string | null = null;
@@ -168,7 +162,7 @@ export class IInputText implements ControlValueAccessor {
    * Unique component identifier
    * @internal
    */
-  componentId = UniqueComponentId('i-input-text-');
+  componentId = UniqueComponentId('i-textarea-');
 
   /**
    * Callback for ControlValueAccessor
@@ -189,7 +183,7 @@ export class IInputText implements ControlValueAccessor {
   }
 
   /**
-   * Writes a value to the input (ControlValueAccessor)
+   * Writes a value to the textarea (ControlValueAccessor)
    * @internal
    */
   writeValue(obj: string | null): void {
@@ -225,13 +219,13 @@ export class IInputText implements ControlValueAccessor {
    * @internal
    */
   handleInput(event: Event) {
-    const v = (event.target as HTMLInputElement).value;
+    const v = (event.target as HTMLTextAreaElement).value;
     this.value = v;
     this.onChange(v);
   }
 
   /**
-   * Marks the input as touched
+   * Marks the textarea as touched
    * @internal
    */
   touch() {
@@ -298,50 +292,38 @@ export class IInputText implements ControlValueAccessor {
   }
 
   /**
-   * Checks if the input has a value (works for all input types including number)
+   * Whether the textarea has a non-empty value
    * @internal
    */
   get hasValue(): boolean {
     if (this.value === null || this.value === undefined) return false;
-    if (typeof this.value === 'string') return this.value.length > 0;
-    return true; // For numbers including 0
+    return this.value.length > 0;
   }
 
   /**
-   * Increment number input value
+   * Current character count
    * @internal
    */
-  incrementNumber(inputElement: HTMLInputElement) {
-    const step = parseFloat(inputElement.step) || 1;
-    const currentValue = parseFloat(this.value || '0');
-    const newValue = currentValue + step;
-
-    // Check max constraint if exists
-    if (inputElement.max && newValue > parseFloat(inputElement.max)) {
-      return;
-    }
-
-    this.value = newValue.toString();
-    this.onChange(this.value);
-    inputElement.value = this.value;
+  get currentLength(): number {
+    return this.value?.length ?? 0;
   }
 
   /**
-   * Decrement number input value
+   * Whether the character count is in the warning range
    * @internal
    */
-  decrementNumber(inputElement: HTMLInputElement) {
-    const step = parseFloat(inputElement.step) || 1;
-    const currentValue = parseFloat(this.value || '0');
-    const newValue = currentValue - step;
+  get charCountWarning(): boolean {
+    if (!this.maxLength) return false;
+    const pct = (this.currentLength / this.maxLength) * 100;
+    return pct >= this.charCountWarnAt && pct < 100;
+  }
 
-    // Check min constraint if exists
-    if (inputElement.min && newValue < parseFloat(inputElement.min)) {
-      return;
-    }
-
-    this.value = newValue.toString();
-    this.onChange(this.value);
-    inputElement.value = this.value;
+  /**
+   * Whether the character count has exceeded the limit
+   * @internal
+   */
+  get charCountOver(): boolean {
+    if (!this.maxLength) return false;
+    return this.currentLength >= this.maxLength;
   }
 }

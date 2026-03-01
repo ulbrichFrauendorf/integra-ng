@@ -1,0 +1,13 @@
+<span
+  class="i-tag"
+  [ngClass]="[
+    severity ? 'i-tag-' + severity : '',
+    rounded ? 'i-tag-rounded' : '',
+    size === 'lg' ? 'i-tag-lg' : size === 'sm' ? 'i-tag-sm' : ''
+  ]"
+>
+  @if (icon) {
+  <i [class]="icon" class="i-tag-icon" aria-hidden="true"></i>
+  }
+  <span class="i-tag-value">{{ value }}</span>
+</span>

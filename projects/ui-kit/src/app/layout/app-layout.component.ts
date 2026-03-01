@@ -49,6 +49,11 @@ export class AppLayoutComponent {
           routerLink: ['/components/input-texts'],
         },
         {
+          label: 'Textareas',
+          icon: 'pi pi-fw pi-align-left',
+          routerLink: ['/components/textareas'],
+        },
+        {
           label: 'Checkboxes',
           icon: 'pi pi-fw pi-check-square',
           routerLink: ['/components/checkboxes'],
@@ -92,6 +97,11 @@ export class AppLayoutComponent {
           label: 'Chips',
           icon: 'pi pi-fw pi-tag',
           routerLink: ['/components/chips'],
+        },
+        {
+          label: 'Tags',
+          icon: 'pi pi-fw pi-bookmark',
+          routerLink: ['/components/tags'],
         },
       ],
     },

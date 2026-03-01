@@ -63,12 +63,12 @@
       <form [formGroup]="basicForm" class="demo-form">
         <div class="input-grid">
           @for (input of inputExamples.basic; track input.formControlName) {
-          <i-input-text
-            [label]="input.label"
-            [type]="input.type"
-            [formControlName]="input.formControlName"
-            icon="pi pi-search"
-          />
+            <i-input-text
+              [label]="input.label"
+              [type]="input.type"
+              [formControlName]="input.formControlName"
+              icon="pi pi-search"
+            />
           }
         </div>
 
@@ -86,13 +86,15 @@
     >
       <form [formGroup]="validationForm" class="demo-form">
         <div class="input-grid">
-          @for (input of inputExamples.validation; track input.formControlName)
-          {
-          <i-input-text
-            [label]="input.label"
-            [type]="input.type"
-            [formControlName]="input.formControlName"
-          />
+          @for (
+            input of inputExamples.validation;
+            track input.formControlName
+          ) {
+            <i-input-text
+              [label]="input.label"
+              [type]="input.type"
+              [formControlName]="input.formControlName"
+            />
           }
         </div>
 
@@ -110,12 +112,12 @@
       <form [formGroup]="fluidForm" class="demo-form">
         <div class="input-stack">
           @for (input of inputExamples.fluid; track input.formControlName) {
-          <i-input-text
-            [label]="input.label"
-            [type]="input.type"
-            [formControlName]="input.formControlName"
-            [fluid]="true"
-          />
+            <i-input-text
+              [label]="input.label"
+              [type]="input.type"
+              [formControlName]="input.formControlName"
+              [fluid]="true"
+            />
           }
         </div>
 
@@ -163,8 +165,8 @@
         <div class="values-display">
           <h4>Pre-filled Values:</h4>
           <p>
-            <strong>Name:</strong> {{ prefilledForm.get("prefilledText")?.value
-            }}
+            <strong>Name:</strong>
+            {{ prefilledForm.get("prefilledText")?.value }}
           </p>
           <p>
             <strong>Email:</strong>

@@ -29,6 +29,11 @@
       // Border colors
       --color-border: #{color.get-color("gray", 300)};
 
+      // Disabled state colors
+      --color-disabled-background: #f5f5f5;
+      --color-disabled-border: #e2e8f0;
+      --color-text-disabled: #{color.get-color("gray", 700)};
+
       // Surface colors
       --surface-ground: #f8fafc;
       --surface-elevated: #ffffff;
@@ -63,6 +68,11 @@
 
       // Border colors
       --color-border: #5e564b;
+
+      // Disabled state colors
+      --color-disabled-background: #1f2937;
+      --color-disabled-border: #4b4e50;
+      --color-text-disabled: #ffffffde;
 
       // Surface colors
       --surface-ground: #000510;

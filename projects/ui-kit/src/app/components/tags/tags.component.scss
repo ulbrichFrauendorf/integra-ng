@@ -1,0 +1,37 @@
+@use "../shared-demo-styles.scss" as *;
+
+.tags-demo {
+  @extend .demo-component;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+
+  &.tag-row--align-center {
+    align-items: center;
+  }
+}
+
+.usage-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.usage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: var(--surface-ground);
+  border: 1px solid var(--surface-border);
+
+  .usage-label {
+    font-size: 0.95em;
+    color: var(--color-text-primary);
+  }
+}

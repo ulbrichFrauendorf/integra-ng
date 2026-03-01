@@ -1,0 +1,58 @@
+<div
+  class="i-textarea-wrapper"
+  [class.invalid]="showErrors"
+  [class.i-textarea--fluid]="fluid"
+  [class.i-textarea--no-float]="!useFloatLabel"
+  [attr.id]="componentId"
+>
+  <div
+    [ngClass]="useFloatLabel ? 'float-label' : 'normal-input'"
+    class="i-textarea-container"
+  >
+    <div class="i-textarea-icon-wrapper">
+      <textarea
+        #textareaElement
+        [id]="id || componentId"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [rows]="rows"
+        [attr.maxlength]="maxLength || null"
+        [value]="value || ''"
+        (input)="handleInput($event)"
+        (blur)="touch()"
+        [placeholder]="useFloatLabel ? ' ' : placeholder || label"
+        class="i-textarea"
+        [class.readonly]="readonly"
+        [class.no-resize]="!resizable"
+        [class.component-border]="backgroundStyle === 'component'"
+        [iTooltip]="showErrors ? (getErrorMessage() || '') : ''"
+        tooltipPosition="below"
+        [tooltipDelay]="100"
+      ></textarea>
+      @if (useFloatLabel) {
+      <label
+        [for]="id || componentId"
+        class="i-textarea-label"
+        [class.floated]="forceFloated || hasValue"
+        >{{ label }}</label
+      >
+      }
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <div class="i-textarea-footer">
+    @if (showErrors && getErrorMessage()) {
+    <span class="i-error">{{ getErrorMessage() }}</span>
+    }
+    @if (maxLength) {
+    <span
+      class="i-char-count"
+      [class.i-char-count--warn]="charCountWarning"
+      [class.i-char-count--over]="charCountOver"
+    >
+      {{ currentLength }}/{{ maxLength }}
+    </span>
+    }
+  </div>
+</div>
