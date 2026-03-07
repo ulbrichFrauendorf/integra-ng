@@ -58,6 +58,19 @@ export interface TableColumn {
 }
 
 /**
+ * Typed data container that bundles rows with their action buttons and handler.
+ * Use this instead of separate \`[actions]\` and \`(onAction)\` inputs.
+ */
+export interface TableData<T = any> {
+  /** The data rows to display */
+  rows: T[];
+  /** Action buttons shown on each row */
+  actions?: TableAction[];
+  /** Handler called when any row action button is clicked */
+  onAction?: (event: { action: string; row: T }) => void;
+}
+
+/**
  * Action button definition for row actions
  */
 export interface TableAction {
@@ -109,6 +122,14 @@ export interface TableGroup {
   columns?: TableColumn[];
   /** Data rows for this group's inner table */
   data: any[];
+  /** Actions shown on the parent group summary row */
+  groupActions?: TableAction[];
+  /** Handler called when a parent group summary row action is clicked */
+  onGroupAction?: (event: { action: string; row: any }) => void;
+  /** Actions shown on each child row inside the expanded detail table */
+  rowActions?: TableAction[];
+  /** Handler called when a child detail row action is clicked */
+  onRowAction?: (event: { action: string; row: any }) => void;
   /** Whether this group is initially expanded */
   expanded?: boolean;
   /** Custom CSS class for the group */
@@ -206,9 +227,10 @@ export class ITable {
   // ===== DATA DISPLAY =====
 
   /**
-   * Table data as a signal input
+   * Table data — either a plain row array or a {@link TableData} object
+   * that bundles rows with actions and a handler.
    */
-  data: InputSignal<any[]> = input<any[]>([]);
+  data: InputSignal<TableData | any[]> = input<TableData | any[]>([]);
 
   /**
    * Column definitions with field, header, sortable, filterable, width properties
@@ -335,22 +357,9 @@ export class ITable {
   @Output() onRowUnselect = new EventEmitter<any>();
 
   // ===== ROW ACTIONS =====
-
-  /**
-   * Show action column
-   * @default false
-   */
-  @Input() showActions = false;
-
-  /**
-   * Action button definitions
-   */
-  @Input() actions: TableAction[] = [];
-
-  /**
-   * Event emitted when an action is clicked
-   */
-  @Output() onAction = new EventEmitter<{ action: string; row: any }>();
+  // Actions are now embedded in [data] (TableData.actions / TableData.onAction)
+  // and in each TableGroup (groupActions/onGroupAction, rowActions/onRowAction).
+  // No separate @Input or @Output is needed.
 
   // ===== VISUAL FEATURES =====
 
@@ -570,12 +579,41 @@ export class ITable {
     });
   }
 
+  // ===== DERIVED DATA =====
+
+  /**
+   * Extracts the plain row array from data (handles both TableData and any[]).
+   * @internal
+   */
+  tableRows = computed<any[]>(() => {
+    const d = this.data();
+    return Array.isArray(d) ? d : (d.rows ?? []);
+  });
+
+  /**
+   * Extracts action buttons from data (only populated when data is a TableData).
+   * @internal
+   */
+  tableRowActions = computed<TableAction[]>(() => {
+    const d = this.data();
+    return Array.isArray(d) ? [] : (d.actions ?? []);
+  });
+
+  /**
+   * Whether any group in groupedData has parent summary-row actions.
+   * Used to decide whether to render the actions column in the grouped table header.
+   * @internal
+   */
+  hasAnyGroupActions = computed<boolean>(() =>
+    this.groupedData().some((g) => (g.groupActions?.length ?? 0) > 0),
+  );
+
   /**
    * Computed filtered and sorted data
    * @internal
    */
   processedData = computed(() => {
-    let result = [...(this.data() || [])];
+    let result = [...(this.tableRows() || [])];
 
     // Apply global filter
     const globalFilter = this.globalFilterValue();
@@ -955,12 +993,32 @@ export class ITable {
   // ===== ACTION METHODS =====
 
   /**
-   * Handles action button click
+   * Handles action button click on a regular (non-grouped) row.
+   * Calls the onAction handler embedded in the TableData.
    * @internal
    */
   onActionClick(action: TableAction, row: any, event: Event): void {
     event.stopPropagation();
-    this.onAction.emit({ action: action.id, row });
+    const d = this.data();
+    if (!Array.isArray(d) && d.onAction) {
+      d.onAction({ action: action.id, row });
+    }
+  }
+
+  /**
+   * Handles action button click on a parent group summary row.
+   * Calls the group's onGroupAction handler.
+   * @internal
+   */
+  onGroupActionClick(
+    group: TableGroup,
+    action: TableAction,
+    event: Event,
+  ): void {
+    event.stopPropagation();
+    if (group.onGroupAction) {
+      group.onGroupAction({ action: action.id, row: group.row ?? {} });
+    }
   }
 
   /**
@@ -1118,6 +1176,20 @@ export class ITable {
    */
   getGroupColumns(group: TableGroup): TableColumn[] {
     return group.columns || this.columns();
+  }
+
+  /**
+   * Builds a TableData object for the nested <i-table> inside an expanded group.
+   * If the group has no child row actions, returns the plain data array.
+   * @internal
+   */
+  getGroupTableData(group: TableGroup): TableData | any[] {
+    if (!group.rowActions?.length) return group.data;
+    return {
+      rows: group.data,
+      actions: group.rowActions,
+      onAction: group.onRowAction,
+    };
   }
 
   /**
