@@ -135,17 +135,20 @@ export class IDialog extends AbstractDialog implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles overlay click to close modal dialog
+   * Handles overlay click to close modal dialog.
+   * Only fires when [dismissableMask]="true" is set — by default dialogs
+   * are not closed by clicking the backdrop.
    * @internal
    */
   onOverlayClick(event: Event): void {
     // Check if click was directly on overlay (not on dialog container or its children)
     const target = event.target as HTMLElement;
     const overlay = event.currentTarget as HTMLElement;
-    
+
     if (
       this.modal &&
       this.closable &&
+      this.dismissableMask &&
       target === overlay
     ) {
       this.hide();

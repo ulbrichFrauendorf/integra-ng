@@ -57,23 +57,49 @@
       </i-table>
     </app-demo-card>
 
-    <!-- Grouped Data with Actions -->
+    <!-- Grouped Data -->
     <app-demo-card
       [title]="'Grouped Data'"
       [sourceCode]="codeExamples.groupedWithActions"
     >
       <p class="demo-description">
-        Organize data into expandable groups. Click group headers to
-        expand/collapse. Each row can have actions.
+        Each group is a <strong>parent row</strong> in a single scrollable
+        table. The outer column headers (set via <code>[groupColumns]</code>)
+        describe group-level summary data from each group's
+        <code>row</code> object. Expanding a group row reveals a full nested
+        table with its own headers, sorting, filtering, and row actions.
       </p>
       <i-table
         [groupedData]="groupedProductsWithActions"
+        [groupColumns]="categoryGroupColumns"
         [columns]="basicColumns"
         [sortable]="true"
+        [filterable]="false"
         [showActions]="true"
         [actions]="viewActions"
         [striped]="true"
+        [height]="'420px'"
         (onAction)="handleAction($event)"
+      >
+      </i-table>
+    </app-demo-card>
+
+    <!-- Grouped Data - Custom Columns per Group -->
+    <app-demo-card
+      [title]="'Grouped Data — Custom Columns per Group'"
+      [sourceCode]="codeExamples.groupedCustomColumns"
+    >
+      <p class="demo-description">
+        Each group can define its own set of columns via the
+        <code>columns</code> property on the group object. When
+        <code>columns</code> is omitted the group inherits the table-level
+        columns. This makes it easy to show different fields for logically
+        different subsets of data.
+      </p>
+      <i-table
+        [groupedData]="groupedProductsCustomColumns"
+        [striped]="true"
+        [height]="'350px'"
       >
       </i-table>
     </app-demo-card>

@@ -113,7 +113,7 @@
           }
         }
 
-        // Grouped data styles
+        // Grouped data styles (legacy)
         .i-table-group-header {
           background: colors.$color-component-background;
           border-bottom: 2px solid colors.$color-surface-border;
@@ -157,6 +157,40 @@
             color: colors.$color-primary;
           }
         }
+
+        // Group summary rows (outer table parent rows)
+        .i-table-group-summary-row {
+          background: colors.$color-surface-section;
+          border-bottom: 2px solid colors.$color-surface-border;
+
+          td {
+            color: colors.$color-text-primary;
+            font-weight: 600;
+          }
+
+          &:hover {
+            background: colors.$color-surface-hover;
+          }
+
+          .i-table-group-count {
+            color: colors.$color-text-secondary;
+          }
+        }
+
+        // Detail row containing the nested <i-table>
+        .i-table-group-detail-row {
+          background: colors.$color-surface-ground;
+
+          .i-table-group-detail-cell {
+            .i-table-wrapper {
+              background: colors.$color-surface-ground;
+
+              table thead tr {
+                background: colors.$color-surface-section;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -178,7 +212,7 @@
         tbody
         tr:not(.i-table-empty-row):not(.i-table-expanded-row):not(
           .i-table-group-header
-        ):not(.i-table-group-columns-header) {
+        ):not(.i-table-group-columns-header):not(.i-table-group-detail-row) {
         &:hover {
           background: colors.$color-surface-hover;
         }

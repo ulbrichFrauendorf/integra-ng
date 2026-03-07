@@ -36,6 +36,13 @@ export interface IDynamicDialogConfig {
   /** Whether the dialog can be closed via the close button, ESC key, or overlay click. Defaults to true */
   closable?: boolean;
 
+  /**
+   * When true, clicking the backdrop overlay will close the dialog.
+   * Defaults to false — the dialog can only be closed via its close button, ESC key,
+   * or programmatically via the dialog reference.
+   */
+  dismissableMask?: boolean;
+
   /** Whether to display a modal overlay behind the dialog. Defaults to true */
   modal?: boolean;
 
