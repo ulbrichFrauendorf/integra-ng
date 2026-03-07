@@ -84,7 +84,7 @@
                     <th [style.width]="getColumnWidth(column)"></th>
                   }
                 }
-                @if (showActions && actions.length > 0) {
+                @if (tableRowActions().length > 0) {
                   <th class="i-table-actions-header"></th>
                 }
               </tr>
@@ -129,7 +129,7 @@
                   }
                 </th>
               }
-              @if (showActions && actions.length > 0) {
+              @if (tableRowActions().length > 0) {
                 <th class="i-table-actions-header">Actions</th>
               }
             </tr>
@@ -153,7 +153,7 @@
                     columns().length +
                     (selectionMode === 'multiple' ? 1 : 0) +
                     (rowExpandable ? 1 : 0) +
-                    (showActions && actions.length > 0 ? 1 : 0)
+                    (tableRowActions().length > 0 ? 1 : 0)
                   "
                 >
                   <i-no-content />
@@ -229,10 +229,10 @@
                   }
                 </td>
               }
-              @if (showActions && actions.length > 0) {
+              @if (tableRowActions().length > 0) {
                 <td class="i-table-actions-cell">
                   <div class="i-table-actions">
-                    @for (action of actions; track action.id) {
+                    @for (action of tableRowActions(); track action.id) {
                       <i-button
                         [severity]="action.severity || 'secondary'"
                         [text]="true"
@@ -283,49 +283,54 @@
                   <th [style.width]="getColumnWidth(column)"></th>
                 }
               }
-              @if (showActions && actions.length > 0) {
+              @if (hasAnyGroupActions()) {
                 <th class="i-table-actions-header"></th>
               }
               <th class="i-table-group-count-header"></th>
             </tr>
           }
 
-          <!-- Group column header row -->
+          <!-- Column Headers Row -->
           <tr>
-            <th class="i-table-expand-header"></th>
-            @if (groupColumns().length === 0) {
-              <th>Group</th>
-            } @else {
-              @for (
-                column of groupColumns();
-                track trackByColumn($index, column)
-              ) {
-                <th
-                  [style.width]="getColumnWidth(column)"
-                  [style.text-align]="column.align || 'left'"
-                  [class.i-table-sortable-column]="sortable && column.sortable"
-                  [class.i-table-sorted]="sortField === column.field"
-                  (click)="onSortColumn(column)"
-                >
-                  <div class="i-table-header-content">
-                    <span class="i-table-header-text">{{ column.header }}</span>
-                    @if (sortable && column.sortable) {
-                      <i
-                        [class]="getSortIcon(column)"
-                        class="i-table-sort-icon"
-                      ></i>
-                    }
-                  </div>
-                  @if (resizableColumns) {
-                    <span
-                      class="i-table-column-resizer"
-                      (mousedown)="onColumnResizeStart($event, column)"
-                    ></span>
-                  }
-                </th>
-              }
+            @if (selectionMode === "multiple") {
+              <th class="i-table-selection-header">
+                <i-checkbox
+                  [checked]="areAllGroupRowsSelected()"
+                  [indeterminate]="areSomeGroupRowsSelected()"
+                  (onChange)="toggleAllGroupSelection()"
+                ></i-checkbox>
+              </th>
             }
-            @if (showActions && actions.length > 0) {
+            <th class="i-table-expand-header"></th>
+            @for (
+              column of groupColumns();
+              track trackByColumn($index, column)
+            ) {
+              <th
+                [style.width]="getColumnWidth(column)"
+                [style.text-align]="column.align || 'left'"
+                [class.i-table-sortable-column]="sortable && column.sortable"
+                [class.i-table-sorted]="sortField === column.field"
+                (click)="onSortColumn(column)"
+              >
+                <div class="i-table-header-content">
+                  <span class="i-table-header-text">{{ column.header }}</span>
+                  @if (sortable && column.sortable) {
+                    <i
+                      [class]="getSortIcon(column)"
+                      class="i-table-sort-icon"
+                    ></i>
+                  }
+                </div>
+                @if (resizableColumns) {
+                  <span
+                    class="i-table-column-resizer"
+                    (mousedown)="onColumnResizeStart($event, column)"
+                  ></span>
+                }
+              </th>
+            }
+            @if (hasAnyGroupActions()) {
               <th class="i-table-actions-header">Actions</th>
             }
             <th class="i-table-group-count-header"></th>
@@ -340,7 +345,7 @@
                   (groupColumns().length || 1) +
                   1 +
                   1 +
-                  (showActions && actions.length > 0 ? 1 : 0)
+                  (hasAnyGroupActions() ? 1 : 0)
                 "
               >
                 <i-no-content />
@@ -420,13 +425,13 @@
                   </td>
                 }
               }
-              @if (showActions && actions.length > 0) {
+              @if ((group.groupActions?.length ?? 0) > 0) {
                 <td
                   class="i-table-actions-cell"
                   (click)="$event.stopPropagation()"
                 >
                   <div class="i-table-actions">
-                    @for (action of actions; track action.id) {
+                    @for (action of group.groupActions ?? []; track action.id) {
                       <i-button
                         [severity]="action.severity || 'secondary'"
                         [text]="true"
@@ -437,9 +442,7 @@
                         [class.i-action-hidden]="
                           !isActionVisible(action, group.row ?? {})
                         "
-                        (clicked)="
-                          onActionClick(action, group.row ?? {}, $event)
-                        "
+                        (clicked)="onGroupActionClick(group, action, $event)"
                       >
                         @if (action.label) {
                           {{ action.label }}
@@ -467,17 +470,15 @@
                     (groupColumns().length || 1) +
                     1 +
                     1 +
-                    (showActions && actions.length > 0 ? 1 : 0)
+                    (hasAnyGroupActions() ? 1 : 0)
                   "
                   class="i-table-group-detail-cell"
                 >
                   <i-table
-                    [data]="group.data"
+                    [data]="getGroupTableData(group)"
                     [columns]="getGroupColumns(group)"
                     [sortable]="sortable"
                     [filterable]="filterable"
-                    [showActions]="showActions"
-                    [actions]="actions"
                     [selectionMode]="selectionMode"
                     [selection]="selection"
                     [striped]="striped"
@@ -489,7 +490,6 @@
                     [resizableColumns]="resizableColumns"
                     (onSort)="onSort.emit($event)"
                     (onFilter)="onFilter.emit($event)"
-                    (onAction)="onAction.emit($event)"
                     (onSelectionChange)="onSelectionChange.emit($event)"
                     (selectionChange)="selectionChange.emit($event)"
                     (onRowSelect)="onRowSelect.emit($event)"
@@ -534,7 +534,7 @@
                   <th [style.width]="getColumnWidth(column)"></th>
                 }
               }
-              @if (showActions && actions.length > 0) {
+              @if (tableRowActions().length > 0) {
                 <th class="i-table-actions-header"></th>
               }
             </tr>
@@ -579,33 +579,27 @@
                 }
               </th>
             }
-            @if (showActions && actions.length > 0) {
+            @if (tableRowActions().length > 0) {
               <th class="i-table-actions-header">Actions</th>
             }
           </tr>
         </thead>
-
-        <!-- Table Body - Regular Mode -->
         <tbody>
           @if (processedData().length === 0) {
-            <tr class="i-table-empty-row">
+            <tr>
               <td
                 [attr.colspan]="
                   columns().length +
                   (selectionMode === 'multiple' ? 1 : 0) +
                   (rowExpandable ? 1 : 0) +
-                  (showActions && actions.length > 0 ? 1 : 0)
+                  (tableRowActions().length > 0 ? 1 : 0)
                 "
               >
                 <i-no-content />
               </td>
             </tr>
           } @else {
-            @for (
-              row of processedData();
-              track trackByRow($index, row);
-              let rowIndex = $index
-            ) {
+            @for (row of processedData(); track trackByRow($index, row)) {
               <tr
                 [class.i-table-row-odd]="$odd"
                 [class.i-table-row-selected]="isRowSelected(row)"
@@ -677,10 +671,10 @@
                     }
                   </td>
                 }
-                @if (showActions && actions.length > 0) {
+                @if (tableRowActions().length > 0) {
                   <td class="i-table-actions-cell">
                     <div class="i-table-actions">
-                      @for (action of actions; track action.id) {
+                      @for (action of tableRowActions(); track action.id) {
                         <i-button
                           [severity]="action.severity || 'secondary'"
                           [text]="true"
@@ -710,7 +704,7 @@
                       columns().length +
                       (selectionMode === 'multiple' ? 1 : 0) +
                       1 +
-                      (showActions && actions.length > 0 ? 1 : 0)
+                      (tableRowActions().length > 0 ? 1 : 0)
                     "
                   >
                     <div class="i-table-expanded-content">

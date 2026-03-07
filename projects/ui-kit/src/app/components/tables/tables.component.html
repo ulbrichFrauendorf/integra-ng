@@ -43,16 +43,13 @@
         <strong>Selected: {{ selectedProducts.length }} products</strong>
       </p>
       <i-table
-        [data]="products"
+        [data]="productsWithActions"
         [columns]="basicColumns"
         selectionMode="multiple"
         [(selection)]="selectedProducts"
-        [showActions]="true"
-        [actions]="tableActions"
         [striped]="true"
         [height]="'300px'"
         (onSelectionChange)="onSelectionChange($event)"
-        (onAction)="handleAction($event)"
       >
       </i-table>
     </app-demo-card>
@@ -75,11 +72,8 @@
         [columns]="basicColumns"
         [sortable]="true"
         [filterable]="false"
-        [showActions]="true"
-        [actions]="viewActions"
         [striped]="true"
         [height]="'420px'"
-        (onAction)="handleAction($event)"
       >
       </i-table>
     </app-demo-card>
@@ -217,18 +211,15 @@
       </i-message>
 
       <i-table
-        [data]="largeDataset"
+        [data]="largeDatasetWithActions"
         [columns]="basicColumns"
         [virtualScroll]="true"
         [height]="'450px'"
         selectionMode="multiple"
         dataKey="id"
         [(selection)]="selectedProducts"
-        [showActions]="true"
-        [actions]="tableActions"
         [striped]="true"
         (onSelectionChange)="onSelectionChange($event)"
-        (onAction)="handleAction($event)"
       >
       </i-table>
 
@@ -527,7 +518,7 @@
         visual customization.
       </p>
       <i-table
-        [data]="products"
+        [data]="productsWithActions"
         [columns]="fullColumns"
         [downloadable]="true"
         downloadMode="direct"
@@ -538,14 +529,11 @@
         [globalFilter]="true"
         selectionMode="multiple"
         [(selection)]="selectedProducts"
-        [showActions]="true"
-        [actions]="tableActions"
         [striped]="true"
         [hoverable]="true"
         (onSort)="onSort($event)"
         (onFilter)="onFilter($event)"
         (onSelectionChange)="onSelectionChange($event)"
-        (onAction)="handleAction($event)"
       >
         <div header style="display: flex; align-items: center; gap: 8px">
           <i

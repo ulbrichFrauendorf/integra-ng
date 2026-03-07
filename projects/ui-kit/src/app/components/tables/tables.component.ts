@@ -11,6 +11,7 @@ import {
   SortEvent,
   TableAction,
   TableColumn,
+  TableData,
   TableGroup,
   TableDownloadEvent,
 } from '@shared/components/table/table.component';
@@ -50,6 +51,11 @@ export class TablesComponent {
   constructor(private whisperService: WhisperService) {
     // Initialize large dataset for virtual scroll demo
     this.largeDataset = this.generateLargeDataset(10000);
+    this.largeDatasetWithActions = {
+      rows: this.largeDataset,
+      actions: this.tableActions,
+      onAction: (e) => this.handleGroupedDataAction(e),
+    };
   }
 
   // Empty data for empty state demo
@@ -57,6 +63,7 @@ export class TablesComponent {
 
   // Large dataset for virtual scroll demo
   largeDataset: Product[] = [];
+  largeDatasetWithActions!: TableData<Product>;
 
   // Sample product data
   products: Product[] = [
@@ -494,6 +501,13 @@ export class TablesComponent {
     },
   ];
 
+  // TableData configs for demos that need embedded actions
+  productsWithActions: TableData<Product> = {
+    rows: this.products,
+    actions: this.tableActions,
+    onAction: (e) => this.handleGroupedDataAction(e),
+  };
+
   // Selection state
   selectedProducts: Product[] = [];
   singleSelectedProduct: Product[] = [];
@@ -561,6 +575,10 @@ export class TablesComponent {
       ),
       data: this.products.filter((p) => p.category === 'Electronics'),
       expanded: false,
+      groupActions: this.viewActions,
+      onGroupAction: (e) => this.handleGroupedDataAction(e),
+      rowActions: this.tableActions,
+      onRowAction: (e) => this.handleAction(e),
     },
     {
       label: 'Accessories',
@@ -570,6 +588,10 @@ export class TablesComponent {
       ),
       data: this.products.filter((p) => p.category === 'Accessories'),
       expanded: false,
+      groupActions: this.viewActions,
+      onGroupAction: (e) => this.handleGroupedDataAction(e),
+      rowActions: this.tableActions,
+      onRowAction: (e) => this.handleAction(e),
     },
     {
       label: 'Audio',
@@ -579,6 +601,10 @@ export class TablesComponent {
       ),
       data: this.products.filter((p) => p.category === 'Audio'),
       expanded: false,
+      groupActions: this.viewActions,
+      onGroupAction: (e) => this.handleGroupedDataAction(e),
+      rowActions: this.tableActions,
+      onRowAction: (e) => this.handleAction(e),
     },
   ];
 
@@ -653,21 +679,26 @@ export class TablesComponent {
   (onSelectionChange)="onSelectionChange($event)">
 </i-table>`,
 
-    actions: `<i-table
-  [data]="products"
-  [columns]="columns"
-  [showActions]="true"
-  [actions]="tableActions"
-  (onAction)="handleAction($event)">
+    actions: `// Actions are embedded directly in a TableData config object.
+// No separate [actions] or (onAction) bindings needed on the template.
+<i-table
+  [data]="productsWithActions"
+  [columns]="columns">
 </i-table>
 
 // TypeScript
-tableActions: TableAction[] = [
-  { id: 'view', icon: 'pi pi-eye', severity: 'info' },
-  { id: 'edit', icon: 'pi pi-pencil', severity: 'warning' },
-  { id: 'delete', icon: 'pi pi-trash', severity: 'danger',
-    disabled: (row) => row.status === 'Out of Stock' }
-];`,
+productsWithActions: TableData<Product> = {
+  rows: this.products,
+  actions: [
+    { id: 'view',   icon: 'pi pi-eye',    severity: 'info' },
+    { id: 'edit',   icon: 'pi pi-pencil', severity: 'warning' },
+    { id: 'delete', icon: 'pi pi-trash',  severity: 'danger',
+      disabled: (row) => row.status === 'Out of Stock' }
+  ],
+  onAction: ({ action, row }) => {
+    console.log(action, row);
+  }
+};`,
 
     visual: `<i-table
   [data]="products"
@@ -746,15 +777,13 @@ listColumns: TableColumn[] = [
 
     full: `
 <i-table
-  [data]="products"
+  [data]="productsWithActions"
   [columns]="fullColumns"
   [sortable]="true"
   [filterable]="true"
   [globalFilter]="true"
   selectionMode="multiple"
   [(selection)]="selectedProducts"
-  [showActions]="true"
-  [actions]="tableActions"
   [downloadable]="true"
   downloadMode="direct"
   downloadFormat="csv"
@@ -764,13 +793,19 @@ listColumns: TableColumn[] = [
   (onSort)="onSort($event)"
   (onFilter)="onFilter($event)"
   (onSelectionChange)="onSelectionChange($event)"
-  (onAction)="handleAction($event)"
 >
   <div header>
     <i class="pi pi-box" style="font-size: 1.25rem; color: var(--color-primary);"></i>
     <h3 style="margin: 0 0 0 8px">Product Inventory - Full</h3>
   </div>
-</i-table>`,
+</i-table>
+
+// TypeScript
+productsWithActions: TableData<Product> = {
+  rows: this.products,
+  actions: this.tableActions,
+  onAction: (e) => this.handleGroupedDataAction(e),
+};`,
 
     grouped: `<i-table
   [groupedData]="groupedProducts"
@@ -829,18 +864,17 @@ groupedProductsCustomColumns: TableGroup[] = [
     groupedWithActions: `// [groupColumns] defines the outer parent row columns shown in the table header.
 // Each group's 'row' object provides aggregated data for those columns.
 // [columns] defines the inner detail table rendered when a group is expanded.
+// Actions are embedded in each TableGroup object — no bindings on the template.
+// groupActions / onGroupAction — action buttons on the parent group summary rows.
+// rowActions / onRowAction     — action buttons on child rows inside expanded groups.
 // A trailing unnamed column is automatically added to show the item count (n).
 <i-table
   [groupedData]="groupedProductsWithActions"
   [groupColumns]="categoryGroupColumns"
   [columns]="basicColumns"
   [sortable]="true"
-  [filterable]="true"
-  [showActions]="true"
-  [actions]="viewActions"
   [striped]="true"
-  [height]="'420px'"
-  (onAction)="handleAction($event)">
+  [height]="'420px'">
 </i-table>
 
 // TypeScript
@@ -850,28 +884,33 @@ categoryGroupColumns: TableColumn[] = [
   { field: 'avgPrice',        header: 'Avg Unit Price',    type: 'currency', align: 'right' },
   { field: 'inventoryStatus', header: 'Inventory Status' },
 ];
-// Note: item count (n) is displayed automatically as an unnamed trailing column.
 
 groupedProductsWithActions: TableGroup[] = [
   {
     label: 'Electronics',
-    row: this.categoryRow('Electronics', this.products.filter(p => p.category === 'Electronics')),
+    row: this.categoryRow('Electronics', ...),
     data: this.products.filter(p => p.category === 'Electronics'),
     expanded: false,
-  },
-  {
-    label: 'Accessories',
-    row: this.categoryRow('Accessories', this.products.filter(p => p.category === 'Accessories')),
-    data: this.products.filter(p => p.category === 'Accessories'),
-    expanded: false,
+    // Parent group row actions:
+    groupActions: [
+      { id: 'view', icon: 'pi pi-eye', severity: 'info', tooltip: 'View category' },
+    ],
+    onGroupAction: (e) => this.handleGroupedDataAction(e),
+    // Child row actions inside expanded group:
+    rowActions: [
+      { id: 'view',   icon: 'pi pi-eye',    severity: 'info' },
+      { id: 'edit',   icon: 'pi pi-pencil', severity: 'warning' },
+      { id: 'delete', icon: 'pi pi-trash',  severity: 'danger',
+        disabled: (row) => row.status === 'Out of Stock' },
+    ],
+    onRowAction: (e) => this.handleAction(e),
   },
 ];
 
 // Compute aggregated group row data dynamically:
 categoryRow(category: string, items: Product[]): any {
-  const itemCount = items.length;
   const totalValue = items.reduce((s, p) => s + p.price * p.quantity, 0);
-  const avgPrice = itemCount ? items.reduce((s, p) => s + p.price, 0) / itemCount : 0;
+  const avgPrice = items.length ? items.reduce((s, p) => s + p.price, 0) / items.length : 0;
   const inventoryStatus = items.some(p => p.status === 'Out of Stock') ? 'Has Out of Stock'
     : items.some(p => p.status === 'Low Stock') ? 'Has Low Stock' : 'Fully Stocked';
   return { category, totalValue, avgPrice, inventoryStatus };
@@ -956,22 +995,7 @@ generateLargeDataset(count: number): Product[] {
   }));
 }`,
 
-    virtualScrollWithSelection: `<i-table
-  [data]="largeDataset"
-  [columns]="basicColumns"
-  [virtualScroll]="true"
-  [height]="'500px'"
-  selectionMode="multiple"
-  dataKey="id"
-  [(selection)]="selectedProducts"
-  [showActions]="true"
-  [actions]="tableActions"
-  [striped]="true"
-  (onAction)="handleAction($event)">
-</i-table>
-
-// Important: Use dataKey="id" for better performance 
-// with large datasets and selection`,
+    virtualScrollWithSelection: `// Actions are embedded in a TableData config — no separate bindings.\n<i-table\n  [data]="largeDatasetWithActions"\n  [columns]="basicColumns"\n  [virtualScroll]="true"\n  [height]="'500px'"\n  selectionMode="multiple"\n  dataKey="id"\n  [(selection)]="selectedProducts"\n  [striped]="true">\n</i-table>\n\n// TypeScript\nlargeDatasetWithActions: TableData<Product> = {\n  rows: this.largeDataset,\n  actions: this.tableActions,\n  onAction: ({ action, row }) => this.handleAction({ action, row }),\n};\n\n// Important: Use dataKey="id" for better performance\n// with large datasets and selection`,
 
     virtualScrollPerformance: `// Performance comparison:
 // Without Virtual Scroll (10,000 rows):
@@ -1085,7 +1109,7 @@ export class ExampleComponent {
     console.debug('Selection changed', selection.length);
   }
 
-  handleAction(event: { action: string; row: Product }): void {
+  handleGroupedDataAction(event: { action: string; row: Product }): void {
     const row = event.row as any;
     switch (event.action) {
       case 'view':
@@ -1093,6 +1117,21 @@ export class ExampleComponent {
           severity: 'info',
           summary: 'Viewing Product',
           detail: `Viewing details for: ${row.name ?? row.category ?? row.label}`,
+          key: 'global',
+          life: 3000,
+        });
+        break;
+    }
+  }
+
+  handleAction(event: { action: string; row: Product }): void {
+    const row = event.row as any;
+    switch (event.action) {
+      case 'view':
+        this.whisperService.add({
+          severity: 'info',
+          summary: 'Viewing Product',
+          detail: `Viewing: ${row.name ?? row.category}`,
           key: 'global',
           life: 3000,
         });
