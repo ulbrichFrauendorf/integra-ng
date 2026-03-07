@@ -503,12 +503,12 @@ export class TablesComponent {
     {
       label: 'Electronics',
       data: this.products.filter((p) => p.category === 'Electronics'),
-      expanded: true,
+      expanded: false,
     },
     {
       label: 'Accessories',
       data: this.products.filter((p) => p.category === 'Accessories'),
-      expanded: true,
+      expanded: false,
     },
     {
       label: 'Audio',
@@ -537,7 +537,7 @@ export class TablesComponent {
         { field: 'status', header: 'Availability' },
       ],
       data: this.products.filter((p) => p.price > 100),
-      expanded: true,
+      expanded: false,
     },
     {
       label: 'Budget Items (<$100)',
@@ -547,7 +547,7 @@ export class TablesComponent {
         { field: 'quantity', header: 'Stock', type: 'number' },
       ],
       data: this.products.filter((p) => p.price <= 100),
-      expanded: true,
+      expanded: false,
     },
   ];
 
@@ -555,20 +555,67 @@ export class TablesComponent {
   groupedProductsWithActions: TableGroup[] = [
     {
       label: 'Electronics',
+      row: this.categoryRow(
+        'Electronics',
+        this.products.filter((p) => p.category === 'Electronics'),
+      ),
       data: this.products.filter((p) => p.category === 'Electronics'),
-      expanded: true,
+      expanded: false,
     },
     {
       label: 'Accessories',
+      row: this.categoryRow(
+        'Accessories',
+        this.products.filter((p) => p.category === 'Accessories'),
+      ),
       data: this.products.filter((p) => p.category === 'Accessories'),
-      expanded: true,
+      expanded: false,
     },
     {
       label: 'Audio',
+      row: this.categoryRow(
+        'Audio',
+        this.products.filter((p) => p.category === 'Audio'),
+      ),
       data: this.products.filter((p) => p.category === 'Audio'),
-      expanded: true,
+      expanded: false,
     },
   ];
+
+  // Columns for the outer group-level table header row
+  categoryGroupColumns: TableColumn[] = [
+    { field: 'category', header: 'Category' },
+    {
+      field: 'totalValue',
+      header: 'Total Stock Value',
+      type: 'currency',
+      align: 'right',
+    },
+    {
+      field: 'avgPrice',
+      header: 'Avg Unit Price',
+      type: 'currency',
+      align: 'right',
+    },
+    { field: 'inventoryStatus', header: 'Inventory Status' },
+  ];
+
+  /** Computes an aggregated summary row for a product category group. */
+  private categoryRow(category: string, items: Product[]): any {
+    const itemCount = items.length;
+    const totalValue = items.reduce((s, p) => s + p.price * p.quantity, 0);
+    const avgPrice = itemCount
+      ? items.reduce((s, p) => s + p.price, 0) / itemCount
+      : 0;
+    const hasOutOfStock = items.some((p) => p.status === 'Out of Stock');
+    const hasLowStock = items.some((p) => p.status === 'Low Stock');
+    const inventoryStatus = hasOutOfStock
+      ? 'Has Out of Stock'
+      : hasLowStock
+        ? 'Has Low Stock'
+        : 'Fully Stocked';
+    return { category, itemCount, totalValue, avgPrice, inventoryStatus };
+  }
 
   // Code examples
   codeExamples = {
@@ -746,51 +793,89 @@ groupedProducts: TableGroup[] = [
   }
 ];`,
 
-    groupedCustomColumns: `<i-table
+    groupedCustomColumns: `// Omit [columns] on <i-table> and define columns per group instead.
+// Each group\'s nested table renders only the columns you specify.
+<i-table
   [groupedData]="groupedProductsCustomColumns"
   [striped]="true">
 </i-table>
 
-// TypeScript - Each group can have its own columns
+// TypeScript
 groupedProductsCustomColumns: TableGroup[] = [
   {
-    label: 'High Value Items (>$100)',
+    label: 'High Value Items (>\$100)',
+    // This group shows price + availability
     columns: [
-      { field: 'name', header: 'Product' },
-      { field: 'price', header: 'Price', type: 'currency' }
+      { field: 'name',     header: 'Product',      sortable: true },
+      { field: 'price',    header: 'Price',         type: 'currency', align: 'right' },
+      { field: 'status',   header: 'Availability' },
     ],
     data: this.products.filter(p => p.price > 100),
-    expanded: true
-  }
+    expanded: true,
+  },
+  {
+    label: 'Budget Items (\u2264\$100)',
+    // This group shows price + stock quantity instead
+    columns: [
+      { field: 'name',     header: 'Product',  sortable: true },
+      { field: 'price',    header: 'Price',     type: 'currency', align: 'right' },
+      { field: 'quantity', header: 'Stock',     type: 'number' },
+    ],
+    data: this.products.filter(p => p.price <= 100),
+    expanded: true,
+  },
 ];`,
 
-    groupedWithActions: `<i-table
+    groupedWithActions: `// [groupColumns] defines the outer parent row columns shown in the table header.
+// Each group's 'row' object provides aggregated data for those columns.
+// [columns] defines the inner detail table rendered when a group is expanded.
+// A trailing unnamed column is automatically added to show the item count (n).
+<i-table
   [groupedData]="groupedProductsWithActions"
+  [groupColumns]="categoryGroupColumns"
   [columns]="basicColumns"
   [sortable]="true"
+  [filterable]="true"
   [showActions]="true"
   [actions]="viewActions"
   [striped]="true"
+  [height]="'420px'"
   (onAction)="handleAction($event)">
 </i-table>
 
 // TypeScript
+categoryGroupColumns: TableColumn[] = [
+  { field: 'category',        header: 'Category' },
+  { field: 'totalValue',      header: 'Total Stock Value', type: 'currency', align: 'right' },
+  { field: 'avgPrice',        header: 'Avg Unit Price',    type: 'currency', align: 'right' },
+  { field: 'inventoryStatus', header: 'Inventory Status' },
+];
+// Note: item count (n) is displayed automatically as an unnamed trailing column.
+
 groupedProductsWithActions: TableGroup[] = [
   {
     label: 'Electronics',
+    row: this.categoryRow('Electronics', this.products.filter(p => p.category === 'Electronics')),
     data: this.products.filter(p => p.category === 'Electronics'),
-    expanded: true,
+    expanded: false,
   },
   {
     label: 'Accessories',
+    row: this.categoryRow('Accessories', this.products.filter(p => p.category === 'Accessories')),
     data: this.products.filter(p => p.category === 'Accessories'),
-    expanded: true,
+    expanded: false,
   },
 ];
 
-viewActions: TableAction[] = [
-  { id: 'view', icon: 'pi pi-eye', severity: 'info' },
-];`,
+// Compute aggregated group row data dynamically:
+categoryRow(category: string, items: Product[]): any {
+  const itemCount = items.length;
+  const totalValue = items.reduce((s, p) => s + p.price * p.quantity, 0);
+  const avgPrice = itemCount ? items.reduce((s, p) => s + p.price, 0) / itemCount : 0;
+  const inventoryStatus = items.some(p => p.status === 'Out of Stock') ? 'Has Out of Stock'
+    : items.some(p => p.status === 'Low Stock') ? 'Has Low Stock' : 'Fully Stocked';
+  return { category, totalValue, avgPrice, inventoryStatus };
+}`,
 
     customHeader: `<i-table
   [data]="products"
@@ -960,7 +1045,7 @@ export class ExampleComponent {
     {
       title: 'Grouped Data',
       description:
-        'Support for nested/grouped data with expandable groups and custom columns per group',
+        'Expandable group sections where each group renders as a fully independent nested table with its own column headers, sorting, filtering, actions, and selection. Groups can also define their own column set.',
     },
     {
       title: 'Custom Header Content',
@@ -1001,12 +1086,13 @@ export class ExampleComponent {
   }
 
   handleAction(event: { action: string; row: Product }): void {
+    const row = event.row as any;
     switch (event.action) {
       case 'view':
         this.whisperService.add({
           severity: 'info',
           summary: 'Viewing Product',
-          detail: `Viewing details for: ${event.row.name}`,
+          detail: `Viewing details for: ${row.name ?? row.category ?? row.label}`,
           key: 'global',
           life: 3000,
         });
@@ -1015,7 +1101,7 @@ export class ExampleComponent {
         this.whisperService.add({
           severity: 'warning',
           summary: 'Editing Product',
-          detail: `Editing: ${event.row.name}`,
+          detail: `Editing: ${row.name ?? row.category ?? row.label}`,
           key: 'global',
           life: 3000,
         });
@@ -1024,7 +1110,7 @@ export class ExampleComponent {
         this.whisperService.add({
           severity: 'danger',
           summary: 'Delete Product',
-          detail: `Are you sure you want to delete ${event.row.name}?`,
+          detail: `Are you sure you want to delete ${row.name ?? row.category ?? row.label}?`,
           key: 'global',
           life: 5000,
         });

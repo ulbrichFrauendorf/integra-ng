@@ -105,8 +105,12 @@ $table-transition: 0.15s ease;
 
     &--scrollable {
       overflow-y: auto;
+      // Reserve scrollbar gutter so content never shifts when the scrollbar appears
+      scrollbar-gutter: stable;
 
-      thead {
+      // Only the outer table's thead should be sticky —
+      // nested <i-table> components inside group detail rows must not inherit this
+      > table > thead {
         position: sticky;
         top: 0;
         z-index: 2;
@@ -193,7 +197,7 @@ $table-transition: 0.15s ease;
         }
 
         .i-table-sort-icon {
-          font-size: 1em;
+          font-size: 0.8em;
           opacity: 0.6;
           transition:
             opacity $table-transition,
@@ -215,6 +219,11 @@ $table-transition: 0.15s ease;
 
         &:hover .i-table-column-resizer {
           opacity: 0.5;
+        }
+
+        // Actions column header must align with the right-justified action buttons
+        &.i-table-actions-header {
+          text-align: right;
         }
       }
 
@@ -268,7 +277,71 @@ $table-transition: 0.15s ease;
         }
       }
 
-      // Grouped data styles
+      // Group summary rows (parent row in the outer table)
+      .i-table-group-summary-row {
+        cursor: pointer;
+        user-select: none;
+        font-weight: 600;
+        transition: background-color $table-transition;
+
+        td {
+          padding: 12px 16px;
+        }
+
+        .i-table-group-header-content {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .i-table-group-label {
+            flex: 1;
+            font-size: 1.05em;
+          }
+
+          .i-table-group-count {
+            opacity: 0.7;
+            font-size: 0.9em;
+            font-weight: 400;
+          }
+        }
+      }
+
+      // Detail row that contains the nested <i-table>
+      .i-table-group-detail-row {
+        .i-table-group-detail-cell {
+          padding: 0;
+          overflow: hidden;
+
+          .i-table-wrapper {
+            border-radius: 0;
+            border-top: none;
+            overflow: hidden;
+          }
+        }
+      }
+
+      // Unnamed trailing count column on group summary rows
+      .i-table-group-count-header {
+        width: 60px;
+        text-align: center;
+        font-weight: 400;
+        opacity: 0.6;
+        font-size: 0.85em;
+      }
+
+      .i-table-group-count-cell {
+        width: 60px;
+        text-align: right;
+        white-space: nowrap;
+
+        .i-table-group-count {
+          opacity: 0.7;
+          font-size: 0.9em;
+          font-weight: 400;
+        }
+      }
+
+      // Grouped data styles (legacy - kept for tbody-inside references)
       .i-table-group-header {
         td {
           padding: 12px 16px;
@@ -288,7 +361,7 @@ $table-transition: 0.15s ease;
           gap: 8px;
 
           .i-table-group-toggle-icon {
-            font-size: 0.9em;
+            font-size: 0.8em;
             transition: transform $table-transition;
           }
 
@@ -337,6 +410,7 @@ $table-transition: 0.15s ease;
   .i-table-actions-cell {
     width: auto;
     white-space: nowrap;
+    text-align: right;
 
     .i-table-actions {
       display: flex;

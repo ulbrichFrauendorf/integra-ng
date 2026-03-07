@@ -136,6 +136,7 @@ export class DialogService {
     dialogRef.instance.breakpoints = config.breakpoints;
     dialogRef.instance.closable = config.closable !== false;
     dialogRef.instance.modal = config.modal !== false;
+    dialogRef.instance.dismissableMask = config.dismissableMask ?? false;
 
     // Create the dialog reference first so we can pass it to the component
     const closeSubject = new Subject<any>();

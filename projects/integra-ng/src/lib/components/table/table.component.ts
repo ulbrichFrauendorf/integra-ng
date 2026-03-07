@@ -11,6 +11,7 @@ import {
   ElementRef,
   effect,
   ViewChild,
+  forwardRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -102,9 +103,11 @@ export interface FilterEvent {
 export interface TableGroup {
   /** Group name/label */
   label: string;
-  /** Columns specific to this group (optional, uses table columns if not provided) */
+  /** Summary data object for the group-level row (used with groupColumns on the parent table) */
+  row?: any;
+  /** Columns specific to this group's inner table (optional, uses table-level columns if not provided) */
   columns?: TableColumn[];
-  /** Data rows for this group */
+  /** Data rows for this group's inner table */
   data: any[];
   /** Whether this group is initially expanded */
   expanded?: boolean;
@@ -194,6 +197,7 @@ export interface VirtualScrollConfig {
     IChip,
     NoContentComponent,
     TooltipDirective,
+    forwardRef(() => ITable),
   ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
@@ -215,6 +219,13 @@ export class ITable {
    * Grouped data mode - when provided, table will render in grouped mode
    */
   groupedData: InputSignal<TableGroup[]> = input<TableGroup[]>([]);
+
+  /**
+   * Column definitions for the outer group-level table header row.
+   * Each group's `row` object is rendered using these columns.
+   * When omitted, only a single label column is shown for the group row.
+   */
+  groupColumns: InputSignal<TableColumn[]> = input<TableColumn[]>([]);
 
   /**
    * Message displayed when table has no data
@@ -1017,6 +1028,60 @@ export class ITable {
    */
   isRowExpanded(row: any): boolean {
     return this.expandedRows().has(row);
+  }
+
+  /**
+   * Gets all rows across all groups (for grouped mode select-all)
+   * @internal
+   */
+  private getAllGroupRows(): any[] {
+    return this.groupedData().flatMap((g) => g.data || []);
+  }
+
+  /**
+   * Checks if all rows across all groups are selected
+   * @internal
+   */
+  areAllGroupRowsSelected(): boolean {
+    const all = this.getAllGroupRows();
+    if (all.length === 0) return false;
+    return all.every((d) =>
+      this.selection?.some((s: any) => this.compareObjects(s, d)),
+    );
+  }
+
+  /**
+   * Checks if some (but not all) rows across all groups are selected
+   * @internal
+   */
+  areSomeGroupRowsSelected(): boolean {
+    const all = this.getAllGroupRows();
+    const count = all.filter((d) =>
+      this.selection?.some((s: any) => this.compareObjects(s, d)),
+    ).length;
+    return count > 0 && count < all.length;
+  }
+
+  /**
+   * Toggles select-all for all groups
+   * @internal
+   */
+  toggleAllGroupSelection(): void {
+    if (this.selectionMode !== 'multiple') return;
+    const all = this.getAllGroupRows();
+    const allSelected = this.areAllGroupRowsSelected();
+    if (allSelected) {
+      this.selection = this.selection.filter(
+        (s: any) => !all.some((d) => this.compareObjects(s, d)),
+      );
+    } else {
+      const newSelections = all.filter(
+        (d) => !this.selection.some((s: any) => this.compareObjects(s, d)),
+      );
+      this.selection = [...this.selection, ...newSelections];
+    }
+    this.selectionChange.emit(this.selection);
+    this.onSelectionChange.emit(this.selection);
   }
 
   // ===== GROUP EXPANSION METHODS =====
