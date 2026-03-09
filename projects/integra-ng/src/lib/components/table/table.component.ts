@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   Output,
@@ -58,22 +59,12 @@ export interface TableColumn {
 }
 
 /**
- * Typed data container that bundles rows with their action buttons and handler.
- * Use this instead of separate \`[actions]\` and \`(onAction)\` inputs.
+ * Action button with an embedded per-action click handler.
+ * No shared dispatcher is needed — each action calls its own `handler`.
+ *
+ * @typeParam T - The row type this action operates on.
  */
-export interface TableData<T = any> {
-  /** The data rows to display */
-  rows: T[];
-  /** Action buttons shown on each row */
-  actions?: TableAction[];
-  /** Handler called when any row action button is clicked */
-  onAction?: (event: { action: string; row: T }) => void;
-}
-
-/**
- * Action button definition for row actions
- */
-export interface TableAction {
+export interface GridAction<T = any> {
   /** Unique identifier for the action */
   id: string;
   /** Icon class (e.g., 'pi pi-edit') */
@@ -82,12 +73,76 @@ export interface TableAction {
   label?: string;
   /** Button severity/style */
   severity?: ISeverity;
-  /** Whether the action is disabled (can be a function) */
-  disabled?: boolean | ((row: any) => boolean);
+  /** Whether the action is disabled */
+  disabled?: boolean | ((row: T) => boolean);
   /** Tooltip text to display on hover */
-  tooltip?: string | ((row: any) => string);
-  /** Whether the action is visible (can be a function) */
-  visible?: boolean | ((row: any) => boolean);
+  tooltip?: string | ((row: T) => string);
+  /** Whether the action is visible */
+  visible?: boolean | ((row: T) => boolean);
+  /** Called when this action button is clicked for a row */
+  handler: (row: T) => void;
+}
+
+/**
+ * Defines the expandable detail sub-table rendered below each parent row.
+ *
+ * @typeParam TRow    - The parent row type.
+ * @typeParam TDetail - The detail row type.
+ */
+export interface GridDetails<TRow = any, TDetail = any> {
+  /** Column definitions for the detail sub-table */
+  columns: TableColumn[];
+  /** Returns the detail rows for a given parent row */
+  rows: (parentRow: TRow) => TDetail[];
+  /** Optional actions on the detail rows */
+  actions?: GridAction<TDetail>[];
+}
+
+/**
+ * Single data object passed to `<i-table>`.
+ * Bundles columns, rows, per-row actions, and an optional detail expansion
+ * — eliminating the need for separate `[columns]`, `[actions]`, `[groupedData]` inputs.
+ *
+ * @typeParam TRow    - The main row type.
+ * @typeParam TDetail - The detail row type (defaults to `any`).
+ *
+ * @example
+ * ```typescript
+ * // Flat table
+ * grid: GridData<Product> = { columns, rows: products };
+ *
+ * // With actions — each action carries its own handler
+ * grid: GridData<Product> = {
+ *   columns,
+ *   rows: products,
+ *   actions: [
+ *     { id: 'edit',   icon: 'pi pi-pencil', handler: p => this.edit(p) },
+ *     { id: 'delete', icon: 'pi pi-trash',  handler: p => this.delete(p) },
+ *   ],
+ * };
+ *
+ * // With expandable detail sub-table (replaces grouped mode)
+ * grid: GridData<CategorySummary, Product> = {
+ *   columns: categoryColumns,
+ *   rows: categories,
+ *   actions: [{ id: 'view', icon: 'pi pi-eye', handler: c => this.view(c) }],
+ *   details: {
+ *     columns: productColumns,
+ *     rows: cat => products.filter(p => p.category === cat.name),
+ *     actions: [{ id: 'edit', icon: 'pi pi-pencil', handler: p => this.edit(p) }],
+ *   },
+ * };
+ * ```
+ */
+export interface GridData<TRow = any, TDetail = any> {
+  /** Column definitions for this table level */
+  columns: TableColumn[];
+  /** Data rows */
+  rows: TRow[];
+  /** Per-row actions — each action carries its own click handler */
+  actions?: GridAction<TRow>[];
+  /** Optional expandable detail sub-table rendered below each expanded row */
+  details?: GridDetails<TRow, TDetail>;
 }
 
 /**
@@ -111,32 +166,6 @@ export interface FilterEvent {
 }
 
 /**
- * Grouped table data structure
- */
-export interface TableGroup {
-  /** Group name/label */
-  label: string;
-  /** Summary data object for the group-level row (used with groupColumns on the parent table) */
-  row?: any;
-  /** Columns specific to this group's inner table (optional, uses table-level columns if not provided) */
-  columns?: TableColumn[];
-  /** Data rows for this group's inner table */
-  data: any[];
-  /** Actions shown on the parent group summary row */
-  groupActions?: TableAction[];
-  /** Handler called when a parent group summary row action is clicked */
-  onGroupAction?: (event: { action: string; row: any }) => void;
-  /** Actions shown on each child row inside the expanded detail table */
-  rowActions?: TableAction[];
-  /** Handler called when a child detail row action is clicked */
-  onRowAction?: (event: { action: string; row: any }) => void;
-  /** Whether this group is initially expanded */
-  expanded?: boolean;
-  /** Custom CSS class for the group */
-  styleClass?: string;
-}
-
-/**
  * Download event configuration
  */
 export interface TableDownloadEvent {
@@ -149,20 +178,6 @@ export interface TableDownloadEvent {
 }
 
 /**
- * Virtual scroll configuration
- */
-export interface VirtualScrollConfig {
-  /** Enable virtual scrolling */
-  enabled: boolean;
-  /** Item size in pixels (height of each row) */
-  itemSize?: number;
-  /** Minimum buffer size in pixels */
-  minBufferPx?: number;
-  /** Maximum buffer size in pixels */
-  maxBufferPx?: number;
-}
-
-/**
  * Table Component
  *
  * A comprehensive table component with sorting, filtering, pagination, selection,
@@ -171,32 +186,19 @@ export interface VirtualScrollConfig {
  *
  * @example
  * ```html
- * <!-- Basic table -->
- * <i-table
- *   [data]="products"
- *   [columns]="columns"
- *   [sortable]="true"
- *   [paginator]="true"
- *   [rows]="10">
- * </i-table>
+ * <!-- Flat table -->
+ * <i-table [grid]="productGrid" [sortable]="true"></i-table>
  *
  * <!-- Table with selection -->
  * <i-table
- *   [data]="products"
- *   [columns]="columns"
+ *   [grid]="productGrid"
  *   selectionMode="multiple"
  *   [(selection)]="selectedProducts"
  *   (onSelectionChange)="onSelect($event)">
  * </i-table>
  *
- * <!-- Table with actions -->
- * <i-table
- *   [data]="products"
- *   [columns]="columns"
- *   [showActions]="true"
- *   [actions]="tableActions"
- *   (onAction)="handleAction($event)">
- * </i-table>
+ * <!-- Expandable detail (replaces grouped mode) -->
+ * <i-table [grid]="categoryGrid" [sortable]="true"></i-table>
  * ```
  *
  * @remarks
@@ -206,6 +208,7 @@ export interface VirtualScrollConfig {
 @Component({
   selector: 'i-table',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     FormsModule,
@@ -224,30 +227,15 @@ export interface VirtualScrollConfig {
   styleUrls: ['./table.component.scss'],
 })
 export class ITable {
-  // ===== DATA DISPLAY =====
+  // ===== DATA =====
 
   /**
-   * Table data — either a plain row array or a {@link TableData} object
-   * that bundles rows with actions and a handler.
+   * All table data in one object: columns, rows, optional per-row actions, and
+   * an optional `details` spec for expandable sub-tables (replaces grouped mode).
+   *
+   * @see GridData
    */
-  data: InputSignal<TableData | any[]> = input<TableData | any[]>([]);
-
-  /**
-   * Column definitions with field, header, sortable, filterable, width properties
-   */
-  columns: InputSignal<TableColumn[]> = input<TableColumn[]>([]);
-
-  /**
-   * Grouped data mode - when provided, table will render in grouped mode
-   */
-  groupedData: InputSignal<TableGroup[]> = input<TableGroup[]>([]);
-
-  /**
-   * Column definitions for the outer group-level table header row.
-   * Each group's `row` object is rendered using these columns.
-   * When omitted, only a single label column is shown for the group row.
-   */
-  groupColumns: InputSignal<TableColumn[]> = input<TableColumn[]>([]);
+  grid: InputSignal<GridData> = input<GridData>({ columns: [], rows: [] });
 
   /**
    * Message displayed when table has no data
@@ -357,8 +345,7 @@ export class ITable {
   @Output() onRowUnselect = new EventEmitter<any>();
 
   // ===== ROW ACTIONS =====
-  // Actions are now embedded in [data] (TableData.actions / TableData.onAction)
-  // and in each TableGroup (groupActions/onGroupAction, rowActions/onRowAction).
+  // Actions are embedded inside GridData.actions — each action has its own handler.
   // No separate @Input or @Output is needed.
 
   // ===== VISUAL FEATURES =====
@@ -400,19 +387,17 @@ export class ITable {
   @Input() scrollable = false;
 
   /**
-   * Fixed height with vertical scroll
-   */
-  @Input() scrollHeight?: string;
-
-  /**
-   * Alias Input for convenience — developer can set `height` or `scrollHeight`.
+   * Container height (also controls virtual scroll viewport height).
+   * @example '400px'
    */
   @Input() height?: string;
 
-  // ===== VIRTUAL SCROLL =====
-
   /**
-   * Enable virtual scrolling for large datasets
+   * Enable CDK virtual scroll for large datasets.
+   * Leave `false` (default) for small/medium tables — rows are rendered with
+   * a regular `@for` loop inside a scrollable container.
+   * Set to `true` only when the row count is large enough (≥ ~500 rows) to
+   * benefit from virtual rendering.
    * @default false
    */
   @Input() virtualScroll = false;
@@ -449,18 +434,6 @@ export class ITable {
    * @default false
    */
   @Input() resizableColumns = false;
-
-  /**
-   * Allow column reordering
-   * @default false
-   */
-  @Input() reorderableColumns = false;
-
-  /**
-   * Enable row expansion
-   * @default false
-   */
-  @Input() rowExpandable = false;
 
   /**
    * Event emitted when a row is expanded
@@ -529,12 +502,6 @@ export class ITable {
   expandedRows = signal<Set<any>>(new Set());
 
   /**
-   * Expanded groups (for grouped data mode)
-   * @internal
-   */
-  expandedGroups = signal<Set<string>>(new Set());
-
-  /**
    * Filter debounce timer
    * @internal
    */
@@ -564,61 +531,33 @@ export class ITable {
    */
   columnWidths = signal<{ [field: string]: number }>({});
 
-  constructor(private el: ElementRef) {
-    effect(() => {
-      const groups = this.groupedData();
-      if (groups.length > 0) {
-        const initialExpandedGroups = new Set<string>();
-        groups.forEach((group, index) => {
-          if (group.expanded !== false) {
-            initialExpandedGroups.add(group.label || index.toString());
-          }
-        });
-        this.expandedGroups.set(initialExpandedGroups);
-      }
-    });
-  }
+  constructor(private el: ElementRef) {}
 
   // ===== DERIVED DATA =====
 
-  /**
-   * Extracts the plain row array from data (handles both TableData and any[]).
-   * @internal
-   */
-  tableRows = computed<any[]>(() => {
-    const d = this.data();
-    return Array.isArray(d) ? d : (d.rows ?? []);
-  });
+  /** Columns for the current table level. @internal */
+  gridColumns = computed<TableColumn[]>(() => this.grid().columns ?? []);
+
+  /** Data rows for the current table level. @internal */
+  gridRows = computed<any[]>(() => this.grid().rows ?? []);
+
+  /** Per-row actions for the current table level. @internal */
+  gridActions = computed<GridAction[]>(() => this.grid().actions ?? []);
+
+  /** Whether this table level has an expandable detail sub-table. @internal */
+  hasDetails = computed<boolean>(() => !!this.grid().details);
 
   /**
-   * Extracts action buttons from data (only populated when data is a TableData).
-   * @internal
-   */
-  tableRowActions = computed<TableAction[]>(() => {
-    const d = this.data();
-    return Array.isArray(d) ? [] : (d.actions ?? []);
-  });
-
-  /**
-   * Whether any group in groupedData has parent summary-row actions.
-   * Used to decide whether to render the actions column in the grouped table header.
-   * @internal
-   */
-  hasAnyGroupActions = computed<boolean>(() =>
-    this.groupedData().some((g) => (g.groupActions?.length ?? 0) > 0),
-  );
-
-  /**
-   * Computed filtered and sorted data
+   * Computed filtered and sorted data.
    * @internal
    */
   processedData = computed(() => {
-    let result = [...(this.tableRows() || [])];
+    let result = [...this.gridRows()];
 
     // Apply global filter
     const globalFilter = this.globalFilterValue();
     if (globalFilter) {
-      const cols = this.columns();
+      const cols = this.gridColumns();
       result = result.filter((row) =>
         cols.some((col) => {
           const value = this.getCellValue(row, col.field);
@@ -772,6 +711,18 @@ export class ITable {
     }
 
     return '';
+  }
+
+  /**
+   * Returns the combined CSS classes for an icon cell: the icon class itself,
+   * the `i-severity-icon` marker (for scoped colour styles), and the severity
+   * token (e.g. `success`, `danger`) needed by the sibling CSS rule.
+   * @internal
+   */
+  getIconClasses(row: any, column: TableColumn): string {
+    const icon = this.getCellIcon(row, column);
+    const severity = this.getCellSeverity(row, column);
+    return severity ? `${icon} i-severity-icon ${severity}` : icon;
   }
 
   /**
@@ -993,39 +944,19 @@ export class ITable {
   // ===== ACTION METHODS =====
 
   /**
-   * Handles action button click on a regular (non-grouped) row.
-   * Calls the onAction handler embedded in the TableData.
+   * Dispatches a grid action by calling the action's own embedded handler.
    * @internal
    */
-  onActionClick(action: TableAction, row: any, event: Event): void {
+  triggerAction(action: GridAction, row: any, event: Event): void {
     event.stopPropagation();
-    const d = this.data();
-    if (!Array.isArray(d) && d.onAction) {
-      d.onAction({ action: action.id, row });
-    }
+    action.handler(row);
   }
 
   /**
-   * Handles action button click on a parent group summary row.
-   * Calls the group's onGroupAction handler.
+   * Checks if an action is disabled for a row.
    * @internal
    */
-  onGroupActionClick(
-    group: TableGroup,
-    action: TableAction,
-    event: Event,
-  ): void {
-    event.stopPropagation();
-    if (group.onGroupAction) {
-      group.onGroupAction({ action: action.id, row: group.row ?? {} });
-    }
-  }
-
-  /**
-   * Checks if an action is disabled for a row
-   * @internal
-   */
-  isActionDisabled(action: TableAction, row: any): boolean {
+  isActionDisabled(action: GridAction, row: any): boolean {
     if (typeof action.disabled === 'function') {
       return action.disabled(row);
     }
@@ -1033,10 +964,10 @@ export class ITable {
   }
 
   /**
-   * Checks if an action is visible for a row
+   * Checks if an action is visible for a row.
    * @internal
    */
-  isActionVisible(action: TableAction, row: any): boolean {
+  isActionVisible(action: GridAction, row: any): boolean {
     if (action.visible === undefined) return true;
     if (typeof action.visible === 'function') {
       return action.visible(row);
@@ -1045,10 +976,10 @@ export class ITable {
   }
 
   /**
-   * Gets the tooltip text for an action
+   * Gets the tooltip text for an action.
    * @internal
    */
-  getActionTooltip(action: TableAction, row: any): string {
+  getActionTooltip(action: GridAction, row: any): string {
     if (!action.tooltip) return '';
     if (typeof action.tooltip === 'function') {
       return action.tooltip(row);
@@ -1064,7 +995,7 @@ export class ITable {
    */
   toggleRowExpansion(row: any, event: Event): void {
     event.stopPropagation();
-    if (!this.rowExpandable) return;
+    if (!this.hasDetails()) return;
 
     const expanded = this.expandedRows();
     const isExpanded = expanded.has(row);
@@ -1088,118 +1019,6 @@ export class ITable {
     return this.expandedRows().has(row);
   }
 
-  /**
-   * Gets all rows across all groups (for grouped mode select-all)
-   * @internal
-   */
-  private getAllGroupRows(): any[] {
-    return this.groupedData().flatMap((g) => g.data || []);
-  }
-
-  /**
-   * Checks if all rows across all groups are selected
-   * @internal
-   */
-  areAllGroupRowsSelected(): boolean {
-    const all = this.getAllGroupRows();
-    if (all.length === 0) return false;
-    return all.every((d) =>
-      this.selection?.some((s: any) => this.compareObjects(s, d)),
-    );
-  }
-
-  /**
-   * Checks if some (but not all) rows across all groups are selected
-   * @internal
-   */
-  areSomeGroupRowsSelected(): boolean {
-    const all = this.getAllGroupRows();
-    const count = all.filter((d) =>
-      this.selection?.some((s: any) => this.compareObjects(s, d)),
-    ).length;
-    return count > 0 && count < all.length;
-  }
-
-  /**
-   * Toggles select-all for all groups
-   * @internal
-   */
-  toggleAllGroupSelection(): void {
-    if (this.selectionMode !== 'multiple') return;
-    const all = this.getAllGroupRows();
-    const allSelected = this.areAllGroupRowsSelected();
-    if (allSelected) {
-      this.selection = this.selection.filter(
-        (s: any) => !all.some((d) => this.compareObjects(s, d)),
-      );
-    } else {
-      const newSelections = all.filter(
-        (d) => !this.selection.some((s: any) => this.compareObjects(s, d)),
-      );
-      this.selection = [...this.selection, ...newSelections];
-    }
-    this.selectionChange.emit(this.selection);
-    this.onSelectionChange.emit(this.selection);
-  }
-
-  // ===== GROUP EXPANSION METHODS =====
-
-  /**
-   * Toggles group expansion
-   * @internal
-   */
-  toggleGroupExpansion(groupLabel: string): void {
-    const expanded = this.expandedGroups();
-    const isExpanded = expanded.has(groupLabel);
-    const newExpanded = new Set(expanded);
-
-    if (isExpanded) {
-      newExpanded.delete(groupLabel);
-    } else {
-      newExpanded.add(groupLabel);
-    }
-
-    this.expandedGroups.set(newExpanded);
-  }
-
-  /**
-   * Checks if a group is expanded
-   * @internal
-   */
-  isGroupExpanded(groupLabel: string): boolean {
-    return this.expandedGroups().has(groupLabel);
-  }
-
-  /**
-   * Gets columns for a specific group
-   * @internal
-   */
-  getGroupColumns(group: TableGroup): TableColumn[] {
-    return group.columns || this.columns();
-  }
-
-  /**
-   * Builds a TableData object for the nested <i-table> inside an expanded group.
-   * If the group has no child row actions, returns the plain data array.
-   * @internal
-   */
-  getGroupTableData(group: TableGroup): TableData | any[] {
-    if (!group.rowActions?.length) return group.data;
-    return {
-      rows: group.data,
-      actions: group.rowActions,
-      onAction: group.onRowAction,
-    };
-  }
-
-  /**
-   * Checks if table is in grouped mode
-   * @internal
-   */
-  isGroupedMode(): boolean {
-    return this.groupedData().length > 0;
-  }
-
   // ===== DOWNLOAD METHODS =====
 
   /**
@@ -1208,30 +1027,14 @@ export class ITable {
    */
   handleDownload(): void {
     if (this.downloadMode === 'api') {
-      // Emit event for API-based download
       this.onDownload.emit({
         format: this.downloadFormat,
-        data: this.isGroupedMode()
-          ? this.getFlattenedGroupedData()
-          : this.processedData(),
-        columns: this.columns(),
+        data: this.processedData(),
+        columns: this.gridColumns(),
       });
     } else {
-      // Direct download
       this.downloadData();
     }
-  }
-
-  /**
-   * Gets flattened data from grouped data
-   * @internal
-   */
-  private getFlattenedGroupedData(): any[] {
-    const flattened: any[] = [];
-    this.groupedData().forEach((group) => {
-      flattened.push(...(group.data || []));
-    });
-    return flattened;
   }
 
   /**
@@ -1239,10 +1042,8 @@ export class ITable {
    * @internal
    */
   private downloadData(): void {
-    const data = this.isGroupedMode()
-      ? this.getFlattenedGroupedData()
-      : this.processedData();
-    const columns = this.columns();
+    const data = this.processedData();
+    const columns = this.gridColumns();
     const filename = this.downloadFilename || 'table-data';
 
     switch (this.downloadFormat) {
@@ -1416,19 +1217,21 @@ export class ITable {
       'i-table--small': this.size === 'small',
       'i-table--medium': this.size === 'medium',
       'i-table--large': this.size === 'large',
-      'i-table--scrollable':
-        this.scrollable || !!(this.height || this.scrollHeight),
+      'i-table--scrollable': this.scrollable || !!this.height,
       'i-table--loading': this.loading,
     };
   }
 
   /**
-   * Track by function for rows
+   * Track by function for rows.
+   * Must be an arrow property so that CDK virtual-scroll can call it as a
+   * plain function reference without losing the component's `this` context.
    * @internal
    */
-  trackByRow(index: number, row: any): any {
-    return row.id ?? index;
-  }
+  trackByRow = (index: number, row: any): any => {
+    if (this.dataKey) return row[this.dataKey];
+    return row?.id ?? index;
+  };
 
   /**
    * Track by function for columns
@@ -1438,7 +1241,52 @@ export class ITable {
     return column.field;
   }
 
-  // ===== VIRTUAL SCROLL METHODS =====
+  // ===== COMPUTED LAYOUT HELPERS =====
+
+  /**
+   * Effective container height for the virtual scroll viewport.
+   * Falls back to '400px' when no height is provided.
+   * @internal
+   */
+  effectiveHeight = computed<string>(() => this.height || '400px');
+
+  /**
+   * Total column span used for empty-state and detail expansion cells.
+   * @internal
+   */
+  totalColspan = computed<number>(() => {
+    return (
+      this.gridColumns().length +
+      (this.selectionMode === 'multiple' ? 1 : 0) +
+      (this.hasDetails() ? 2 : 0) + // expand column + detail-count column
+      (this.gridActions().length > 0 ? 1 : 0)
+    );
+  });
+
+  /**
+   * Returns the number of detail rows for a given parent row.
+   * Used to render the `(n)` count badge in the expand table.
+   * @internal
+   */
+  getDetailRowCount(row: any): number {
+    const details = this.grid().details;
+    if (!details) return 0;
+    return details.rows(row).length;
+  }
+
+  /**
+   * Builds a `GridData` for the nested detail `<i-table>` of an expanded row.
+   * @internal
+   */
+  getDetailGrid(row: any): GridData {
+    const details = this.grid().details;
+    if (!details) return { columns: [], rows: [] };
+    return {
+      columns: details.columns,
+      rows: details.rows(row),
+      actions: details.actions,
+    };
+  }
 
   /**
    * Scrolls to a specific index in the virtual scroll viewport
@@ -1446,9 +1294,7 @@ export class ITable {
    * @param behavior - Scroll behavior ('auto' or 'smooth')
    */
   scrollToIndex(index: number, behavior: ScrollBehavior = 'auto'): void {
-    if (this.virtualScroll && this.virtualScrollViewport) {
-      this.virtualScrollViewport.scrollToIndex(index, behavior);
-    }
+    this.virtualScrollViewport?.scrollToIndex(index, behavior);
   }
 
   /**
@@ -1457,9 +1303,7 @@ export class ITable {
    * @param behavior - Scroll behavior ('auto' or 'smooth')
    */
   scrollToOffset(offset: number, behavior: ScrollBehavior = 'auto'): void {
-    if (this.virtualScroll && this.virtualScrollViewport) {
-      this.virtualScrollViewport.scrollToOffset(offset, behavior);
-    }
+    this.virtualScrollViewport?.scrollToOffset(offset, behavior);
   }
 
   /**
@@ -1467,10 +1311,7 @@ export class ITable {
    * @returns The total content size in pixels
    */
   getVirtualScrollContentSize(): number {
-    if (this.virtualScroll && this.virtualScrollViewport) {
-      return this.virtualScrollViewport.measureScrollOffset('bottom');
-    }
-    return 0;
+    return this.virtualScrollViewport?.measureScrollOffset('bottom') ?? 0;
   }
 
   /**
@@ -1478,9 +1319,6 @@ export class ITable {
    * @returns The current scroll offset in pixels
    */
   getVirtualScrollOffset(): number {
-    if (this.virtualScroll && this.virtualScrollViewport) {
-      return this.virtualScrollViewport.measureScrollOffset();
-    }
-    return 0;
+    return this.virtualScrollViewport?.measureScrollOffset() ?? 0;
   }
 }
