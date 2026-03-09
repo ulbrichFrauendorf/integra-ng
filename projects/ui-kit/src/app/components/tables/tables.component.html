@@ -1,553 +1,128 @@
 <div class="tables-demo">
-  <!-- Whisper container required for toast/whisper messages from demo actions -->
+  <!-- Whisper container for toast messages from demo actions -->
   <i-whisper [position]="'top-right'" [key]="'global'"></i-whisper>
+
   <header class="demo-header">
     <h1>Table Component</h1>
     <p>
-      A comprehensive table component with sorting, filtering, selection, and
-      row actions. All features are configurable via props.
+      A single-input table driven by <code>GridData&lt;TRow, TDetail&gt;</code>.
+      Pass columns, rows, per-row actions, and an optional detail sub-table in
+      one object. Use <code>[virtualScroll]="true"</code> for large datasets
+      (&ge;500 rows) to enable CDK virtual rendering.
     </p>
   </header>
 
+  <!-- Features list -->
+  <app-features-list [features]="features"></app-features-list>
+
   <div class="cards-container">
-    <!-- Basic Table with Sorting & Filtering -->
+    <!-- ── 1. Sorting & Filtering ─────────────────────────────────── -->
     <app-demo-card
-      [title]="'Basic Table with Sorting & Filtering'"
-      [sourceCode]="codeExamples.filtering"
+      [title]="'Sorting & Filtering'"
+      [sourceCode]="codeExamples.flat"
+      [tsCode]="tsCodeExamples.flat"
     >
       <p class="demo-description">
-        Click column headers to sort. Use global search or column filters to
-        narrow results.
+        Click column headers to sort. Use the global search bar or per-column
+        filter inputs to narrow results. Uses a regular overflow-scroll table;
+        for 10 000+ rows use <code>[virtualScroll]="true"</code>.
       </p>
       <i-table
-        [data]="products"
-        [columns]="filterableColumns"
+        [grid]="flatGrid"
         [sortable]="true"
         [filterable]="true"
         [globalFilter]="true"
-        [height]="'350px'"
+        [height]="'360px'"
+        [striped]="true"
         (onSort)="onSort($event)"
         (onFilter)="onFilter($event)"
-      >
-      </i-table>
+      ></i-table>
     </app-demo-card>
 
-    <!-- Selection & Actions -->
+    <!-- ── 2. Selection & Row Actions ────────────────────────────── -->
     <app-demo-card
       [title]="'Selection & Row Actions'"
       [sourceCode]="codeExamples.actions"
+      [tsCode]="tsCodeExamples.actions"
     >
       <p class="demo-description">
-        Select rows with checkboxes. Action buttons support conditional disable
-        (delete disabled for out of stock).
-        <strong>Selected: {{ selectedProducts.length }} products</strong>
+        Actions are embedded directly in <code>GridData.actions</code> — each
+        carries its own <code>handler</code>. Delete is disabled for
+        out-of-stock rows.
+        <strong>Selected: {{ selectedProducts.length }}</strong>
       </p>
       <i-table
-        [data]="productsWithActions"
-        [columns]="basicColumns"
-        selectionMode="multiple"
-        [(selection)]="selectedProducts"
-        [striped]="true"
-        [height]="'300px'"
-        (onSelectionChange)="onSelectionChange($event)"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Grouped Data -->
-    <app-demo-card
-      [title]="'Grouped Data'"
-      [sourceCode]="codeExamples.groupedWithActions"
-    >
-      <p class="demo-description">
-        Each group is a <strong>parent row</strong> in a single scrollable
-        table. The outer column headers (set via <code>[groupColumns]</code>)
-        describe group-level summary data from each group's
-        <code>row</code> object. Expanding a group row reveals a full nested
-        table with its own headers, sorting, filtering, and row actions.
-      </p>
-      <i-table
-        [groupedData]="groupedProductsWithActions"
-        [groupColumns]="categoryGroupColumns"
-        [columns]="basicColumns"
-        [sortable]="true"
-        [filterable]="false"
-        [striped]="true"
-        [height]="'420px'"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Grouped Data - Custom Columns per Group -->
-    <app-demo-card
-      [title]="'Grouped Data — Custom Columns per Group'"
-      [sourceCode]="codeExamples.groupedCustomColumns"
-    >
-      <p class="demo-description">
-        Each group can define its own set of columns via the
-        <code>columns</code> property on the group object. When
-        <code>columns</code> is omitted the group inherits the table-level
-        columns. This makes it easy to show different fields for logically
-        different subsets of data.
-      </p>
-      <i-table
-        [groupedData]="groupedProductsCustomColumns"
-        [striped]="true"
-        [height]="'350px'"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Icon Columns -->
-    <app-demo-card
-      [title]="'Icon Columns'"
-      [sourceCode]="codeExamples.iconColumns"
-    >
-      <p class="demo-description">
-        Display dynamic icons in table cells. Icons can be based on row data
-        using functions or field references. This example shows status icons
-        that change based on inventory levels.
-      </p>
-      <i-table
-        [data]="products"
-        [columns]="iconColumns"
-        [striped]="true"
-        [height]="'350px'"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- List Columns -->
-    <app-demo-card
-      [title]="'List Columns (Chips)'"
-      [sourceCode]="codeExamples.listColumns"
-    >
-      <p class="demo-description">
-        Display array data as stacked chips in a column. Use
-        <code>type: 'list'</code>
-        to render arrays as vertical chip lists. Useful for tags, categories, or
-        any multi-value fields.
-      </p>
-      <i-table
-        [data]="productsWithTags"
-        [columns]="listColumns"
-        [striped]="true"
-      >
-      </i-table>
-    </app-demo-card>
-
-    <!-- Visual Variants & Sizes -->
-    <app-demo-card
-      [title]="'Visual Variants & Sizes'"
-      [sourceCode]="codeExamples.visual"
-    >
-      <div class="visual-examples">
-        <div class="visual-example">
-          <h4>Small - Striped & Bordered</h4>
-          <i-table
-            [data]="products.slice(0, 4)"
-            [columns]="basicColumns"
-            [striped]="true"
-            [bordered]="true"
-            size="small"
-          >
-          </i-table>
-        </div>
-        <div class="visual-example">
-          <h4>Large Size</h4>
-          <i-table
-            [data]="products.slice(0, 3)"
-            [columns]="basicColumns"
-            size="large"
-          >
-          </i-table>
-        </div>
-      </div>
-    </app-demo-card>
-
-    <!-- Virtual Scroll - Large Dataset -->
-    <app-demo-card
-      [title]="'Virtual Scroll - 10,000 Rows'"
-      [sourceCode]="codeExamples.virtualScroll"
-    >
-      <i-message severity="info" [closable]="false">
-        Virtual scroll efficiently renders large datasets. This table has 10,000
-        rows but only renders visible items.
-      </i-message>
-      <i-message severity="success" [closable]="false">
-        Benefits: 10x-100x faster rendering, 90% less memory, smooth 60fps
-        scrolling.
-      </i-message>
-
-      <i-table
-        [data]="largeDataset"
-        [columns]="sortableColumns"
-        [virtualScroll]="true"
-        [virtualScrollItemSize]="48"
-        [height]="'500px'"
-        [sortable]="true"
-        [filterable]="true"
-        [globalFilter]="true"
-        [striped]="true"
-        (onSort)="onSort($event)"
-        (onFilter)="onFilter($event)"
-      >
-      </i-table>
-
-      <i-message severity="info" [closable]="false" style="margin-top: 16px">
-        Quick Start: Use [virtualScroll]="true" and [height]="'500px'" for
-        tables with 1,000+ rows.
-      </i-message>
-    </app-demo-card>
-
-    <!-- Virtual Scroll with Selection & Actions -->
-    <app-demo-card
-      [title]="'Virtual Scroll with Selection & Actions'"
-      [sourceCode]="codeExamples.virtualScrollWithSelection"
-    >
-      <i-message severity="info" [closable]="false">
-        Virtual scroll works with selection and actions. Selecting from 10,000
-        items stays fast. Selected: {{ selectedProducts.length }}
-      </i-message>
-
-      <i-table
-        [data]="largeDatasetWithActions"
-        [columns]="basicColumns"
-        [virtualScroll]="true"
-        [height]="'450px'"
+        [grid]="actionsGrid"
         selectionMode="multiple"
         dataKey="id"
         [(selection)]="selectedProducts"
-        [striped]="true"
-        (onSelectionChange)="onSelectionChange($event)"
-      >
-      </i-table>
-
-      <i-message severity="warning" [closable]="false" style="margin-top: 16px">
-        Performance Tip: Always use dataKey="id" with selection for large
-        datasets to improve performance.
-      </i-message>
-    </app-demo-card>
-
-    <!-- Virtual Scroll Performance Comparison -->
-    <app-demo-card
-      [title]="'Virtual Scroll - Performance Comparison'"
-      [sourceCode]="codeExamples.virtualScrollPerformance"
-    >
-      <div style="display: grid; gap: 20px">
-        <div
-          style="
-            background: linear-gradient(
-              135deg,
-              var(--color-surface-200) 0%,
-              var(--color-surface-300) 100%
-            );
-            padding: 20px;
-            border-radius: 12px;
-          "
-        >
-          <h3
-            style="
-              margin: 0 0 16px 0;
-              color: var(--color-text-primary);
-              display: flex;
-              align-items: center;
-              gap: 8px;
-            "
-          >
-            <i class="pi pi-chart-bar" style="color: var(--color-primary)"></i>
-            Performance Metrics (10,000 rows)
-          </h3>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
-            <!-- Without Virtual Scroll -->
-            <div
-              style="
-                background: var(--color-surface-50);
-                padding: 16px;
-                border-radius: 8px;
-                border-left: 4px solid var(--color-danger);
-              "
-            >
-              <h4
-                style="
-                  margin: 0 0 12px 0;
-                  color: var(--color-danger);
-                  font-size: 0.9rem;
-                "
-              >
-                Without Virtual Scroll
-              </h4>
-              <ul
-                style="
-                  margin: 0;
-                  padding-left: 20px;
-                  font-size: 0.85rem;
-                  line-height: 1.8;
-                "
-              >
-                <li><strong>DOM Nodes:</strong> 10,000+</li>
-                <li><strong>Initial Render:</strong> ~2-3 seconds</li>
-                <li><strong>Memory Usage:</strong> ~500MB</li>
-                <li><strong>Scroll Performance:</strong> Laggy</li>
-                <li><strong>Frame Rate:</strong> 15-30fps</li>
-              </ul>
-            </div>
-
-            <!-- With Virtual Scroll -->
-            <div
-              style="
-                background: var(--color-surface-50);
-                padding: 16px;
-                border-radius: 8px;
-                border-left: 4px solid var(--color-success);
-              "
-            >
-              <h4
-                style="
-                  margin: 0 0 12px 0;
-                  color: var(--color-success);
-                  font-size: 0.9rem;
-                "
-              >
-                With Virtual Scroll
-              </h4>
-              <ul
-                style="
-                  margin: 0;
-                  padding-left: 20px;
-                  font-size: 0.85rem;
-                  line-height: 1.8;
-                "
-              >
-                <li><strong>DOM Nodes:</strong> ~30-50 (visible only)</li>
-                <li><strong>Initial Render:</strong> ~50-100ms</li>
-                <li><strong>Memory Usage:</strong> ~50MB</li>
-                <li><strong>Scroll Performance:</strong> Smooth</li>
-                <li><strong>Frame Rate:</strong> 60fps</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Recommendations -->
-          <div
-            style="
-              margin-top: 20px;
-              padding: 16px;
-              background: var(--color-primary-100);
-              border-radius: 8px;
-              border-left: 4px solid var(--color-primary);
-            "
-          >
-            <h4
-              style="
-                margin: 0 0 12px 0;
-                color: var(--color-primary);
-                font-size: 0.9rem;
-              "
-            >
-              When to Use Virtual Scroll
-            </h4>
-            <div
-              style="
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 12px;
-                font-size: 0.85rem;
-              "
-            >
-              <div
-                style="
-                  text-align: center;
-                  padding: 8px;
-                  background: var(--color-surface-50);
-                  border-radius: 6px;
-                "
-              >
-                <div style="font-weight: 600; margin-bottom: 4px">
-                  &lt; 100 rows
-                </div>
-                <div style="color: var(--color-text-secondary)">Not needed</div>
-              </div>
-              <div
-                style="
-                  text-align: center;
-                  padding: 8px;
-                  background: var(--color-surface-50);
-                  border-radius: 6px;
-                "
-              >
-                <div style="font-weight: 600; margin-bottom: 4px">
-                  100-1K rows
-                </div>
-                <div style="color: var(--color-warning)">Optional</div>
-              </div>
-              <div
-                style="
-                  text-align: center;
-                  padding: 8px;
-                  background: var(--color-surface-50);
-                  border-radius: 6px;
-                "
-              >
-                <div style="font-weight: 600; margin-bottom: 4px">
-                  1K-10K rows
-                </div>
-                <div style="color: var(--color-success)">Recommended</div>
-              </div>
-              <div
-                style="
-                  text-align: center;
-                  padding: 8px;
-                  background: var(--color-surface-50);
-                  border-radius: 6px;
-                "
-              >
-                <div style="font-weight: 600; margin-bottom: 4px">
-                  &gt; 10K rows
-                </div>
-                <div style="color: var(--color-success)">Required</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Configuration Tips -->
-          <div
-            style="
-              margin-top: 16px;
-              padding: 16px;
-              background: var(--color-info-100);
-              border-radius: 8px;
-            "
-          >
-            <h4
-              style="
-                margin: 0 0 12px 0;
-                color: var(--color-info);
-                font-size: 0.9rem;
-              "
-            >
-              Configuration Properties
-            </h4>
-            <ul
-              style="
-                margin: 0;
-                padding-left: 20px;
-                font-size: 0.85rem;
-                line-height: 1.8;
-              "
-            >
-              <li>
-                <code>[virtualScroll]="true"</code> - Enables virtual scrolling
-              </li>
-              <li>
-                <code>[height]="'500px'"</code> - Required: Sets container
-                height
-              </li>
-              <li>
-                <code>[virtualScrollItemSize]="48"</code> - Row height in pixels
-                (default: 48)
-              </li>
-              <li>
-                <code>[virtualScrollMinBufferPx]="200"</code> - Min buffer
-                before viewport (default: 200)
-              </li>
-              <li>
-                <code>[virtualScrollMaxBufferPx]="400"</code> - Max buffer after
-                viewport (default: 400)
-              </li>
-              <li>
-                <code>dataKey="id"</code> - Important: Use with selection for
-                best performance
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </app-demo-card>
-
-    <!-- Empty State -->
-    <app-demo-card
-      [title]="'Empty State'"
-      [sourceCode]="codeExamples.emptyState"
-    >
-      <p class="demo-description">
-        When a table has no data, the table component automatically displays an
-        empty state with a friendly icon and message.
-      </p>
-      <i-table [data]="emptyProducts" [columns]="basicColumns" [striped]="true">
-      </i-table>
-    </app-demo-card>
-
-    <!-- Custom Header & Download -->
-    <app-demo-card
-      [title]="'Custom Header & Export'"
-      [sourceCode]="codeExamples.download"
-    >
-      <p class="demo-description">
-        Add custom header content with ng-content. Export data to CSV, JSON, or
-        Excel.
-      </p>
-      <i-table
-        [data]="products"
-        [columns]="fullColumns"
-        [globalFilter]="true"
-        [downloadable]="true"
-        downloadMode="direct"
-        downloadFormat="csv"
-        downloadFilename="products-inventory"
-        [striped]="true"
-      >
-        <div header style="display: flex; align-items: center; gap: 8px">
-          <i
-            class="pi pi-box"
-            style="font-size: 1.5rem; color: var(--color-primary)"
-          ></i>
-          <h3 style="margin: 0; font-size: 1.1rem">Product Inventory</h3>
-        </div>
-      </i-table>
-    </app-demo-card>
-
-    <!-- Full Featured Table -->
-    <app-demo-card
-      [title]="'Full Featured Example'"
-      [sourceCode]="codeExamples.full"
-    >
-      <p class="demo-description">
-        All features combined: sorting, filtering, selection, actions, and
-        visual customization.
-      </p>
-      <i-table
-        [data]="productsWithActions"
-        [columns]="fullColumns"
-        [downloadable]="true"
-        downloadMode="direct"
-        downloadFormat="csv"
-        downloadFilename="products-full"
-        [sortable]="true"
-        [filterable]="true"
-        [globalFilter]="true"
-        selectionMode="multiple"
-        [(selection)]="selectedProducts"
-        [striped]="true"
         [hoverable]="true"
-        (onSort)="onSort($event)"
-        (onFilter)="onFilter($event)"
+        [height]="'360px'"
         (onSelectionChange)="onSelectionChange($event)"
-      >
-        <div header style="display: flex; align-items: center; gap: 8px">
-          <i
-            class="pi pi-box"
-            style="font-size: 1.25rem; color: var(--color-primary)"
-          ></i>
-          <h3 style="margin: 0; font-size: 1.1rem">Product Inventory — Full</h3>
-        </div>
-      </i-table>
+      ></i-table>
     </app-demo-card>
 
-    <!-- Features -->
-    <app-demo-card [title]="'Features'">
-      <app-features-list [features]="features"></app-features-list>
+    <!-- ── 3. Expandable Detail Sub-Table ────────────────────────── -->
+    <app-demo-card
+      [title]="'Expandable Detail Sub-Table'"
+      [sourceCode]="codeExamples.detail"
+      [tsCode]="tsCodeExamples.detail"
+    >
+      <p class="demo-description">
+        Set <code>GridData.details</code> to replace grouped mode. The parent
+        rows show category summaries; expanding a row renders a nested
+        <code>&lt;i-table&gt;</code> with the matching products and their own
+        actions.
+      </p>
+      <i-table
+        [grid]="detailGrid"
+        [sortable]="true"
+        [striped]="true"
+        [height]="'420px'"
+      ></i-table>
+    </app-demo-card>
+
+    <!-- ── 4. Icon & Chip Columns ─────────────────────────────────── -->
+    <app-demo-card
+      [title]="'Icon & Chip Columns'"
+      [sourceCode]="codeExamples.icons"
+      [tsCode]="tsCodeExamples.icons"
+    >
+      <p class="demo-description">
+        Use <code>type: 'icon'</code> with <code>iconClass</code> and
+        <code>severity</code> for colour-coded status icons. Use
+        <code>type: 'list'</code> to render array values as
+        <code>&lt;i-chip&gt;</code> tags.
+      </p>
+      <i-table
+        [grid]="iconGrid"
+        [sortable]="true"
+        [height]="'360px'"
+        [hoverable]="true"
+      ></i-table>
+    </app-demo-card>
+
+    <!-- ── 5. Large Dataset + Download ───────────────────────────── -->
+    <app-demo-card
+      [title]="'Large Dataset — Virtual Scroll & Download'"
+      [sourceCode]="codeExamples.large"
+      [tsCode]="tsCodeExamples.large"
+    >
+      <p class="demo-description">
+        10 000 rows rendered with CDK virtual scroll — only visible rows are in
+        the DOM. Enable <code>[downloadable]</code> for client-side CSV / JSON /
+        Excel export.
+      </p>
+      <i-table
+        [grid]="largeGrid"
+        [sortable]="true"
+        [globalFilter]="true"
+        [downloadable]="true"
+        [virtualScroll]="true"
+        downloadFormat="csv"
+        [height]="'400px'"
+        (onDownload)="onDownload($event)"
+      ></i-table>
     </app-demo-card>
   </div>
 </div>

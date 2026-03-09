@@ -125,12 +125,40 @@ $table-transition: 0.15s ease;
       .i-table-virtual-header {
         flex-shrink: 0;
         overflow: hidden;
-        background: var(--color-surface-50);
 
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          table-layout: fixed;
+        .i-table-sort-icon {
+          font-size: 0.8em;
+          opacity: 0.6;
+          transition:
+            opacity $table-transition,
+            color $table-transition;
+        }
+
+        .i-table-header-cell.i-table-sortable-column {
+          cursor: pointer;
+
+          .i-table-sort-icon {
+            opacity: 0.4;
+          }
+
+          &:hover .i-table-sort-icon,
+          &.i-table-sorted .i-table-sort-icon {
+            opacity: 1;
+          }
+        }
+
+        .i-table-filter-row .i-table-virtual-cell {
+          padding: 8px 16px;
+
+          .i-table-column-filter {
+            width: 100%;
+            padding: 6px 10px;
+            font-size: 1em;
+            border-radius: vars.$componentBorderRadius;
+            transition:
+              border-color $table-transition,
+              box-shadow $table-transition;
+          }
         }
       }
 
@@ -138,36 +166,65 @@ $table-transition: 0.15s ease;
         flex: 1;
         min-height: 0;
         width: 100%;
+        overflow-y: auto;
+        @include scrollbar.dropdown-scrollbar();
 
         .cdk-virtual-scroll-content-wrapper {
           width: 100%;
         }
       }
 
-      .i-table-virtual-body {
+      // Shared flex layout for header and body rows
+      .i-table-virtual-row {
+        display: flex;
+        align-items: center;
         width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-      }
-
-      table {
-        display: table;
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      tbody {
-        display: table-row-group;
-      }
-
-      tr {
-        display: table-row;
         box-sizing: border-box;
       }
 
-      td,
-      th {
-        display: table-cell;
+      // Shared flex layout for header and body cells
+      .i-table-virtual-cell {
+        padding: 12px 16px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+
+        &.i-table-header-cell {
+          user-select: none;
+          font-weight: 600;
+          white-space: nowrap;
+
+          .i-table-header-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .i-table-header-text {
+              flex: 1;
+            }
+          }
+        }
+
+        &.i-table-selection-header,
+        &.i-table-selection-cell {
+          width: 50px;
+          flex: 0 0 50px;
+          justify-content: center;
+        }
+
+        &.i-table-actions-header,
+        &.i-table-actions-cell {
+          flex: 0 0 auto;
+          justify-content: flex-end;
+
+          .i-table-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+          }
+        }
       }
     }
   }
@@ -260,11 +317,9 @@ $table-transition: 0.15s ease;
       }
 
       .i-table-expanded-row td {
-        padding: 0;
-
         .i-table-expanded-content {
-          padding: 16px;
-          margin: 8px 16px;
+          padding: 0;
+          margin: 2px 0 24px;
           border-radius: vars.$componentBorderRadius;
 
           pre {
@@ -404,6 +459,21 @@ $table-transition: 0.15s ease;
   .i-table-expand-cell {
     width: 50px;
     text-align: center;
+  }
+
+  .i-table-detail-count-header {
+    width: 36px;
+    padding: 0;
+  }
+
+  .i-table-detail-count-cell {
+    width: 36px;
+    padding: 0 4px 0 0;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 0.78em;
+    opacity: 0.5;
+    font-weight: 400;
   }
 
   .i-table-actions-header,

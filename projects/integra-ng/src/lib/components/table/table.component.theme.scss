@@ -102,8 +102,8 @@
           background: colors.$color-component-background;
 
           .i-table-expanded-content {
-            background: colors.$color-surface-ground;
-            border: 1px solid colors.$color-surface-border;
+            // No border or background: the nested <i-table> renders flat
+            background: transparent;
           }
         }
 
@@ -229,6 +229,77 @@
 
       &:hover {
         background: colors.$color-primary;
+      }
+    }
+
+    // ── Virtual scroll (PATH B) — flex-row theme ──────────────────────────────
+    .i-table-container--virtual-scroll {
+      .i-table-virtual-header {
+        background: colors.$color-component-background;
+        border-bottom: 1px solid colors.$color-surface-border;
+
+        .i-table-virtual-cell {
+          color: colors.$color-text-primary;
+        }
+
+        .i-table-header-cell {
+          .i-table-sort-icon {
+            color: colors.$color-text-secondary;
+          }
+
+          &.i-table-sortable-column:hover {
+            background: colors.$color-surface-hover;
+          }
+
+          &.i-table-sorted {
+            background: colors.$color-surface-hover;
+            color: colors.$color-primary;
+
+            .i-table-sort-icon {
+              color: colors.$color-primary;
+            }
+          }
+        }
+
+        .i-table-filter-row .i-table-column-filter {
+          border: 1px solid colors.$color-surface-border;
+          background: colors.$color-surface-ground;
+          color: colors.$color-text-primary;
+
+          &:focus {
+            border-color: colors.$color-primary;
+            outline: none;
+          }
+
+          &::placeholder {
+            color: colors.$color-text-tertiary;
+          }
+        }
+      }
+
+      .i-table-virtual-viewport .i-table-virtual-row {
+        background: colors.$color-component-background;
+        border-bottom: 1px solid colors.$color-surface-border;
+        color: colors.$color-text-primary;
+        transition: background-color 0.15s ease;
+
+        &.i-table-row-odd {
+          background: colors.$color-component-background;
+        }
+
+        &.i-table-row-selected {
+          background: colors.$color-surface-hover;
+          color: colors.$color-primary;
+        }
+      }
+    }
+
+    // ── Nested table — rendered inside a detail expansion row ─────────────────
+    &.i-table--nested {
+      background: transparent;
+
+      table thead tr {
+        background: colors.$color-surface-section;
       }
     }
   }
