@@ -4,16 +4,7 @@
 
   <header class="demo-header">
     <h1>Table Component</h1>
-    <p>
-      A single-input table driven by <code>GridData&lt;TRow, TDetail&gt;</code>.
-      Pass columns, rows, per-row actions, and an optional detail sub-table in
-      one object. Use <code>[virtualScroll]="true"</code> for large datasets
-      (&ge;500 rows) to enable CDK virtual rendering.
-    </p>
   </header>
-
-  <!-- Features list -->
-  <app-features-list [features]="features"></app-features-list>
 
   <div class="cards-container">
     <!-- ── 1. Sorting & Filtering ─────────────────────────────────── -->
@@ -22,11 +13,6 @@
       [sourceCode]="codeExamples.flat"
       [tsCode]="tsCodeExamples.flat"
     >
-      <p class="demo-description">
-        Click column headers to sort. Use the global search bar or per-column
-        filter inputs to narrow results. Uses a regular overflow-scroll table;
-        for 10 000+ rows use <code>[virtualScroll]="true"</code>.
-      </p>
       <i-table
         [grid]="flatGrid"
         [sortable]="true"
@@ -45,12 +31,6 @@
       [sourceCode]="codeExamples.actions"
       [tsCode]="tsCodeExamples.actions"
     >
-      <p class="demo-description">
-        Actions are embedded directly in <code>GridData.actions</code> — each
-        carries its own <code>handler</code>. Delete is disabled for
-        out-of-stock rows.
-        <strong>Selected: {{ selectedProducts.length }}</strong>
-      </p>
       <i-table
         [grid]="actionsGrid"
         selectionMode="multiple"
@@ -68,18 +48,7 @@
       [sourceCode]="codeExamples.detail"
       [tsCode]="tsCodeExamples.detail"
     >
-      <p class="demo-description">
-        Set <code>GridData.details</code> to replace grouped mode. The parent
-        rows show category summaries; expanding a row renders a nested
-        <code>&lt;i-table&gt;</code> with the matching products and their own
-        actions.
-      </p>
-      <i-table
-        [grid]="detailGrid"
-        [sortable]="true"
-        [striped]="true"
-        [height]="'420px'"
-      ></i-table>
+      <i-table [grid]="detailGrid" [sortable]="true" [striped]="true"></i-table>
     </app-demo-card>
 
     <!-- ── 4. Icon & Chip Columns ─────────────────────────────────── -->
@@ -88,12 +57,6 @@
       [sourceCode]="codeExamples.icons"
       [tsCode]="tsCodeExamples.icons"
     >
-      <p class="demo-description">
-        Use <code>type: 'icon'</code> with <code>iconClass</code> and
-        <code>severity</code> for colour-coded status icons. Use
-        <code>type: 'list'</code> to render array values as
-        <code>&lt;i-chip&gt;</code> tags.
-      </p>
       <i-table
         [grid]="iconGrid"
         [sortable]="true"
@@ -108,11 +71,6 @@
       [sourceCode]="codeExamples.large"
       [tsCode]="tsCodeExamples.large"
     >
-      <p class="demo-description">
-        10 000 rows rendered with CDK virtual scroll — only visible rows are in
-        the DOM. Enable <code>[downloadable]</code> for client-side CSV / JSON /
-        Excel export.
-      </p>
       <i-table
         [grid]="largeGrid"
         [sortable]="true"
@@ -125,4 +83,7 @@
       ></i-table>
     </app-demo-card>
   </div>
+
+  <!-- Features list -->
+  <app-features-list [features]="features"></app-features-list>
 </div>

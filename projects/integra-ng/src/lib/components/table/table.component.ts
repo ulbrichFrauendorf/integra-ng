@@ -1245,10 +1245,10 @@ export class ITable {
 
   /**
    * Effective container height for the virtual scroll viewport.
-   * Falls back to '400px' when no height is provided.
+   * Falls back to '100%' when no height is provided.
    * @internal
    */
-  effectiveHeight = computed<string>(() => this.height || '400px');
+  effectiveHeight = computed<string>(() => this.height || '100%');
 
   /**
    * Total column span used for empty-state and detail expansion cells.
