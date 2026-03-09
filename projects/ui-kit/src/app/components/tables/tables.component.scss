@@ -4,12 +4,6 @@
   @extend .demo-component;
 }
 
-.demo-description {
-  margin-bottom: 16px;
-  color: var(--text-color-secondary);
-  font-size: 0.9rem;
-}
-
 .visual-examples {
   display: flex;
   flex-direction: column;
