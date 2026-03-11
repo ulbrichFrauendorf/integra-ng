@@ -94,3 +94,14 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .i-tabs {
+    .i-tabs__panels {
+      .i-tabs__panel {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}
