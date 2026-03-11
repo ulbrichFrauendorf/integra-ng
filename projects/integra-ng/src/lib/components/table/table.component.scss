@@ -574,4 +574,18 @@ $table-transition: 0.15s ease;
       }
     }
   }
+
+  .i-table-wrapper {
+    table {
+      min-width: max-content;
+    }
+
+    .i-table-container--virtual-scroll {
+      min-width: 600px;
+
+      .i-table-virtual-cell {
+        min-width: 80px;
+      }
+    }
+  }
 }
