@@ -17,8 +17,8 @@
     [attr.aria-readonly]="readonly"
     [attr.aria-labelledby]="label ? (id || componentId) + '-label' : null"
     tabindex="0"
-    (keydown.space)="$event.preventDefault(); toggle()"
-    (keydown.enter)="$event.preventDefault(); toggle()"
+    (keydown.space)="handleKeydown($event)"
+    (keydown.enter)="handleKeydown($event)"
   >
     <span class="i-toggle-thumb"></span>
   </div>

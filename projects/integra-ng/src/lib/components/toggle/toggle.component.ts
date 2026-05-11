@@ -147,9 +147,21 @@ export class IToggle implements ControlValueAccessor {
     this.onChangeCallback(this._checked);
     this.onTouchedCallback();
 
+    // Deferred to allow Angular's change detection cycle to process the new
+    // value before external listeners receive the event (mirrors checkbox pattern)
     setTimeout(() => {
       this.onChange.emit(this._checked);
     }, 0);
+  }
+
+  /**
+   * Handles keyboard events (Space/Enter) — only prevents default when interactive
+   * @internal
+   */
+  handleKeydown(event: Event): void {
+    if (this.disabled || this.readonly) return;
+    event.preventDefault();
+    this.toggle();
   }
 
   /**
