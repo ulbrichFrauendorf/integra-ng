@@ -1,0 +1,116 @@
+@use "./toggle.component.theme.scss" as theme;
+
+@include theme.i-toggle-theme();
+
+.i-toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1em;
+
+  &.i-toggle--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    .i-toggle,
+    .i-toggle-label {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  &.i-toggle--readonly {
+    .i-toggle,
+    .i-toggle-label {
+      cursor: default;
+    }
+  }
+
+  &.i-toggle--small {
+    font-size: 0.9em;
+    gap: 6px;
+
+    .i-toggle {
+      width: 28px;
+      height: 16px;
+      border-radius: 8px;
+
+      .i-toggle-thumb {
+        width: 10px;
+        height: 10px;
+      }
+
+      &.i-toggle--checked .i-toggle-thumb {
+        transform: translateX(13px);
+      }
+    }
+  }
+
+  &.i-toggle--medium {
+    font-size: 1em;
+    gap: 8px;
+
+    .i-toggle {
+      width: 36px;
+      height: 20px;
+      border-radius: 10px;
+
+      .i-toggle-thumb {
+        width: 14px;
+        height: 14px;
+      }
+
+      &.i-toggle--checked .i-toggle-thumb {
+        transform: translateX(17px);
+      }
+    }
+  }
+
+  &.i-toggle--large {
+    font-size: 1.2em;
+    gap: 10px;
+
+    .i-toggle {
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+
+      .i-toggle-thumb {
+        width: 18px;
+        height: 18px;
+      }
+
+      &.i-toggle--checked .i-toggle-thumb {
+        transform: translateX(21px);
+      }
+    }
+  }
+
+  .i-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 2px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
+
+    .i-toggle-thumb {
+      border-radius: 50%;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      flex-shrink: 0;
+    }
+  }
+
+  .i-toggle-label {
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+  }
+}

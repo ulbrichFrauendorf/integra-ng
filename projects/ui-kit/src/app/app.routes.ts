@@ -31,6 +31,7 @@ import { LayoutsComponent } from './components/layouts/layouts.component';
 import { OverlayPanelsComponent } from './components/overlay-panels/overlay-panels.component';
 import { ProgressSpinnersComponent } from './components/progress-spinners/progress-spinners.component';
 import { NoContentComponent } from './components/no-content/no-content.component';
+import { TogglesComponent } from './components/toggles/toggles.component';
 
 export const routes: Routes = [
   {
@@ -82,6 +83,7 @@ export const routes: Routes = [
           { path: 'tables', component: TablesComponent },
           { path: 'tabs', component: TabsComponent },
           { path: 'tooltips', component: TooltipsComponent },
+          { path: 'toggles', component: TogglesComponent },
           { path: 'tree-views', component: TreeViewsComponent },
           { path: 'whispers', component: WhispersComponent },
           {
