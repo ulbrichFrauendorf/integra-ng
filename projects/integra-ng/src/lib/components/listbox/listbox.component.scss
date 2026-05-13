@@ -205,3 +205,11 @@ $listbox-transition: 0.15s ease;
     }
   }
 }
+
+@media (max-width: 991px) {
+  .i-listbox-wrapper {
+    .i-listbox-options {
+      max-height: 120px;
+    }
+  }
+}

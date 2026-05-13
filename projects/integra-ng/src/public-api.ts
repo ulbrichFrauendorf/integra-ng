@@ -45,6 +45,7 @@ export * from './lib/components/progress-spinner/progress-spinner.component';
 export * from './lib/components/select/select.component';
 export * from './lib/components/tabs/tabs.component';
 export * from './lib/components/tabs/tab-panel.component';
+export * from './lib/components/toggle/toggle.component';
 export * from './lib/components/tree-view/tree-view.component';
 export * from './lib/components/whisper/whisper.component';
 export * from './lib/components/whisper/services/whisper.service';

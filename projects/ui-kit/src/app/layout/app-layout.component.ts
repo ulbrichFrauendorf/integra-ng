@@ -59,6 +59,11 @@ export class AppLayoutComponent {
           routerLink: ['/components/checkboxes'],
         },
         {
+          label: 'Toggles',
+          icon: 'pi pi-fw pi-toggle-on',
+          routerLink: ['/components/toggles'],
+        },
+        {
           label: 'Radio Buttons',
           icon: 'pi pi-fw pi-circle',
           routerLink: ['/components/radio-buttons'],
