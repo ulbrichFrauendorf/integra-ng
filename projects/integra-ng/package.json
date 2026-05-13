@@ -6,9 +6,9 @@
     "url": "https://github.com/ulbrichFrauendorf/integra-ng"
   },
   "peerDependencies": {
-    "@angular/common": "^21.0.0",
-    "@angular/core": "^21.0.0",
-    "chart.js": "^4.0.0",
+    "@angular/common": "^21.2.12",
+    "@angular/core": "^21.2.12",
+    "chart.js": "^4.5.1",
     "primeicons": "^7.0.0"
   },
   "dependencies": {
